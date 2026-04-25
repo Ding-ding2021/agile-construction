@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import Icon from '../../icons/Icon'
 import { navIconMap, type IconName } from '../../icons'
 import { defaultNavItems, type SharedNavItem } from '../nav.config'
 import { isHashRouteActive, navigateByHash } from '../nav.utils'
+import { useSidebarCollapsed } from '../useSidebarCollapsed'
 
 type AppSidebarProps = {
   currentHash: string
@@ -17,8 +18,6 @@ const getNavIconName = (label: string): IconName => {
   return navIconMap[label] || 'menu'
 }
 
-const STORAGE_KEY = 'pm-sidebar-collapsed'
-
 const AppSidebar = ({
   currentHash,
   collapsed: controlledCollapsed,
@@ -27,29 +26,14 @@ const AppSidebar = ({
   className = 'pm-sidebar',
 }: AppSidebarProps) => {
   const isControlled = controlledCollapsed !== undefined
-
-  const [internalCollapsed, setInternalCollapsed] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === 'true'
-    } catch {
-      return false
-    }
-  })
+  const { collapsed: internalCollapsed, toggle } = useSidebarCollapsed(isControlled)
 
   const collapsed = isControlled ? controlledCollapsed : internalCollapsed
 
   const handleCollapseChange = useCallback(() => {
-    const next = !collapsed
-    if (!isControlled) {
-      setInternalCollapsed(next)
-      try {
-        localStorage.setItem(STORAGE_KEY, String(next))
-      } catch {
-        // ignore
-      }
-    }
+    const next = toggle()
     onCollapseChange?.(next)
-  }, [collapsed, isControlled, onCollapseChange])
+  }, [toggle, onCollapseChange])
 
   return (
     <aside className={`${className} ${collapsed ? 'collapsed' : ''}`}>
