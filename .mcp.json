@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "tencent-docs": {
+      "command": "npx",
+      "args": ["-y", "@tencent/docs-mcp-server"],
+      "env": {
+        "TENCENT_DOCS_API_KEY": "your_api_key_here"
+      },
+      "disabled": true
+    }
+  }
+}

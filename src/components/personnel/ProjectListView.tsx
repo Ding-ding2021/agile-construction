@@ -2,23 +2,30 @@
  * 项目管理页面的列表视图组件
  */
 
-import type { ProjectItem, PaginationState } from './projectManagement.types';
+import type { ProjectItem, PaginationState } from './projectManagement.types'
+import type { ProjectStatus } from '../../domain/projectStatusMachine'
 
 type ProjectListViewProps = {
-  projects: ProjectItem[];
-  pagination: PaginationState;
-  onProjectClick: (project: ProjectItem) => void;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
-  searchQuery?: string;
-};
+  projects: ProjectItem[]
+  pagination: PaginationState
+  onProjectClick: (project: ProjectItem) => void
+  onPageChange: (page: number) => void
+  onPageSizeChange: (size: number) => void
+  onProjectStatusUpdate?: (
+    projectCode: string,
+    toStatus: ProjectStatus,
+    reason?: string
+  ) => { ok: boolean; message: string }
+  feedback?: { tone: 'success' | 'error'; text: string } | null
+  searchQuery?: string
+}
 
 const riskLevelMap: Record<string, { label: string; tone: string }> = {
   low: { label: '低', tone: 'green' },
   medium: { label: '中', tone: 'yellow' },
   high: { label: '高', tone: 'orange' },
   critical: { label: '严重', tone: 'red' },
-};
+}
 
 const ProjectListView = ({
   projects,
@@ -26,9 +33,9 @@ const ProjectListView = ({
   onProjectClick,
   onPageChange,
   onPageSizeChange: _onPageSizeChange,
-  searchQuery = ''
+  searchQuery = '',
 }: ProjectListViewProps) => {
-  const totalPages = Math.ceil(pagination.total / pagination.pageSize);
+  const totalPages = Math.ceil(pagination.total / pagination.pageSize)
 
   // 空状态
   if (projects.length === 0) {
@@ -49,7 +56,7 @@ const ProjectListView = ({
           )}
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -70,14 +77,14 @@ const ProjectListView = ({
             </tr>
           </thead>
           <tbody>
-            {projects.map((item) => (
+            {projects.map(item => (
               <tr
                 key={item.code}
                 onClick={() => onProjectClick(item)}
-                onKeyDown={(event) => {
+                onKeyDown={event => {
                   if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    onProjectClick(item);
+                    event.preventDefault()
+                    onProjectClick(item)
                   }
                 }}
                 tabIndex={0}
@@ -99,13 +106,20 @@ const ProjectListView = ({
                   <div className="pm-progress-cell">
                     <span className={`pm-status-badge ${item.statusTone}`}>{item.status}</span>
                     <div className="pm-line-progress">
-                      <div className={`pm-line-progress-fill ${item.statusTone}`} style={{ width: `${item.progress}%` }} />
+                      <div
+                        className={`pm-line-progress-fill ${item.statusTone}`}
+                        style={{ width: `${item.progress}%` }}
+                      />
                     </div>
                     <span className="pm-progress-value">{item.progress}%</span>
                   </div>
                 </td>
-                <td style={{ textAlign: 'center' }}><span className="pm-table-text">{item.milestone}</span></td>
-                <td style={{ textAlign: 'center' }}><span className="pm-table-text">{item.tasks}</span></td>
+                <td style={{ textAlign: 'center' }}>
+                  <span className="pm-table-text">{item.milestone}</span>
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <span className="pm-table-text">{item.tasks}</span>
+                </td>
                 <td style={{ textAlign: 'center' }}>
                   {item.riskLevel ? (
                     <div className="pm-risk-cell">
@@ -121,7 +135,9 @@ const ProjectListView = ({
                 <td style={{ textAlign: 'center' }}>
                   <span className="pm-table-text">{item.plannedOpenDate}</span>
                 </td>
-                <td style={{ textAlign: 'center' }}><span className="pm-table-text">{item.owner}</span></td>
+                <td style={{ textAlign: 'center' }}>
+                  <span className="pm-table-text">{item.owner}</span>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -153,9 +169,9 @@ const ProjectListView = ({
             >
               <img src="/assets/CodeBubbyAssets/3848_19/35.svg" alt="" />
             </button>
-            
+
             <div className="pm-page-numbers">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                 <button
                   key={page}
                   type="button"
@@ -166,7 +182,7 @@ const ProjectListView = ({
                 </button>
               ))}
             </div>
-            
+
             <button
               type="button"
               className={`pm-page-arrow ${pagination.currentPage === totalPages || totalPages === 0 ? 'pm-disabled' : ''}`}
@@ -179,7 +195,7 @@ const ProjectListView = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProjectListView;
+export default ProjectListView

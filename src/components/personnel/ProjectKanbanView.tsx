@@ -2,34 +2,37 @@
  * 项目管理页面的看板视图组件
  */
 
-import type { ProjectItem, ProjectStage } from './projectManagement.types';
+import { EmptyState } from '../shared'
+import type { ProjectItem, ProjectStage } from './projectManagement.types'
 
 type ProjectKanbanViewProps = {
-  projects: ProjectItem[];
-  groups: Map<string, ProjectItem[]>;
-  onProjectClick: (project: ProjectItem) => void;
-  searchQuery?: string;
-};
+  projects: ProjectItem[]
+  groups: Map<string, ProjectItem[]>
+  onProjectClick: (project: ProjectItem) => void
+  searchQuery?: string
+}
 
 const stageColors: Record<ProjectStage, string> = {
-  '启动': 'blue',
-  '准备': 'yellow',
-  '执行': 'green',
-  '收尾': 'purple'
-};
+  启动: 'blue',
+  准备: 'yellow',
+  计划: 'cyan',
+  执行: 'green',
+  监控: 'orange',
+  收尾: 'purple',
+}
 
 const riskLevelMap: Record<string, { label: string; tone: string }> = {
   low: { label: '低', tone: 'green' },
   medium: { label: '中', tone: 'yellow' },
   high: { label: '高', tone: 'orange' },
   critical: { label: '严重', tone: 'red' },
-};
+}
 
 const ProjectKanbanView = ({
   projects,
   groups,
   onProjectClick,
-  searchQuery = ''
+  searchQuery = '',
 }: ProjectKanbanViewProps) => {
   // 空状态
   if (projects.length === 0) {
@@ -41,7 +44,7 @@ const ProjectKanbanView = ({
           description={searchQuery ? '请尝试使用其他关键词搜索' : '点击上方"新建项目"开始创建'}
         />
       </div>
-    );
+    )
   }
 
   return (
@@ -50,7 +53,9 @@ const ProjectKanbanView = ({
         {Array.from(groups.entries()).map(([stage, stageProjects]) => (
           <div key={stage} className="pm-kanban-column">
             {/* 列标题 */}
-            <div className={`pm-kanban-column-header pm-kanban-header-${stageColors[stage as ProjectStage]}`}>
+            <div
+              className={`pm-kanban-column-header pm-kanban-header-${stageColors[stage as ProjectStage]}`}
+            >
               <div className="pm-kanban-column-title">
                 <span>{stage}</span>
                 <em>{stageProjects.length}</em>
@@ -62,15 +67,15 @@ const ProjectKanbanView = ({
               {stageProjects.length === 0 ? (
                 <div className="pm-kanban-empty">暂无项目</div>
               ) : (
-                stageProjects.map((item) => (
+                stageProjects.map(item => (
                   <div
                     key={item.code}
                     className="pm-kanban-card"
                     onClick={() => onProjectClick(item)}
-                    onKeyDown={(event) => {
+                    onKeyDown={event => {
                       if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        onProjectClick(item);
+                        event.preventDefault()
+                        onProjectClick(item)
                       }
                     }}
                     tabIndex={0}
@@ -98,9 +103,9 @@ const ProjectKanbanView = ({
                         <span>{item.progress}%</span>
                       </div>
                       <div className="pm-line-progress">
-                        <div 
-                          className={`pm-line-progress-fill ${item.statusTone}`} 
-                          style={{ width: `${item.progress}%` }} 
+                        <div
+                          className={`pm-line-progress-fill ${item.statusTone}`}
+                          style={{ width: `${item.progress}%` }}
                         />
                       </div>
                     </div>
@@ -134,7 +139,7 @@ const ProjectKanbanView = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProjectKanbanView;
+export default ProjectKanbanView

@@ -1,0 +1,225 @@
+// Prisma Schema for 多Agent建店管理平台
+// 对应 local-api/store/schema.sql 的实体化升级
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── 项目状态快照表 ────────────────────────────────────────────
+// 存储项目列表和状态日志的 JSON 快照（兼容现有 localStorage 模式）
+model ProjectState {
+  id           Int      @id @default(autoincrement())
+  envId        String   @map("env_id")
+  snapshotJson String   @map("snapshot_json")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([envId])
+  @@map("project_state")
+}
+
+// ─── 任务状态快照表 ────────────────────────────────────────────
+model TaskState {
+  id          Int      @id @default(autoincrement())
+  envId       String   @map("env_id")
+  contextKey  String   @map("context_key")
+  snapshotJson String  @map("snapshot_json")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([envId, contextKey])
+  @@map("task_state")
+}
+
+// ─── 验收状态快照表 ────────────────────────────────────────────
+model AcceptanceState {
+  id          Int      @id @default(autoincrement())
+  envId       String   @map("env_id")
+  projectCode String   @map("project_code")
+  snapshotJson String  @map("snapshot_json")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([envId, projectCode])
+  @@map("acceptance_state")
+}
+
+// ─── 结算建议快照表 ────────────────────────────────────────────
+model SettlementState {
+  id          Int      @id @default(autoincrement())
+  envId       String   @map("env_id")
+  snapshotJson String  @map("snapshot_json")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([envId])
+  @@map("settlement_state")
+}
+
+// ─── 审计日志表 ────────────────────────────────────────────────
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  envId       String   @map("env_id")
+  scene       String
+  detail      String
+  projectCode String?  @map("project_code")
+  at          DateTime
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([envId])
+  @@index([projectCode])
+  @@index([scene])
+  @@map("audit_logs")
+}
+
+// ─── 幂等记录表 ────────────────────────────────────────────────
+model IdempotencyKey {
+  key            String   @id
+  scope          String
+  envId          String   @map("env_id")
+  requestHash    String   @map("request_hash")
+  responseStatus Int      @map("response_status")
+  responseBody   String?  @map("response_body")
+  createdAt      DateTime @default(now()) @map("created_at")
+  expiredAt      DateTime @map("expired_at")
+
+  @@index([envId])
+  @@index([scope])
+  @@index([expiredAt])
+  @@map("idempotency_keys")
+}
+
+// ─── 项目实体表（V2 结构化数据）─────────────────────────────────
+// 从 JSON 快照逐步迁移到结构化字段
+model Project {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  status    String
+  stage     String
+  progress  Int      @default(0)
+  budget    String?
+  teamSize  String?  @map("team_size")
+  dateRange String?  @map("date_range")
+  description String?
+  owner     String?
+  riskLevel String?  @map("risk_level")
+  milestone String?
+  tasks     String?
+  templateId String? @map("template_id")
+  dispatchStatus    String? @map("dispatch_status")
+  executionStatus   String? @map("execution_status")
+  acceptanceStatus  String? @map("acceptance_status")
+  settlementStatus  String? @map("settlement_status")
+  pendingDispatchCount    Int @default(0) @map("pending_dispatch_count")
+  pendingExecutionCount   Int @default(0) @map("pending_execution_count")
+  pendingAcceptanceCount  Int @default(0) @map("pending_acceptance_count")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  phases      ProjectPhase[]
+  milestones  ProjectMilestone[]
+  taskTree    ProjectTask[]
+  risks       ProjectRisk[]
+  members     ProjectMember[]
+  statusLogs  ProjectStatusLog[]
+
+  @@map("projects")
+}
+
+// ─── 项目阶段表 ────────────────────────────────────────────────
+model ProjectPhase {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String
+  startDate String   @map("start_date")
+  endDate   String   @map("end_date")
+  progress  Int      @default(0)
+  status    String
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_phases")
+}
+
+// ─── 项目里程碑表 ──────────────────────────────────────────────
+model ProjectMilestone {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  name          String
+  dueDate       String   @map("due_date")
+  status        String
+  assignee      String?
+  completedDate String?  @map("completed_date")
+
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_milestones")
+}
+
+// ─── 项目任务表 ────────────────────────────────────────────────
+model ProjectTask {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  code      String
+  name      String
+  status    String
+  assignee  String?
+  startDate String?  @map("start_date")
+  endDate   String?  @map("end_date")
+  progress  Int      @default(0)
+  parentId  Int?     @map("parent_id")
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_tasks")
+}
+
+// ─── 项目风险表 ────────────────────────────────────────────────
+model ProjectRisk {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  title       String
+  level       String
+  probability String?
+  impact      String?
+  mitigation  String?
+  status      String
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_risks")
+}
+
+// ─── 项目成员表 ────────────────────────────────────────────────
+model ProjectMember {
+  id       Int     @id @default(autoincrement())
+  projectId Int    @map("project_id")
+  userId   String  @map("user_id")
+  name     String
+  role     String
+  avatar   String?
+
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_members")
+}
+
+// ─── 项目状态流转日志表 ────────────────────────────────────────
+model ProjectStatusLog {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  type      String   // 'transition' | 'hook'
+  at        DateTime
+  operator  String
+  message   String
+  fromStatus String? @map("from_status")
+  toStatus   String? @map("to_status")
+  reason    String?
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_status_logs")
+}

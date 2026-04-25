@@ -1,4 +1,10 @@
-import type { TaskItem, TaskRiskLevel, TaskSlaStatus, TaskStatus } from './taskManagement.types';
+import type {
+  TaskDetail,
+  TaskItem,
+  TaskRiskLevel,
+  TaskSlaStatus,
+  TaskStatus,
+} from './taskManagement.types'
 
 export const mockTasks: TaskItem[] = [
   {
@@ -241,49 +247,54 @@ export const mockTasks: TaskItem[] = [
     isBlocked: false,
     progress: 92,
   },
-];
+]
 
 export const groupOptions = [
   { value: 'none', label: '不分组' },
   { value: 'project', label: '按项目' },
   { value: 'status', label: '按状态' },
   { value: 'owner', label: '按负责人' },
-];
+]
 
 export const sortOptions = [
   { value: 'default', label: '默认排序' },
   { value: 'planned-end-asc', label: '计划结束时间升序' },
   { value: 'risk-desc', label: '风险等级从高到低' },
   { value: 'remind-desc', label: '催办次数从高到低' },
-];
+]
 
-export const statusOptions: TaskStatus[] = ['待创建', '待分配', '待执行', '执行中', '待提交', '待验收', '不通过', '已完成', '已关闭'];
-export const riskOptions: TaskRiskLevel[] = ['高风险', '中风险', '低风险'];
-export const slaOptions: TaskSlaStatus[] = ['超时', '即将超时', '正常'];
+export const statusOptions: TaskStatus[] = [
+  '待创建',
+  '待分配',
+  '待执行',
+  '执行中',
+  '待提交',
+  '待验收',
+  '不通过',
+  '已完成',
+  '已关闭',
+]
+export const riskOptions: TaskRiskLevel[] = ['高风险', '中风险', '低风险']
+export const slaOptions: TaskSlaStatus[] = ['超时', '即将超时', '正常']
 
 const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
-  const isDone = task.status === '已完成' || task.status === '已关闭';
-  const isBlocked = task.predecessorStatus === '前置阻塞' || task.isBlocked;
-  const ownerName = task.owner === '待分配' ? '' : task.owner;
+  const isDone = task.status === '已完成' || task.status === '已关闭'
+  const isBlocked = task.predecessorStatus === '前置阻塞' || task.isBlocked
+  const ownerName = task.owner === '待分配' ? '' : task.owner
 
   return {
     ...task,
     taskType: '标准任务',
     assigneeName: ownerName,
     assigneeType: ownerName ? 'internal' : 'external',
-    actualStartAt: task.status === '待创建' || task.status === '待分配' ? undefined : task.plannedStartAt,
+    actualStartAt:
+      task.status === '待创建' || task.status === '待分配' ? undefined : task.plannedStartAt,
     actualEndAt: isDone ? task.plannedEndAt : undefined,
     blockedReason: isBlocked ? '前置任务未完成，需先解除阻塞后再推进。' : undefined,
     snapshotStatus: task.standardBindingStatus === '已绑定' ? '已生成' : '未生成',
     standardSnapshotId: task.standardBindingStatus === '已绑定' ? `SNAP-${task.code}` : undefined,
-    executionStandards: [
-      '按门店施工标准执行并拍照留档。',
-      '关键节点需在当日 18:00 前更新进度。',
-    ],
-    acceptanceStandards: [
-      '验收资料齐全（照片/记录/签字）。',
-      '不符合项需闭环后方可通过。',
-    ],
+    executionStandards: ['按门店施工标准执行并拍照留档。', '关键节点需在当日 18:00 前更新进度。'],
+    acceptanceStandards: ['验收资料齐全（照片/记录/签字）。', '不符合项需闭环后方可通过。'],
     checklist: [
       { id: `${task.code}-ck-1`, label: '任务范围确认', done: true },
       { id: `${task.code}-ck-2`, label: '现场执行记录上传', done: task.progress >= 50 },
@@ -320,13 +331,100 @@ const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
         time: `${task.plannedEndAt} 16:30`,
       },
     ],
-  };
-};
+  }
+}
 
 const taskDetailMap: Record<string, TaskDetail> = Object.fromEntries(
-  mockTasks.map((task) => [task.code, buildTaskDetailFromItem(task)]),
-);
+  mockTasks.map(task => [task.code, buildTaskDetailFromItem(task)])
+)
 
 export const getTaskDetailByCode = (taskCode: string): TaskDetail | null => {
-  return taskDetailMap[taskCode] ?? null;
-};
+  return taskDetailMap[taskCode] ?? null
+}
+
+// ─── Task Tree Types & Functions ───────────────────────────────
+
+export type TaskTreeNodeStatus = 'completed' | 'in-progress' | 'delayed' | 'planned'
+
+export interface TaskTreeNode {
+  id: string
+  code: string
+  name: string
+  type: 'project' | 'work_package' | 'task'
+  status: TaskTreeNodeStatus
+  statusLabel: string
+  owner: string
+  progress: number
+  children: TaskTreeNode[]
+  dependencies: string[]
+  taskCode?: string
+}
+
+export interface TaskTreeViewModel {
+  nodes: TaskTreeNode[]
+  summary: {
+    projectCount: number
+    workPackageCount: number
+    taskCount: number
+    delayedCount: number
+  }
+  updatedAt: string
+  focusNodeId?: string
+}
+
+export function buildTaskTreeViewModel(tasks: TaskItem[]): TaskTreeViewModel {
+  const nodes: TaskTreeNode[] = tasks.map(task => ({
+    id: task.code,
+    code: task.code,
+    name: task.name,
+    type: 'task' as const,
+    status: mapTaskStatusToTreeStatus(task.status, task.slaStatus),
+    statusLabel: task.status,
+    owner: task.owner,
+    progress: task.progress,
+    children: [],
+    dependencies: [],
+    taskCode: task.code,
+  }))
+
+  const delayedCount = nodes.filter(n => n.status === 'delayed').length
+
+  return {
+    nodes,
+    summary: {
+      projectCount: 1,
+      workPackageCount: 0,
+      taskCount: nodes.length,
+      delayedCount,
+    },
+    updatedAt: new Date().toLocaleString('zh-CN'),
+  }
+}
+
+function mapTaskStatusToTreeStatus(
+  status: TaskItem['status'],
+  slaStatus: TaskItem['slaStatus']
+): TaskTreeNodeStatus {
+  if (status === '已完成' || status === '已关闭') return 'completed'
+  if (status === '执行中' || status === '待提交') return 'in-progress'
+  if (slaStatus === '超时' || slaStatus === '即将超时') return 'delayed'
+  return 'planned'
+}
+
+export function getTasksByTemplateId(templateId: string): TaskItem[] {
+  return mockTasks.filter(
+    task => task.projectName.includes(templateId) || task.code.includes(templateId)
+  )
+}
+
+export function getTemplateNameById(templateId: string | undefined): string | null {
+  if (!templateId) return null
+  return `模板-${templateId}`
+}
+
+export function getTemplateInstantiationDiagnostics(
+  templateId: string | undefined
+): { errors: string[]; warnings: string[] } | null {
+  if (!templateId) return null
+  return { errors: [], warnings: [] }
+}

@@ -2,7 +2,7 @@
  * 项目管理页面的 mock 数据和配置
  */
 
-import type { ProjectItem, ProjectStage } from './projectManagement.types';
+import type { ProjectItem, ProjectStage } from './projectManagement.types'
 
 /**
  * 项目列表 mock 数据
@@ -21,7 +21,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'medium',
     riskCount: 3,
     plannedOpenDate: '2024-06-15',
-    owner: '张三'
+    owner: '张三',
   },
   {
     name: '北京SKP旗舰店筹建',
@@ -36,7 +36,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'low',
     riskCount: 1,
     plannedOpenDate: '2024-08-20',
-    owner: '李四'
+    owner: '李四',
   },
   {
     name: '上海K11艺术商场改造',
@@ -51,7 +51,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: null,
     riskCount: 0,
     plannedOpenDate: '2024-04-01',
-    owner: '王五'
+    owner: '王五',
   },
   {
     name: '成都太古里二期扩建',
@@ -66,7 +66,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'high',
     riskCount: 5,
     plannedOpenDate: '2024-07-30',
-    owner: '赵六'
+    owner: '赵六',
   },
   {
     name: '广州天环广场品牌升级',
@@ -81,7 +81,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: null,
     riskCount: 0,
     plannedOpenDate: '2024-10-01',
-    owner: '孙七'
+    owner: '孙七',
   },
   {
     name: '杭州湖滨银泰in77焕新',
@@ -96,7 +96,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'low',
     riskCount: 1,
     plannedOpenDate: '2024-05-20',
-    owner: '周八'
+    owner: '周八',
   },
   {
     name: '南京德基广场VIP室装修',
@@ -111,7 +111,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'medium',
     riskCount: 2,
     plannedOpenDate: '2024-09-15',
-    owner: '吴九'
+    owner: '吴九',
   },
   {
     name: '武汉恒隆广场机电改造',
@@ -126,7 +126,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'critical',
     riskCount: 7,
     plannedOpenDate: '2024-06-30',
-    owner: '郑十'
+    owner: '郑十',
   },
   {
     name: '重庆IFS国金中心扩建',
@@ -141,7 +141,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: null,
     riskCount: 0,
     plannedOpenDate: '2024-12-01',
-    owner: '陈一'
+    owner: '陈一',
   },
   {
     name: '西安大悦城亲子业态调整',
@@ -156,7 +156,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'low',
     riskCount: 1,
     plannedOpenDate: '2024-04-10',
-    owner: '刘二'
+    owner: '刘二',
   },
   {
     name: '苏州中心广场智慧化升级',
@@ -171,7 +171,7 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: 'medium',
     riskCount: 3,
     plannedOpenDate: '2024-07-15',
-    owner: '张三'
+    owner: '张三',
   },
   {
     name: '天津天河城品牌焕新',
@@ -186,9 +186,9 @@ export const mockProjects: ProjectItem[] = [
     riskLevel: null,
     riskCount: 0,
     plannedOpenDate: '2024-11-01',
-    owner: '李四'
-  }
-];
+    owner: '李四',
+  },
+]
 
 /**
  * 统计卡片配置
@@ -198,27 +198,31 @@ export const statsCardConfig = [
     key: 'all' as const,
     label: '全部项目',
     icon: '/assets/CodeBubbyAssets/3848_19/46.svg',
-    color: 'default'
+    color: 'default',
+    delta: { value: 0, icon: '/assets/CodeBubbyAssets/3848_19/51.svg' },
   },
   {
     key: 'active' as const,
     label: '执行中',
     icon: '/assets/CodeBubbyAssets/3848_19/47.svg',
-    color: 'blue'
+    color: 'blue',
+    delta: { value: 0, icon: '/assets/CodeBubbyAssets/3848_19/51.svg' },
   },
   {
     key: 'pendingAcceptance' as const,
     label: '待验收',
     icon: '/assets/CodeBubbyAssets/3848_19/48.svg',
-    color: 'green'
+    color: 'green',
+    delta: { value: 0, icon: '/assets/CodeBubbyAssets/3848_19/51.svg' },
   },
   {
     key: 'risk' as const,
     label: '风险预警',
     icon: '/assets/CodeBubbyAssets/3848_19/49.svg',
-    color: 'red'
-  }
-];
+    color: 'red',
+    delta: { value: 0, icon: '/assets/CodeBubbyAssets/3848_19/51.svg' },
+  },
+]
 
 /**
  * 分组选项配置
@@ -227,8 +231,8 @@ export const groupOptions = [
   { value: 'none', label: '不分组' },
   { value: 'stage', label: '按阶段' },
   { value: 'owner', label: '按负责人' },
-  { value: 'brand', label: '按品牌' }
-];
+  { value: 'brand', label: '按品牌' },
+]
 
 /**
  * 排序选项配置
@@ -238,13 +242,13 @@ export const sortOptions = [
   { value: 'name-asc', label: '项目名称 A-Z' },
   { value: 'progress-desc', label: '进度从高到低' },
   { value: 'planned-open-asc', label: '计划开业时间' },
-  { value: 'risk-desc', label: '风险等级优先' }
-];
+  { value: 'risk-desc', label: '风险等级优先' },
+]
 
 /**
  * 项目阶段枚举
  */
-export const stageOptions: ProjectStage[] = ['启动', '准备', '执行', '收尾'];
+export const stageOptions: ProjectStage[] = ['启动', '准备', '执行', '收尾']
 
 /**
  * 状态选项
@@ -259,10 +263,10 @@ export const statusOptions = [
   '待协调',
   '进度滞后',
   '验收中',
-  '待验收'
-];
+  '待验收',
+]
 
 /**
  * 每页条数选项
  */
-export const pageSizeOptions = [10, 20, 50, 100];
+export const pageSizeOptions = [10, 20, 50, 100]

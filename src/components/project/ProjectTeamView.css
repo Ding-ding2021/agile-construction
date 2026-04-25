@@ -1,0 +1,172 @@
+/**
+ * 项目团队管理视图样式
+ */
+
+.project-team-view {
+  padding: var(--pm-spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-header {
+  margin-bottom: var(--pm-spacing-xl);
+}
+
+.team-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--pm-text-100);
+  margin: 0 0 var(--pm-spacing-xs) 0;
+}
+
+.team-header p {
+  font-size: 14px;
+  color: var(--pm-text-50);
+  margin: 0;
+}
+
+.team-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pm-spacing-xl);
+}
+
+.team-stats-placeholder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--pm-spacing-md);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--pm-spacing-md);
+  padding: var(--pm-spacing-lg);
+  background: var(--pm-card);
+  border: 1px solid var(--pm-border);
+  border-radius: var(--pm-radius-lg);
+  box-shadow: var(--pm-shadow-md);
+  transition: box-shadow var(--pm-transition-normal);
+}
+
+.stat-card:hover {
+  box-shadow: var(--pm-shadow-lg);
+}
+
+.stat-icon {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pm-surface);
+  border-radius: var(--pm-radius-md);
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pm-spacing-xs);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pm-text-100);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--pm-text-50);
+}
+
+.team-section {
+  background: var(--pm-card);
+  border: 1px solid var(--pm-border);
+  border-radius: var(--pm-radius-lg);
+  padding: var(--pm-spacing-lg);
+  box-shadow: var(--pm-shadow-md);
+}
+
+.team-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pm-text-100);
+  margin: 0 0 var(--pm-spacing-md) 0;
+}
+
+.team-description {
+  font-size: 14px;
+  color: var(--pm-text-70);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.team-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--pm-spacing-md);
+}
+
+.module-card {
+  padding: var(--pm-spacing-md);
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: var(--pm-radius-md);
+  transition: all var(--pm-transition-normal);
+  cursor: pointer;
+}
+
+.module-card:hover {
+  border-color: var(--pm-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--pm-shadow-md);
+}
+
+.module-icon {
+  font-size: 28px;
+  margin-bottom: var(--pm-spacing-sm);
+}
+
+.module-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pm-text-100);
+  margin: 0 0 var(--pm-spacing-xs) 0;
+}
+
+.module-card p {
+  font-size: 13px;
+  color: var(--pm-text-50);
+  margin: 0;
+}
+
+.team-note {
+  padding: var(--pm-spacing-md);
+  background: var(--pm-blue-2-10);
+  border: 1px solid var(--pm-blue-2-20);
+  border-radius: var(--pm-radius-md);
+}
+
+.team-note p {
+  font-size: 14px;
+  color: var(--pm-text-70);
+  margin: 0;
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .project-team-view {
+    padding: var(--pm-spacing-md);
+  }
+
+  .team-stats-placeholder {
+    grid-template-columns: 1fr;
+  }
+
+  .team-modules {
+    grid-template-columns: 1fr;
+  }
+}

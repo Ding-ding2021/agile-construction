@@ -1,0 +1,15 @@
+# Prisma generated client — auto-generated, do not lint
+src/generated/prisma/**
+
+# Build output
+dist/
+build/
+.coelbuddy/
+.codebuddy/
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+scripts/

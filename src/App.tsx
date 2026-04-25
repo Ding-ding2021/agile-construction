@@ -6,10 +6,6 @@ import { AppRouter } from './components/router/AppRouter'
 import { readRouteFromHash, isRouterHandledPage, type AppRoute } from './config/routes'
 import { getProjectByCode, projects as allProjects } from './data/projects'
 import { getTaskDetailByCode } from './components/task/taskManagement.data'
-import {
-  buildProjectDetailTabHash,
-  type ProjectDetailTab,
-} from './components/project/projectTabs.shared'
 
 const PageLoader = () => (
   <div
@@ -69,10 +65,6 @@ function App() {
     }
     return getTaskDetailByCode(route.taskCode)
   }, [route])
-
-  const openProject = (projectCode: string, tab: ProjectDetailTab = 'overview') => {
-    window.location.hash = buildProjectDetailTabHash(projectCode, tab)
-  }
 
   const goToProjectList = () => {
     window.location.hash = '#/projects'

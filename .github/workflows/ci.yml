@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (core go-live chain)
+        run: npx eslint src/App.tsx src/components/task/TaskManagementPage.tsx src/components/project/ProjectAcceptanceView.tsx src/components/contracts/ContractSettlementPage.tsx "src/services/**/*.ts"
+
+      - name: Verify stage3 docs
+        run: |
+          test -f docs/phase3/launch-checklist.md
+          test -f docs/phase3/collaboration-matrix.md
+          test -f docs/phase3/cloudbase-e2e-checklist.md
+          test -f docs/phase3/weekly-governance-metrics.md
+          test -f docs/phase3/feishu-publish-runbook.md
+
+      - name: Type & Build
+        run: npm run build

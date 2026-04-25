@@ -1,0 +1,352 @@
+- generic [ref=e188]:
+  - complementary [ref=e189]:
+    - generic [ref=e190]:
+      - img "数字建管" [ref=e191]
+      - button "收起侧边栏" [ref=e192] [cursor=pointer]
+    - navigation [ref=e193]:
+      - button "工作台" [disabled] [ref=e194]:
+        - generic [ref=e195]: 工作台
+      - button "数据中心" [disabled] [ref=e196]:
+        - generic [ref=e197]: 数据中心
+      - button "项目管理" [ref=e198] [cursor=pointer]:
+        - generic [ref=e199]: 项目管理
+      - button "任务管理" [ref=e200] [cursor=pointer]:
+        - generic [ref=e201]: 任务管理
+      - button "客户管理" [disabled] [ref=e202]:
+        - generic [ref=e203]: 客户管理
+      - button "合同结算" [ref=e204] [cursor=pointer]:
+        - generic [ref=e205]: 合同结算
+      - button "采购管理" [ref=e206] [cursor=pointer]:
+        - generic [ref=e207]: 采购管理
+      - button "订单管理" [disabled] [ref=e208]:
+        - generic [ref=e209]: 订单管理
+      - button "设施管理" [disabled] [ref=e210]:
+        - generic [ref=e211]: 设施管理
+      - button "标准管理" [ref=e212] [cursor=pointer]:
+        - generic [ref=e213]: 标准管理
+      - button "人员管理" [ref=e214] [cursor=pointer]:
+        - generic [ref=e215]: 人员管理
+      - button "数字员工" [ref=e216] [cursor=pointer]:
+        - generic [ref=e217]: 数字员工
+      - button "系统设置" [ref=e218] [cursor=pointer]:
+        - generic [ref=e219]: 系统设置
+  - main [ref=e221]:
+    - generic [ref=e222]:
+      - generic [ref=e223]:
+        - heading "项目管理" [level=1] [ref=e224]
+        - text: Project Management
+      - generic [ref=e225]:
+        - generic [ref=e226]:
+          - img "搜索" [ref=e227]
+          - textbox "搜索项目..." [ref=e228]
+        - button "通知" [ref=e229] [cursor=pointer]
+        - button "AI助手" [ref=e230] [cursor=pointer]
+        - button "当前用户" [ref=e231] [cursor=pointer]:
+          - generic [ref=e232]: 管理员
+    - generic [ref=e233]:
+      - generic [ref=e234]:
+        - button "+8 门店项目 12" [ref=e235] [cursor=pointer]:
+          - generic [ref=e238]: "+8"
+          - generic [ref=e239]: 门店项目
+          - generic [ref=e240]: "12"
+        - button "+3 建设中 5" [ref=e241] [cursor=pointer]:
+          - generic [ref=e244]: "+3"
+          - generic [ref=e245]: 建设中
+          - generic [ref=e246]: "5"
+        - button "+5 已完成 2" [ref=e247] [cursor=pointer]:
+          - generic [ref=e250]: "+5"
+          - generic [ref=e251]: 已完成
+          - generic [ref=e252]: "2"
+        - button "-1 风险预警 2" [ref=e253] [cursor=pointer]:
+          - generic [ref=e256]: "-1"
+          - generic [ref=e257]: 风险预警
+          - generic [ref=e258]: "2"
+      - generic [ref=e259]:
+        - generic [ref=e260]:
+          - generic [ref=e261]:
+            - button "列表" [ref=e262] [cursor=pointer]:
+              - generic [ref=e263]: 列表
+            - button "网格" [ref=e264] [cursor=pointer]:
+              - generic [ref=e265]: 网格
+            - button "看板" [ref=e266] [cursor=pointer]:
+              - generic [ref=e267]: 看板
+            - button "日历" [ref=e268] [cursor=pointer]:
+              - generic [ref=e269]: 日历
+            - button "地图" [ref=e270] [cursor=pointer]:
+              - generic [ref=e271]: 地图
+          - generic [ref=e272]:
+            - textbox "搜索项目..." [ref=e274]
+            - button "分组" [ref=e276] [cursor=pointer]:
+              - generic [ref=e277]: 分组
+            - button "筛选" [ref=e279] [cursor=pointer]:
+              - generic [ref=e280]: 筛选
+            - button "排序" [ref=e282] [cursor=pointer]:
+              - generic [ref=e283]: 排序
+            - button "重置" [ref=e284] [cursor=pointer]:
+              - generic [ref=e285]: 重置
+            - button "新建项目" [ref=e286] [cursor=pointer]:
+              - generic [ref=e287]: 新建项目
+            - button "更多筛选" [ref=e288] [cursor=pointer]
+        - generic [ref=e289]:
+          - table [ref=e291]:
+            - rowgroup [ref=e292]:
+              - row "项目名称 品牌 阶段 进度 里程碑 任务 风险 计划开业 负责人" [ref=e293]:
+                - columnheader "项目名称" [ref=e294]
+                - columnheader "品牌" [ref=e295]
+                - columnheader "阶段" [ref=e296]
+                - columnheader "进度" [ref=e297]
+                - columnheader "里程碑" [ref=e298]
+                - columnheader "任务" [ref=e299]
+                - columnheader "风险" [ref=e300]
+                - columnheader "计划开业" [ref=e301]
+                - columnheader "负责人" [ref=e302]
+            - rowgroup [ref=e303]:
+              - row "深圳万象城开业项目 PRJ-2024-001 万象城 执行 执行中 65% 8/12 23/35 中 3 2024-06-15 张三" [ref=e304] [cursor=pointer]:
+                - cell "深圳万象城开业项目 PRJ-2024-001" [ref=e305]:
+                  - generic [ref=e306]:
+                    - generic [ref=e307]: 深圳万象城开业项目
+                    - generic [ref=e308]: PRJ-2024-001
+                - cell "万象城" [ref=e309]:
+                  - generic [ref=e310]: 万象城
+                - cell "执行" [ref=e311]:
+                  - generic [ref=e312]: 执行
+                - cell "执行中 65%" [ref=e313]:
+                  - generic [ref=e314]:
+                    - combobox [ref=e315]:
+                      - option "执行中" [selected]
+                      - option "待验收"
+                      - option "整改中"
+                      - option "已中止"
+                    - generic [ref=e317]: 65%
+                - cell "8/12" [ref=e318]
+                - cell "23/35" [ref=e319]
+                - cell "中 3" [ref=e320]:
+                  - generic [ref=e321]:
+                    - generic [ref=e322]: 中
+                    - generic [ref=e323]: "3"
+                - cell "2024-06-15" [ref=e324]
+                - cell "张三" [ref=e325]
+              - row "北京SKP旗舰店筹建 PRJ-2024-002 SKP 启动 待确认 25% 2/8 8/20 低 1 2024-08-20 李四" [ref=e326] [cursor=pointer]:
+                - cell "北京SKP旗舰店筹建 PRJ-2024-002" [ref=e327]:
+                  - generic [ref=e328]:
+                    - generic [ref=e329]: 北京SKP旗舰店筹建
+                    - generic [ref=e330]: PRJ-2024-002
+                - cell "SKP" [ref=e331]:
+                  - generic [ref=e332]: SKP
+                - cell "启动" [ref=e333]:
+                  - generic [ref=e334]: 启动
+                - cell "待确认 25%" [ref=e335]:
+                  - generic [ref=e336]:
+                    - combobox [ref=e337]:
+                      - option "待确认" [selected]
+                      - option "待拆解"
+                      - option "已中止"
+                    - generic [ref=e339]: 25%
+                - cell "2/8" [ref=e340]
+                - cell "8/20" [ref=e341]
+                - cell "低 1" [ref=e342]:
+                  - generic [ref=e343]:
+                    - generic [ref=e344]: 低
+                    - generic [ref=e345]: "1"
+                - cell "2024-08-20" [ref=e346]
+                - cell "李四" [ref=e347]
+              - row "上海K11艺术商场改造 PRJ-2024-003 K11 收尾 待验收 92% 11/12 32/35 - 2024-04-01 王五" [ref=e348] [cursor=pointer]:
+                - cell "上海K11艺术商场改造 PRJ-2024-003" [ref=e349]:
+                  - generic [ref=e350]:
+                    - generic [ref=e351]: 上海K11艺术商场改造
+                    - generic [ref=e352]: PRJ-2024-003
+                - cell "K11" [ref=e353]:
+                  - generic [ref=e354]: K11
+                - cell "收尾" [ref=e355]:
+                  - generic [ref=e356]: 收尾
+                - cell "待验收 92%" [ref=e357]:
+                  - generic [ref=e358]:
+                    - combobox [ref=e359]:
+                      - option "待验收" [selected]
+                      - option "待结算"
+                      - option "整改中"
+                      - option "已中止"
+                    - generic [ref=e361]: 92%
+                - cell "11/12" [ref=e362]
+                - cell "32/35" [ref=e363]
+                - cell "-" [ref=e364]
+                - cell "2024-04-01" [ref=e365]
+                - cell "王五" [ref=e366]
+              - row "成都太古里二期扩建 PRJ-2024-004 太古里 执行 整改中 48% 5/15 18/40 高 5 2024-07-30 赵六" [ref=e367] [cursor=pointer]:
+                - cell "成都太古里二期扩建 PRJ-2024-004" [ref=e368]:
+                  - generic [ref=e369]:
+                    - generic [ref=e370]: 成都太古里二期扩建
+                    - generic [ref=e371]: PRJ-2024-004
+                - cell "太古里" [ref=e372]:
+                  - generic [ref=e373]: 太古里
+                - cell "执行" [ref=e374]:
+                  - generic [ref=e375]: 执行
+                - cell "整改中 48%" [ref=e376]:
+                  - generic [ref=e377]:
+                    - combobox [ref=e378]:
+                      - option "整改中" [selected]
+                      - option "待验收"
+                      - option "已中止"
+                    - generic [ref=e380]: 48%
+                - cell "5/15" [ref=e381]
+                - cell "18/40" [ref=e382]
+                - cell "高 5" [ref=e383]:
+                  - generic [ref=e384]:
+                    - generic [ref=e385]: 高
+                    - generic [ref=e386]: "5"
+                - cell "2024-07-30" [ref=e387]
+                - cell "赵六" [ref=e388]
+              - row "广州天环广场品牌升级 PRJ-2024-005 天环广场 启动 待立项 10% 1/10 2/25 - 2024-10-01 孙七" [ref=e389] [cursor=pointer]:
+                - cell "广州天环广场品牌升级 PRJ-2024-005" [ref=e390]:
+                  - generic [ref=e391]:
+                    - generic [ref=e392]: 广州天环广场品牌升级
+                    - generic [ref=e393]: PRJ-2024-005
+                - cell "天环广场" [ref=e394]:
+                  - generic [ref=e395]: 天环广场
+                - cell "启动" [ref=e396]:
+                  - generic [ref=e397]: 启动
+                - cell "待立项 10%" [ref=e398]:
+                  - generic [ref=e399]:
+                    - combobox [ref=e400]:
+                      - option "待立项" [selected]
+                      - option "待确认"
+                      - option "已中止"
+                    - generic [ref=e402]: 10%
+                - cell "1/10" [ref=e403]
+                - cell "2/25" [ref=e404]
+                - cell "-" [ref=e405]
+                - cell "2024-10-01" [ref=e406]
+                - cell "孙七" [ref=e407]
+              - row "杭州湖滨银泰in77焕新 PRJ-2024-006 银泰 执行 执行中 72% 9/12 27/30 低 1 2024-05-20 周八" [ref=e408] [cursor=pointer]:
+                - cell "杭州湖滨银泰in77焕新 PRJ-2024-006" [ref=e409]:
+                  - generic [ref=e410]:
+                    - generic [ref=e411]: 杭州湖滨银泰in77焕新
+                    - generic [ref=e412]: PRJ-2024-006
+                - cell "银泰" [ref=e413]:
+                  - generic [ref=e414]: 银泰
+                - cell "执行" [ref=e415]:
+                  - generic [ref=e416]: 执行
+                - cell "执行中 72%" [ref=e417]:
+                  - generic [ref=e418]:
+                    - combobox [ref=e419]:
+                      - option "执行中" [selected]
+                      - option "待验收"
+                      - option "整改中"
+                      - option "已中止"
+                    - generic [ref=e421]: 72%
+                - cell "9/12" [ref=e422]
+                - cell "27/30" [ref=e423]
+                - cell "低 1" [ref=e424]:
+                  - generic [ref=e425]:
+                    - generic [ref=e426]: 低
+                    - generic [ref=e427]: "1"
+                - cell "2024-05-20" [ref=e428]
+                - cell "周八" [ref=e429]
+              - row "南京德基广场VIP室装修 PRJ-2024-007 德基广场 准备 待拆解 35% 3/8 10/18 中 2 2024-09-15 吴九" [ref=e430] [cursor=pointer]:
+                - cell "南京德基广场VIP室装修 PRJ-2024-007" [ref=e431]:
+                  - generic [ref=e432]:
+                    - generic [ref=e433]: 南京德基广场VIP室装修
+                    - generic [ref=e434]: PRJ-2024-007
+                - cell "德基广场" [ref=e435]:
+                  - generic [ref=e436]: 德基广场
+                - cell "准备" [ref=e437]:
+                  - generic [ref=e438]: 准备
+                - cell "待拆解 35%" [ref=e439]:
+                  - generic [ref=e440]:
+                    - combobox [ref=e441]:
+                      - option "待拆解" [selected]
+                      - option "执行中"
+                      - option "已中止"
+                    - generic [ref=e443]: 35%
+                - cell "3/8" [ref=e444]
+                - cell "10/18" [ref=e445]
+                - cell "中 2" [ref=e446]:
+                  - generic [ref=e447]:
+                    - generic [ref=e448]: 中
+                    - generic [ref=e449]: "2"
+                - cell "2024-09-15" [ref=e450]
+                - cell "吴九" [ref=e451]
+              - row "武汉恒隆广场机电改造 PRJ-2024-008 恒隆广场 执行 整改中 55% 7/12 20/32 严重 7 2024-06-30 郑十" [ref=e452] [cursor=pointer]:
+                - cell "武汉恒隆广场机电改造 PRJ-2024-008" [ref=e453]:
+                  - generic [ref=e454]:
+                    - generic [ref=e455]: 武汉恒隆广场机电改造
+                    - generic [ref=e456]: PRJ-2024-008
+                - cell "恒隆广场" [ref=e457]:
+                  - generic [ref=e458]: 恒隆广场
+                - cell "执行" [ref=e459]:
+                  - generic [ref=e460]: 执行
+                - cell "整改中 55%" [ref=e461]:
+                  - generic [ref=e462]:
+                    - combobox [ref=e463]:
+                      - option "整改中" [selected]
+                      - option "待验收"
+                      - option "已中止"
+                    - generic [ref=e465]: 55%
+                - cell "7/12" [ref=e466]
+                - cell "20/32" [ref=e467]
+                - cell "严重 7" [ref=e468]:
+                  - generic [ref=e469]:
+                    - generic [ref=e470]: 严重
+                    - generic [ref=e471]: "7"
+                - cell "2024-06-30" [ref=e472]
+                - cell "郑十" [ref=e473]
+              - row "重庆IFS国金中心扩建 PRJ-2024-009 IFS 启动 待立项 5% 0/10 1/28 - 2024-12-01 陈一" [ref=e474] [cursor=pointer]:
+                - cell "重庆IFS国金中心扩建 PRJ-2024-009" [ref=e475]:
+                  - generic [ref=e476]:
+                    - generic [ref=e477]: 重庆IFS国金中心扩建
+                    - generic [ref=e478]: PRJ-2024-009
+                - cell "IFS" [ref=e479]:
+                  - generic [ref=e480]: IFS
+                - cell "启动" [ref=e481]:
+                  - generic [ref=e482]: 启动
+                - cell "待立项 5%" [ref=e483]:
+                  - generic [ref=e484]:
+                    - combobox [ref=e485]:
+                      - option "待立项" [selected]
+                      - option "待确认"
+                      - option "已中止"
+                    - generic [ref=e487]: 5%
+                - cell "0/10" [ref=e488]
+                - cell "1/28" [ref=e489]
+                - cell "-" [ref=e490]
+                - cell "2024-12-01" [ref=e491]
+                - cell "陈一" [ref=e492]
+              - row "西安大悦城亲子业态调整 PRJ-2024-010 大悦城 收尾 待验收 88% 10/12 30/32 低 1 2024-04-10 刘二" [ref=e493] [cursor=pointer]:
+                - cell "西安大悦城亲子业态调整 PRJ-2024-010" [ref=e494]:
+                  - generic [ref=e495]:
+                    - generic [ref=e496]: 西安大悦城亲子业态调整
+                    - generic [ref=e497]: PRJ-2024-010
+                - cell "大悦城" [ref=e498]:
+                  - generic [ref=e499]: 大悦城
+                - cell "收尾" [ref=e500]:
+                  - generic [ref=e501]: 收尾
+                - cell "待验收 88%" [ref=e502]:
+                  - generic [ref=e503]:
+                    - combobox [ref=e504]:
+                      - option "待验收" [selected]
+                      - option "待结算"
+                      - option "整改中"
+                      - option "已中止"
+                    - generic [ref=e506]: 88%
+                - cell "10/12" [ref=e507]
+                - cell "30/32" [ref=e508]
+                - cell "低 1" [ref=e509]:
+                  - generic [ref=e510]:
+                    - generic [ref=e511]: 低
+                    - generic [ref=e512]: "1"
+                - cell "2024-04-10" [ref=e513]
+                - cell "刘二" [ref=e514]
+          - generic [ref=e516]:
+            - generic [ref=e517]:
+              - generic [ref=e518]: 共 12 条记录，当前第 1 / 2 页
+              - generic [ref=e519]:
+                - generic [ref=e520]: 每页显示
+                - button "10 条" [ref=e521] [cursor=pointer]:
+                  - generic [ref=e522]: 10 条
+            - generic [ref=e523]:
+              - button [disabled] [ref=e524]
+              - generic [ref=e525]:
+                - button "1" [ref=e526] [cursor=pointer]
+                - button "2" [ref=e527] [cursor=pointer]
+              - button [ref=e528] [cursor=pointer]
+  - button "打开洞察" [ref=e529] [cursor=pointer]

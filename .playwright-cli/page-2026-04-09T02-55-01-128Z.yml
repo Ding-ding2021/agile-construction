@@ -1,0 +1,313 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "数字建管" [ref=e6]
+      - button "收起侧边栏" [ref=e7] [cursor=pointer]
+    - navigation [ref=e8]:
+      - button "工作台" [disabled] [ref=e9]:
+        - generic [ref=e10]: 工作台
+      - button "数据中心" [disabled] [ref=e11]:
+        - generic [ref=e12]: 数据中心
+      - button "项目管理" [ref=e13] [cursor=pointer]:
+        - generic [ref=e14]: 项目管理
+      - button "任务管理" [ref=e15] [cursor=pointer]:
+        - generic [ref=e16]: 任务管理
+      - button "客户管理" [disabled] [ref=e17]:
+        - generic [ref=e18]: 客户管理
+      - button "合同结算" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: 合同结算
+      - button "采购管理" [ref=e21] [cursor=pointer]:
+        - generic [ref=e22]: 采购管理
+      - button "订单管理" [ref=e23] [cursor=pointer]:
+        - generic [ref=e24]: 订单管理
+      - button "设施管理" [disabled] [ref=e25]:
+        - generic [ref=e26]: 设施管理
+      - button "标准管理" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: 标准管理
+      - button "人员管理" [ref=e29] [cursor=pointer]:
+        - generic [ref=e30]: 人员管理
+      - button "数字员工" [ref=e31] [cursor=pointer]:
+        - generic [ref=e32]: 数字员工
+      - button "系统设置" [ref=e33] [cursor=pointer]:
+        - generic [ref=e34]: 系统设置
+  - main [ref=e36]:
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - heading "人员管理" [level=1] [ref=e39]
+        - text: Personnel & Permissions
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - img "搜索" [ref=e42]
+          - textbox "搜索..." [ref=e43]
+        - button "通知" [ref=e44] [cursor=pointer]
+        - button "AI助手" [ref=e45] [cursor=pointer]
+        - button "当前用户" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: 管理员
+    - generic [ref=e48]:
+      - tablist "人员管理标签" [ref=e49]:
+        - tab "用户列表" [selected] [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: 用户列表
+        - tab "角色管理" [ref=e52] [cursor=pointer]:
+          - generic [ref=e53]: 角色管理
+        - tab "技能资质" [ref=e54] [cursor=pointer]:
+          - generic [ref=e55]: 技能资质
+        - tab "操作审计" [ref=e56] [cursor=pointer]:
+          - generic [ref=e57]: 操作审计
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e61]: 在岗人数
+          - generic [ref=e62]: "168"
+        - generic [ref=e63]:
+          - generic [ref=e65]: 可分配人数
+          - generic [ref=e66]: "112"
+        - generic [ref=e67]:
+          - generic [ref=e69]: 资质即将到期
+          - generic [ref=e70]: "14"
+        - generic [ref=e71]:
+          - generic [ref=e73]: 超负载人数
+          - generic [ref=e74]: "9"
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - button "网格" [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]: 网格
+            - button "列表" [ref=e80] [cursor=pointer]:
+              - generic [ref=e81]: 列表
+          - generic [ref=e82]:
+            - textbox "搜索姓名、手机号、工号..." [ref=e84]
+            - button "筛选" [ref=e85] [cursor=pointer]:
+              - generic [ref=e86]: 筛选
+            - button "排序" [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]: 排序
+            - button "添加人员" [ref=e89] [cursor=pointer]:
+              - generic [ref=e90]: 添加人员
+        - generic [ref=e91]:
+          - table [ref=e92]:
+            - rowgroup [ref=e93]:
+              - row "人员 组织/团队 角色 人员状态 可分配状态 技能摘要 负载(当前/关键) 风险等级 最近活跃 操作" [ref=e94]:
+                - columnheader "人员" [ref=e95]
+                - columnheader "组织/团队" [ref=e96]
+                - columnheader "角色" [ref=e97]
+                - columnheader "人员状态" [ref=e98]
+                - columnheader "可分配状态" [ref=e99]
+                - columnheader "技能摘要" [ref=e100]
+                - columnheader "负载(当前/关键)" [ref=e101]
+                - columnheader "风险等级" [ref=e102]
+                - columnheader "最近活跃" [ref=e103]
+                - columnheader "操作" [ref=e104]
+            - rowgroup [ref=e105]:
+              - row "ZW 张伟 EMP-2021-0042 · 138****1234 华东大区 项目一部 项目经理 在岗 可分配 进度管理 成本管控 +1 4 / 2 低 2026-03-03 09:45 查看用户详情" [ref=e106]:
+                - cell "ZW 张伟 EMP-2021-0042 · 138****1234" [ref=e107]:
+                  - button "ZW 张伟 EMP-2021-0042 · 138****1234" [ref=e108] [cursor=pointer]:
+                    - generic [ref=e109]:
+                      - generic [ref=e111]: ZW
+                      - generic [ref=e112]:
+                        - generic [ref=e113]: 张伟
+                        - generic [ref=e114]: EMP-2021-0042 · 138****1234
+                - cell "华东大区 项目一部" [ref=e115]:
+                  - generic [ref=e116]:
+                    - generic [ref=e117]: 华东大区
+                    - generic [ref=e118]: 项目一部
+                - cell "项目经理" [ref=e119]:
+                  - generic [ref=e120]: 项目经理
+                - cell "在岗" [ref=e121]:
+                  - generic [ref=e122]: 在岗
+                - cell "可分配" [ref=e123]:
+                  - generic [ref=e124]: 可分配
+                - cell "进度管理 成本管控 +1" [ref=e125]:
+                  - generic [ref=e126]:
+                    - generic [ref=e127]: 进度管理
+                    - generic [ref=e128]: 成本管控
+                    - generic [ref=e129]: "+1"
+                - cell "4 / 2" [ref=e130]:
+                  - generic [ref=e131]: 4 / 2
+                - cell "低" [ref=e132]:
+                  - generic [ref=e133]: 低
+                - cell "2026-03-03 09:45" [ref=e134]
+                - cell "查看用户详情" [ref=e135]:
+                  - button "查看用户详情" [ref=e136] [cursor=pointer]
+              - row "李 李娜 EMP-1002 · 13800002222 华东大区 项目二部 项目经理 在岗 忙碌 合同管理 沟通协调 5 / 2 中 2026-04-07 08:48 查看用户详情" [ref=e137]:
+                - cell "李 李娜 EMP-1002 · 13800002222" [ref=e138]:
+                  - button "李 李娜 EMP-1002 · 13800002222" [ref=e139] [cursor=pointer]:
+                    - generic [ref=e140]:
+                      - generic [ref=e142]: 李
+                      - generic [ref=e143]:
+                        - generic [ref=e144]: 李娜
+                        - generic [ref=e145]: EMP-1002 · 13800002222
+                - cell "华东大区 项目二部" [ref=e146]:
+                  - generic [ref=e147]:
+                    - generic [ref=e148]: 华东大区
+                    - generic [ref=e149]: 项目二部
+                - cell "项目经理" [ref=e150]:
+                  - generic [ref=e151]: 项目经理
+                - cell "在岗" [ref=e152]:
+                  - generic [ref=e153]: 在岗
+                - cell "忙碌" [ref=e154]:
+                  - generic [ref=e155]: 忙碌
+                - cell "合同管理 沟通协调" [ref=e156]:
+                  - generic [ref=e157]:
+                    - generic [ref=e158]: 合同管理
+                    - generic [ref=e159]: 沟通协调
+                - cell "5 / 2" [ref=e160]:
+                  - generic [ref=e161]: 5 / 2
+                - cell "中" [ref=e162]:
+                  - generic [ref=e163]: 中
+                - cell "2026-04-07 08:48" [ref=e164]
+                - cell "查看用户详情" [ref=e165]:
+                  - button "查看用户详情" [ref=e166] [cursor=pointer]
+              - row "王 王强 EMP-1021 · 13800003333 工程技术中心 结构组 专业负责人 在岗 忙碌 结构设计 抗震评估 +1 6 / 3 高 2026-04-06 22:03 查看用户详情" [ref=e167]:
+                - cell "王 王强 EMP-1021 · 13800003333" [ref=e168]:
+                  - button "王 王强 EMP-1021 · 13800003333" [ref=e169] [cursor=pointer]:
+                    - generic [ref=e170]:
+                      - generic [ref=e172]: 王
+                      - generic [ref=e173]:
+                        - generic [ref=e174]: 王强
+                        - generic [ref=e175]: EMP-1021 · 13800003333
+                - cell "工程技术中心 结构组" [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: 工程技术中心
+                    - generic [ref=e179]: 结构组
+                - cell "专业负责人" [ref=e180]:
+                  - generic [ref=e181]: 专业负责人
+                - cell "在岗" [ref=e182]:
+                  - generic [ref=e183]: 在岗
+                - cell "忙碌" [ref=e184]:
+                  - generic [ref=e185]: 忙碌
+                - cell "结构设计 抗震评估 +1" [ref=e186]:
+                  - generic [ref=e187]:
+                    - generic [ref=e188]: 结构设计
+                    - generic [ref=e189]: 抗震评估
+                    - generic [ref=e190]: "+1"
+                - cell "6 / 3" [ref=e191]:
+                  - generic [ref=e192]: 6 / 3
+                - cell "高" [ref=e193]:
+                  - generic [ref=e194]: 高
+                - cell "2026-04-06 22:03" [ref=e195]
+                - cell "查看用户详情" [ref=e196]:
+                  - button "查看用户详情" [ref=e197] [cursor=pointer]
+              - row "赵 赵敏 EMP-1068 · 13800004444 安全质量中心 质量组 工程师 请假 不可分配 质量巡检 风险排查 2 / 0 中 2026-04-01 18:25 查看用户详情" [ref=e198]:
+                - cell "赵 赵敏 EMP-1068 · 13800004444" [ref=e199]:
+                  - button "赵 赵敏 EMP-1068 · 13800004444" [ref=e200] [cursor=pointer]:
+                    - generic [ref=e201]:
+                      - generic [ref=e203]: 赵
+                      - generic [ref=e204]:
+                        - generic [ref=e205]: 赵敏
+                        - generic [ref=e206]: EMP-1068 · 13800004444
+                - cell "安全质量中心 质量组" [ref=e207]:
+                  - generic [ref=e208]:
+                    - generic [ref=e209]: 安全质量中心
+                    - generic [ref=e210]: 质量组
+                - cell "工程师" [ref=e211]:
+                  - generic [ref=e212]: 工程师
+                - cell "请假" [ref=e213]:
+                  - generic [ref=e214]: 请假
+                - cell "不可分配" [ref=e215]:
+                  - generic [ref=e216]: 不可分配
+                - cell "质量巡检 风险排查" [ref=e217]:
+                  - generic [ref=e218]:
+                    - generic [ref=e219]: 质量巡检
+                    - generic [ref=e220]: 风险排查
+                - cell "2 / 0" [ref=e221]:
+                  - generic [ref=e222]: 2 / 0
+                - cell "中" [ref=e223]:
+                  - generic [ref=e224]: 中
+                - cell "2026-04-01 18:25" [ref=e225]
+                - cell "查看用户详情" [ref=e226]:
+                  - button "查看用户详情" [ref=e227] [cursor=pointer]
+              - row "孙 孙杰 EMP-1082 · 13800005555 华南大区 机电组 工程师 离岗 不可分配 机电施工 0 / 0 低 2026-03-19 11:17 查看用户详情" [ref=e228]:
+                - cell "孙 孙杰 EMP-1082 · 13800005555" [ref=e229]:
+                  - button "孙 孙杰 EMP-1082 · 13800005555" [ref=e230] [cursor=pointer]:
+                    - generic [ref=e231]:
+                      - generic [ref=e233]: 孙
+                      - generic [ref=e234]:
+                        - generic [ref=e235]: 孙杰
+                        - generic [ref=e236]: EMP-1082 · 13800005555
+                - cell "华南大区 机电组" [ref=e237]:
+                  - generic [ref=e238]:
+                    - generic [ref=e239]: 华南大区
+                    - generic [ref=e240]: 机电组
+                - cell "工程师" [ref=e241]:
+                  - generic [ref=e242]: 工程师
+                - cell "离岗" [ref=e243]:
+                  - generic [ref=e244]: 离岗
+                - cell "不可分配" [ref=e245]:
+                  - generic [ref=e246]: 不可分配
+                - cell "机电施工" [ref=e247]:
+                  - generic [ref=e249]: 机电施工
+                - cell "0 / 0" [ref=e250]:
+                  - generic [ref=e251]: 0 / 0
+                - cell "低" [ref=e252]:
+                  - generic [ref=e253]: 低
+                - cell "2026-03-19 11:17" [ref=e254]
+                - cell "查看用户详情" [ref=e255]:
+                  - button "查看用户详情" [ref=e256] [cursor=pointer]
+              - row "陈 陈雨 EMP-1120 · 13800006666 运营管理中心 管理层 只读观察者 禁用 不可分配 经营分析 审计复盘 1 / 0 中 2026-03-27 09:40 查看用户详情" [ref=e257]:
+                - cell "陈 陈雨 EMP-1120 · 13800006666" [ref=e258]:
+                  - button "陈 陈雨 EMP-1120 · 13800006666" [ref=e259] [cursor=pointer]:
+                    - generic [ref=e260]:
+                      - generic [ref=e262]: 陈
+                      - generic [ref=e263]:
+                        - generic [ref=e264]: 陈雨
+                        - generic [ref=e265]: EMP-1120 · 13800006666
+                - cell "运营管理中心 管理层" [ref=e266]:
+                  - generic [ref=e267]:
+                    - generic [ref=e268]: 运营管理中心
+                    - generic [ref=e269]: 管理层
+                - cell "只读观察者" [ref=e270]:
+                  - generic [ref=e271]: 只读观察者
+                - cell "禁用" [ref=e272]:
+                  - generic [ref=e273]: 禁用
+                - cell "不可分配" [ref=e274]:
+                  - generic [ref=e275]: 不可分配
+                - cell "经营分析 审计复盘" [ref=e276]:
+                  - generic [ref=e277]:
+                    - generic [ref=e278]: 经营分析
+                    - generic [ref=e279]: 审计复盘
+                - cell "1 / 0" [ref=e280]:
+                  - generic [ref=e281]: 1 / 0
+                - cell "中" [ref=e282]:
+                  - generic [ref=e283]: 中
+                - cell "2026-03-27 09:40" [ref=e284]
+                - cell "查看用户详情" [ref=e285]:
+                  - button "查看用户详情" [ref=e286] [cursor=pointer]
+              - row "吴 吴芳（外部） EXT-2011 · 13900007777 合作伙伴组织 远大幕墙 外部协作方 在岗 可分配 幕墙深化 现场配合 1 / 1 高 2026-04-06 15:09 查看用户详情" [ref=e287]:
+                - cell "吴 吴芳（外部） EXT-2011 · 13900007777" [ref=e288]:
+                  - button "吴 吴芳（外部） EXT-2011 · 13900007777" [ref=e289] [cursor=pointer]:
+                    - generic [ref=e290]:
+                      - generic [ref=e292]: 吴
+                      - generic [ref=e293]:
+                        - generic [ref=e294]: 吴芳（外部）
+                        - generic [ref=e295]: EXT-2011 · 13900007777
+                - cell "合作伙伴组织 远大幕墙" [ref=e296]:
+                  - generic [ref=e297]:
+                    - generic [ref=e298]: 合作伙伴组织
+                    - generic [ref=e299]: 远大幕墙
+                - cell "外部协作方" [ref=e300]:
+                  - generic [ref=e301]: 外部协作方
+                - cell "在岗" [ref=e302]:
+                  - generic [ref=e303]: 在岗
+                - cell "可分配" [ref=e304]:
+                  - generic [ref=e305]: 可分配
+                - cell "幕墙深化 现场配合" [ref=e306]:
+                  - generic [ref=e307]:
+                    - generic [ref=e308]: 幕墙深化
+                    - generic [ref=e309]: 现场配合
+                - cell "1 / 1" [ref=e310]:
+                  - generic [ref=e311]: 1 / 1
+                - cell "高" [ref=e312]:
+                  - generic [ref=e313]: 高
+                - cell "2026-04-06 15:09" [ref=e314]
+                - cell "查看用户详情" [ref=e315]:
+                  - button "查看用户详情" [ref=e316] [cursor=pointer]
+          - generic [ref=e317]:
+            - generic [ref=e318]: 共 75 条记录，当前第 1 / 8 页
+            - generic [ref=e319]:
+              - button "上一页" [ref=e320]
+              - generic [ref=e321]:
+                - button "1" [ref=e322] [cursor=pointer]
+                - button "2" [ref=e323] [cursor=pointer]
+                - button "3" [ref=e324] [cursor=pointer]
+                - button "4" [ref=e325] [cursor=pointer]
+                - button "更多页码" [ref=e326] [cursor=pointer]
+                - button "8" [ref=e327] [cursor=pointer]
+              - button "下一页" [ref=e328] [cursor=pointer]

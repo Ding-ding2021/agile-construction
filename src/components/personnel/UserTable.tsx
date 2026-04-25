@@ -3,35 +3,35 @@
  * 负责工具栏交互、视图切换、分页、空状态和详情入口
  */
 
-import type { 
-  ProjectItem, 
-  ProjectFilters, 
-  ProjectViewMode, 
+import type {
+  ProjectItem,
+  ProjectFilters,
+  ProjectViewMode,
   PaginationState,
-  ProjectStage 
-} from './projectManagement.types';
-import ProjectToolbar from './ProjectToolbar';
-import ProjectListView from './ProjectListView';
-import ProjectGridView from './ProjectGridView';
-import ProjectKanbanView from './ProjectKanbanView';
-import ProjectPlaceholderView from './ProjectPlaceholderView';
+  ProjectStage,
+} from './projectManagement.types'
+import ProjectToolbar from './ProjectToolbar'
+import ProjectListView from './ProjectListView'
+import ProjectGridView from './ProjectGridView'
+import ProjectKanbanView from './ProjectKanbanView'
+import ProjectPlaceholderView from './ProjectPlaceholderView'
 
 type UserTableProps = {
-  viewMode: ProjectViewMode;
-  onViewModeChange: (mode: ProjectViewMode) => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  filters: ProjectFilters;
-  onFiltersChange: (filters: Partial<ProjectFilters>) => void;
-  projects: ProjectItem[];
-  pagination: PaginationState;
-  kanbanGroups: Map<ProjectStage, ProjectItem[]>;
-  onProjectClick: (project: ProjectItem) => void;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
-  onOpenDetailPage?: () => void;
-  onNewProject: () => void;
-};
+  viewMode: ProjectViewMode
+  onViewModeChange: (mode: ProjectViewMode) => void
+  searchQuery: string
+  onSearchChange: (query: string) => void
+  filters: ProjectFilters
+  onFiltersChange: (filters: Partial<ProjectFilters>) => void
+  projects: ProjectItem[]
+  pagination: PaginationState
+  kanbanGroups: Map<ProjectStage, ProjectItem[]>
+  onProjectClick: (project: ProjectItem) => void
+  onPageChange: (page: number) => void
+  onPageSizeChange: (size: number) => void
+  onOpenDetailPage?: () => void
+  onNewProject: () => void
+}
 
 const UserTable = ({
   viewMode,
@@ -47,7 +47,7 @@ const UserTable = ({
   onPageChange,
   onPageSizeChange,
   onOpenDetailPage,
-  onNewProject
+  onNewProject,
 }: UserTableProps) => {
   return (
     <section className="pm-table-section">
@@ -59,6 +59,7 @@ const UserTable = ({
         onSearchChange={onSearchChange}
         filters={filters}
         onFiltersChange={onFiltersChange}
+        onResetFilters={() => undefined}
         onOpenDetailPage={onOpenDetailPage}
         onNewProject={onNewProject}
       />
@@ -96,14 +97,10 @@ const UserTable = ({
       )}
 
       {(viewMode === 'calendar' || viewMode === 'map') && (
-        <ProjectPlaceholderView
-          viewMode={viewMode}
-          projects={projects}
-          searchQuery={searchQuery}
-        />
+        <ProjectPlaceholderView viewMode={viewMode} projects={projects} searchQuery={searchQuery} />
       )}
     </section>
-  );
-};
+  )
+}
 
-export default UserTable;
+export default UserTable
