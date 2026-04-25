@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "🔍 提交前检查..."
+
+# 首次提交时，lint-staged 会处理所有文件
+# 如果文件过多或有问题，可以临时跳过：
+# 1. 只检查本次 add 的文件
+# 2. 对已知问题文件做排除
+
+# 运行 lint-staged（只对暂存区文件）
+npx lint-staged || exit 1
+
+echo "✅ 检查通过"

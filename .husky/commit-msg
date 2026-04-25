@@ -1,0 +1,22 @@
+#!/bin/bash
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(head -n1 "$COMMIT_MSG_FILE")
+
+# Conventional Commits 规范检查
+PATTERN="^(feat|fix|docs|style|refactor|test|chore|ci|build|perf)(\(.+\))?!?: .+"
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+    echo ""
+    echo "❌ 提交信息不符合 Conventional Commits 规范"
+    echo ""
+    echo "正确格式:"
+    echo "  feat(scope): 添加新功能"
+    echo "  fix(ui): 修复按钮样式"
+    echo "  refactor(gantt): 重构甘特图组件"
+    echo ""
+    echo "可用类型: feat, fix, docs, style, refactor, test, chore, ci, build, perf"
+    echo ""
+    exit 1
+fi
+
+echo "✅ 提交信息格式正确"
