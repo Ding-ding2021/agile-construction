@@ -4,6 +4,7 @@ import ProjectDetailPage from './components/project/ProjectDetailPage'
 import TaskDetailPage from './components/task/TaskDetailPage'
 import { AppRouter } from './components/router/AppRouter'
 import { readRouteFromHash, isRouterHandledPage, type AppRoute } from './config/routes'
+import { goToProjectList, goToTaskList, goToPersonnelUser } from './config/navigation'
 import { getProjectByCode, projects as allProjects } from './data/projects'
 import { getTaskDetailByCode } from './components/task/taskManagement.data'
 
@@ -41,7 +42,7 @@ function App() {
 
   useEffect(() => {
     if (!window.location.hash || window.location.hash === '#') {
-      window.location.hash = '#/projects'
+      goToProjectList()
     }
 
     const handleHashChange = () => {
@@ -65,18 +66,6 @@ function App() {
     }
     return getTaskDetailByCode(route.taskCode)
   }, [route])
-
-  const goToProjectList = () => {
-    window.location.hash = '#/projects'
-  }
-
-  const goToTaskList = () => {
-    window.location.hash = '#/tasks'
-  }
-
-  const openPersonnelUser = (userId: string) => {
-    window.location.hash = `#/personnel/users/${encodeURIComponent(userId)}`
-  }
 
   // detail 页面：注入 project 数据（AppRouter 无法处理需要外部数据的页面）
   if (route.page === 'detail' && activeProject) {
@@ -117,7 +106,7 @@ function App() {
 
   // personnel 页面：注入 onUserOpen 回调
   if (route.page === 'personnel') {
-    return <PersonnelPage onUserOpen={openPersonnelUser} />
+    return <PersonnelPage onUserOpen={goToPersonnelUser} />
   }
 
   // 其他所有页面由 AppRouter 处理
@@ -130,7 +119,7 @@ function App() {
   }
 
   // Fallback
-  return <PersonnelPage onUserOpen={openPersonnelUser} />
+  return <PersonnelPage onUserOpen={goToPersonnelUser} />
 }
 
 export default App
