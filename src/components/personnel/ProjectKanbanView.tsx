@@ -35,20 +35,11 @@ const ProjectKanbanView = ({
   if (projects.length === 0) {
     return (
       <div className="pm-kanban-wrap">
-        <div className="pm-empty-state">
-          <img src="/assets/CodeBuddyAssets/3848_19/50.svg" alt="" className="pm-empty-icon" />
-          {searchQuery ? (
-            <>
-              <div className="pm-empty-title">未找到匹配项目</div>
-              <div className="pm-empty-desc">请尝试使用其他关键词搜索</div>
-            </>
-          ) : (
-            <>
-              <div className="pm-empty-title">暂无项目数据</div>
-              <div className="pm-empty-desc">点击上方"新建项目"开始创建</div>
-            </>
-          )}
-        </div>
+        <EmptyState
+          iconSrc="/assets/CodeBuddyAssets/3848_19/50.svg"
+          title={searchQuery ? '未找到匹配项目' : '暂无项目数据'}
+          description={searchQuery ? '请尝试使用其他关键词搜索' : '点击上方"新建项目"开始创建'}
+        />
       </div>
     );
   }

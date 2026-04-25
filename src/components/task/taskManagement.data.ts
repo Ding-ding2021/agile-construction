@@ -260,3 +260,73 @@ export const sortOptions = [
 export const statusOptions: TaskStatus[] = ['待创建', '待分配', '待执行', '执行中', '待提交', '待验收', '不通过', '已完成', '已关闭'];
 export const riskOptions: TaskRiskLevel[] = ['高风险', '中风险', '低风险'];
 export const slaOptions: TaskSlaStatus[] = ['超时', '即将超时', '正常'];
+
+const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
+  const isDone = task.status === '已完成' || task.status === '已关闭';
+  const isBlocked = task.predecessorStatus === '前置阻塞' || task.isBlocked;
+  const ownerName = task.owner === '待分配' ? '' : task.owner;
+
+  return {
+    ...task,
+    taskType: '标准任务',
+    assigneeName: ownerName,
+    assigneeType: ownerName ? 'internal' : 'external',
+    actualStartAt: task.status === '待创建' || task.status === '待分配' ? undefined : task.plannedStartAt,
+    actualEndAt: isDone ? task.plannedEndAt : undefined,
+    blockedReason: isBlocked ? '前置任务未完成，需先解除阻塞后再推进。' : undefined,
+    snapshotStatus: task.standardBindingStatus === '已绑定' ? '已生成' : '未生成',
+    standardSnapshotId: task.standardBindingStatus === '已绑定' ? `SNAP-${task.code}` : undefined,
+    executionStandards: [
+      '按门店施工标准执行并拍照留档。',
+      '关键节点需在当日 18:00 前更新进度。',
+    ],
+    acceptanceStandards: [
+      '验收资料齐全（照片/记录/签字）。',
+      '不符合项需闭环后方可通过。',
+    ],
+    checklist: [
+      { id: `${task.code}-ck-1`, label: '任务范围确认', done: true },
+      { id: `${task.code}-ck-2`, label: '现场执行记录上传', done: task.progress >= 50 },
+      { id: `${task.code}-ck-3`, label: '验收结果回传', done: isDone },
+    ],
+    attachments: [
+      {
+        id: `${task.code}-att-1`,
+        fileName: `${task.code}-执行记录.pdf`,
+        fileSizeKb: 680,
+        uploader: ownerName || '系统',
+      },
+    ],
+    relations: [
+      {
+        code: `${task.code}-REL-1`,
+        name: `${task.name}（前置）`,
+        type: '前置任务',
+      },
+    ],
+    flowLogs: [
+      {
+        id: `${task.code}-log-1`,
+        action: '任务创建',
+        operator: '系统',
+        detail: '根据项目模板自动生成任务。',
+        time: `${task.plannedStartAt} 09:00`,
+      },
+      {
+        id: `${task.code}-log-2`,
+        action: `状态更新为${task.status}`,
+        operator: ownerName || '系统',
+        detail: '任务状态按最新进度自动同步。',
+        time: `${task.plannedEndAt} 16:30`,
+      },
+    ],
+  };
+};
+
+const taskDetailMap: Record<string, TaskDetail> = Object.fromEntries(
+  mockTasks.map((task) => [task.code, buildTaskDetailFromItem(task)]),
+);
+
+export const getTaskDetailByCode = (taskCode: string): TaskDetail | null => {
+  return taskDetailMap[taskCode] ?? null;
+};

@@ -3,6 +3,7 @@
  */
 
 import { useEffect } from 'react';
+import { EmptyState } from '../shared';
 import type { ProjectItem, ProjectDetail } from './projectManagement.types';
 
 type ProjectDetailDrawerProps = {
@@ -260,11 +261,11 @@ const ProjectDetailDrawer = ({
               )}
             </>
           ) : (
-            <div className="pm-empty-state">
-              <img src="/assets/CodeBuddyAssets/3848_19/50.svg" alt="" className="pm-empty-icon" />
-              <div className="pm-empty-title">未选择项目</div>
-              <div className="pm-empty-desc">请从列表中选择一个项目查看详情</div>
-            </div>
+            <EmptyState
+              iconSrc="/assets/CodeBuddyAssets/3848_19/50.svg"
+              title="未选择项目"
+              description="请从列表中选择一个项目查看详情"
+            />
           )}
         </div>
 

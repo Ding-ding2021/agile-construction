@@ -6,9 +6,10 @@ type TaskListViewProps = {
   onPageChange: (page: number) => void;
   searchQuery: string;
   viewMode: TaskViewMode;
+  onOpenTaskDetail?: (taskCode: string) => void;
 };
 
-const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode }: TaskListViewProps) => {
+const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, onOpenTaskDetail }: TaskListViewProps) => {
   const totalPages = Math.ceil(pagination.total / pagination.pageSize);
 
   if (viewMode !== 'list') {
@@ -87,6 +88,15 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode }
                 </td>
                 <td style={{ textAlign: 'center' }}>
                   <span className={`tm-table-text ${item.standardBindingStatus === '未绑定' ? 'tm-alert-text' : ''}`}>{item.standardBindingStatus}</span>
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <button
+                    type="button"
+                    className="tm-link-btn"
+                    onClick={() => onOpenTaskDetail?.(item.code)}
+                  >
+                    详情
+                  </button>
                 </td>
               </tr>
             ))}

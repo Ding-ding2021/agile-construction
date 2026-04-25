@@ -1,177 +1,155 @@
-import { useState, useMemo, useCallback } from 'react';
-import PersonnelSidebar from './Sidebar';
+import { useMemo, useState } from 'react';
+import { AppSidebar, StatsCards } from '../shared';
 import PersonnelHeader from './Header';
-import StatsCards from './StatsCards';
-import UserTable from './UserTable';
 import InsightsPanel from './InsightsPanel';
-import ProjectDetailDrawer from './ProjectDetailDrawer';
-import { 
-  calculateProjectStats, 
-  processProjects, 
-  shouldResetPage,
-  kanbanGroupByStage 
-} from './projectManagement.selectors';
-import { mockProjects } from './projectManagement.data';
-import type { 
-  ProjectItem, 
-  ProjectFilters, 
-  ProjectViewMode, 
-  ProjectStats 
-} from './projectManagement.types';
+import { personnelUsers, type PersonnelUser } from './personnelUsers';
 
 type PersonnelPageProps = {
-  onProjectOpen: (projectCode: string) => void;
+  onUserOpen?: (userId: string) => void;
 };
 
-const PersonnelPage = ({ onProjectOpen }: PersonnelPageProps) => {
-  // 状态管理
+const statusLabelMap: Record<PersonnelUser['personStatus'], string> = {
+  onduty: '在岗',
+  leave: '请假',
+  offboard: '离岗',
+  disabled: '禁用',
+};
+
+const riskLabelMap: Record<PersonnelUser['riskLevel'], string> = {
+  low: '低',
+  medium: '中',
+  high: '高',
+};
+
+const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
+  const currentHash = typeof window === 'undefined' ? '#/personnel' : window.location.hash || '#/personnel';
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<ProjectFilters>({
-    statKey: 'all',
-    searchQuery: '',
-    groupBy: 'none',
-    sortBy: 'default',
-    riskOnly: false
-  });
-  const [viewMode, setViewMode] = useState<ProjectViewMode>('list');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isNewProject, setIsNewProject] = useState(false);
 
-  // 计算统计数据
-  const stats: ProjectStats = useMemo(
-    () => calculateProjectStats(mockProjects),
-    []
-  );
+  const normalizedQuery = searchQuery.trim().toLowerCase();
 
-  // 处理项目数据
-  const { data: processedProjects, pagination } = useMemo(
-    () => processProjects(mockProjects, filters, { currentPage, pageSize }),
-    [filters, currentPage, pageSize]
-  );
+  const filteredUsers = useMemo(() => {
+    if (!normalizedQuery) {
+      return personnelUsers;
+    }
 
-  // 看板分组数据
-  const kanbanGroups = useMemo(
-    () => kanbanGroupByStage(processedProjects),
-    [processedProjects]
-  );
-
-  // 更新筛选条件
-  const updateFilters = useCallback((newFilters: Partial<ProjectFilters>) => {
-    setFilters(prev => {
-      const next = { ...prev, ...newFilters };
-      
-      // 如果搜索、筛选、排序变化，重置页码
-      if (shouldResetPage(prev, next, pageSize, pageSize)) {
-        setCurrentPage(1);
-      }
-      
-      return next;
+    return personnelUsers.filter((user) => {
+      return [
+        user.name,
+        user.personCode,
+        user.mobile,
+        user.role,
+        user.orgName,
+        user.teamName,
+        user.workCity,
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedQuery);
     });
-  }, [pageSize]);
+  }, [normalizedQuery]);
 
-  // 更新搜索查询（同步 Header 和 Toolbar）
-  const updateSearchQuery = useCallback((query: string) => {
-    setSearchQuery(query);
-    updateFilters({ searchQuery: query });
-  }, [updateFilters]);
+  const stats = useMemo(() => {
+    return {
+      total: personnelUsers.length,
+      onduty: personnelUsers.filter((user) => user.personStatus === 'onduty').length,
+      assignable: personnelUsers.filter((user) => user.availabilityStatus === 'assignable').length,
+      highRisk: personnelUsers.filter((user) => user.riskLevel === 'high').length,
+    };
+  }, []);
 
-  // 点击统计卡片
-  const handleStatCardClick = useCallback((statKey: ProjectFilters['statKey']) => {
-    updateFilters({ statKey });
-    setCurrentPage(1);
-  }, [updateFilters]);
-
-  // 点击项目
-  const handleProjectClick = useCallback((project: ProjectItem) => {
-    onProjectOpen(project.code);
-  }, [onProjectOpen]);
-
-  const handleOpenDetailPage = useCallback(() => {
-    const firstProject = processedProjects[0];
-    if (!firstProject) {
+  const openUserDetail = (userId: string) => {
+    if (onUserOpen) {
+      onUserOpen(userId);
       return;
     }
 
-    onProjectOpen(firstProject.code);
-  }, [onProjectOpen, processedProjects]);
-
-  // 新建项目
-  const handleNewProject = useCallback(() => {
-    setSelectedProject(null);
-    setIsNewProject(true);
-    setIsDrawerOpen(true);
-  }, []);
-
-  // 关闭抽屉
-  const handleCloseDrawer = useCallback(() => {
-    setIsDrawerOpen(false);
-    setTimeout(() => {
-      setSelectedProject(null);
-      setIsNewProject(false);
-    }, 300);
-  }, []);
-
-  // 分页处理
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
-
-  const handlePageSizeChange = useCallback((size: number) => {
-    setPageSize(size);
-    setCurrentPage(1);
-  }, []);
+    if (typeof window !== 'undefined') {
+      window.location.hash = `#/personnel/users/${encodeURIComponent(userId)}`;
+    }
+  };
 
   return (
     <div className="pm-app">
       <div className="pm-glow pm-glow-left" />
       <div className="pm-glow pm-glow-right" />
-      <PersonnelSidebar />
+      <AppSidebar currentHash={currentHash} />
+
       <div className="pm-workspace">
         <main className="pm-main">
-          <PersonnelHeader 
+          <PersonnelHeader
             searchQuery={searchQuery}
-            onSearchChange={updateSearchQuery}
+            onSearchChange={setSearchQuery}
             isInsightsOpen={isInsightsOpen}
             onInsightsToggle={() => setIsInsightsOpen((prev) => !prev)}
           />
+
           <div className="pm-body">
-            <StatsCards 
-              stats={stats}
-              activeStatKey={filters.statKey}
-              onStatCardClick={handleStatCardClick}
+            <StatsCards
+              items={[
+                { key: 'all', icon: '1.svg', label: '人员总数', value: stats.total, tone: 'blue' },
+                { key: 'onduty', icon: '3.svg', label: '在岗人数', value: stats.onduty, tone: 'green' },
+                { key: 'assignable', icon: '5.svg', label: '可分配', value: stats.assignable, tone: 'purple' },
+                { key: 'risk', icon: '7.svg', label: '高风险人员', value: stats.highRisk, tone: 'orange' },
+              ]}
+              activeKey="all"
+              className="pm-stats-row"
+              assetBase="/assets/CodeBubbyAssets/3848_19"
             />
-            <UserTable
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-              searchQuery={searchQuery}
-              onSearchChange={updateSearchQuery}
-              filters={filters}
-              onFiltersChange={updateFilters}
-              projects={processedProjects}
-              pagination={pagination}
-              kanbanGroups={kanbanGroups}
-              onProjectClick={handleProjectClick}
-              onPageChange={handlePageChange}
-              onPageSizeChange={handlePageSizeChange}
-              onOpenDetailPage={processedProjects.length > 0 ? handleOpenDetailPage : undefined}
-              onNewProject={handleNewProject}
-            />
+
+            <section className="pm-table-section personnel-table-shell">
+              <div className="personnel-table-toolbar">
+                <span>人员列表（{filteredUsers.length}）</span>
+              </div>
+
+              <div className="personnel-table-wrapper">
+                <table className="personnel-table">
+                  <thead>
+                    <tr>
+                      <th>姓名</th>
+                      <th>工号</th>
+                      <th>角色</th>
+                      <th>组织 / 团队</th>
+                      <th>状态</th>
+                      <th>可用性</th>
+                      <th>风险</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredUsers.map((user) => (
+                      <tr key={user.id}>
+                        <td>{user.name}</td>
+                        <td>{user.personCode}</td>
+                        <td>{user.role}</td>
+                        <td>{user.orgName} / {user.teamName}</td>
+                        <td>{statusLabelMap[user.personStatus]}</td>
+                        <td>{user.availabilityStatus === 'assignable' ? '可分配' : user.availabilityStatus === 'busy' ? '忙碌' : '不可分配'}</td>
+                        <td>{riskLabelMap[user.riskLevel]}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="personnel-link-btn"
+                            onClick={() => openUserDetail(user.id)}
+                          >
+                            查看详情
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {filteredUsers.length === 0 ? (
+                  <div className="personnel-empty">未找到匹配人员，请调整关键词</div>
+                ) : null}
+              </div>
+            </section>
           </div>
         </main>
+
         <InsightsPanel isOpen={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />
       </div>
-
-      {/* 项目详情抽屉 */}
-      <ProjectDetailDrawer
-        project={selectedProject}
-        isOpen={isDrawerOpen}
-        onClose={handleCloseDrawer}
-        isNewProject={isNewProject}
-      />
     </div>
   );
 };

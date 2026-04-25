@@ -14,16 +14,16 @@ const PersonnelHeader = ({
   return (
     <header className="pm-header">
       <div className="pm-header-title">
-        <h1>项目管理</h1>
-        <span>Project Management</span>
+        <h1>人员管理</h1>
+        <span>Personnel Management</span>
       </div>
 
       <div className="pm-header-actions">
         <div className="pm-search-box">
           <img src="/assets/CodeBubbyAssets/3848_19/41.svg" alt="搜索" />
-          <input 
-            type="text" 
-            placeholder="搜索..." 
+          <input
+            type="text"
+            placeholder="搜索姓名 / 工号 / 手机..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />

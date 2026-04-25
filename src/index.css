@@ -11,6 +11,8 @@
   --pm-sidebar-bg: rgba(10, 35, 99, 0.9);
   --pm-header-bg: rgba(5, 19, 56, 0.8);
   --pm-primary: #154dd9;
+  --pm-primary-light: #1a5ae8;
+  --pm-primary-dark: #1248c5;
   --pm-border: rgba(255, 255, 255, 0.08);
   --pm-border-light: rgba(255, 255, 255, 0.05);
   --pm-card: rgba(255, 255, 255, 0.04);
@@ -19,21 +21,146 @@
   --pm-input-bg: rgba(255, 255, 255, 0.05);
 
   --pm-text-white: #ffffff;
+  --pm-text-92: rgba(255, 255, 255, 0.92);
+  --pm-text-85: rgba(255, 255, 255, 0.85);
   --pm-text-70: rgba(255, 255, 255, 0.7);
+  --pm-text-62: rgba(255, 255, 255, 0.62);
   --pm-text-60: rgba(255, 255, 255, 0.6);
+  --pm-text-55: rgba(255, 255, 255, 0.55);
   --pm-text-50: rgba(255, 255, 255, 0.5);
+  --pm-text-45: rgba(255, 255, 255, 0.45);
   --pm-text-40: rgba(255, 255, 255, 0.4);
   --pm-text-30: rgba(255, 255, 255, 0.3);
   --pm-text-25: rgba(255, 255, 255, 0.25);
+  --pm-text-15: rgba(255, 255, 255, 0.15);
+  --pm-text-14: rgba(255, 255, 255, 0.14);
+  --pm-text-12: rgba(255, 255, 255, 0.12);
 
   --pm-blue: #2b7fff;
   --pm-blue-light: #51a2ff;
+  --pm-blue-35: rgba(43, 127, 255, 0.35);
+  --pm-blue-25: rgba(43, 127, 255, 0.25);
+  --pm-blue-20: rgba(43, 127, 255, 0.2);
+  --pm-blue-15: rgba(43, 127, 255, 0.15);
+  --pm-blue-12: rgba(43, 127, 255, 0.12);
+  --pm-blue-10: rgba(43, 127, 255, 0.1);
+  --pm-blue-8: rgba(43, 127, 255, 0.08);
+
   --pm-green: #00bc7d;
   --pm-green-light: #00d492;
+  --pm-green-30: rgba(0, 188, 125, 0.3);
+  --pm-green-25: rgba(0, 188, 125, 0.25);
+  --pm-green-20: rgba(0, 188, 125, 0.2);
+  --pm-green-15: rgba(0, 188, 125, 0.15);
+  --pm-green-10: rgba(0, 188, 125, 0.1);
+
   --pm-purple: #8e51ff;
   --pm-purple-light: #a684ff;
+  --pm-purple-25: rgba(142, 81, 255, 0.25);
+  --pm-purple-20: rgba(142, 81, 255, 0.2);
+  --pm-purple-15: rgba(142, 81, 255, 0.15);
+
   --pm-orange: #fe9a00;
   --pm-orange-gold: #ffb900;
+  --pm-orange-25: rgba(254, 154, 0, 0.25);
+  --pm-orange-20: rgba(254, 154, 0, 0.2);
+  --pm-orange-15: rgba(254, 154, 0, 0.15);
+  --pm-orange-14: rgba(254, 154, 0, 0.14);
+  --pm-orange-10: rgba(254, 154, 0, 0.1);
+
+  --pm-red: #ff6467;
+  --pm-red-light: #fb2c36;
+  --pm-red-25: rgba(251, 44, 54, 0.25);
+  --pm-red-20: rgba(251, 44, 54, 0.2);
+  --pm-red-15: rgba(251, 44, 54, 0.15);
+  --pm-red-14: rgba(251, 44, 54, 0.14);
+  --pm-red-12: rgba(251, 44, 54, 0.12);
+
+  --pm-primary-15: rgba(21, 77, 217, 0.15);
+  --pm-primary-light-8: rgba(70, 137, 234, 0.08);
+  --pm-primary-shadow-50: rgba(28, 57, 142, 0.5);
+  --pm-primary-shadow-30: rgba(28, 57, 142, 0.3);
+  --pm-shadow-10: rgba(0, 0, 0, 0.1);
+
+  --pm-radius-sm: 8px;
+  --pm-radius-md: 12px;
+  --pm-radius-lg: 16px;
+  --pm-radius-xl: 20px;
+  --pm-radius-full: 9999px;
+
+  --pm-spacing-xs: 4px;
+  --pm-spacing-sm: 8px;
+  --pm-spacing-md: 12px;
+  --pm-spacing-lg: 16px;
+  --pm-spacing-xl: 24px;
+
+  --pm-transition-normal: all 0.2s ease;
+
+  --pm-gradient-stat-blue: linear-gradient(135deg, rgba(43, 127, 255, 0.2) 0%, rgba(43, 127, 255, 0.05) 100%);
+  --pm-gradient-stat-green: linear-gradient(135deg, rgba(0, 188, 125, 0.2) 0%, rgba(0, 188, 125, 0.05) 100%);
+  --pm-gradient-stat-purple: linear-gradient(135deg, rgba(142, 81, 255, 0.2) 0%, rgba(142, 81, 255, 0.05) 100%);
+  --pm-gradient-stat-orange: linear-gradient(135deg, rgba(254, 154, 0, 0.2) 0%, rgba(254, 154, 0, 0.05) 100%);
+
+  --pm-gradient-kpi-blue: var(--pm-gradient-stat-blue);
+  --pm-gradient-kpi-green: var(--pm-gradient-stat-green);
+  --pm-gradient-kpi-purple: var(--pm-gradient-stat-purple);
+  --pm-gradient-kpi-orange: var(--pm-gradient-stat-orange);
+
+  --pm-gradient-icon-blue: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  --pm-gradient-icon-green: linear-gradient(135deg, #10b981, #059669);
+  --pm-gradient-icon-orange: linear-gradient(135deg, #f59e0b, #d97706);
+  --pm-gradient-icon-violet: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  --pm-gradient-icon-rose: linear-gradient(135deg, #f43f5e, #e11d48);
+
+  --pm-gradient-agent-blue: var(--pm-gradient-icon-blue);
+  --pm-gradient-agent-cyan: linear-gradient(135deg, #06b6d4, #0891b2);
+  --pm-gradient-agent-green: var(--pm-gradient-icon-green);
+  --pm-gradient-agent-orange: var(--pm-gradient-icon-orange);
+  --pm-gradient-agent-violet: var(--pm-gradient-icon-violet);
+  --pm-gradient-agent-rose: var(--pm-gradient-icon-rose);
+
+  /* 兼容 token（P1 最小兜底，后续继续收敛） */
+  --pm-text-100: var(--pm-text-white);
+  --pm-accent: var(--pm-blue);
+  --pm-surface: rgba(255, 255, 255, 0.02);
+
+  --pm-shadow-md: 0 4px 6px -4px var(--pm-shadow-10), 0 10px 15px -3px var(--pm-shadow-10);
+  --pm-shadow-lg: 0 10px 20px -8px var(--pm-shadow-10), 0 16px 28px -12px var(--pm-shadow-10);
+
+  --pm-gray-15: rgba(107, 114, 128, 0.15);
+  --pm-gray-30: rgba(107, 114, 128, 0.3);
+  --pm-color-6b7280: #6b7280;
+
+  --pm-green-2: #10b981;
+  --pm-green-7-15: rgba(0, 188, 125, 0.15);
+  --pm-green-7-30: rgba(0, 188, 125, 0.3);
+
+  --pm-orange-2-15: rgba(254, 154, 0, 0.15);
+  --pm-orange-2-30: rgba(254, 154, 0, 0.3);
+  --pm-blue-2-10: rgba(43, 127, 255, 0.1);
+  --pm-blue-2-20: rgba(43, 127, 255, 0.2);
+
+  --pm-white-7: rgba(255, 255, 255, 0.07);
+  --pm-white-12: rgba(255, 255, 255, 0.12);
+  --pm-white-35: rgba(255, 255, 255, 0.35);
+  --pm-white-36: rgba(255, 255, 255, 0.36);
+  --pm-white-38: rgba(255, 255, 255, 0.38);
+  --pm-white-40: rgba(255, 255, 255, 0.4);
+  --pm-white-45: rgba(255, 255, 255, 0.45);
+  --pm-white-54: rgba(255, 255, 255, 0.54);
+  --pm-white-55: rgba(255, 255, 255, 0.55);
+  --pm-white-58: rgba(255, 255, 255, 0.58);
+  --pm-white-60: rgba(255, 255, 255, 0.6);
+  --pm-white-62: rgba(255, 255, 255, 0.62);
+  --pm-white-72: rgba(255, 255, 255, 0.72);
+  --pm-white-88: rgba(255, 255, 255, 0.88);
+
+  --pm-navy-2-45: rgba(8, 25, 69, 0.45);
+  --pm-blue-4-12: rgba(43, 127, 255, 0.12);
+  --pm-deep-88: rgba(13, 35, 93, 0.88);
+  --pm-deep-92: rgba(13, 35, 93, 0.92);
+  --pm-deeper-84: rgba(8, 25, 69, 0.84);
+  --pm-deeper-88: rgba(8, 25, 69, 0.88);
 
   /* Sidebar text */
   --pm-nav-color: rgba(219, 234, 254, 0.6);
@@ -3645,17 +3772,85 @@ body {
   color: #fff;
 }
 
-.tm-placeholder-wrap {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  min-height: 240px;
+/* .tm-placeholder-wrap / .tm-placeholder-content 已迁移至 EmptyState 组件（P1.5-T5） */
+
+.personnel-table-shell {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.tm-placeholder-content {
+.personnel-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--pm-text-70);
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+}
+
+.personnel-table-wrapper {
+  border: 1px solid var(--pm-border);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.personnel-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.personnel-table th,
+.personnel-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--pm-border-light);
+  text-align: left;
+  font-size: 13px;
+}
+
+.personnel-table th {
+  color: var(--pm-text-55);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.personnel-table td {
+  color: var(--pm-text-85);
+}
+
+.personnel-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.personnel-link-btn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--pm-blue-25);
+  background: var(--pm-blue-10);
+  color: var(--pm-blue-light);
+  font-size: 12px;
+}
+
+.personnel-link-btn:hover {
+  background: var(--pm-blue-15);
+}
+
+.personnel-empty {
+  padding: 16px;
+  color: var(--pm-text-55);
+  font-size: 13px;
+}
+
+.tm-link-btn {
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--pm-blue-25);
+  background: var(--pm-blue-10);
+  color: var(--pm-blue-light);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tm-link-btn:hover {
+  background: var(--pm-blue-15);
 }
