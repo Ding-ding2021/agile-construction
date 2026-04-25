@@ -1,29 +1,33 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { ProjectItem } from '../../data/projects';
-import { getProjectGanttData } from '../../data/projectGantt';
-import GanttChart from './GanttChart';
-import GanttTaskPanel from './GanttTaskPanel';
-import './project-gantt.css';
+import { useEffect, useMemo, useState } from 'react'
+import type { ProjectItem } from '../../data/projects'
+import { getProjectGanttData } from '../../data/projectGantt'
+import GanttChart from './GanttChart'
+import GanttTaskPanel from './GanttTaskPanel'
+import './project-gantt.css'
 
 type ProjectGanttViewProps = {
-  project: ProjectItem;
-};
+  project: ProjectItem
+}
 
 const ProjectGanttView = ({ project }: ProjectGanttViewProps) => {
-  const ganttData = useMemo(() => getProjectGanttData(project), [project]);
-  const [selectedTaskId, setSelectedTaskId] = useState(ganttData.focusTaskId);
+  const ganttData = useMemo(() => getProjectGanttData(project), [project])
+  const [selectedTaskId, setSelectedTaskId] = useState(ganttData.focusTaskId)
 
   useEffect(() => {
-    setSelectedTaskId(ganttData.focusTaskId);
-  }, [ganttData.focusTaskId, project.code]);
+    // eslint-disable-next-line
+    setSelectedTaskId(ganttData.focusTaskId)
+  }, [ganttData.focusTaskId, project.code])
 
-  const taskItems = useMemo(() => ganttData.groups.flatMap((group) => group.items), [ganttData.groups]);
+  const taskItems = useMemo(
+    () => ganttData.groups.flatMap(group => group.items),
+    [ganttData.groups]
+  )
 
   const selectedTask = useMemo(
-    () => taskItems.find((item) => item.id === selectedTaskId) ?? taskItems[0] ?? null,
-    [selectedTaskId, taskItems],
-  );
-  const focusLabel = selectedTask?.critical ? '关键路径任务' : '执行任务';
+    () => taskItems.find(item => item.id === selectedTaskId) ?? taskItems[0] ?? null,
+    [selectedTaskId, taskItems]
+  )
+  const focusLabel = selectedTask?.critical ? '关键路径任务' : '执行任务'
 
   return (
     <section className="gantt-view">
@@ -53,7 +57,7 @@ const ProjectGanttView = ({ project }: ProjectGanttViewProps) => {
 
           <div className="gantt-header-actions">
             <div className="gantt-legend">
-              {ganttData.legend.map((item) => (
+              {ganttData.legend.map(item => (
                 <span key={item.label} className="gantt-legend-item">
                   <span className={`gantt-legend-dot ${item.tone}`} />
                   <span>{item.label}</span>
@@ -81,7 +85,7 @@ const ProjectGanttView = ({ project }: ProjectGanttViewProps) => {
         <GanttTaskPanel projectName={project.name} task={selectedTask} />
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ProjectGanttView;
+export default ProjectGanttView

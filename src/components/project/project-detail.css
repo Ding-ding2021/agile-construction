@@ -1,8 +1,4 @@
-.project-detail-app {
-  min-height: 100vh;
-  overflow: hidden;
-}
-
+/* TODO[Wave2]: 将 .project-detail-main/.project-detail-body 迁移到 .pm-workspace/.pm-main/.pm-body 标准壳层 */
 .project-detail-main {
   flex: 1;
   min-width: 0;
