@@ -1,39 +1,41 @@
-import { useMemo, useState } from 'react';
-import { AppSidebar, StatsCards } from '../shared';
-import PersonnelHeader from './Header';
-import InsightsPanel from './InsightsPanel';
-import { personnelUsers, type PersonnelUser } from './personnelUsers';
+import { useMemo, useState } from 'react'
+import { AppSidebar, StatsCards } from '../shared'
+import PersonnelHeader from './Header'
+import InsightsPanel from './InsightsPanel'
+import { personnelUsers, type PersonnelUser } from './personnelUsers'
+import { goToPersonnelUser } from '../../config/navigation'
 
 type PersonnelPageProps = {
-  onUserOpen?: (userId: string) => void;
-};
+  onUserOpen?: (userId: string) => void
+}
 
 const statusLabelMap: Record<PersonnelUser['personStatus'], string> = {
   onduty: '在岗',
   leave: '请假',
   offboard: '离岗',
   disabled: '禁用',
-};
+}
 
 const riskLabelMap: Record<PersonnelUser['riskLevel'], string> = {
   low: '低',
   medium: '中',
   high: '高',
-};
+}
 
 const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
-  const currentHash = typeof window === 'undefined' ? '#/personnel' : window.location.hash || '#/personnel';
-  const [isInsightsOpen, setIsInsightsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const currentHash =
+    typeof window === 'undefined' ? '#/personnel' : window.location.hash || '#/personnel'
+  const [isInsightsOpen, setIsInsightsOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const normalizedQuery = searchQuery.trim().toLowerCase()
 
   const filteredUsers = useMemo(() => {
     if (!normalizedQuery) {
-      return personnelUsers;
+      return personnelUsers
     }
 
-    return personnelUsers.filter((user) => {
+    return personnelUsers.filter(user => {
       return [
         user.name,
         user.personCode,
@@ -45,29 +47,27 @@ const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
       ]
         .join(' ')
         .toLowerCase()
-        .includes(normalizedQuery);
-    });
-  }, [normalizedQuery]);
+        .includes(normalizedQuery)
+    })
+  }, [normalizedQuery])
 
   const stats = useMemo(() => {
     return {
       total: personnelUsers.length,
-      onduty: personnelUsers.filter((user) => user.personStatus === 'onduty').length,
-      assignable: personnelUsers.filter((user) => user.availabilityStatus === 'assignable').length,
-      highRisk: personnelUsers.filter((user) => user.riskLevel === 'high').length,
-    };
-  }, []);
+      onduty: personnelUsers.filter(user => user.personStatus === 'onduty').length,
+      assignable: personnelUsers.filter(user => user.availabilityStatus === 'assignable').length,
+      highRisk: personnelUsers.filter(user => user.riskLevel === 'high').length,
+    }
+  }, [])
 
   const openUserDetail = (userId: string) => {
     if (onUserOpen) {
-      onUserOpen(userId);
-      return;
+      onUserOpen(userId)
+      return
     }
 
-    if (typeof window !== 'undefined') {
-      window.location.hash = `#/personnel/users/${encodeURIComponent(userId)}`;
-    }
-  };
+    goToPersonnelUser(userId)
+  }
 
   return (
     <div className="pm-app">
@@ -81,16 +81,34 @@ const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
             isInsightsOpen={isInsightsOpen}
-            onInsightsToggle={() => setIsInsightsOpen((prev) => !prev)}
+            onInsightsToggle={() => setIsInsightsOpen(prev => !prev)}
           />
 
           <div className="pm-body">
             <StatsCards
               items={[
                 { key: 'all', icon: '1.svg', label: '人员总数', value: stats.total, tone: 'blue' },
-                { key: 'onduty', icon: '3.svg', label: '在岗人数', value: stats.onduty, tone: 'green' },
-                { key: 'assignable', icon: '5.svg', label: '可分配', value: stats.assignable, tone: 'purple' },
-                { key: 'risk', icon: '7.svg', label: '高风险人员', value: stats.highRisk, tone: 'orange' },
+                {
+                  key: 'onduty',
+                  icon: '3.svg',
+                  label: '在岗人数',
+                  value: stats.onduty,
+                  tone: 'green',
+                },
+                {
+                  key: 'assignable',
+                  icon: '5.svg',
+                  label: '可分配',
+                  value: stats.assignable,
+                  tone: 'purple',
+                },
+                {
+                  key: 'risk',
+                  icon: '7.svg',
+                  label: '高风险人员',
+                  value: stats.highRisk,
+                  tone: 'orange',
+                },
               ]}
               activeKey="all"
               className="pm-stats-row"
@@ -117,14 +135,22 @@ const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredUsers.map((user) => (
+                    {filteredUsers.map(user => (
                       <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>{user.personCode}</td>
                         <td>{user.role}</td>
-                        <td>{user.orgName} / {user.teamName}</td>
+                        <td>
+                          {user.orgName} / {user.teamName}
+                        </td>
                         <td>{statusLabelMap[user.personStatus]}</td>
-                        <td>{user.availabilityStatus === 'assignable' ? '可分配' : user.availabilityStatus === 'busy' ? '忙碌' : '不可分配'}</td>
+                        <td>
+                          {user.availabilityStatus === 'assignable'
+                            ? '可分配'
+                            : user.availabilityStatus === 'busy'
+                              ? '忙碌'
+                              : '不可分配'}
+                        </td>
                         <td>{riskLabelMap[user.riskLevel]}</td>
                         <td>
                           <button
@@ -151,7 +177,7 @@ const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
         <InsightsPanel isOpen={isInsightsOpen} onClose={() => setIsInsightsOpen(false)} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PersonnelPage;
+export default PersonnelPage

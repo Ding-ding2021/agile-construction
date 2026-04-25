@@ -7,12 +7,14 @@
 
 import type { ProjectDetailTab } from '../components/project/projectTabs.shared'
 import { buildProjectDetailTabHash } from '../components/project/projectTabs.shared'
+import { navigateByHash } from '../components/shared/navigation/nav.utils'
+export { navigateByHash }
 
-// ─── Core: raw hash setter ─────────────────────────────────────
+// ─── Core: safe hash setter ────────────────────────────────────
 
-export const setHash = (hash: string) => {
-  if (typeof window !== 'undefined' && window.location.hash !== hash) {
-    window.location.hash = hash
+const setHash = (hash: string) => {
+  if (typeof window !== 'undefined') {
+    navigateByHash(hash)
   }
 }
 

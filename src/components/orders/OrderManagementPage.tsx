@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
+import { goToProjectDetail } from '../../config/navigation'
 import './order-management-page.css'
 
 type OrderStatus =
@@ -523,7 +524,7 @@ const OrderManagementPage = () => {
                             type="button"
                             className="om-link-btn"
                             onClick={() => {
-                              window.location.hash = `#/projects/${encodeURIComponent(item.projectCode)}`
+                              goToProjectDetail(item.projectCode)
                             }}
                           >
                             项目追溯

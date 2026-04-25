@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { goToTaskListWithCode } from '../../config/navigation'
 import type { TaskItem, TaskStatus } from '../task/taskManagement.types'
 
 type TaskDispatchPanelProps = {
@@ -36,7 +37,7 @@ const TaskDispatchPanel = ({ tasks, onTaskClick }: TaskDispatchPanelProps) => {
     if (onTaskClick) {
       onTaskClick(taskCode)
     } else {
-      window.location.hash = `#/tasks?taskCode=${encodeURIComponent(taskCode)}`
+      goToTaskListWithCode(taskCode)
     }
   }
 

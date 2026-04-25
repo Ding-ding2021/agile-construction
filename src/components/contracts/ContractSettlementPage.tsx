@@ -2,6 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ProjectItem } from '../../data/projects'
 import { AppSidebar, PageHeader } from '../shared'
 import { settlementRepository } from '../../services/repositories/settlementRepository'
+import {
+  navigateByHash,
+  goToProjectDetail,
+  goToProjectSettlementReview,
+} from '../../config/navigation'
 import './contract-settlement-page.css'
 
 type ContractStatus = '履约中' | '审核中' | '已归档' | '草稿'
@@ -183,20 +188,6 @@ const buildSettlementDiffs = (projects: ProjectItem[]): SettlementDiffItem[] =>
     })
     .sort((a, b) => b.varianceWan - a.varianceWan)
 
-const navigateByHash = (targetHash: string) => {
-  if (!targetHash.startsWith('#/')) {
-    return
-  }
-
-  if (window.location.hash !== targetHash) {
-    window.location.hash = targetHash
-    return
-  }
-
-  const baseUrl = `${window.location.pathname}${window.location.search}`
-  window.location.assign(`${baseUrl}${targetHash}`)
-}
-
 type ContractSettlementPageProps = {
   projects: ProjectItem[]
 }
@@ -252,7 +243,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
 
   const openDiffReview = (diff: SettlementDiffItem) => {
     setReviewingDiffIds(prev => (prev.includes(diff.id) ? prev : [...prev, diff.id]))
-    window.location.hash = `#/projects/${encodeURIComponent(diff.projectCode)}?panel=settlement-review&diff=${encodeURIComponent(diff.id)}`
+    goToProjectSettlementReview(diff.projectCode, diff.id)
   }
 
   return (
@@ -281,10 +272,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
                 role="tab"
                 aria-selected={tab.href === '#/contracts'}
                 onClick={() => {
-                  if (window.location.hash === tab.href) {
-                    return
-                  }
-                  window.location.hash = tab.href
+                  if (tab.href) navigateByHash(tab.href)
                 }}
               >
                 <img src={`${ASSET_BASE}/${tab.icon}`} alt="" />
@@ -334,7 +322,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
                     className="csm-filter-btn"
                     role="listitem"
                     onClick={() => {
-                      window.location.hash = `#/projects/${encodeURIComponent(item.code)}`
+                      goToProjectDetail(item.code)
                     }}
                   >
                     <span>{item.name}</span>
@@ -419,7 +407,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
                               type="button"
                               className="csm-row-action csm-row-trace"
                               onClick={() => {
-                                window.location.hash = `#/projects/${encodeURIComponent(diff.projectCode)}`
+                                goToProjectDetail(diff.projectCode)
                               }}
                             >
                               追溯项目
@@ -544,7 +532,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
                         aria-label={`查看 ${item.name}`}
                         onClick={() => {
                           const target = item.projectCode
-                          window.location.hash = `#/projects/${encodeURIComponent(target)}`
+                          goToProjectDetail(target)
                         }}
                       >
                         <img src={`${ASSET_BASE}/${item.actionIcon}`} alt="" />

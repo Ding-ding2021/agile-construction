@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { navigateByHash } from '../nav.utils'
 import Icon from '../../icons/Icon'
 
 type BreadcrumbItem = {
@@ -51,7 +52,7 @@ const PageHeader = ({
                         item.onClick
                           ? item.onClick
                           : () => {
-                              if (item.href) window.location.hash = item.href
+                              if (item.href) navigateByHash(item.href)
                             }
                       }
                     >

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AppSidebar, PageHeader } from '../shared'
+import { navigateByHash } from '../shared/navigation/nav.utils'
 import './facility-management.css'
 
 type FacilityStatus = '运行正常' | '维护中' | '故障' | '离线'
@@ -142,12 +143,6 @@ const FacilityManagementPage = () => {
     )
   }, [tableSearchQuery])
 
-  const navigateTo = (hash: string) => {
-    if (window.location.hash !== hash) {
-      window.location.hash = hash
-    }
-  }
-
   return (
     <div className="fm-page">
       <div className="fm-glow fm-glow-left" />
@@ -170,11 +165,11 @@ const FacilityManagementPage = () => {
               <img src={`${ASSET_BASE}/1.svg`} alt="" />
               设施设备
             </button>
-            <button type="button" className="fm-top-tab" onClick={() => navigateTo('#/orders')}>
+            <button type="button" className="fm-top-tab" onClick={() => navigateByHash('#/orders')}>
               <img src={`${ASSET_BASE}/2.svg`} alt="" />
               服务单
             </button>
-            <button type="button" className="fm-top-tab" onClick={() => navigateTo('#/tasks')}>
+            <button type="button" className="fm-top-tab" onClick={() => navigateByHash('#/tasks')}>
               <img src={`${ASSET_BASE}/3.svg`} alt="" />
               巡检记录
             </button>

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import { getStandardTemplateById, getStandardTemplatesByKind } from './standard-template.data'
+import { goToStandardList } from '../../config/navigation'
 import type { ProjectTemplate, TaskTemplate, TemplateStatus } from './template-contract.types'
 import './standard-template-detail.css'
 
@@ -167,7 +168,7 @@ const StandardTemplateDetailPage = ({ templateId }: StandardTemplateDetailPagePr
                 <button
                   type="button"
                   className="std-primary-btn"
-                  onClick={() => (window.location.hash = '#/standards')}
+                  onClick={() => goToStandardList()}
                 >
                   返回标准管理
                 </button>
@@ -255,7 +256,7 @@ const StandardTemplateDetailPage = ({ templateId }: StandardTemplateDetailPagePr
 
         <main className="std-content">
           <div className="std-breadcrumb">
-            <button type="button" onClick={() => (window.location.hash = '#/standards')}>
+            <button type="button" onClick={() => goToStandardList()}>
               标准管理
             </button>
             <img src={`${ASSET_BASE}/2.svg`} alt="" />

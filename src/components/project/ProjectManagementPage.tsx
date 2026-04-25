@@ -14,6 +14,7 @@ import {
   processProjects,
   shouldResetPage,
 } from '../personnel/projectManagement.selectors'
+import { goToProjectDetail } from '../../config/navigation'
 import type {
   CreateProjectFormData,
   ProjectFilters,
@@ -122,9 +123,7 @@ const ProjectManagementPage = ({
       return
     }
 
-    if (typeof window !== 'undefined') {
-      window.location.hash = `#/projects/${encodeURIComponent(project.code)}`
-    }
+    goToProjectDetail(project.code)
   }
 
   const handleProjectCreate = (formData: CreateProjectFormData): TransitionActionResult => {
