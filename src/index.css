@@ -32,7 +32,9 @@
   --pm-text-40: rgba(255, 255, 255, 0.4);
   --pm-text-30: rgba(255, 255, 255, 0.3);
   --pm-text-25: rgba(255, 255, 255, 0.25);
+  --pm-text-20: rgba(255, 255, 255, 0.2);
   --pm-text-15: rgba(255, 255, 255, 0.15);
+  --pm-text-10: rgba(255, 255, 255, 0.1);
   --pm-text-14: rgba(255, 255, 255, 0.14);
   --pm-text-12: rgba(255, 255, 255, 0.12);
 
@@ -96,10 +98,26 @@
 
   --pm-transition-normal: all 0.2s ease;
 
-  --pm-gradient-stat-blue: linear-gradient(135deg, rgba(43, 127, 255, 0.2) 0%, rgba(43, 127, 255, 0.05) 100%);
-  --pm-gradient-stat-green: linear-gradient(135deg, rgba(0, 188, 125, 0.2) 0%, rgba(0, 188, 125, 0.05) 100%);
-  --pm-gradient-stat-purple: linear-gradient(135deg, rgba(142, 81, 255, 0.2) 0%, rgba(142, 81, 255, 0.05) 100%);
-  --pm-gradient-stat-orange: linear-gradient(135deg, rgba(254, 154, 0, 0.2) 0%, rgba(254, 154, 0, 0.05) 100%);
+  --pm-gradient-stat-blue: linear-gradient(
+    135deg,
+    rgba(43, 127, 255, 0.2) 0%,
+    rgba(43, 127, 255, 0.05) 100%
+  );
+  --pm-gradient-stat-green: linear-gradient(
+    135deg,
+    rgba(0, 188, 125, 0.2) 0%,
+    rgba(0, 188, 125, 0.05) 100%
+  );
+  --pm-gradient-stat-purple: linear-gradient(
+    135deg,
+    rgba(142, 81, 255, 0.2) 0%,
+    rgba(142, 81, 255, 0.05) 100%
+  );
+  --pm-gradient-stat-orange: linear-gradient(
+    135deg,
+    rgba(254, 154, 0, 0.2) 0%,
+    rgba(254, 154, 0, 0.05) 100%
+  );
 
   --pm-gradient-kpi-blue: var(--pm-gradient-stat-blue);
   --pm-gradient-kpi-green: var(--pm-gradient-stat-green);

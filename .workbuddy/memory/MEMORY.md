@@ -22,7 +22,8 @@
 - **project-detail.css 96 处硬编码**（27 HEX + 69 rgba）——当前最大单笔 CSS 债务（Wave 2 目标）
 - `taskManagementPage.tsx` 47 个独立 Icon import
 - `App.tsx` 路由硬编码 → **已大幅简化**（配置驱动），但 `navigation.ts` 缺失
-- ~~lint 164 errors~~ → ✅ **0 errors, 18 warnings**（Wave 1）
+- ~~lint 164 errors~~ → ✅ **0 errors, 19 warnings**（Wave 1 + 类型修复后）
+- ~~build 119 TS errors~~ → ✅ **0 errors**（2026-04-26 修复并提交 `a5e3d80`）
 - P1-T4 后端仍为 snapshotJson 快照模式，实体表未建（**待决策**：V1 保持快照 or 立即实体化）
 
 ## 用户工作风格
