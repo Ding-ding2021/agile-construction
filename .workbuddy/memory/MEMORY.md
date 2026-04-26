@@ -19,12 +19,22 @@
 
 - ~~5+ 套侧边栏/头部重复实现~~ → ✅ 已统一为 AppSidebar/PageHeader/StatsCards，旧 Sidebar/Header 文件已删（Wave 1）
 - ~~7+ 统计卡片硬编码在各页面~~ → ✅ 已统一为 StatsCards，旧 CSS 类名已清理（Wave 1）
-- **project-detail.css 96 处硬编码**（27 HEX + 69 rgba）——当前最大单笔 CSS 债务（Wave 2 目标）
+- ~~project-detail.css 96 处硬编码~~ → ✅ **0 处**（2026-04-26 全部替换为 CSS 变量，提交 `3a10ad7`）
+- **navigation.ts 已创建**（2026-04-26，提交 `adcaf4f`），App.tsx 已接入
+- **组件层 hash 硬编码已全部替换**（2026-04-26，提交 `2c1bfbb`），41 处→0 处
+- **AppSidebar localStorage 已封装**（2026-04-26，提交 `1230cb6`），提取为 useSidebarCollapsed hook
+- ~~组件层剩余 localStorage 直接调用~~ → ✅ **0 处**（2026-04-26 提取到 repository 层，提交 `54ac199`）
 - `taskManagementPage.tsx` 47 个独立 Icon import
 - `App.tsx` 路由硬编码 → **已大幅简化**（配置驱动），但 `navigation.ts` 缺失
 - ~~lint 164 errors~~ → ✅ **0 errors, 19 warnings**（Wave 1 + 类型修复后）
 - ~~build 119 TS errors~~ → ✅ **0 errors**（2026-04-26 修复并提交 `a5e3d80`）
-- P1-T4 后端仍为 snapshotJson 快照模式，实体表未建（**待决策**：V1 保持快照 or 立即实体化）
+- ~~P1-T4 后端快照模式~~ → ✅ **已完成实体化**（2026-04-26）
+  - Prisma Schema 清理快照表，补全实体字段
+  - local-api 重构为 better-sqlite3 实体 CRUD（7 组端点）
+  - serverAdapter + Repository 切换为 API 优先 + localStorage 降级
+  - 自动迁移：load 时检测后端空数据则推送 localStorage 数据
+  - `schema.sql` 已删除，Prisma schema 成为唯一 SSOT
+  - 旧 /state 端点保留 deprecated 兼容
 
 ## 用户工作风格
 
