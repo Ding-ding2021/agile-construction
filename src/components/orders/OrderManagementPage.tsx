@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import { goToProjectDetail } from '../../config/navigation'
+import {
+  readOrders,
+  saveOrders,
+  readFlowLogs,
+  saveFlowLogs,
+} from '../../services/repositories/orderRepository'
 import './order-management-page.css'
 
 type OrderStatus =
@@ -41,8 +47,6 @@ type OrderFlowAction = {
 }
 
 const ASSET_BASE = '/assets/CodeBubbyAssets/4106_3082'
-const ORDER_STATE_STORAGE_KEY = 'pm-order-state-v1'
-const ORDER_LOG_STORAGE_KEY = 'pm-order-flow-logs-v1'
 
 const seedOrders: OrderItem[] = [
   {
@@ -202,32 +206,6 @@ const flowActionsMap: Record<OrderStatus, OrderFlowAction[]> = {
   已取消: [],
 }
 
-const readLocalOrders = (): OrderItem[] | null => {
-  try {
-    const raw = window.localStorage.getItem(ORDER_STATE_STORAGE_KEY)
-    if (!raw) {
-      return null
-    }
-    const parsed = JSON.parse(raw) as OrderItem[]
-    return Array.isArray(parsed) ? parsed : null
-  } catch {
-    return null
-  }
-}
-
-const readLocalFlowLogs = (): Record<string, OrderFlowLog[]> => {
-  try {
-    const raw = window.localStorage.getItem(ORDER_LOG_STORAGE_KEY)
-    if (!raw) {
-      return {}
-    }
-    const parsed = JSON.parse(raw) as Record<string, OrderFlowLog[]>
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch {
-    return {}
-  }
-}
-
 const formatFlowTime = (date = new Date()) => {
   const yyyy = date.getFullYear()
   const mm = String(date.getMonth() + 1).padStart(2, '0')
@@ -239,28 +217,22 @@ const formatFlowTime = (date = new Date()) => {
 
 const OrderManagementPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [ordersState, setOrdersState] = useState<OrderItem[]>(() => readLocalOrders() ?? seedOrders)
-  const [flowLogsMap, setFlowLogsMap] = useState<Record<string, OrderFlowLog[]>>(() =>
-    readLocalFlowLogs()
+  const [ordersState, setOrdersState] = useState<OrderItem[]>(
+    () => (readOrders() as OrderItem[]) ?? seedOrders
+  )
+  const [flowLogsMap, setFlowLogsMap] = useState<Record<string, OrderFlowLog[]>>(
+    () => readFlowLogs() as Record<string, OrderFlowLog[]>
   )
   const [activeLogOrderCode, setActiveLogOrderCode] = useState<string | null>(null)
 
   const currentHash = window.location.hash || '#/orders'
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(ORDER_STATE_STORAGE_KEY, JSON.stringify(ordersState))
-    } catch {
-      // ignore storage errors
-    }
+    saveOrders(ordersState)
   }, [ordersState])
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(ORDER_LOG_STORAGE_KEY, JSON.stringify(flowLogsMap))
-    } catch {
-      // ignore storage errors
-    }
+    saveFlowLogs(flowLogsMap)
   }, [flowLogsMap])
 
   const filteredOrders = useMemo(

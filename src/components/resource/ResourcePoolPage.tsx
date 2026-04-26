@@ -2,6 +2,11 @@ import { useMemo, useState } from 'react'
 import { AppSidebar, PageHeader } from '../shared'
 import { personnelRepository } from '../../services/repositories/personnelRepository'
 import { supplierRepository } from '../../services/repositories/supplierRepository'
+import {
+  readGovernanceSettings,
+  saveGovernanceSettings,
+} from '../../services/repositories/governanceRepository'
+import type { GovernanceSettings } from '../../services/repositories/governanceRepository'
 import type { PersonnelAvailabilityStatus, PersonnelUser } from '../personnel/personnelUsers'
 import type {
   SupplierAvailabilityStatus,
@@ -25,11 +30,6 @@ type SupplierDraft = {
   currentTaskCount: number
   availabilityStatus: SupplierAvailabilityStatus
   qualificationStatus: SupplierQualificationStatus
-}
-
-type GovernanceSettings = {
-  personnelBusyThreshold: number
-  supplierBusyThreshold: number
 }
 
 const employmentTypeLabel: Record<PersonnelUser['employmentType'], '资源方' | '工队' | '供应商'> = {
@@ -92,31 +92,6 @@ const mapCertHealthToStatus = (
   }
 
   return 'valid'
-}
-
-const GOVERNANCE_SETTINGS_STORAGE_KEY = 'pm-resource-governance-v1'
-
-const readGovernanceSettings = (): GovernanceSettings => {
-  try {
-    const raw = window.localStorage.getItem(GOVERNANCE_SETTINGS_STORAGE_KEY)
-    if (!raw) {
-      return {
-        personnelBusyThreshold: 5,
-        supplierBusyThreshold: 4,
-      }
-    }
-
-    const parsed = JSON.parse(raw) as Partial<GovernanceSettings>
-    return {
-      personnelBusyThreshold: Math.max(1, Number(parsed.personnelBusyThreshold) || 5),
-      supplierBusyThreshold: Math.max(1, Number(parsed.supplierBusyThreshold) || 4),
-    }
-  } catch {
-    return {
-      personnelBusyThreshold: 5,
-      supplierBusyThreshold: 4,
-    }
-  }
 }
 
 const ResourcePoolPage = () => {
@@ -285,19 +260,14 @@ const ResourcePoolPage = () => {
     setFeedback(`已更新供应商 ${supplierId} 的负载、可分配状态与资质状态。`)
   }
 
-  const saveGovernanceSettings = () => {
+  const handleSaveGovernanceSettings = () => {
     const nextSettings: GovernanceSettings = {
       personnelBusyThreshold: Math.max(1, Number(governanceSettings.personnelBusyThreshold) || 5),
       supplierBusyThreshold: Math.max(1, Number(governanceSettings.supplierBusyThreshold) || 4),
     }
 
     setGovernanceSettings(nextSettings)
-
-    try {
-      window.localStorage.setItem(GOVERNANCE_SETTINGS_STORAGE_KEY, JSON.stringify(nextSettings))
-    } catch {
-      // ignore storage errors
-    }
+    saveGovernanceSettings(nextSettings)
 
     setFeedback(
       `已保存治理规则：人员高负载阈值 ${nextSettings.personnelBusyThreshold}，供应商高负载阈值 ${nextSettings.supplierBusyThreshold}。`
@@ -426,7 +396,7 @@ const ResourcePoolPage = () => {
               aria-label="供应商高负载阈值"
             />
           </label>
-          <button type="button" onClick={saveGovernanceSettings}>
+          <button type="button" onClick={handleSaveGovernanceSettings}>
             保存治理规则
           </button>
         </section>

@@ -9,7 +9,7 @@ const ACCEPTANCE_STORAGE_PREFIX = 'pm-acceptance-state-v1'
 
 const storageKeyOf = (projectCode: string) => `${ACCEPTANCE_STORAGE_PREFIX}:${projectCode}`
 
-const readLocalState = (projectCode: string): AcceptanceStateSnapshot | null => {
+export const readLocalState = (projectCode: string): AcceptanceStateSnapshot | null => {
   try {
     const raw = window.localStorage.getItem(storageKeyOf(projectCode))
     if (!raw) {

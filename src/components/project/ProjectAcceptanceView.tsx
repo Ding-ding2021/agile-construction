@@ -69,8 +69,6 @@ const milestoneStatusClassMap: Record<MilestoneStatus, string> = {
   已完成: 'done',
 }
 
-const ACCEPTANCE_STORAGE_PREFIX = 'pm-acceptance-state-v1'
-
 const parseProgressPair = (value: string): { done: number; total: number } => {
   const [rawDone = '0', rawTotal = '0'] = value.split('/')
   const done = Number(rawDone)
@@ -158,8 +156,7 @@ const buildMilestoneSyncPayload = (
   }
 }
 
-const getAcceptanceStorageKey = (projectCode: string) =>
-  `${ACCEPTANCE_STORAGE_PREFIX}:${projectCode}`
+import { readLocalState } from '../../services/repositories/acceptanceRepository'
 
 type PersistedAcceptanceState = {
   nodes: AcceptanceNode[]
@@ -178,24 +175,13 @@ const readAcceptanceState = (
   fallbackProject: Pick<ProjectItem, 'code' | 'milestone' | 'owner'>
 ): PersistedAcceptanceState => {
   const fallback = createInitialAcceptanceState(fallbackProject)
-
-  try {
-    const raw = window.localStorage.getItem(getAcceptanceStorageKey(projectCode))
-    if (!raw) {
-      return fallback
-    }
-
-    const parsed = JSON.parse(raw) as Partial<PersistedAcceptanceState>
-    if (!Array.isArray(parsed.nodes) || !Array.isArray(parsed.milestones)) {
-      return fallback
-    }
-
-    return {
-      nodes: parsed.nodes,
-      milestones: parsed.milestones,
-    }
-  } catch {
+  const local = readLocalState(projectCode)
+  if (!local || !Array.isArray(local.nodes) || !Array.isArray(local.milestones)) {
     return fallback
+  }
+  return {
+    nodes: local.nodes as AcceptanceNode[],
+    milestones: local.milestones as AcceptanceMilestone[],
   }
 }
 
