@@ -1,7 +1,6 @@
 .fm-page {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: clamp(72px, 13.333vw, 256px) minmax(0, 1fr);
+  display: flex;
   background: var(--pm-bg);
   color: var(--pm-text-white);
   position: relative;
@@ -34,6 +33,7 @@
 }
 
 .fm-main {
+  flex: 1;
   min-width: 0;
   min-height: 100vh;
   display: flex;
@@ -413,10 +413,6 @@
 }
 
 @media (max-width: 768px) {
-  .fm-page {
-    grid-template-columns: 72px minmax(0, 1fr);
-  }
-
   .fm-top-tabs,
   .fm-toolbar-right,
   .fm-page-meta {
