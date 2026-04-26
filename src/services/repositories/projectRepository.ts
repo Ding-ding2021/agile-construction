@@ -75,51 +75,124 @@ const persistLocalState = (state: ProjectState) => {
 }
 
 export const projectRepository = {
+  // ── 加载状态：实体 API 优先，降级到 localStorage ──────────────
   async loadState(): Promise<ProjectState> {
     const localState = readLocalState()
 
     try {
-      const remoteState = await serverAdapter.getProjectState()
+      let remoteProjects = await serverAdapter.getProjects()
+
+      // ── 自动迁移：后端为空但本地有数据时，推送本地数据到实体表 ──
+      if (remoteProjects.length === 0 && localState.projects.length > 0) {
+        await Promise.allSettled(
+          localState.projects.map(project => {
+            const payload = { ...project } as Record<string, unknown>
+            delete payload.id
+            delete payload.createdAt
+            delete payload.updatedAt
+            return serverAdapter.createProject(
+              payload as unknown as ProjectItem,
+              createIdempotencyKey('migration', project.code)
+            )
+          })
+        )
+        remoteProjects = await serverAdapter.getProjects()
+      }
+
+      // 日志保持从本地缓存读取（审计日志与状态日志结构不同，暂不混用）
       const nextState: ProjectState = {
-        projects: remoteState.projects,
-        logs: remoteState.logs,
+        projects: remoteProjects,
+        logs: localState.logs,
       }
       persistLocalState(nextState)
       return nextState
     } catch (err) {
-      // 增强日志：记录远程加载失败，降级到本地缓存
       const error = StructuredError.fromRaw(
         err,
         'NETWORK_ERROR',
         'repository',
         'load-remote-state',
-        {
-          raw: err,
-        }
+        { raw: err }
       )
       errorLogger.log(error)
-
       return localState
     }
   },
 
+  // ── 保存状态：快照兼容（过渡期内保留） ──────────────────────────
   async saveState(state: ProjectState): Promise<void> {
     persistLocalState(state)
 
     try {
       await serverAdapter.saveProjectState(state, createIdempotencyKey('project-state'))
     } catch (err) {
-      // 增强日志：记录远程保存失败，已降级到本地缓存
       const error = StructuredError.fromRaw(
         err,
         'NETWORK_ERROR',
         'repository',
         'save-remote-state',
-        {
-          raw: err,
-        }
+        { raw: err }
       )
       errorLogger.log(error)
     }
+  },
+
+  // ── 项目实体 CRUD (V1) ────────────────────────────────────────
+  async getProjects(): Promise<ProjectItem[]> {
+    try {
+      return await serverAdapter.getProjects()
+    } catch {
+      return readLocalState().projects
+    }
+  },
+
+  async getProjectByCode(code: string): Promise<ProjectItem | null> {
+    try {
+      return await serverAdapter.getProjectByCode(code)
+    } catch {
+      return readLocalState().projects.find(p => p.code === code) ?? null
+    }
+  },
+
+  async createProject(project: ProjectItem): Promise<ProjectItem> {
+    const payload = { ...project } as Record<string, unknown>
+    delete payload.id
+    delete payload.createdAt
+    delete payload.updatedAt
+    const created = await serverAdapter.createProject(
+      payload as unknown as ProjectItem,
+      createIdempotencyKey('project-create', project.code)
+    )
+    // 双写本地缓存
+    const current = readLocalState()
+    const nextProjects = [...current.projects.filter(p => p.code !== created.code), created]
+    persistLocalState({ ...current, projects: nextProjects })
+    return created
+  },
+
+  async updateProject(code: string, patch: Partial<ProjectItem>): Promise<ProjectItem> {
+    const payload = { ...patch } as Record<string, unknown>
+    delete payload.id
+    delete payload.code
+    delete payload.createdAt
+    delete payload.updatedAt
+    const updated = await serverAdapter.updateProject(
+      code,
+      payload as Partial<ProjectItem>,
+      createIdempotencyKey('project-update', code)
+    )
+    // 双写本地缓存
+    const current = readLocalState()
+    const nextProjects = current.projects.map(p => (p.code === code ? updated : p))
+    persistLocalState({ ...current, projects: nextProjects })
+    return updated
+  },
+
+  async deleteProject(code: string): Promise<void> {
+    await serverAdapter.deleteProject(code)
+    // 同步删除本地缓存
+    const current = readLocalState()
+    const nextProjects = current.projects.filter(p => p.code !== code)
+    persistLocalState({ ...current, projects: nextProjects })
   },
 }

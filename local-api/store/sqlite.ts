@@ -2,13 +2,13 @@
  * SQLite 数据库连接与初始化
  */
 
-import { readFileSync, existsSync, mkdirSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import { dirname, join } from 'path'
 import Database from 'better-sqlite3'
 import type { Database as DatabaseType } from 'better-sqlite3'
 
-const DB_PATH = join(process.cwd(), 'local-api', 'store', 'local.db')
-const SCHEMA_PATH = join(process.cwd(), 'local-api', 'store', 'schema.sql')
+const DB_PATH = join(process.cwd(), 'local-api', 'store', 'prisma.db')
+// schema.sql 已删除，表结构由 prisma db push 管理
 
 let db: DatabaseType | null = null
 
@@ -31,12 +31,10 @@ export function initDatabase(): DatabaseType {
 
   // 启用 WAL 模式提升并发性能
   db.pragma('journal_mode = WAL')
+  // 启用外键约束，确保级联删除等操作生效
+  db.pragma('foreign_keys = ON')
 
-  // 读取并执行 schema
-  const schema = readFileSync(SCHEMA_PATH, 'utf-8')
-  db.exec(schema)
-
-  console.log('[SQLite] 数据库初始化完成:', DB_PATH)
+  console.log('[SQLite] 数据库连接成功:', DB_PATH)
 
   return db
 }
@@ -90,10 +88,13 @@ export function resetDatabase(): void {
   const database = getDatabase()
 
   database.exec(`
-    DELETE FROM project_state;
-    DELETE FROM task_state;
-    DELETE FROM acceptance_state;
-    DELETE FROM settlement_state;
+    DELETE FROM project_status_logs;
+    DELETE FROM project_members;
+    DELETE FROM project_risks;
+    DELETE FROM project_tasks;
+    DELETE FROM project_milestones;
+    DELETE FROM project_phases;
+    DELETE FROM projects;
     DELETE FROM audit_logs;
     DELETE FROM idempotency_keys;
   `)

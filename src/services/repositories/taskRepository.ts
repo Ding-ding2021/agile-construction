@@ -138,18 +138,37 @@ const createFallbackRectificationTask = (payload: AcceptanceRectificationPayload
 })
 
 export const taskRepository = {
+  // ── 加载任务：实体 API 优先，降级到 localStorage ────────────────
   async loadTasks(contextKey: string): Promise<TaskItem[] | null> {
     const localTasks = readLocalTasks(contextKey)
+    // contextKey 格式通常为 `__{projectName}__{projectCode}`，提取 projectCode
+    const projectCode = contextKey.split('__').pop() ?? contextKey
 
     try {
-      const remote = await serverAdapter.getTaskState(contextKey)
-      persistLocalTasks(contextKey, remote.tasks)
-      return remote.tasks
+      let remoteTasks = await serverAdapter.getProjectTasks(projectCode)
+
+      // ── 自动迁移：后端为空但本地有数据时，推送本地任务到实体表 ──
+      if (remoteTasks.length === 0 && localTasks && localTasks.length > 0) {
+        await Promise.allSettled(
+          localTasks.map(task =>
+            serverAdapter.createProjectTask(
+              projectCode,
+              task,
+              createIdempotencyKey('migration-task', task.code)
+            )
+          )
+        )
+        remoteTasks = await serverAdapter.getProjectTasks(projectCode)
+      }
+
+      persistLocalTasks(contextKey, remoteTasks)
+      return remoteTasks
     } catch {
       return localTasks
     }
   },
 
+  // ── 保存任务：快照兼容（过渡期内保留） ──────────────────────────
   async saveTasks(contextKey: string, tasks: TaskItem[]): Promise<void> {
     persistLocalTasks(contextKey, tasks)
 
@@ -165,6 +184,29 @@ export const taskRepository = {
     } catch {
       // fallback to local cache only
     }
+  },
+
+  // ── 任务实体 CRUD (V1) ────────────────────────────────────────
+  async getProjectTasks(projectCode: string): Promise<TaskItem[]> {
+    try {
+      return await serverAdapter.getProjectTasks(projectCode)
+    } catch {
+      const contextKey = `__${projectCode}`
+      return readLocalTasks(contextKey) ?? []
+    }
+  },
+
+  async createProjectTask(projectCode: string, task: TaskItem): Promise<TaskItem> {
+    const created = await serverAdapter.createProjectTask(
+      projectCode,
+      task,
+      createIdempotencyKey('task-create', task.code)
+    )
+    // 双写本地缓存
+    const contextKey = `__${projectCode}`
+    const current = readLocalTasks(contextKey) ?? []
+    persistLocalTasks(contextKey, [...current, created])
+    return created
   },
 
   async loadOperationLogs(contextKey: string): Promise<Record<string, TaskFlowLog[]>> {

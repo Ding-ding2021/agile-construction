@@ -117,36 +117,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.ProjectStateScalarFieldEnum = {
-  id: 'id',
-  envId: 'envId',
-  snapshotJson: 'snapshotJson',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.TaskStateScalarFieldEnum = {
-  id: 'id',
-  envId: 'envId',
-  contextKey: 'contextKey',
-  snapshotJson: 'snapshotJson',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AcceptanceStateScalarFieldEnum = {
-  id: 'id',
-  envId: 'envId',
-  projectCode: 'projectCode',
-  snapshotJson: 'snapshotJson',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SettlementStateScalarFieldEnum = {
-  id: 'id',
-  envId: 'envId',
-  snapshotJson: 'snapshotJson',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   envId: 'envId',
@@ -172,7 +142,9 @@ exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
+  brand: 'brand',
   status: 'status',
+  statusTone: 'statusTone',
   stage: 'stage',
   progress: 'progress',
   budget: 'budget',
@@ -181,9 +153,12 @@ exports.Prisma.ProjectScalarFieldEnum = {
   description: 'description',
   owner: 'owner',
   riskLevel: 'riskLevel',
+  riskCount: 'riskCount',
   milestone: 'milestone',
   tasks: 'tasks',
   templateId: 'templateId',
+  plannedOpenDate: 'plannedOpenDate',
+  actualOpenDate: 'actualOpenDate',
   dispatchStatus: 'dispatchStatus',
   executionStatus: 'executionStatus',
   acceptanceStatus: 'acceptanceStatus',
@@ -223,20 +198,23 @@ exports.Prisma.ProjectTaskScalarFieldEnum = {
   status: 'status',
   assignee: 'assignee',
   startDate: 'startDate',
-  endDate: 'endDate',
+  dueDate: 'dueDate',
   progress: 'progress',
+  level: 'level',
   parentId: 'parentId'
 };
 
 exports.Prisma.ProjectRiskScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
-  title: 'title',
+  description: 'description',
   level: 'level',
   probability: 'probability',
   impact: 'impact',
   mitigation: 'mitigation',
-  status: 'status'
+  status: 'status',
+  assignee: 'assignee',
+  dueDate: 'dueDate'
 };
 
 exports.Prisma.ProjectMemberScalarFieldEnum = {
@@ -245,7 +223,10 @@ exports.Prisma.ProjectMemberScalarFieldEnum = {
   userId: 'userId',
   name: 'name',
   role: 'role',
-  avatar: 'avatar'
+  avatar: 'avatar',
+  department: 'department',
+  phone: 'phone',
+  email: 'email'
 };
 
 exports.Prisma.ProjectStatusLogScalarFieldEnum = {
@@ -272,10 +253,6 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  ProjectState: 'ProjectState',
-  TaskState: 'TaskState',
-  AcceptanceState: 'AcceptanceState',
-  SettlementState: 'SettlementState',
   AuditLog: 'AuditLog',
   IdempotencyKey: 'IdempotencyKey',
   Project: 'Project',

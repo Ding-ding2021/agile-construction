@@ -1,5 +1,6 @@
 // Prisma Schema for 多Agent建店管理平台
-// 对应 local-api/store/schema.sql 的实体化升级
+// V1 实体化模式 — 结构化实体表（已删除快照表 ProjectState/TaskState/AcceptanceState/SettlementState）
+// Schema 唯一来源，local-api/store/schema.sql 已废弃
 
 generator client {
   provider = "prisma-client-js"
@@ -8,53 +9,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-}
-
-// ─── 项目状态快照表 ────────────────────────────────────────────
-// 存储项目列表和状态日志的 JSON 快照（兼容现有 localStorage 模式）
-model ProjectState {
-  id           Int      @id @default(autoincrement())
-  envId        String   @map("env_id")
-  snapshotJson String   @map("snapshot_json")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  @@unique([envId])
-  @@map("project_state")
-}
-
-// ─── 任务状态快照表 ────────────────────────────────────────────
-model TaskState {
-  id          Int      @id @default(autoincrement())
-  envId       String   @map("env_id")
-  contextKey  String   @map("context_key")
-  snapshotJson String  @map("snapshot_json")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  @@unique([envId, contextKey])
-  @@map("task_state")
-}
-
-// ─── 验收状态快照表 ────────────────────────────────────────────
-model AcceptanceState {
-  id          Int      @id @default(autoincrement())
-  envId       String   @map("env_id")
-  projectCode String   @map("project_code")
-  snapshotJson String  @map("snapshot_json")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  @@unique([envId, projectCode])
-  @@map("acceptance_state")
-}
-
-// ─── 结算建议快照表 ────────────────────────────────────────────
-model SettlementState {
-  id          Int      @id @default(autoincrement())
-  envId       String   @map("env_id")
-  snapshotJson String  @map("snapshot_json")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  @@unique([envId])
-  @@map("settlement_state")
 }
 
 // ─── 审计日志表 ────────────────────────────────────────────────
@@ -96,7 +50,9 @@ model Project {
   id        Int      @id @default(autoincrement())
   code      String   @unique
   name      String
+  brand     String
   status    String
+  statusTone String  @map("status_tone")
   stage     String
   progress  Int      @default(0)
   budget    String?
@@ -105,9 +61,12 @@ model Project {
   description String?
   owner     String?
   riskLevel String?  @map("risk_level")
+  riskCount Int      @default(0) @map("risk_count")
   milestone String?
   tasks     String?
   templateId String? @map("template_id")
+  plannedOpenDate   String  @map("planned_open_date")
+  actualOpenDate    String? @map("actual_open_date")
   dispatchStatus    String? @map("dispatch_status")
   executionStatus   String? @map("execution_status")
   acceptanceStatus  String? @map("acceptance_status")
@@ -168,8 +127,9 @@ model ProjectTask {
   status    String
   assignee  String?
   startDate String?  @map("start_date")
-  endDate   String?  @map("end_date")
+  dueDate   String?  @map("due_date")
   progress  Int      @default(0)
+  level     Int      @default(0)
   parentId  Int?     @map("parent_id")
 
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -181,12 +141,14 @@ model ProjectTask {
 model ProjectRisk {
   id          Int      @id @default(autoincrement())
   projectId   Int      @map("project_id")
-  title       String
+  description String
   level       String
   probability String?
   impact      String?
   mitigation  String?
   status      String
+  assignee    String?
+  dueDate     String?  @map("due_date")
 
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -195,12 +157,15 @@ model ProjectRisk {
 
 // ─── 项目成员表 ────────────────────────────────────────────────
 model ProjectMember {
-  id       Int     @id @default(autoincrement())
-  projectId Int    @map("project_id")
-  userId   String  @map("user_id")
-  name     String
-  role     String
-  avatar   String?
+  id         Int     @id @default(autoincrement())
+  projectId  Int     @map("project_id")
+  userId     String  @map("user_id")
+  name       String
+  role       String
+  avatar     String?
+  department String?
+  phone      String?
+  email      String?
 
   project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
