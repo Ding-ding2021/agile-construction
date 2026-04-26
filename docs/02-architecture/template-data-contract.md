@@ -108,6 +108,55 @@ V1 不覆盖：
 
 ---
 
+## 2.3 模版字段与运行时字段划分（2026-04 决策）
+
+TaskTemplate 复用 TaskItem/TaskDetail 全部字段，按以下规则裁剪。
+
+### 进模版的字段（预配置）
+
+| 模版字段              | 对应运行时字段                               | 类型                                               |
+| --------------------- | -------------------------------------------- | -------------------------------------------------- |
+| `taskTemplateName`    | `name`                                       | `string`                                           |
+| `taskDescription`     | `taskDescription`                            | `string?`                                          |
+| `businessDomain`      | —                                            | `string`                                           |
+| `taskType`            | `taskType`                                   | `'标准任务' \| '关键任务' \| '里程碑' \| '检查点'` |
+| `requiredFlag`        | —                                            | `boolean`                                          |
+| `milestoneFlag`       | —                                            | `boolean`                                          |
+| `ownerRole`           | `owner`（角色）                              | `string`                                           |
+| `assigneeTypeDefault` | `assigneeType`                               | `'internal' \| 'external'`                         |
+| `plannedDurationDays` | → `plannedStartAt` / `plannedEndAt`          | `number?`                                          |
+| `slaRuleId`           | → `slaStatus`                                | `string?`                                          |
+| `priority`            | → `riskLevel`（参考）                        | `'high' \| 'medium' \| 'low'?`                     |
+| `tags`                | —                                            | `string[]?`                                        |
+| `standardBinding`     | `executionStandards` + `acceptanceStandards` | `StandardBinding`                                  |
+| `dependencyBlueprint` | `relations`（前置依赖）                      | `DependencyBlueprint[]`                            |
+| `sortOrder`           | —                                            | `number`                                           |
+
+### 不进模版的字段（运行时填充）
+
+| 运行时字段                              | 为什么不进模版                        |
+| --------------------------------------- | ------------------------------------- |
+| `code`                                  | 实例化时按项目编码 + 序号生成         |
+| `projectName`                           | 实例化时才关联具体项目                |
+| `parentPath`                            | 根据任务树位置动态计算                |
+| `status` / `statusTone`                 | 运行时状态流转                        |
+| `actualStartAt` / `actualEndAt`         | 实际执行时间，运行时记录              |
+| `slaStatus` / `slaTone`                 | 根据 SLA 规则 + 实际时间计算          |
+| `riskLevel` / `riskTone`                | 运行时风险评估                        |
+| `predecessorStatus`                     | 运行时根据依赖任务状态计算            |
+| `remindCount`                           | 运行时累计催办次数                    |
+| `standardBindingStatus`                 | 运行时判断是否已绑定                  |
+| `isBlocked` / `blockedReason`           | 运行时阻塞状态                        |
+| `progress`                              | 运行时任务完成进度                    |
+| `assigneeName`                          | 实例化时或运行时分配具体人            |
+| `standardSnapshotId` / `snapshotStatus` | 进入执行态时生成                      |
+| `checklist`                             | 运行时从标准对象 + 模版展开           |
+| `attachments`                           | 运行时上传                            |
+| `flowLogs`                              | 运行时流转记录                        |
+| `sourceType`                            | 实例化时标注来源（manual / template） |
+
+---
+
 ## 3. 结构蓝图定义
 
 ## 3.1 阶段蓝图 `phase_blueprint[]`

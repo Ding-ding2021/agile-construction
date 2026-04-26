@@ -10,16 +10,18 @@
 
 ## 架构速查
 
-| 做什么             | 找这里                                                                        |
-| ------------------ | ----------------------------------------------------------------------------- |
-| 改路由 / 加页面    | `src/App.tsx` → `readRouteFromHash`                                           |
-| 改项目状态流转     | `src/domain/projectStatusMachine.ts` → `canTransition` / `allowedTransitions` |
-| 改项目数据模型     | `src/data/projects.ts` → `ProjectItem`                                        |
-| 改任务筛选 / 排序  | `src/components/task/taskManagement.selectors.ts`                             |
-| 改任务类型定义     | `src/components/task/taskManagement.types.ts`                                 |
-| 改全局样式与 Token | `src/index.css` → `:root` 变量                                                |
-| 查视觉基线         | `docs/00-governance/design-specification.md`                                  |
-| 查编码规范         | `docs/00-governance/coding-standards.md`                                      |
+| 做什么             | 找这里                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------- |
+| 改路由 / 加页面    | `src/App.tsx` → `readRouteFromHash`                                                      |
+| 改项目状态流转     | `src/domain/projectStatusMachine.ts` → `canTransition` / `allowedTransitions`            |
+| 改项目数据模型     | `src/data/projects.ts` → `ProjectItem`                                                   |
+| 改任务筛选 / 排序  | `src/components/task/taskManagement.selectors.ts`                                        |
+| 改任务类型定义     | `src/components/task/taskManagement.types.ts`                                            |
+| 改全局样式与 Token | `src/index.css` → `:root` 变量                                                           |
+| 改标准对象         | `src/components/standard/standard.types.ts` → `ExecutionStandard` / `AcceptanceStandard` |
+| 改任务模版编辑器   | `src/components/standard/TaskTemplateEditor.tsx`（复用 `TaskDetailPage` 样式）           |
+| 查视觉基线         | `docs/00-governance/design-specification.md`                                             |
+| 查编码规范         | `docs/00-governance/coding-standards.md`                                                 |
 
 ## 项目约定
 
