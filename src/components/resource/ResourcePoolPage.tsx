@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AppSidebar, PageHeader } from '../shared'
+import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import { personnelRepository } from '../../services/repositories/personnelRepository'
 import { supplierRepository } from '../../services/repositories/supplierRepository'
 import {
@@ -186,6 +186,34 @@ const ResourcePoolPage = () => {
     usersState,
   ])
 
+  const statsItems = useMemo(
+    () => [
+      { key: 'total', label: '资源总量', value: stats.total, tone: 'blue' as const, icon: '1.svg' },
+      {
+        key: 'assignable',
+        label: '可分配',
+        value: stats.assignable,
+        tone: 'green' as const,
+        icon: '3.svg',
+      },
+      {
+        key: 'certRisk',
+        label: '资质风险',
+        value: stats.certRisk,
+        tone: 'orange' as const,
+        icon: '5.svg',
+      },
+      {
+        key: 'heavyLoad',
+        label: '高负载',
+        value: stats.heavyLoad,
+        tone: 'red' as const,
+        icon: '7.svg',
+      },
+    ],
+    [stats]
+  )
+
   const updateDraft = (userId: string, patch: Partial<ResourceDraft>) => {
     setDraftMap(prev => ({
       ...prev,
@@ -290,24 +318,7 @@ const ResourcePoolPage = () => {
           }
         />
 
-        <section className="rp-stats" aria-label="资源池统计">
-          <article>
-            <p>资源总量</p>
-            <strong>{stats.total}</strong>
-          </article>
-          <article>
-            <p>可分配</p>
-            <strong>{stats.assignable}</strong>
-          </article>
-          <article>
-            <p>资质风险</p>
-            <strong>{stats.certRisk}</strong>
-          </article>
-          <article>
-            <p>高负载</p>
-            <strong>{stats.heavyLoad}</strong>
-          </article>
-        </section>
+        <StatsCards items={statsItems} classNamePrefix="rp" />
 
         <section className="rp-toolbar" aria-label="资源池筛选">
           <label>

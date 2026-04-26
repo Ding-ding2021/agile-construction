@@ -338,8 +338,8 @@ const taskDetailMap: Record<string, TaskDetail> = Object.fromEntries(
   mockTasks.map(task => [task.code, buildTaskDetailFromItem(task)])
 )
 
-export const getTaskDetailByCode = (taskCode: string): TaskDetail | null => {
-  return taskDetailMap[taskCode] ?? null
+export const getTaskDetailByCode = (taskCode: string): TaskDetail | undefined => {
+  return taskDetailMap[taskCode]
 }
 
 // ─── Task Tree Types & Functions ───────────────────────────────
@@ -388,16 +388,20 @@ export function buildTaskTreeViewModel(tasks: TaskItem[]): TaskTreeViewModel {
   }))
 
   const delayedCount = nodes.filter(n => n.status === 'delayed').length
+  const distinctProjects = new Set(tasks.map(t => t.projectName))
+
+  const now = new Date()
+  const updatedAt = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
   return {
     nodes,
     summary: {
-      projectCount: 1,
+      projectCount: tasks.length > 0 ? distinctProjects.size : 0,
       workPackageCount: 0,
       taskCount: nodes.length,
       delayedCount,
     },
-    updatedAt: new Date().toLocaleString('zh-CN'),
+    updatedAt,
   }
 }
 
@@ -412,9 +416,11 @@ function mapTaskStatusToTreeStatus(
 }
 
 export function getTasksByTemplateId(templateId: string): TaskItem[] {
-  return mockTasks.filter(
+  if (!templateId) return mockTasks
+  const filtered = mockTasks.filter(
     task => task.projectName.includes(templateId) || task.code.includes(templateId)
   )
+  return filtered.length > 0 ? filtered : mockTasks
 }
 
 export function getTemplateNameById(templateId: string | undefined): string | null {

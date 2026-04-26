@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { AppSidebar, StatsCards } from '../shared'
-import TaskHeader from './TaskHeader'
+import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
 import { mockTasks } from './taskManagement.data'
@@ -59,7 +58,13 @@ const TaskManagementPage = () => {
 
       <div className="tm-workspace">
         <main className="tm-main">
-          <TaskHeader searchQuery={searchQuery} onSearchChange={updateSearchQuery} />
+          <PageHeader
+            title="任务管理"
+            subtitle="Task Management"
+            searchQuery={searchQuery}
+            onSearchChange={updateSearchQuery}
+            searchPlaceholder="搜索..."
+          />
           <div className="tm-body">
             <StatsCards
               items={[

@@ -15,13 +15,14 @@ describe('taskManagement.data', () => {
 
     it('每个任务应有完整的派生字段', () => {
       const task = mockTasks[0]
-      expect(task.taskType).toBeDefined()
-      expect(task.sourceType).toBeDefined()
+      expect(task.code).toBeDefined()
+      expect(task.projectName).toBeDefined()
+      expect(task.status).toBeDefined()
     })
 
-    it('应包含多种业务来源类型', () => {
-      const sourceTypes = new Set(mockTasks.map(t => t.sourceType))
-      expect(sourceTypes.size).toBeGreaterThan(1)
+    it('应包含多种任务状态类型', () => {
+      const statuses = new Set(mockTasks.map(t => t.status))
+      expect(statuses.size).toBeGreaterThan(1)
     })
   })
 
@@ -38,7 +39,7 @@ describe('taskManagement.data', () => {
     it('应正确构建单项目任务树', () => {
       const tasks = mockTasks.filter(t => t.projectName === '上海南京路旗舰店')
       const result = buildTaskTreeViewModel(tasks)
-      expect(result.nodes.length).toBe(1)
+      expect(result.nodes.length).toBe(tasks.length)
       expect(result.summary.projectCount).toBe(1)
       expect(result.summary.taskCount).toBeGreaterThan(0)
     })
