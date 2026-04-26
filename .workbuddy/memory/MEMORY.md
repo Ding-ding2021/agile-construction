@@ -6,7 +6,7 @@
 - **V1 后端**：Node.js + Express + SQLite + Prisma（轻量方案）
 - **V2 后端**：迁移 PostgreSQL + Redis
 - **状态管理**：当前 `App.tsx` 内联状态 + localStorage，目标迁移 Zustand
-- **数据持久化**：`pm-projects-state-v1` / `pm-project-logs-v1` 存 localStorage（演示阶段）
+- **数据持久化**：API 优先（better-sqlite3 + Prisma Schema），localStorage 降级备份
 
 ## 代码质量红线（不可违背）
 
@@ -25,8 +25,8 @@
 - **AppSidebar localStorage 已封装**（2026-04-26，提交 `1230cb6`），提取为 useSidebarCollapsed hook
 - ~~组件层剩余 localStorage 直接调用~~ → ✅ **0 处**（2026-04-26 提取到 repository 层，提交 `54ac199`）
 - `taskManagementPage.tsx` 47 个独立 Icon import
-- `App.tsx` 路由硬编码 → **已大幅简化**（配置驱动），但 `navigation.ts` 缺失
-- ~~lint 164 errors~~ → ✅ **0 errors, 19 warnings**（Wave 1 + 类型修复后）
+- ~~`App.tsx` 路由硬编码~~ → ✅ **已解决**（navigation.ts 创建 + 组件层 hash 41→0，Wave 2）
+- lint 现为 **0 errors, 21 warnings**（Wave 1 + 类型修复后）
 - ~~build 119 TS errors~~ → ✅ **0 errors**（2026-04-26 修复并提交 `a5e3d80`）
 - ~~P1-T4 后端快照模式~~ → ✅ **已完成实体化**（2026-04-26）
   - Prisma Schema 清理快照表，补全实体字段
@@ -79,19 +79,19 @@
 
 ### 波次划分
 
-- **Wave 0**（10 分钟）：数据层策略决策 — 建议 V1 保持快照模式，实体化延后到 Phase 3
-- **Wave 1**（1~2 小时）：lint 清零 + 3 个旧 Sidebar 删除 + 旧 CSS 类名清理 + ProjectDetailPage 布局对齐
-- **Wave 2**（1~2 天）：project-detail.css 硬编码清零 + navigation.ts 创建 + 组件层 localStorage 清理
-- **Wave 3**（2~3 天，可延后）：CSS Token 压缩 + 渐变清零 + ProjectCard + MUI 封装
+- **Wave 0**（✅ 已完成）：数据层策略决策 — 最终选择实体表方案（选项 B），已完成迁移
+- **Wave 1**（✅ 已完成）：lint 清零 + 3 个旧 Sidebar 删除 + 旧 CSS 类名清理 + ProjectDetailPage 布局对齐
+- **Wave 2**（✅ 已完成）：project-detail.css 硬编码清零 + navigation.ts 创建 + 组件层 localStorage 清理
+- **Wave 3**（⏳ 延后）：CSS Token 压缩 + 渐变清零 + ProjectCard + MUI 封装
 
 ### 进入 Phase 2 底线标准
 
-1. lint 零 error
-2. 旧 Sidebar 删除
-3. 旧统计卡片 CSS 清理
-4. project-detail.css 硬编码 ≤ 20 处
-5. 数据策略决策明确
+1. ✅ lint 零 error
+2. ✅ 旧 Sidebar 删除
+3. ✅ 旧统计卡片 CSS 清理
+4. ✅ project-detail.css 硬编码 0 处（≤ 20 超标完成）
+5. ✅ 数据策略决策：实体表方案，已完成 Prisma + better-sqlite3 迁移
 
 ### 待决策项
 
-- **P1-T4 数据策略**：快照模式（选项 A，建议）vs 实体表（选项 B，2~3 天）
+- **无** — 全部决策已闭合
