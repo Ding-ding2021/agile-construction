@@ -91,3 +91,10 @@
 
 - 根 `README.md` 仍是 Vite 模板说明，不反映业务架构现状。
 - 实际业务结构以 `src/App.tsx` + `src/domain/*` + `src/data/*` + `src/components/*` 为准；后续改动应以这些文件为主线理解系统。
+
+## 9) 设计规范参考
+
+- **设计规范**：`docs/00-governance/design-specification.md` — 视觉基线（深色玻璃态、统一圆角与交互动效）
+- **编码规范**：`docs/00-governance/coding-standards.md` — TypeScript/React 编码标准
+- **开发指南**：`docs/03-engineering/development-guide.md` — 本地开发与调试流程
+- **完整文档索引**：`docs/README.md` — 仓库全部 83 篇文档的统一导航入口
