@@ -1,0 +1,15 @@
+{
+  "models": [
+    {
+      "id": "deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "vendor": "DeepSeek",
+      "apiKey": "sk-9e0bbefd7381401d8dd0a678031119d5",
+      "maxInputTokens": 1000000,
+      "maxOutputTokens": 8192,
+      "url": "https://api.deepseek.com/v1/chat/completions",
+      "supportsToolCall": true,
+      "supportsImages": false
+    }
+  ]
+}
