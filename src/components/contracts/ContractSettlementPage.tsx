@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ProjectItem } from '../../data/projects'
-import { AppSidebar, PageHeader } from '../shared'
+import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import { settlementRepository } from '../../services/repositories/settlementRepository'
 import {
   navigateByHash,
@@ -27,19 +27,6 @@ type TopTab = {
   label: string
   icon: string
   href: string
-}
-
-type StatItem = {
-  key: string
-  label: string
-  valueMain: string
-  valueSub: string
-  icon: string
-  tone: 'blue' | 'purple' | 'orange'
-  delta?: string
-  deltaIcon?: string
-  ratio?: string
-  riskTag?: string
 }
 
 type SettlementDiffItem = {
@@ -101,7 +88,7 @@ const buildContractsByProjects = (projects: ProjectItem[]): ContractItem[] =>
     actionIcon: ['25.svg', '26.svg', '27.svg', '28.svg', '29.svg'][index % 5],
   }))
 
-const buildStatsByProjects = (projects: ProjectItem[]): StatItem[] => {
+const buildStatsByProjects = (projects: ProjectItem[]) => {
   const totalBudgetWan = projects.reduce(
     (sum, project) => sum + parseBudgetToWan(project.budget),
     0
@@ -116,30 +103,27 @@ const buildStatsByProjects = (projects: ProjectItem[]): StatItem[] => {
     {
       key: 'yearlyTotal',
       label: '本年度合同总额',
-      valueMain: `¥ ${Math.max(totalBudgetWan, 0).toLocaleString('zh-CN')}`,
-      valueSub: '万',
+      value: `¥ ${Math.max(totalBudgetWan, 0).toLocaleString('zh-CN')} 万`,
+      tone: 'blue' as const,
       delta: '+0%',
       deltaIcon: '10.svg',
       icon: '5.svg',
-      tone: 'blue',
     },
     {
       key: 'settled',
       label: '累计已结算金额',
-      valueMain: `¥ ${Math.max(settledWan, 0).toLocaleString('zh-CN')}`,
-      valueSub: '万',
-      ratio: `占合同额 ${settledRatio}%`,
+      value: `¥ ${Math.max(settledWan, 0).toLocaleString('zh-CN')} 万`,
+      tone: 'purple' as const,
+      subLabel: `占合同额 ${settledRatio}%`,
       icon: '11.svg',
-      tone: 'purple',
     },
     {
       key: 'risk',
       label: '项目预算超支风险',
-      valueMain: `¥ ${Math.max(totalBudgetWan - settledWan, 0).toLocaleString('zh-CN')}`,
-      valueSub: '万',
-      riskTag: `${overRiskCount} 个项目高风险`,
+      value: `¥ ${Math.max(totalBudgetWan - settledWan, 0).toLocaleString('zh-CN')} 万`,
+      tone: 'orange' as const,
+      subLabel: `${overRiskCount} 个项目高风险`,
       icon: '13.svg',
-      tone: 'orange',
     },
   ]
 }
@@ -281,30 +265,7 @@ const ContractSettlementPage = ({ projects }: ContractSettlementPageProps) => {
             ))}
           </section>
 
-          <section className="csm-stat-row" aria-label="合同统计">
-            {stats.map(item => (
-              <article key={item.key} className={`csm-stat-card ${item.tone}`}>
-                <div className="csm-stat-bg-icon">
-                  <img src={`${ASSET_BASE}/${item.icon}`} alt="" />
-                </div>
-                <div className="csm-stat-top">
-                  <p>{item.label}</p>
-                  {item.delta ? (
-                    <span className="csm-delta">
-                      <img src={`${ASSET_BASE}/${item.deltaIcon}`} alt="" />
-                      {item.delta}
-                    </span>
-                  ) : null}
-                  {item.ratio ? <span className="csm-ratio">{item.ratio}</span> : null}
-                  {item.riskTag ? <span className="csm-risk-tag">{item.riskTag}</span> : null}
-                </div>
-                <div className="csm-stat-value">
-                  <strong>{item.valueMain}</strong>
-                  <em>{item.valueSub}</em>
-                </div>
-              </article>
-            ))}
-          </section>
+          <StatsCards items={stats} assetBase={ASSET_BASE} classNamePrefix="csm" />
 
           {settlementSuggestions.length > 0 ? (
             <section className="csm-toolbar" aria-label="结算建议">

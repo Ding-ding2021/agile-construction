@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AppSidebar, PageHeader } from '../shared'
+import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import { navigateByHash } from '../shared/navigation/nav.utils'
 import './facility-management.css'
 
@@ -16,21 +16,13 @@ type FacilityItem = {
   score: string
 }
 
-type StatCard = {
-  key: string
-  title: string
-  value: string
-  tone: 'blue' | 'green' | 'orange' | 'red'
-  icon: string
-}
-
 const ASSET_BASE = '/assets/CodeBubbyAssets/4106_5251'
 
-const statCards: StatCard[] = [
-  { key: 'total', title: '设施总数', value: '248', tone: 'blue', icon: '4.svg' },
-  { key: 'healthy', title: '运行正常', value: '218', tone: 'green', icon: '11.svg' },
-  { key: 'maintaining', title: '维护中', value: '15', tone: 'orange', icon: '13.svg' },
-  { key: 'faulty', title: '故障/离线', value: '15', tone: 'red', icon: '15.svg' },
+const statsItems = [
+  { key: 'total', label: '设施总数', value: '248', tone: 'blue' as const, icon: '4.svg' },
+  { key: 'healthy', label: '运行正常', value: '218', tone: 'green' as const, icon: '11.svg' },
+  { key: 'maintaining', label: '维护中', value: '15', tone: 'orange' as const, icon: '13.svg' },
+  { key: 'faulty', label: '故障/离线', value: '15', tone: 'red' as const, icon: '15.svg' },
 ]
 
 const facilityItems: FacilityItem[] = [
@@ -175,15 +167,7 @@ const FacilityManagementPage = () => {
             </button>
           </div>
 
-          <section className="fm-stats-grid" aria-label="设施统计">
-            {statCards.map(card => (
-              <article key={card.key} className={`fm-stat-card ${card.tone}`}>
-                <img src={`${ASSET_BASE}/${card.icon}`} alt="" className="fm-stat-bg-icon" />
-                <p>{card.title}</p>
-                <strong>{card.value}</strong>
-              </article>
-            ))}
-          </section>
+          <StatsCards items={statsItems} assetBase={ASSET_BASE} classNamePrefix="fm" />
 
           <section className="fm-table-section">
             <div className="fm-toolbar">

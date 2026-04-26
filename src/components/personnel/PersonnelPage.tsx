@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AppSidebar, StatsCards } from '../shared'
-import PersonnelHeader from './Header'
+import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import InsightsPanel from './InsightsPanel'
 import { personnelUsers, type PersonnelUser } from './personnelUsers'
 import { goToPersonnelUser } from '../../config/navigation'
@@ -77,11 +76,23 @@ const PersonnelPage = ({ onUserOpen }: PersonnelPageProps) => {
 
       <div className="pm-workspace">
         <main className="pm-main">
-          <PersonnelHeader
+          <PageHeader
+            title="人员管理"
+            subtitle="Personnel Management"
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
-            isInsightsOpen={isInsightsOpen}
-            onInsightsToggle={() => setIsInsightsOpen(prev => !prev)}
+            searchPlaceholder="搜索姓名 / 工号 / 手机..."
+            extraActions={
+              <button
+                type="button"
+                className={`pm-icon-btn ${isInsightsOpen ? 'pm-icon-btn-active' : ''}`}
+                aria-label={isInsightsOpen ? '关闭 Agent 对话框' : '打开 Agent 对话框'}
+                aria-expanded={isInsightsOpen}
+                onClick={() => setIsInsightsOpen(prev => !prev)}
+              >
+                <img src="/assets/CodeBubbyAssets/3848_19/38.svg" alt="" />
+              </button>
+            }
           />
 
           <div className="pm-body">
