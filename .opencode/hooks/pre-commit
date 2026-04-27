@@ -1,0 +1,5 @@
+#!/bin/bash
+# 预提交钩子：自动同步记忆
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"${SCRIPT_DIR}/../../.opencode/scripts/sync-memory.sh" both
