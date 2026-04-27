@@ -1,10 +1,11 @@
 export type TaskViewMode = 'grid' | 'list' | 'kanban' | 'calendar'
 
 export type TaskStatus =
-  | '待创建'
+  | '草稿'
   | '待分配'
   | '待执行'
   | '执行中'
+  | '已暂停'
   | '待提交'
   | '待验收'
   | '不通过'
@@ -136,15 +137,16 @@ export interface PaginationState {
 const READONLY_TASK_STATUS: TaskStatus[] = ['已完成', '已关闭']
 
 const AVAILABLE_STATUS_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
-  待创建: ['待分配', '待执行'],
-  待分配: ['待执行'],
-  待执行: ['执行中', '不通过'],
-  执行中: ['待提交', '不通过'],
-  待提交: ['待验收', '不通过'],
+  草稿: ['待分配'],
+  待分配: ['待执行', '已关闭'],
+  待执行: ['执行中', '已关闭'],
+  执行中: ['待提交', '已暂停', '不通过', '已关闭'],
+  已暂停: ['执行中', '已关闭'],
+  待提交: ['待验收', '执行中', '不通过'],
   待验收: ['已完成', '不通过'],
-  不通过: ['待执行', '执行中'],
-  已完成: ['已完成'],
-  已关闭: ['已关闭'],
+  不通过: ['待执行', '执行中', '已关闭'],
+  已完成: ['已完成', '待分配'],
+  已关闭: ['已关闭', '待分配'],
 }
 
 export const isTaskReadonlyStatus = (status: TaskStatus): boolean =>

@@ -93,7 +93,7 @@
 .wbs-tree-card {
   padding: 0;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--pm-deep-88) 0%, var(--pm-deeper-84) 100%);
+  background: var(--pm-gradient-wbs-node);
   border-color: var(--pm-azure-12);
 }
 
@@ -243,7 +243,7 @@
   min-height: 100%;
   position: sticky;
   top: 24px;
-  background: linear-gradient(180deg, var(--pm-deep-92) 0%, var(--pm-deeper-88) 100%);
+  background: var(--pm-gradient-wbs-header);
   border-color: var(--pm-azure-12);
 }
 
@@ -325,11 +325,7 @@
 .wbs-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--wbs-tone) 86%, var(--pm-text-white) 14%),
-    var(--wbs-tone)
-  );
+  background: var(--pm-gradient-wbs-progress);
 }
 
 .wbs-panel-owner {

@@ -144,7 +144,7 @@
   height: 28px;
   border-radius: var(--pm-radius-sm);
   background: var(--pm-blue-25);
-  color: #8ec8ff;
+  color: var(--pm-blue-ish-2);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -179,14 +179,14 @@
 }
 
 .cm-level-tag.S级 {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
-  border-color: rgba(251, 191, 36, 0.24);
+  color: var(--pm-yellow-24);
+  background: var(--pm-yellow-12);
+  border-color: var(--pm-yellow-24);
 }
 
 .cm-level-tag.A级 {
-  color: #8ec8ff;
-  background: rgba(43, 127, 255, 0.14);
+  color: var(--pm-blue-ish-2);
+  background: var(--pm-blue-15);
   border-color: var(--pm-blue-25);
 }
 
@@ -218,7 +218,7 @@
   border: 1px solid var(--pm-blue-25);
   border-radius: var(--pm-radius-sm);
   background: var(--pm-blue-10);
-  color: #8ec8ff;
+  color: var(--pm-blue-ish-2);
   font-size: 11px;
   height: 26px;
   padding: 0 10px;

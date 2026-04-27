@@ -175,7 +175,7 @@
   border-radius: var(--pm-radius-lg);
   border: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
   font-weight: 500;
   display: inline-flex;
@@ -228,7 +228,7 @@
   border-radius: var(--pm-radius-md);
   border: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
   padding: 0 12px;
   display: inline-flex;
@@ -302,7 +302,7 @@
 }
 
 .pcm-table th {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-weight: 500;
 }
 
@@ -350,11 +350,11 @@
 .pcm-status-badge.已暂停 {
   color: var(--pm-red-light);
   background: var(--pm-red-15);
-  border-color: rgba(251, 44, 54, 0.25);
+  border-color: var(--pm-red-25);
 }
 
 .pcm-status-badge.已过期 {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   background: var(--pm-border);
   border-color: var(--pm-text-15);
 }
@@ -367,7 +367,7 @@
 
 .pcm-rating-cell em {
   font-style: normal;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
 }
 
 .pcm-row-action {
@@ -393,7 +393,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
 }
 
@@ -408,7 +408,7 @@
   border-radius: var(--pm-radius-md);
   border: 1px solid var(--pm-border);
   background: var(--pm-border-light);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   font-size: 12px;
   display: inline-flex;
   align-items: center;
@@ -429,7 +429,7 @@
   border-radius: var(--pm-radius-md);
   border: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   font-size: 12px;
   font-weight: 500;
 }

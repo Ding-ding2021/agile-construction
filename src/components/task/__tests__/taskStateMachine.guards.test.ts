@@ -273,8 +273,8 @@ describe('状态机守卫条件校验', () => {
   })
 
   describe('validateStatusTransition - 无守卫状态', () => {
-    it('应默认通过：待创建流转到待分配', () => {
-      const task = createTask({ status: '待创建' })
+    it('应默认通过：草稿流转到待分配', () => {
+      const task = createTask({ status: '草稿' })
       const result = validateStatusTransition(task, '待分配', [task])
       expect(result.passed).toBe(true)
     })

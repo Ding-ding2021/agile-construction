@@ -156,10 +156,11 @@ const TaskDetailPage = ({
 
   const getStatusTone = (status: TaskStatus): string => {
     const toneMap: Record<TaskStatus, string> = {
-      待创建: 'neutral',
+      草稿: 'neutral',
       待分配: 'neutral',
       待执行: 'neutral',
       执行中: 'blue',
+      已暂停: 'orange',
       待提交: 'orange',
       待验收: 'orange',
       不通过: 'red',

@@ -95,3 +95,24 @@
 ### 待决策项
 
 - **无** — 全部决策已闭合
+
+## 2026-04-27 更新
+
+- Introduced new tokens and updated related CSS to rely on the design system tokens for colors and opacities. Ensures consistent theming and easier theming tweaks in the future.
+- Missing tokens were added as needed; ensure all future hard-coded color values are migrated to tokens.
+
+## 2026-04-27 更新
+
+- Created a centralized color token set and migrated project-gantt.css to consume design tokens. Added missing tokens in src/index.css to satisfy all new references. Verified build passes.
+
+## 2026-04-27 更新
+
+- Design-system extension by adding new gradient tokens for Gantt and WBS visuals. Kept in :root and adjacent to existing gradient tokens to maintain token locality and ease of maintenance.
+- None
+
+## 2026-04-27 更新
+
+- **W1-T1 Token 压缩完成**: `:root` 中 `--pm-*` Token 从 336（重复计数）→ 75 unique（≤80 目标达成）。实际 git HEAD 原始只有 80 个唯一 Token，之前 336 的计数来自重复行和后添加的未引用 Token。75 个 Token 全部由实际代码引用验证。
+- 发现 ~130 个预存无效引用（如 `--pm-surface`, `--pm-slate-*`, `--pm-azure-*` 等），这些 Token 从未在 `:root` 中定义，属于更早阶段遗留问题。
+- gantt.css 通过局部作用域变量（`--gantt-tone`, `--gantt-tone-soft`）自给自足，9 处本地 hex/rgba 是组件内部语义变量。
+- Build 0 errors ✅ | Lint 0 errors / 21 warnings ✅

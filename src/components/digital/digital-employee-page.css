@@ -347,7 +347,7 @@
   height: 28px;
   border-radius: var(--pm-radius-md);
   padding: 0 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -374,16 +374,15 @@
 }
 
 .de-list-table-head {
-  background: rgba(7, 23, 66, 0.52);
+  background: var(--pm-navy-52);
   border-bottom: 1px solid var(--pm-border);
 }
 
 .de-list-row {
   display: grid;
-  grid-template-columns: minmax(240px, 1.5fr) minmax(220px, 1.2fr) minmax(230px, 1.2fr) minmax(
-      160px,
-      1fr
-    ) 88px 88px;
+  grid-template-columns:
+    minmax(240px, 1.5fr) minmax(220px, 1.2fr) minmax(230px, 1.2fr) minmax(160px, 1fr)
+    88px 88px;
   gap: 16px;
   align-items: center;
   padding: 14px 20px;
@@ -399,7 +398,7 @@
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.06px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .de-list-table-body .de-list-row {
@@ -451,7 +450,7 @@
 .de-list-agent-text span {
   font-size: 10px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.34);
+  color: var(--pm-text-34);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -494,7 +493,7 @@
 .de-list-metric-chip span {
   font-size: 9px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.36);
+  color: var(--pm-text-36);
 }
 
 .de-list-metric-chip strong {
@@ -537,7 +536,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
 }
 
@@ -570,7 +569,7 @@
   border-color: var(--pm-purple-25);
 }
 .de-agent-card.rose {
-  border-color: rgba(255, 32, 86, 0.25);
+  border-color: var(--pm-red-25);
 }
 
 .de-agent-head {
@@ -648,7 +647,7 @@
   color: var(--pm-purple-light);
 }
 .de-agent-card.rose .de-agent-identity p {
-  color: #ff637e;
+  color: var(--pm-red-2);
 }
 
 .de-status {
@@ -668,7 +667,7 @@
 
 .de-status.online {
   color: var(--pm-green-light);
-  background: rgba(0, 188, 125, 0.1);
+  background: var(--pm-green-10);
   border: 1px solid var(--pm-green-20);
 }
 
@@ -681,7 +680,7 @@
 .de-agent-desc {
   font-size: 11px;
   line-height: 1.62;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .de-tag-wrap {
@@ -708,7 +707,7 @@
 .de-tag.cyan {
   color: var(--pm-cyan);
   border: 1px solid var(--pm-cyan-25);
-  background: rgba(0, 184, 219, 0.1);
+  background: var(--pm-cyan-10);
 }
 .de-tag.orange {
   color: var(--pm-orange-gold);
@@ -718,17 +717,17 @@
 .de-tag.green {
   color: var(--pm-green-light);
   border: 1px solid var(--pm-green-25);
-  background: rgba(0, 188, 125, 0.1);
+  background: var(--pm-green-10);
 }
 .de-tag.violet {
   color: var(--pm-purple-light);
   border: 1px solid var(--pm-purple-25);
-  background: rgba(142, 81, 255, 0.1);
+  background: var(--pm-purple-10);
 }
 .de-tag.rose {
-  color: #ff637e;
-  border: 1px solid rgba(255, 32, 86, 0.25);
-  background: rgba(255, 32, 86, 0.1);
+  color: var(--pm-red-2);
+  border: 1px solid var(--pm-red-25);
+  background: var(--pm-red-10);
 }
 
 .de-metrics {
@@ -800,22 +799,22 @@
 }
 
 .de-launch-btn.blue {
-  background: var(--pm-gradient-agent-blue);
+  background: var(--pm-gradient-icon-blue);
 }
 .de-launch-btn.cyan {
   background: var(--pm-gradient-agent-cyan);
 }
 .de-launch-btn.orange {
-  background: var(--pm-gradient-agent-orange);
+  background: var(--pm-gradient-icon-orange);
 }
 .de-launch-btn.green {
-  background: var(--pm-gradient-agent-green);
+  background: var(--pm-gradient-icon-green);
 }
 .de-launch-btn.violet {
-  background: var(--pm-gradient-agent-violet);
+  background: var(--pm-gradient-icon-violet);
 }
 .de-launch-btn.rose {
-  background: var(--pm-gradient-agent-rose);
+  background: var(--pm-gradient-icon-rose);
 }
 
 @media (max-width: 1439px) {
@@ -828,10 +827,9 @@
   }
 
   .de-list-row {
-    grid-template-columns: minmax(220px, 1.3fr) minmax(200px, 1fr) minmax(220px, 1.1fr) minmax(
-        140px,
-        1fr
-      ) 82px 82px;
+    grid-template-columns:
+      minmax(220px, 1.3fr) minmax(200px, 1fr) minmax(220px, 1.1fr) minmax(140px, 1fr)
+      82px 82px;
   }
 }
 

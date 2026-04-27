@@ -7,7 +7,7 @@ type TaskDispatchPanelProps = {
   onTaskClick?: (taskCode: string) => void
 }
 
-const dispatchPoolStatuses: TaskStatus[] = ['待创建', '待分配']
+const dispatchPoolStatuses: TaskStatus[] = ['草稿', '待分配']
 
 const isDispatchPoolTask = (status: TaskStatus) => dispatchPoolStatuses.includes(status)
 
