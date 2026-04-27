@@ -15,7 +15,7 @@
 .team-header h2 {
   font-size: 24px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-xs) 0;
 }
 
@@ -73,7 +73,7 @@
 .stat-value {
   font-size: 24px;
   font-weight: 700;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
 }
 
 .stat-label {
@@ -92,7 +92,7 @@
 .team-section h3 {
   font-size: 16px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-md) 0;
 }
 
@@ -132,7 +132,7 @@
 .module-card h4 {
   font-size: 15px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-xs) 0;
 }
 
@@ -144,8 +144,8 @@
 
 .team-note {
   padding: var(--pm-spacing-md);
-  background: var(--pm-blue-2-10);
-  border: 1px solid var(--pm-blue-2-20);
+  background: var(--pm-blue-10);
+  border: 1px solid var(--pm-blue-15);
   border-radius: var(--pm-radius-md);
 }
 

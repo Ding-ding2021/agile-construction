@@ -30,8 +30,9 @@ export { default as ListToolbar } from './filters/ListToolbar'
 export { default as EmptyState } from './feedback/EmptyState'
 export type { EmptyStateProps } from './feedback/EmptyState'
 
-// MUI components (暗色玻璃态主题已统一配置)
-// 请优先从以下路径导入 MUI 组件：
+// MUI 封装组件 (预设样式，暗色玻璃态主题)
+// import { PmButton, PmInput, PmTable } from '@/components/shared/mui';
+// 如需直接使用 MUI 组件：
 // import { Button, Dialog, Chip } from '@/components/shared/mui';
 // 如需使用 MUI Icons：
 // import { Save, Delete } from '@mui/icons-material';
@@ -39,3 +40,7 @@ export type { EmptyStateProps } from './feedback/EmptyState'
 // Icon components
 export { default as Icon } from './icons/Icon'
 export { type IconName, getIconPath, hasIcon, navIconMap } from './icons'
+
+// Shared ProjectCard component
+export { default as ProjectCard } from './ProjectCard'
+export type { ProjectCardProps } from './ProjectCard'

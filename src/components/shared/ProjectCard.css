@@ -1,0 +1,144 @@
+.pm-project-card {
+  background: var(--pm-card);
+  border: 1px solid var(--pm-border);
+  border-radius: var(--pm-radius-xl);
+  color: var(--pm-text-white);
+  padding: 12px;
+  box-shadow: var(--pm-shadow-md);
+}
+.pm-project-card + .pm-project-card {
+  margin-top: 8px;
+}
+
+.pm-project-card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--pm-gap-md);
+}
+.pm-grid-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pm-grid-label {
+  font-size: var(--pm-font-xs);
+  color: var(--pm-text-60);
+  margin-bottom: 4px;
+}
+.pm-grid-value {
+  font-size: var(--pm-font-sm);
+  font-weight: 500;
+  color: var(--pm-text-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pm-grid-cell-actions {
+  display: flex;
+  align-items: center;
+}
+
+.pm-status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--pm-border);
+  font-size: 12px;
+}
+.pm-tone-blue {
+  background: var(--pm-blue-25);
+  color: var(--pm-text-white);
+}
+.pm-tone-yellow {
+  background: var(--pm-orange-25);
+  color: var(--pm-text-white);
+}
+.pm-tone-green {
+  background: var(--pm-green-25);
+  color: var(--pm-text-white);
+}
+.pm-tone-red {
+  background: var(--pm-red-25);
+  color: var(--pm-text-white);
+}
+
+.pm-progress-shell {
+  height: 8px;
+  width: 100%;
+  background: var(--pm-element-hover);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pm-progress-bar {
+  height: 100%;
+  width: var(--progress);
+  background: linear-gradient(90deg, var(--pm-primary), var(--pm-blue-light));
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.pm-project-card-kanban {
+  padding: 12px;
+  border-radius: var(--pm-radius-lg);
+}
+.pm-kanban-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: var(--pm-font-xs);
+  color: var(--pm-text-70);
+}
+.pm-kanban-label {
+  margin-right: 6px;
+}
+.pm-kanban-value {
+  font-weight: 500;
+  color: var(--pm-text-white);
+}
+.pm-kanban-status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.pm-project-card-compact {
+  padding: 8px;
+}
+.pm-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pm-compact-name {
+  font-size: var(--pm-font-sm);
+  font-weight: 500;
+}
+.pm-compact-status {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.pm-compact-progress {
+  height: 6px;
+  width: 120px;
+  display: block;
+  background: var(--pm-element-hover);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pm-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.pm-btn-ghost {
+  background: transparent;
+  color: var(--pm-text-white);
+  border: 1px solid var(--pm-border);
+}
+.pm-btn-ghost:hover {
+  background: var(--pm-element-hover);
+}

@@ -7,9 +7,18 @@
  *
  * @example
  * ```tsx
+ * import { PmButton, PmInput, PmTable } from '@/components/shared/mui';
  * import { Button, Dialog, TextField, Chip } from '@/components/shared/mui';
  * ```
  */
+
+// Preset wrapper components
+export { PmButton } from './PmButton'
+export { PmInput } from './PmInput'
+export { PmTable } from './PmTable'
+export type { PmButtonProps } from './PmButton'
+export type { PmInputProps } from './PmInput'
+export type { PmTableProps, PmTableColumn } from './PmTable'
 
 // Layout
 export {
