@@ -302,7 +302,9 @@
 .gantt-group-track,
 .gantt-row-timeline {
   position: relative;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-repeat: repeat;
 }
 
@@ -423,7 +425,11 @@
 .gantt-bar-progress {
   position: absolute;
   inset: 0 auto 0 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--gantt-tone) 88%, #fff 12%), var(--gantt-tone));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gantt-tone) 88%, #fff 12%),
+    var(--gantt-tone)
+  );
   pointer-events: none;
 }
 
@@ -567,7 +573,11 @@
 .gantt-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--gantt-tone) 86%, #fff 14%), var(--gantt-tone));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gantt-tone) 86%, #fff 14%),
+    var(--gantt-tone)
+  );
 }
 
 .gantt-panel-owner {
@@ -660,3 +670,5 @@
 
   .gantt-panel-grid {
     grid-template-columns: 1fr;
+  }
+}
