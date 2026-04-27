@@ -306,7 +306,7 @@
 
 .om-stat-card p {
   margin: 12px 0 4px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   font-size: 12px;
 }
 
@@ -339,7 +339,7 @@
 
 .om-stat-label {
   margin: 12px 0 4px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   font-size: 12px;
 }
 
@@ -371,7 +371,7 @@
   border: 0;
   border-radius: var(--pm-radius-md);
   background: transparent;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -434,7 +434,7 @@
 }
 
 .om-table td {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   font-size: 12px;
 }
 
@@ -488,7 +488,7 @@
 
 .om-status-运输中 {
   color: var(--pm-cyan);
-  background: rgba(0, 184, 219, 0.15);
+  background: var(--pm-cyan-15);
   border-color: var(--pm-cyan-25);
 }
 .om-status-已审批 {
@@ -497,9 +497,9 @@
   border-color: var(--pm-blue-25);
 }
 .om-status-部分到货 {
-  color: #ff8904;
-  background: rgba(255, 105, 0, 0.15);
-  border-color: rgba(255, 105, 0, 0.25);
+  color: var(--pm-orange-2);
+  background: var(--pm-orange-15);
+  border-color: var(--pm-orange-25);
 }
 .om-status-待审批 {
   color: var(--pm-orange-gold);
@@ -512,12 +512,12 @@
   border-color: var(--pm-green-25);
 }
 .om-status-已完成 {
-  color: #5ee9b5;
+  color: var(--pm-green-3);
   background: var(--pm-green-15);
   border-color: var(--pm-green-20);
 }
 .om-status-草稿 {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--pm-text-35);
   background: var(--pm-border);
   border-color: var(--pm-text-12);
 }
@@ -527,7 +527,7 @@
   border-color: var(--pm-purple-25);
 }
 .om-status-已取消 {
-  color: rgba(255, 100, 103, 0.6);
+  color: var(--pm-red-60);
   background: var(--pm-red-12);
   border-color: var(--pm-red-15);
 }
@@ -535,12 +535,12 @@
 .om-priority-紧急 {
   color: var(--pm-red-light);
   background: var(--pm-red-15);
-  border-color: rgba(251, 44, 54, 0.25);
+  border-color: var(--pm-red-25);
 }
 .om-priority-高 {
-  color: #ff8904;
-  background: rgba(255, 105, 0, 0.15);
-  border-color: rgba(255, 105, 0, 0.25);
+  color: var(--pm-orange-2);
+  background: var(--pm-orange-15);
+  border-color: var(--pm-orange-25);
 }
 .om-priority-中 {
   color: var(--pm-text-30);
@@ -574,7 +574,7 @@
 }
 
 .om-progress-wrap span {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 10px;
   min-width: 32px;
   text-align: right;
@@ -584,7 +584,7 @@
   border: 1px solid var(--pm-blue-25);
   border-radius: var(--pm-radius-sm);
   background: var(--pm-blue-10);
-  color: #8ec8ff;
+  color: var(--pm-blue-ish-2);
   font-size: 11px;
   height: 26px;
   padding: 0 10px;
@@ -607,7 +607,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   font-size: 12px;
 }
 
@@ -616,7 +616,7 @@
   border-radius: var(--pm-radius-md);
   border: 1px solid var(--pm-border);
   background: var(--pm-border-light);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -637,7 +637,7 @@
   border: 0;
   border-radius: var(--pm-radius-md);
   background: transparent;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
 }
 
 .om-page-num.active {

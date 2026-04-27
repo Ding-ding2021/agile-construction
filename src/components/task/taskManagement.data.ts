@@ -152,7 +152,7 @@ export const mockTasks: TaskItem[] = [
     code: 'PRJ-003-T-001',
     projectName: '北京朝阳大悦城店',
     parentPath: '软装陈列 / 家具安装',
-    status: '待创建',
+    status: '草稿',
     statusTone: 'neutral',
     owner: '待分配',
     plannedStartAt: '2026-04-14',
@@ -264,10 +264,11 @@ export const sortOptions = [
 ]
 
 export const statusOptions: TaskStatus[] = [
-  '待创建',
+  '草稿',
   '待分配',
   '待执行',
   '执行中',
+  '已暂停',
   '待提交',
   '待验收',
   '不通过',
@@ -288,7 +289,7 @@ const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
     assigneeName: ownerName,
     assigneeType: ownerName ? 'internal' : 'external',
     actualStartAt:
-      task.status === '待创建' || task.status === '待分配' ? undefined : task.plannedStartAt,
+      task.status === '草稿' || task.status === '待分配' ? undefined : task.plannedStartAt,
     actualEndAt: isDone ? task.plannedEndAt : undefined,
     blockedReason: isBlocked ? '前置任务未完成，需先解除阻塞后再推进。' : undefined,
     snapshotStatus: task.standardBindingStatus === '已绑定' ? '已生成' : '未生成',

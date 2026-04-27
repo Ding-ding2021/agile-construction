@@ -21,7 +21,7 @@
   height: 540px;
   left: 220px;
   top: -120px;
-  background: rgba(21, 77, 217, 0.14);
+  background: var(--pm-primary-15);
 }
 
 .rp-glow-right {
@@ -61,9 +61,9 @@
 .rp-permission-tip {
   min-height: 28px;
   border-radius: 999px;
-  border: 1px solid rgba(81, 162, 255, 0.42);
-  background: rgba(43, 127, 255, 0.14);
-  color: var(--pm-blue-very-light);
+  border: 1px solid var(--pm-blue-42);
+  background: var(--pm-blue-15);
+  color: var(--pm-blue-light);
   padding: 0 12px;
   display: inline-flex;
   align-items: center;
@@ -108,7 +108,7 @@
 }
 
 .rp-toolbar span {
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--pm-text-52);
   font-size: 11px;
 }
 
@@ -130,7 +130,7 @@
 }
 
 .rp-feedback {
-  color: #9fd0ff;
+  color: var(--pm-blue-4);
   font-size: 12px;
 }
 
@@ -169,12 +169,12 @@
 .rp-user-cell span {
   display: block;
   margin-top: 4px;
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--pm-text-48);
   font-size: 11px;
 }
 
 .rp-skill-cell p {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--pm-text-72);
   font-size: 12px;
   margin-bottom: 6px;
 }
@@ -186,7 +186,7 @@
 }
 
 .rp-load-editor span {
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--pm-text-52);
   font-size: 11px;
 }
 

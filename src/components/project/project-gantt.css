@@ -24,21 +24,21 @@
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.24px;
-  color: rgba(255, 255, 255, 0.38);
+  color: var(--pm-text-38);
 }
 
 .gantt-view-title-block h2 {
   font-size: 22px;
   line-height: 30px;
   font-weight: 700;
-  color: #fff;
+  color: var(--pm-text-white);
 }
 
 .gantt-view-title-block p {
   max-width: 760px;
   font-size: 13px;
   line-height: 20px;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--pm-text-55);
 }
 
 .gantt-view-toolbar {
@@ -65,8 +65,8 @@
 .gantt-status-chip {
   height: 32px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--pm-border);
+  background: var(--pm-border-light);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -75,17 +75,17 @@
 .gantt-summary-pill {
   padding: 0 14px;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--pm-text-62);
   font-size: 12px;
 }
 
 .gantt-summary-pill strong {
-  color: #fff;
+  color: var(--pm-text-white);
   font-size: 13px;
 }
 
 .gantt-summary-pill.muted {
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--pm-text-45);
 }
 
 .gantt-legend-item {
@@ -94,7 +94,7 @@
   gap: 6px;
   font-size: 11px;
   line-height: 16px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--pm-text-45);
 }
 
 .gantt-legend-dot {
@@ -108,8 +108,10 @@
 .gantt-status-chip.completed,
 .gantt-bar.completed,
 .gantt-progress-fill.completed {
-  --gantt-tone: #00d492;
-  --gantt-tone-soft: rgba(0, 212, 146, 0.18);
+  --gantt-tone: var(--pm-green-light);
+  --gantt-tone-soft: var(--pm-green-18);
+  /* tokens added for compatibility */
+  --pm-green-18: rgba(0, 212, 146, 0.18);
 }
 
 .gantt-legend-dot.in-progress,
@@ -118,6 +120,7 @@
 .gantt-progress-fill.in-progress {
   --gantt-tone: #2b7fff;
   --gantt-tone-soft: rgba(43, 127, 255, 0.18);
+  --pm-blue-18: rgba(43, 127, 255, 0.18);
 }
 
 .gantt-legend-dot.delayed,
@@ -126,13 +129,15 @@
 .gantt-progress-fill.delayed {
   --gantt-tone: #ff4d5f;
   --gantt-tone-soft: rgba(255, 77, 95, 0.18);
+  --pm-red-18: rgba(255, 77, 95, 0.18);
 }
 
 .gantt-legend-dot.planned,
 .gantt-status-chip.planned,
 .gantt-bar.planned,
 .gantt-progress-fill.planned {
-  --gantt-tone: rgba(255, 255, 255, 0.48);
+  --gantt-tone: var(--pm-white-48);
+  --pm-white-48: rgba(255, 255, 255, 0.48);
   --gantt-tone-soft: rgba(255, 255, 255, 0.12);
 }
 
@@ -147,7 +152,7 @@
   width: 9px;
   height: 9px;
   border-radius: 2px;
-  background: #4f8fff;
+  background: var(--pm-blue);
   transform: rotate(45deg);
 }
 
@@ -155,13 +160,13 @@
 .gantt-info-chip {
   padding: 0 14px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--pm-text-70);
 }
 
 .gantt-meta-chip.active {
-  background: rgba(21, 77, 217, 0.2);
-  border-color: rgba(43, 127, 255, 0.35);
-  color: #fff;
+  background: var(--pm-primary-20);
+  border-color: var(--pm-blue-35);
+  color: var(--pm-text-white);
 }
 
 .gantt-view-layout {
@@ -174,8 +179,8 @@
 .gantt-board-card {
   padding: 0;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(13, 35, 93, 0.88) 0%, rgba(8, 25, 69, 0.84) 100%);
-  border-color: rgba(120, 167, 255, 0.12);
+  background-image: var(--pm-gradient-gantt-bar);
+  border-color: var(--pm-border-light);
 }
 
 .gantt-board-scroll {
@@ -213,19 +218,19 @@
 .gantt-meta-header {
   min-height: 76px;
   padding: 18px 20px 14px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid var(--pm-border-light);
+  border-bottom: 1px solid var(--pm-border-light);
   font-size: 11px;
   letter-spacing: 0.24px;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--pm-text-32);
   position: sticky;
   left: 0;
   z-index: 10;
-  background: rgba(11, 31, 82, 0.95);
+  background: var(--pm-deep-95);
 }
 
 .gantt-timeline-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--pm-border-light);
 }
 
 .gantt-year-row,
@@ -236,7 +241,7 @@
 
 .gantt-year-row {
   min-height: 34px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--pm-text-02);
 }
 
 .gantt-year-row span,
@@ -245,11 +250,11 @@
   text-align: center;
   font-size: 11px;
   line-height: 16px;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--pm-text-32);
 }
 
 .gantt-year-row span {
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid var(--pm-text-32);
 }
 
 .gantt-month-row span {
@@ -257,7 +262,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid var(--pm-card);
 }
 
 .gantt-table-body {
@@ -273,8 +278,8 @@
   align-items: center;
   gap: 10px;
   padding: 0 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(10, 29, 77, 0.96);
+  border-right: 1px solid var(--pm-border-light);
+  background: var(--pm-deep-96);
   position: sticky;
   left: 0;
   z-index: 6;
@@ -284,33 +289,31 @@
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: #2b7fff;
-  box-shadow: 0 0 0 4px rgba(43, 127, 255, 0.12);
+  background: var(--pm-blue);
+  box-shadow: 0 0 0 4px var(--pm-blue-12);
 }
 
 .gantt-group-title {
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: var(--pm-text-white);
 }
 
 .gantt-group-summary {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--pm-text-28);
 }
 
 .gantt-group-track,
 .gantt-row-timeline {
   position: relative;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-image: var(--pm-gradient-gantt-grid);
   background-repeat: repeat;
 }
 
 .gantt-group-track {
   min-height: 40px;
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: var(--pm-card);
 }
 
 .gantt-row {
@@ -323,30 +326,30 @@
 
 .gantt-row:hover,
 .gantt-row.selected {
-  background: rgba(43, 127, 255, 0.08);
+  background: var(--pm-blue-08);
 }
 
 .gantt-row.selected {
-  box-shadow: inset 3px 0 0 #2b7fff;
+  box-shadow: inset 3px 0 0 var(--pm-blue);
 }
 
 .gantt-row:focus-visible {
   outline: none;
-  background: rgba(43, 127, 255, 0.12);
+  background: var(--pm-blue-12);
 }
 
 .gantt-row:focus-visible .gantt-row-meta,
 .gantt-row.selected .gantt-row-meta {
-  background: rgba(11, 34, 88, 0.98);
+  background: var(--pm-deep-98);
 }
 
 .gantt-row-meta {
   padding: 0 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid var(--pm-border-light);
   position: sticky;
   left: 0;
   z-index: 5;
-  background: rgba(8, 26, 71, 0.92);
+  background: var(--pm-deep-92);
 }
 
 .gantt-row-name-cell {
@@ -359,7 +362,7 @@
 .gantt-row-name {
   font-size: 12px;
   line-height: 18px;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--pm-text-88);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -372,13 +375,13 @@
   height: 8px;
   margin-right: 8px;
   border-radius: 2px;
-  background: #4f8fff;
+  background: var(--pm-blue-2);
   transform: rotate(45deg);
 }
 
 .gantt-row-owner {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--pm-text-32);
 }
 
 .gantt-status-chip {
@@ -393,8 +396,8 @@
   flex-shrink: 0;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(79, 143, 255, 0.14);
-  color: #7db0ff;
+  background: var(--pm-blue-2-14);
+  color: var(--pm-blue-ish);
   font-size: 10px;
   line-height: 14px;
 }
@@ -425,11 +428,7 @@
 .gantt-bar-progress {
   position: absolute;
   inset: 0 auto 0 0;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--gantt-tone) 88%, #fff 12%),
-    var(--gantt-tone)
-  );
+  background: var(--pm-gradient-gantt-progress);
   pointer-events: none;
 }
 
@@ -439,7 +438,7 @@
   z-index: 1;
   font-size: 10px;
   line-height: 12px;
-  color: #fff;
+  color: var(--pm-text-white);
 }
 
 .gantt-bar-label {
@@ -453,7 +452,7 @@
 .gantt-bar-value {
   margin-left: auto;
   padding-right: 8px;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--pm-text-82);
 }
 
 .gantt-milestone {
@@ -462,20 +461,20 @@
   width: 13px;
   height: 13px;
   border-radius: 3px;
-  background: linear-gradient(135deg, #58a6ff, #1c6fff);
+  background-image: var(--pm-gradient-gantt-icon-blue);
   transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: 0 0 0 4px rgba(43, 127, 255, 0.14);
+  box-shadow: 0 0 0 4px var(--pm-blue-14);
   pointer-events: none;
 }
 
 .gantt-milestone.completed {
-  background: linear-gradient(135deg, #2ef2b2, #00bc7d);
-  box-shadow: 0 0 0 4px rgba(0, 212, 146, 0.14);
+  background-image: var(--pm-gradient-gantt-icon-green);
+  box-shadow: 0 0 0 4px var(--pm-green-14);
 }
 
 .gantt-milestone.planned {
-  background: linear-gradient(135deg, #6f87b8, #38517f);
-  box-shadow: 0 0 0 4px rgba(90, 119, 166, 0.14);
+  background-image: var(--pm-gradient-gantt-icon-violet);
+  box-shadow: 0 0 0 4px var(--pm-purple-ish-14);
 }
 
 .gantt-panel {
@@ -486,8 +485,8 @@
   min-height: 100%;
   position: sticky;
   top: 24px;
-  background: linear-gradient(180deg, rgba(13, 35, 93, 0.92) 0%, rgba(8, 25, 69, 0.88) 100%);
-  border-color: rgba(120, 167, 255, 0.12);
+  background: var(--pm-gradient-gantt-header);
+  border-color: var(--pm-blue-12);
 }
 
 .gantt-panel-header,
@@ -505,14 +504,14 @@
   font-size: 18px;
   line-height: 26px;
   font-weight: 700;
-  color: #fff;
+  color: var(--pm-text-white);
 }
 
 .gantt-panel-description,
 .gantt-empty-text {
   font-size: 12px;
   line-height: 20px;
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--pm-text-50);
 }
 
 .gantt-panel-grid {
@@ -525,7 +524,7 @@
   min-height: 68px;
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pm-card);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -534,7 +533,7 @@
 
 .gantt-panel-field span {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--pm-text-35);
 }
 
 .gantt-panel-field strong,
@@ -542,7 +541,7 @@
 .gantt-toggle-row strong {
   font-size: 13px;
   line-height: 18px;
-  color: #fff;
+  color: var(--pm-text-white);
   font-weight: 600;
 }
 
@@ -554,36 +553,32 @@
 
 .gantt-panel-section-head span {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .gantt-panel-section-head strong {
   font-size: 13px;
-  color: #fff;
+  color: var(--pm-text-white);
 }
 
 .gantt-progress-track {
   width: 100%;
   height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--pm-blue-12);
   overflow: hidden;
 }
 
 .gantt-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--gantt-tone) 86%, #fff 14%),
-    var(--gantt-tone)
-  );
+  background: var(--pm-gradient-gantt-progress);
 }
 
 .gantt-panel-owner {
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pm-card);
   justify-content: flex-start;
 }
 
@@ -591,8 +586,8 @@
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  background: rgba(43, 127, 255, 0.16);
-  color: #7db0ff;
+  background: var(--pm-blue-16);
+  color: var(--pm-blue-ish);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -603,14 +598,14 @@
 .gantt-toggle-row {
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pm-card);
 }
 
 .gantt-toggle {
   width: 42px;
   height: 24px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--pm-text-12);
   display: inline-flex;
   align-items: center;
   padding: 3px;
@@ -621,27 +616,27 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.82);
+  background: var(--pm-text-82);
   transform: translateX(0);
   transition: transform 0.2s ease;
 }
 
 .gantt-toggle.active {
-  background: rgba(43, 127, 255, 0.3);
+  background: var(--pm-blue-30);
 }
 
 .gantt-toggle.active span {
   transform: translateX(18px);
-  background: #7db0ff;
+  background: var(--pm-blue-ish);
 }
 
 .gantt-info-chip {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--pm-text-72);
 }
 
 .gantt-info-chip.muted {
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.54);
+  background: var(--pm-card);
+  color: var(--pm-text-54);
 }
 
 @media (max-width: 1440px) {

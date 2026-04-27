@@ -296,11 +296,8 @@ function isCompletedStatus(status: TaskStatus): boolean {
   return status === '已完成' || status === '已关闭'
 }
 
-/**
- * 辅助函数：检查状态是否为阻塞态
- */
-function isBlockedStatus(status: TaskStatus): boolean {
-  return status === '不通过' || status === '待创建'
+function isBlockedStatus(_status: TaskStatus): boolean {
+  return false
 }
 
 /**

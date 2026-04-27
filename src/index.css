@@ -7,11 +7,16 @@
    ============================================ */
 
 :root {
+  /* Layout & Background */
   --pm-bg: #051338;
   --pm-sidebar-bg: rgba(10, 35, 99, 0.9);
   --pm-header-bg: rgba(5, 19, 56, 0.8);
   --pm-primary: #154dd9;
   --pm-primary-light: #1a5ae8;
+  --pm-primary-15: rgba(21, 77, 217, 0.15);
+  --pm-primary-light-8: rgba(70, 137, 234, 0.08);
+  --pm-primary-shadow-50: rgba(28, 57, 142, 0.5);
+  --pm-primary-shadow-30: rgba(28, 57, 142, 0.3);
   --pm-border: rgba(255, 255, 255, 0.08);
   --pm-border-light: rgba(255, 255, 255, 0.05);
   --pm-card: rgba(255, 255, 255, 0.04);
@@ -19,6 +24,7 @@
   --pm-element-hover: rgba(255, 255, 255, 0.06);
   --pm-input-bg: rgba(255, 255, 255, 0.05);
 
+  /* Text */
   --pm-text-white: #ffffff;
   --pm-text-92: rgba(255, 255, 255, 0.92);
   --pm-text-70: rgba(255, 255, 255, 0.7);
@@ -29,52 +35,63 @@
   --pm-text-25: rgba(255, 255, 255, 0.25);
   --pm-text-14: rgba(255, 255, 255, 0.14);
 
+  /* White Variants */
+  --pm-white-12: rgba(255, 255, 255, 0.12);
+  --pm-white-36: rgba(255, 255, 255, 0.36);
+  --pm-white-45: rgba(255, 255, 255, 0.45);
+  --pm-white-60: rgba(255, 255, 255, 0.6);
+
+  /* Blue */
   --pm-blue: #2b7fff;
   --pm-blue-light: #51a2ff;
-  --pm-blue-25: rgba(43, 127, 255, 0.25);
-  --pm-blue-15: rgba(43, 127, 255, 0.15);
   --pm-blue-10: rgba(43, 127, 255, 0.1);
+  --pm-blue-15: rgba(43, 127, 255, 0.15);
+  --pm-blue-25: rgba(43, 127, 255, 0.25);
 
+  /* Green */
   --pm-green: #00bc7d;
   --pm-green-light: #00d492;
-  --pm-green-25: rgba(0, 188, 125, 0.25);
+  --pm-green-2: #10b981;
   --pm-green-15: rgba(0, 188, 125, 0.15);
+  --pm-green-25: rgba(0, 188, 125, 0.25);
 
-  --pm-purple: #8e51ff;
+  /* Purple */
   --pm-purple-light: #a684ff;
-  --pm-purple-25: rgba(142, 81, 255, 0.25);
   --pm-purple-15: rgba(142, 81, 255, 0.15);
+  --pm-purple-25: rgba(142, 81, 255, 0.25);
 
+  /* Orange */
   --pm-orange: #fe9a00;
   --pm-orange-gold: #ffb900;
-  --pm-orange-25: rgba(254, 154, 0, 0.25);
   --pm-orange-15: rgba(254, 154, 0, 0.15);
+  --pm-orange-25: rgba(254, 154, 0, 0.25);
 
+  /* Red */
   --pm-red: #ff6467;
   --pm-red-light: #fb2c36;
-  --pm-red-25: rgba(251, 44, 54, 0.25);
   --pm-red-15: rgba(251, 44, 54, 0.15);
+  --pm-red-25: rgba(251, 44, 54, 0.25);
 
-  --pm-primary-15: rgba(21, 77, 217, 0.15);
-  --pm-primary-light-8: rgba(70, 137, 234, 0.08);
-  --pm-primary-shadow-50: rgba(28, 57, 142, 0.5);
-  --pm-primary-shadow-30: rgba(28, 57, 142, 0.3);
-  --pm-shadow-10: rgba(0, 0, 0, 0.1);
-
-  --pm-radius-sm: 8px;
-  --pm-radius-md: 12px;
-  --pm-radius-lg: 16px;
-  --pm-radius-xl: 20px;
-  --pm-radius-full: 9999px;
-
+  /* Spacing */
   --pm-spacing-xs: 4px;
   --pm-spacing-sm: 8px;
   --pm-spacing-md: 12px;
   --pm-spacing-lg: 16px;
   --pm-spacing-xl: 24px;
 
-  --pm-transition-normal: all 0.2s ease;
+  /* Radius */
+  --pm-radius-sm: 8px;
+  --pm-radius-md: 12px;
+  --pm-radius-lg: 16px;
+  --pm-radius-xl: 20px;
+  --pm-radius-full: 9999px;
 
+  /* Shadows */
+  --pm-shadow-10: rgba(0, 0, 0, 0.1);
+  --pm-shadow-md: 0 4px 6px -4px var(--pm-shadow-10), 0 10px 15px -3px var(--pm-shadow-10);
+  --pm-shadow-lg: 0 10px 20px -8px var(--pm-shadow-10), 0 16px 28px -12px var(--pm-shadow-10);
+
+  /* Gradients — Stat Cards */
   --pm-gradient-stat-blue: linear-gradient(
     135deg,
     rgba(43, 127, 255, 0.2) 0%,
@@ -96,30 +113,19 @@
     rgba(254, 154, 0, 0.05) 100%
   );
 
+  /* Gradients — Icons */
   --pm-gradient-icon-blue: linear-gradient(135deg, #3b82f6, #1d4ed8);
   --pm-gradient-icon-green: linear-gradient(135deg, #10b981, #059669);
   --pm-gradient-icon-orange: linear-gradient(135deg, #f59e0b, #d97706);
   --pm-gradient-icon-violet: linear-gradient(135deg, #8b5cf6, #7c3aed);
   --pm-gradient-icon-rose: linear-gradient(135deg, #f43f5e, #e11d48);
-
   --pm-gradient-agent-cyan: linear-gradient(135deg, #06b6d4, #0891b2);
 
-  --pm-shadow-md: 0 4px 6px -4px var(--pm-shadow-10), 0 10px 15px -3px var(--pm-shadow-10);
-  --pm-shadow-lg: 0 10px 20px -8px var(--pm-shadow-10), 0 16px 28px -12px var(--pm-shadow-10);
-
-  --pm-green-2: #10b981;
-
-  --pm-white-12: rgba(255, 255, 255, 0.12);
-  --pm-white-36: rgba(255, 255, 255, 0.36);
-  --pm-white-45: rgba(255, 255, 255, 0.45);
-  --pm-white-60: rgba(255, 255, 255, 0.6);
-
-  --pm-navy-2-45: rgba(8, 25, 69, 0.45);
-  --pm-deep-88: rgba(13, 35, 93, 0.88);
+  /* Deep / Background */
   --pm-deep-92: rgba(13, 35, 93, 0.92);
-  --pm-deeper-84: rgba(8, 25, 69, 0.84);
-  --pm-deeper-88: rgba(8, 25, 69, 0.88);
 
+  /* Misc */
+  --pm-transition-normal: all 0.2s ease;
   --pm-nav-color: rgba(219, 234, 254, 0.6);
 }
 
@@ -1352,7 +1358,7 @@ body {
 
 .pm-page-info {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .pm-page-size {

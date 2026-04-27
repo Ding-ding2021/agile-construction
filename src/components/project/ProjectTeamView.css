@@ -119,7 +119,7 @@
 }
 
 .module-card:hover {
-  border-color: var(--pm-accent);
+  border-color: var(--pm-blue);
   transform: translateY(-2px);
   box-shadow: var(--pm-shadow-md);
 }

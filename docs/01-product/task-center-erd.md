@@ -49,8 +49,19 @@ erDiagram
         string work_package_code
         string work_package_name
         string stage_id
+        string description
+        string manager_id FK
         string status
+        int planned_work_hours
+        int actual_work_hours
+        decimal budget
+        int progress_percent
+        datetime planned_start_at
+        datetime planned_end_at
+        datetime actual_start_at
+        datetime actual_end_at
         datetime created_at
+        datetime updated_at
     }
 
     COST_ACCOUNT {
@@ -73,24 +84,33 @@ erDiagram
         string task_type
         string task_status
         string priority
-        string required_flag
-        string milestone_flag
+        boolean required_flag
+        boolean milestone_flag
         string owner_role
         string assignee_type
-        string assignee_id
+        string assignee_id FK
         datetime planned_start_at
         datetime planned_end_at
         datetime actual_start_at
         datetime actual_end_at
-        string progress_percent
+        int planned_work_hours
+        int actual_work_hours
+        int progress_percent
         string blocked_reason
-        string standard_snapshot_id
+        json object_ids
+        json standard_snapshot
         string contract_id FK
         string service_id FK
         string sla_rule_id
         string derived_source_task_id
+        boolean is_rectification
+        string rectification_reason
+        int reopen_count
+        string close_reason
         datetime created_at
         string created_by
+        datetime updated_at
+        string updated_by
     }
 
     TASK_RELATION {
@@ -217,25 +237,106 @@ erDiagram
         string allocation_type
         datetime bound_at
     }
+
+    %% ========== Phase 2 新增实体 ==========
+
+    %% 人员与权限
+    PERSONNEL {
+        string personnel_id PK
+        string name
+        string role
+        string department
+        string status
+        string email
+        string phone
+        boolean is_external
+        json skills
+        datetime created_at
+        datetime updated_at
+    }
+
+    PERMISSION {
+        string permission_id PK
+        string personnel_id FK
+        string resource
+        string action
+        string scope
+        datetime created_at
+    }
+
+    %% 标准库（对象抽象层）
+    STANDARD_FILE {
+        string standard_file_id PK
+        string standard_code
+        string standard_name
+        string version
+        string category
+        string status
+        datetime created_at
+    }
+
+    STANDARD_CLAUSE {
+        string clause_id PK
+        string standard_file_id FK
+        string clause_number
+        string title
+        string content
+        string type
+        datetime created_at
+    }
+
+    STANDARD_OBJECT {
+        string object_id PK
+        string object_name
+        string category
+        string description
+        datetime created_at
+    }
+
+    CLAUSE_OBJECT_BINDING {
+        string binding_id PK
+        string clause_id FK
+        string object_id FK
+        string role
+        datetime created_at
+    }
+
+    %% ========== Phase 2 新增关系 ==========
+
+    PERSONNEL ||--o{ TASK : assigned_to
+    PERSONNEL ||--o{ WORK_PACKAGE : manages
+    PERSONNEL ||--o{ PERMISSION : has_permissions
+    TASK ||--o{ STANDARD_OBJECT : binds_via_objects
+    STANDARD_OBJECT ||--o{ CLAUSE_OBJECT_BINDING : links_to_clauses
+    STANDARD_CLAUSE ||--o{ CLAUSE_OBJECT_BINDING : linked_by_objects
+    STANDARD_FILE ||--o{ STANDARD_CLAUSE : contains
 ```
 
 ## 核心关系说明
 
-| 关系                          | 类型   | 说明                        |
-| ----------------------------- | ------ | --------------------------- |
-| PROJECT 1:N WORK_PACKAGE      | 一对多 | 一个项目包含多个工作包      |
-| WORK_PACKAGE 1:1 COST_ACCOUNT | 一对一 | 每个工作包绑定唯一成本账户  |
-| WORK_PACKAGE 1:N TASK         | 一对多 | 工作包下包含多个任务/子任务 |
-| TASK 1:N TASK                 | 自引用 | 父子任务层级关系            |
-| TASK 1:N TASK_RELATION        | 一对多 | 任务间的依赖/派生关系       |
-| CONTRACT 1:N SERVICE          | 一对多 | 一个合同可定义多个服务      |
-| SERVICE N:M WORK_PACKAGE      | 多对多 | 服务与工作包通过关联表绑定  |
+| 关系                                    | 类型       | 说明                                 |
+| --------------------------------------- | ---------- | ------------------------------------ |
+| PROJECT 1:N WORK_PACKAGE                | 一对多     | 一个项目包含多个工作包               |
+| WORK_PACKAGE 1:1 COST_ACCOUNT           | 一对一     | 每个工作包绑定唯一成本账户           |
+| WORK_PACKAGE 1:N TASK                   | 一对多     | 工作包下包含多个任务/子任务          |
+| TASK 1:N TASK                           | 自引用     | 父子任务层级关系                     |
+| TASK 1:N TASK_RELATION                  | 一对多     | 任务间的依赖/派生关系                |
+| CONTRACT 1:N SERVICE                    | 一对多     | 一个合同可定义多个服务               |
+| SERVICE N:M WORK_PACKAGE                | 多对多     | 服务与工作包通过关联表绑定           |
+| **PERSONNEL 1:N TASK**                  | **一对多** | **人员作为任务执行人（assignee）**   |
+| **PERSONNEL 1:N WORK_PACKAGE**          | **一对多** | **人员作为工作包负责人（manager）**  |
+| **PERSONNEL 1:N PERMISSION**            | **一对多** | **人员拥有多个权限**                 |
+| **STANDARD_FILE 1:N STANDARD_CLAUSE**   | **一对多** | **标准文件包含多个条款**             |
+| **STANDARD_CLAUSE N:M STANDARD_OBJECT** | **多对多** | **条款与对象通过绑定表关联**         |
+| **TASK N:M STANDARD_OBJECT**            | **多对多** | **任务通过 object_ids 绑定多个对象** |
 
 ## 关键业务规则
 
-1. **层级规则**
-   - 项目(Project) → 工作包(WorkPackage) → 任务(Task) → 子任务(SubTask)
-   - 任务通过 `parent_task_id` 自引用形成树形结构
+1. **层级规则（Phase 2 更新：4层→3层）**
+   - ~~项目(Project) → 工作包(WorkPackage) → 任务(Task) → 子任务(SubTask)~~
+   - **项目(Project) → 工作包(WorkPackage) → 任务(Task)**
+   - 子任务(SubTask)通过 `parent_task_id` 自引用在任务层内表达，不独立为层级
+   - 阶段(Stage)作为项目生命周期属性（`stage_id`），不纳入任务树层级
 
 2. **成本归集规则**
    - 所有任务成本归集到所属 `work_package_id`
@@ -252,6 +353,8 @@ erDiagram
 
 ## 扩展实体说明
 
+### 任务相关
+
 | 实体                  | 用途                                 |
 | --------------------- | ------------------------------------ |
 | TASK_STANDARD_BINDING | 绑定执行标准、验收标准、检查清单模板 |
@@ -261,3 +364,34 @@ erDiagram
 | TASK_REMINDER         | 催办记录，支持系统/人工/自动催办     |
 | TASK_EVENT_LOG        | 任务操作审计日志                     |
 | TASK_ATTACHMENT       | 任务附件/资料管理                    |
+
+### Phase 2 新增实体
+
+| 实体                      | 用途                                 |
+| ------------------------- | ------------------------------------ |
+| **PERSONNEL**             | **人员信息，支持任务分配与权限管理** |
+| **PERMISSION**            | **权限配置（资源/操作/范围）**       |
+| **STANDARD_FILE**         | **标准文件（如 GB/T 50254-2024）**   |
+| **STANDARD_CLAUSE**       | **标准条款（如"4.2 线路铺设要求"）** |
+| **STANDARD_OBJECT**       | **标准对象（如"线路铺设"）**         |
+| **CLAUSE_OBJECT_BINDING** | **条款-对象关联（多对多）**          |
+
+### 对象抽象层说明
+
+**Phase 2 引入的标准绑定新链路**：
+
+```
+TASK（任务）
+  ↓ object_ids（绑定对象ID列表）
+STANDARD_OBJECT（标准对象，如"线路铺设"）
+  ↓ CLAUSE_OBJECT_BINDING（通过关联表）
+STANDARD_CLAUSE（标准条款，如"4.2 线路铺设要求"）
+  ↓ standard_file_id（归属）
+STANDARD_FILE（标准文件，如"GB/T 50254-2024"）
+```
+
+**优势**：
+
+- 工程人员按对象思考（"我要做线路铺设"），不用记条款号
+- 一个对象可关联多个条款（执行标准 + 验收标准）
+- 标准文件更新时，重建条款-对象映射即可

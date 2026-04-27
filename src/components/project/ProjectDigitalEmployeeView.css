@@ -15,7 +15,7 @@
 .digital-header h2 {
   font-size: 24px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-xs) 0;
 }
 
@@ -73,7 +73,7 @@
 .stat-value {
   font-size: 24px;
   font-weight: 700;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
 }
 
 .stat-label {
@@ -92,7 +92,7 @@
 .digital-section h3 {
   font-size: 16px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-md) 0;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .agent-card:hover {
-  border-color: var(--pm-accent);
+  border-color: var(--pm-blue);
   transform: translateY(-2px);
   box-shadow: var(--pm-shadow-md);
 }
@@ -153,7 +153,7 @@
 .agent-basic h4 {
   font-size: 15px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 2px 0;
 }
 
@@ -223,7 +223,7 @@
 }
 
 .module-card:hover {
-  border-color: var(--pm-accent);
+  border-color: var(--pm-blue);
   transform: translateY(-2px);
   box-shadow: var(--pm-shadow-md);
 }
@@ -236,7 +236,7 @@
 .module-card h4 {
   font-size: 15px;
   font-weight: 600;
-  color: var(--pm-text-100);
+  color: var(--pm-text-white);
   margin: 0 0 var(--pm-spacing-xs) 0;
 }
 

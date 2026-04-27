@@ -140,7 +140,7 @@
 
 .sm-title span {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .sm-header-actions {
@@ -237,7 +237,7 @@
   border-radius: var(--pm-radius-lg);
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .sm-top-tab.active {
@@ -344,7 +344,7 @@
   width: 68px;
   height: 28px;
   border-radius: var(--pm-radius-md);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -426,7 +426,7 @@
   height: 42px;
   border-bottom: 1px solid var(--pm-border);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   text-align: left;
   padding: 0 20px;
 }
@@ -441,7 +441,7 @@
   border-bottom: 1px solid var(--pm-border-light);
   padding: 0 20px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
 }
 
 .sm-name-cell {
@@ -469,7 +469,7 @@
   background: var(--pm-blue-20);
 }
 .sm-row-icon.cyan {
-  background: rgba(0, 184, 219, 0.2);
+  background: var(--pm-cyan-20);
 }
 .sm-row-icon.orange {
   background: var(--pm-orange-20);
@@ -515,7 +515,7 @@
 .sm-name-content p {
   margin-top: 2px;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
   max-width: min(46vw, 560px);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -559,7 +559,7 @@
 
 .sm-pagination span {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--pm-text-40);
 }
 
 .sm-page-controls {
@@ -572,7 +572,7 @@
   height: 32px;
   border-radius: var(--pm-radius-md);
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--pm-text-60);
   display: inline-flex;
   align-items: center;
   justify-content: center;
