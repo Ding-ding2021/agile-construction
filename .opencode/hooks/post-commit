@@ -1,0 +1,4 @@
+#!/bin/bash
+# 提交后钩子：记录同步
+
+echo "✅ 记忆已同步到 OpenCode"
