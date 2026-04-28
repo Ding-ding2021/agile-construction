@@ -89,6 +89,9 @@ pnpm dev
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
     "type-check": "tsc --noEmit", // 类型检查
+    "test": "vitest", // 启动 Vitest 测试（watch 模式）
+    "test:run": "vitest run", // 单次运行所有测试
+    "test:coverage": "vitest run --coverage", // 运行测试并生成覆盖率报告
 
     // 新增：后端和数据库相关
     "server:dev": "tsx watch server/index.ts", // 启动后端开发服务器
@@ -102,6 +105,43 @@ pnpm dev
   }
 }
 ```
+
+### 1.4 测试与 CI
+
+**测试框架**: Vitest + React Testing Library + jsdom
+
+```bash
+# 单次运行测试
+npm run test:run
+
+# 运行测试并查看覆盖率
+npm run test:coverage
+
+# 覆盖率报告将输出到 coverage/ 目录
+# 覆盖率阈值配置在 vitest.config.ts（当前: lines≥40%, statements≥40%, functions≥30%, branches≥30%）
+```
+
+**Pre-commit 门禁**（自动强制执行）:
+
+```
+1. lint-staged → ESLint + Prettier（仅暂存文件）
+2. tsc --noEmit（类型检查）
+```
+
+**CI 流水线**（GitHub Actions，在 `.github/workflows/ci.yml`）:
+
+```yaml
+触发条件: pull_request + push to main
+步骤顺序:
+  1. Lint（核心文件）
+  2. Verify stage3 docs
+  3. Type & Build（tsc -b && vite build）
+  4. Run unit tests（npm run test:run）
+  5. Run tests with coverage（npm run test:coverage）
+  6. Upload coverage report（artifact: coverage-report）
+```
+
+所有步骤必须通过方可合并 PR。
 
 ---
 

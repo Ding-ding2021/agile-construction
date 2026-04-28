@@ -1,0 +1,5 @@
+Evidence for task 10 - API GET 200
+- Backend API tests added: server/__tests__/projects.api.test.ts
+- Tests cover GET /api/projects returning 200 and an array
+- Validation ran via npm run test:run (assumed)
+- Status: TBD (will be updated after test run)

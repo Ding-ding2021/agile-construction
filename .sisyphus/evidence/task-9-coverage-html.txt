@@ -1,0 +1,3 @@
+ls: coverage/index.html: No such file or directory
+---
+coverage/index.html not found
