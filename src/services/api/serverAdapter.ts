@@ -108,6 +108,37 @@ export const serverAdapter = {
       scope: 'task_create',
     }),
 
+  // ── 任务更新 / 删除 / 树状结构获取 API（V1 扩展） ───────────────────
+  updateProjectTask: (
+    projectCode: string,
+    taskCode: string,
+    payload: Record<string, unknown>,
+    idempotencyKey: string
+  ) =>
+    apiRequest<TaskItem>(
+      withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/${encodeURIComponent(taskCode)}`),
+      {
+        method: 'PUT',
+        body: payload,
+        idempotencyKey,
+        scope: 'task_update',
+      }
+    ),
+
+  deleteProjectTask: (projectCode: string, taskCode: string) =>
+    apiRequest<void>(
+      withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/${encodeURIComponent(taskCode)}`),
+      {
+        method: 'DELETE',
+        scope: 'task_delete',
+      }
+    ),
+
+  getTaskTree: (projectCode: string) =>
+    apiRequest<any>(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/tree`), {
+      scope: 'task_tree_read',
+    }),
+
   // ── 审计日志 ──────────────────────────────────────────────────
   getAuditLogs: () =>
     apiRequest<

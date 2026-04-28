@@ -181,6 +181,66 @@ export const taskRepository = {
     }
   },
 
+  // ── 更新单任务 ─────────────────────────────────
+  async updateTask(
+    projectCode: string,
+    taskCode: string,
+    payload: Partial<TaskItem>
+  ): Promise<TaskItem> {
+    const contextKey = `__${projectCode}`
+    try {
+      const updated = await serverAdapter.updateProjectTask(
+        projectCode,
+        taskCode,
+        payload,
+        createIdempotencyKey('task-update', taskCode)
+      )
+
+      // 同步本地缓存
+      const current = readLocalTasks(contextKey) ?? []
+      const next = current.map(t => (t.code === taskCode ? updated : t))
+      persistLocalTasks(contextKey, next)
+      return updated
+    } catch {
+      // 回退到本地缓存中的改动，确保离线可用
+      const current = readLocalTasks(contextKey) ?? []
+      const local = current.find(t => t.code === taskCode)
+      if (local) {
+        const fallback = { ...local, ...payload } as TaskItem
+        const next = current.map(t => (t.code === taskCode ? fallback : t))
+        persistLocalTasks(contextKey, next)
+        return fallback
+      }
+      throw new Error(`Failed to update task: ${taskCode}`)
+    }
+  },
+
+  // ── 删除单任务 ─────────────────────────────────
+  async deleteTask(projectCode: string, taskCode: string): Promise<void> {
+    const contextKey = `__${projectCode}`
+    try {
+      await serverAdapter.deleteProjectTask(projectCode, taskCode)
+    } catch {
+      // 忽略远端删除失败，仍尝试清理本地缓存
+    } finally {
+      const current = readLocalTasks(contextKey) ?? []
+      const next = current.filter(t => t.code !== taskCode)
+      persistLocalTasks(contextKey, next)
+    }
+  },
+
+  // ── 载入含树状结构的任务 ───────────────────────────
+  async loadTasksWithTree(projectCode: string): Promise<any> {
+    try {
+      return await serverAdapter.getTaskTree(projectCode)
+    } catch {
+      // 回退到本地任务数组作为简易树状结构
+      const contextKey = `__${projectCode}`
+      const local = readLocalTasks(contextKey) ?? []
+      return local
+    }
+  },
+
   // ── 保存任务：快照兼容（过渡期内保留） ──────────────────────────
   async saveTasks(contextKey: string, tasks: TaskItem[]): Promise<void> {
     persistLocalTasks(contextKey, tasks)
