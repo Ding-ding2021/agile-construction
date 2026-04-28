@@ -7,12 +7,7 @@ type PrismaLike = any
 
 export function createMockPrismaClient(initialProjects: any[] = []) {
   // In-memory data store for the mock
-  let data: any[] = initialProjects.slice()
-
-  // Simple helper to reset to a known state if needed
-  const reset = (projects: any[] = []) => {
-    data = projects.slice()
-  }
+  const data: any[] = initialProjects.slice()
 
   const project = {
     // Return all projects (in-memory)

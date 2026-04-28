@@ -1,0 +1,3 @@
+- npm run build finished successfully (exit code 0).
+- Build log excerpt: Vite built in 1.06s; assets emitted (example: dist/index.html, dist/assets/...).
+- TypeScript compile completed with no blocking errors after fixing a.remove-unused-reset in src/test/mocks/prisma.mock.ts; the temporary mocks file was adjusted to remove an unused function.
