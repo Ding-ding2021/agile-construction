@@ -196,12 +196,40 @@ exports.Prisma.ProjectTaskScalarFieldEnum = {
   code: 'code',
   name: 'name',
   status: 'status',
-  assignee: 'assignee',
+  assigneeId: 'assigneeId',
+  assigneeName: 'assigneeName',
   startDate: 'startDate',
   dueDate: 'dueDate',
+  parentId: 'parentId',
+  nodeLevelType: 'nodeLevelType',
+  priority: 'priority',
   progress: 'progress',
-  level: 'level',
-  parentId: 'parentId'
+  taskType: 'taskType',
+  sourceType: 'sourceType',
+  riskLevel: 'riskLevel',
+  slaStatus: 'slaStatus',
+  description: 'description',
+  actualStartDate: 'actualStartDate',
+  actualEndDate: 'actualEndDate',
+  blockedReason: 'blockedReason',
+  remindCount: 'remindCount',
+  tags: 'tags',
+  workPackageId: 'workPackageId',
+  slaRuleId: 'slaRuleId',
+  plannedWorkHours: 'plannedWorkHours',
+  actualWorkHours: 'actualWorkHours',
+  standardSnapshotId: 'standardSnapshotId',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskRelationScalarFieldEnum = {
+  id: 'id',
+  fromTaskId: 'fromTaskId',
+  toTaskId: 'toTaskId',
+  relationType: 'relationType'
 };
 
 exports.Prisma.ProjectRiskScalarFieldEnum = {
@@ -259,6 +287,7 @@ exports.Prisma.ModelName = {
   ProjectPhase: 'ProjectPhase',
   ProjectMilestone: 'ProjectMilestone',
   ProjectTask: 'ProjectTask',
+  TaskRelation: 'TaskRelation',
   ProjectRisk: 'ProjectRisk',
   ProjectMember: 'ProjectMember',
   ProjectStatusLog: 'ProjectStatusLog'

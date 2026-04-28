@@ -17,15 +17,22 @@ import { taskRepository } from '../repositories/taskRepository'
 import type { TaskFlowLog, TaskItem } from '../../components/task/taskManagement.types'
 
 const createTask = (code: string): TaskItem => ({
+  id: `task-${code}`,
   name: `任务-${code}`,
   code,
+  projectId: 'PRJ-TEST',
   projectName: '测试项目',
+  parentTaskId: null,
   parentPath: '路径',
   taskType: '标准任务',
   sourceType: 'manual',
   status: '待分配',
   statusTone: 'neutral',
   owner: '待分配',
+  assigneeId: '',
+  assigneeName: '待分配',
+  nodeLevelType: 'task',
+  priority: 'medium',
   plannedStartAt: '2026-04-01',
   plannedEndAt: '2026-04-02',
   slaStatus: '正常',
@@ -37,6 +44,9 @@ const createTask = (code: string): TaskItem => ({
   standardBindingStatus: '已绑定',
   isBlocked: false,
   progress: 0,
+  tags: [],
+  createdBy: 'test',
+  createdAt: '2026-03-01T00:00:00Z',
 })
 
 describe('taskRepository(task-center)', () => {

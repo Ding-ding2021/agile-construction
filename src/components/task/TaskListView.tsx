@@ -1,31 +1,46 @@
-import type { PaginationState, TaskItem, TaskViewMode } from './taskManagement.types';
+import type { PaginationState, TaskItem, TaskViewMode } from './taskManagement.types'
 
 type TaskListViewProps = {
-  tasks: TaskItem[];
-  pagination: PaginationState;
-  onPageChange: (page: number) => void;
-  searchQuery: string;
-  viewMode: TaskViewMode;
-  onOpenTaskDetail?: (taskCode: string) => void;
-};
+  tasks: TaskItem[]
+  pagination: PaginationState
+  onPageChange: (page: number) => void
+  searchQuery: string
+  viewMode: TaskViewMode
+  onOpenTaskDetail?: (taskCode: string) => void
+}
 
-const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, onOpenTaskDetail }: TaskListViewProps) => {
-  const totalPages = Math.ceil(pagination.total / pagination.pageSize);
+const TaskListView = ({
+  tasks,
+  pagination,
+  onPageChange,
+  searchQuery,
+  viewMode,
+  onOpenTaskDetail,
+}: TaskListViewProps) => {
+  const totalPages = Math.ceil(pagination.total / pagination.pageSize)
 
   if (viewMode !== 'list') {
     return (
       <div className="tm-placeholder-wrap">
-        <div className="tm-placeholder-content">{viewMode === 'grid' ? '网格视图开发中' : viewMode === 'kanban' ? '看板视图开发中' : '日历视图开发中'}</div>
+        <div className="tm-placeholder-content">
+          {viewMode === 'grid'
+            ? '网格视图开发中'
+            : viewMode === 'kanban'
+              ? '看板视图开发中'
+              : '日历视图开发中'}
+        </div>
       </div>
-    );
+    )
   }
 
   if (tasks.length === 0) {
     return (
       <div className="tm-placeholder-wrap">
-        <div className="tm-placeholder-content">{searchQuery ? '未找到匹配任务' : '暂无任务数据'}</div>
+        <div className="tm-placeholder-content">
+          {searchQuery ? '未找到匹配任务' : '暂无任务数据'}
+        </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -34,25 +49,30 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
         <table className="tm-table">
           <thead>
             <tr>
-              <th style={{ width: '17%' }}>任务名称</th>
+              <th style={{ width: '22%' }}>任务名称</th>
               <th style={{ width: '13%' }}>父任务路径</th>
               <th style={{ width: '10%' }}>项目</th>
               <th style={{ width: '7%', textAlign: 'center' }}>状态</th>
               <th style={{ width: '7%', textAlign: 'center' }}>风险等级</th>
-              <th style={{ width: '7%', textAlign: 'center' }}>负责人/执行人</th>
+              <th style={{ width: '7%', textAlign: 'center' }}>负责人</th>
               <th style={{ width: '11%', textAlign: 'center' }}>计划时间</th>
               <th style={{ width: '8%', textAlign: 'center' }}>SLA状态</th>
               <th style={{ width: '8%', textAlign: 'center' }}>前置任务状态</th>
-              <th style={{ width: '5%', textAlign: 'center' }}>催办次数</th>
-              <th style={{ width: '7%', textAlign: 'center' }}>标准绑定</th>
+              <th style={{ width: '5%', textAlign: 'center' }}>催办</th>
             </tr>
           </thead>
           <tbody>
-            {tasks.map((item) => (
+            {tasks.map(item => (
               <tr key={item.code}>
                 <td>
                   <div className="tm-task-cell">
-                    <div className="tm-task-name">{item.name}</div>
+                    <button
+                      type="button"
+                      className="tm-task-name-link"
+                      onClick={() => onOpenTaskDetail?.(item.code)}
+                    >
+                      {item.name}
+                    </button>
                     <div className="tm-task-code">{item.code}</div>
                   </div>
                 </td>
@@ -72,7 +92,9 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
                   <span className="tm-table-text">{item.owner}</span>
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                  <span className="tm-table-text">{item.plannedStartAt} ~ {item.plannedEndAt}</span>
+                  <span className="tm-table-text">
+                    {item.plannedStartAt} ~ {item.plannedEndAt}
+                  </span>
                 </td>
                 <td style={{ textAlign: 'center' }}>
                   <span className={`tm-sla-status ${item.slaTone}`}>
@@ -81,22 +103,23 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
                   </span>
                 </td>
                 <td style={{ textAlign: 'center' }}>
-                  <span className={`tm-table-text ${item.predecessorStatus === '前置阻塞' ? 'tm-alert-text' : ''}`}>{item.predecessorStatus}</span>
-                </td>
-                <td style={{ textAlign: 'center' }}>
-                  <span className={`tm-remind-badge ${item.remindCount > 2 ? 'high' : ''}`}>{item.remindCount}</span>
-                </td>
-                <td style={{ textAlign: 'center' }}>
-                  <span className={`tm-table-text ${item.standardBindingStatus === '未绑定' ? 'tm-alert-text' : ''}`}>{item.standardBindingStatus}</span>
-                </td>
-                <td style={{ textAlign: 'center' }}>
-                  <button
-                    type="button"
-                    className="tm-link-btn"
-                    onClick={() => onOpenTaskDetail?.(item.code)}
+                  <span
+                    className={`tm-table-text ${item.predecessorStatus === '前置阻塞' ? 'tm-alert-text' : ''}`}
                   >
-                    详情
-                  </button>
+                    {item.predecessorStatus}
+                  </span>
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <span className={`tm-remind-badge ${item.remindCount > 2 ? 'high' : ''}`}>
+                    {item.remindCount}
+                  </span>
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <span
+                    className={`tm-table-text ${item.standardBindingStatus === '未绑定' ? 'tm-alert-text' : ''}`}
+                  >
+                    {item.standardBindingStatus}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -107,8 +130,15 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
       <div className="tm-pagination-shell">
         <div className="tm-pagination">
           <div className="tm-pagination-left">
-            <div className="tm-page-info">共 {pagination.total} 条记录，当前第 {pagination.currentPage} / {totalPages || 1} 页</div>
-            <div className="tm-page-size">每页显示 <button type="button" className="tm-page-size-btn">{pagination.pageSize} 条</button></div>
+            <div className="tm-page-info">
+              共 {pagination.total} 条记录，当前第 {pagination.currentPage} / {totalPages || 1} 页
+            </div>
+            <div className="tm-page-size">
+              每页显示{' '}
+              <button type="button" className="tm-page-size-btn">
+                {pagination.pageSize} 条
+              </button>
+            </div>
           </div>
 
           <div className="tm-page-controls">
@@ -122,7 +152,7 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
             </button>
 
             <div className="tm-page-numbers">
-              {Array.from({ length: totalPages || 1 }, (_, index) => index + 1).map((page) => (
+              {Array.from({ length: totalPages || 1 }, (_, index) => index + 1).map(page => (
                 <button
                   key={page}
                   type="button"
@@ -146,7 +176,7 @@ const TaskListView = ({ tasks, pagination, onPageChange, searchQuery, viewMode, 
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TaskListView;
+export default TaskListView

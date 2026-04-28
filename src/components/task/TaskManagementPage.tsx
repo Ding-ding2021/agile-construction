@@ -1,15 +1,24 @@
-import { useCallback, useMemo, useState } from 'react'
+/**
+ * TaskManagementPage — 任务管理主页面
+ *
+ * 提供任务列表的查看、筛选、搜索和详情查看功能。
+ * 数据加载优先从后端获取，失败时降级到 mock 数据。
+ */
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
-import { mockTasks } from './taskManagement.data'
+import TaskDetailPage from './TaskDetailPage'
+import { allMockTaskNodes, getTaskDetailByCode } from './taskManagement.data'
 import { calculateTaskStats, processTasks, shouldResetPage } from './taskManagement.selectors'
-import type { TaskFilters, TaskViewMode } from './taskManagement.types'
-import { goToTaskDetail } from '../../config/navigation'
+import type { TaskFilters, TaskViewMode, TaskItem, TaskDetail } from './taskManagement.types'
+import { taskRepository } from '../../services/repositories/taskRepository'
+import { Drawer } from '@mui/material'
 
 const TaskManagementPage = () => {
   const currentHash = typeof window === 'undefined' ? '#/tasks' : window.location.hash || '#/tasks'
 
+  const [tasks, setTasks] = useState<TaskItem[]>(allMockTaskNodes)
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<TaskFilters>({
     statKey: 'all',
@@ -20,14 +29,30 @@ const TaskManagementPage = () => {
   const [viewMode, setViewMode] = useState<TaskViewMode>('list')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize] = useState(12)
+  const [selectedTaskCode, setSelectedTaskCode] = useState<string | null>(null)
 
-  const stats = useMemo(() => calculateTaskStats(mockTasks), [])
-
-  const { data: processedTasks, pagination } = useMemo(
-    () => processTasks(mockTasks, filters, { currentPage, pageSize }),
-    [filters, currentPage, pageSize]
+  const selectedTaskDetail: TaskDetail | null = useMemo(
+    () => (selectedTaskCode ? (getTaskDetailByCode(selectedTaskCode) ?? null) : null),
+    [selectedTaskCode]
   )
 
+  // 从 Repository 加载真实数据，降级到 mock
+  useEffect(() => {
+    taskRepository.loadTasks('__all').then(remoteTasks => {
+      if (remoteTasks && remoteTasks.length > 0) {
+        setTasks(remoteTasks)
+      }
+    })
+  }, [])
+
+  const stats = useMemo(() => calculateTaskStats(tasks), [tasks])
+
+  const { data: processedTasks, pagination } = useMemo(
+    () => processTasks(tasks, filters, { currentPage, pageSize }),
+    [tasks, filters, currentPage, pageSize]
+  )
+
+  // 更新筛选条件：筛选条件变化时自动重置到第 1 页
   const updateFilters = useCallback(
     (newFilters: Partial<TaskFilters>) => {
       setFilters(prev => {
@@ -144,13 +169,34 @@ const TaskManagementPage = () => {
                 searchQuery={searchQuery}
                 viewMode={viewMode}
                 onOpenTaskDetail={taskCode => {
-                  goToTaskDetail(taskCode)
+                  setSelectedTaskCode(taskCode)
                 }}
               />
             </section>
           </div>
         </main>
       </div>
+
+      {/* 任务详情侧拉弹窗 */}
+      <Drawer anchor="right" open={!!selectedTaskDetail} onClose={() => setSelectedTaskCode(null)}>
+        <div
+          style={{
+            width: 680,
+            maxWidth: '100vw',
+            height: '100%',
+            backgroundColor: '#051338',
+            borderLeft: '1px solid rgba(255,255,255,0.08)',
+          }}
+        >
+          {selectedTaskDetail && (
+            <TaskDetailPage
+              taskDetail={selectedTaskDetail}
+              mode="drawer"
+              onBack={() => setSelectedTaskCode(null)}
+            />
+          )}
+        </div>
+      </Drawer>
     </div>
   )
 }
