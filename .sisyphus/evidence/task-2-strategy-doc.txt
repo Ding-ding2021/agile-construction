@@ -1,0 +1,9 @@
+- Task: Documentation strategy for test data and Prisma mock factory
+- Content:
+  - Illustrated four strategy chapters in test data strategy document:
+    - 单元测试数据策略 (pure function + Mock external deps)
+    - 仓库测试数据策略 (Mock Prisma client, in-memory data)
+    - 集成测试数据策略 (Express test instance, Mock Prisma)
+    - 数据隔离原则 (per-test create/cleanup, no shared state)
+- Evidence: src/test/test-data-strategy.md created; prisma mock factory implemented at src/test/mocks/prisma.mock.ts
+- Outcome: A clear guide for test data generation and Prisma mocking in tests
