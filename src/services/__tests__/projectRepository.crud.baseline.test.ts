@@ -8,7 +8,7 @@ vi.mock('../../services/api/serverAdapter', () => {
     createIdempotencyKey: vi.fn(() => 'mock-key'),
     serverAdapter: {
       getProjects: vi.fn(async () => []),
-      getProjectByCode: vi.fn(async (code: string) => null),
+      getProjectByCode: vi.fn(async () => null),
       createProject: vi.fn(async (payload: any) => ({
         ...payload,
         id: 'mock-id',
@@ -20,7 +20,7 @@ vi.mock('../../services/api/serverAdapter', () => {
         ...payload,
         updatedAt: new Date().toISOString(),
       })),
-      deleteProject: vi.fn(async (code: string) => {}),
+      deleteProject: vi.fn(async () => {}),
     },
   }
 })
@@ -66,7 +66,7 @@ describe('projectRepository CRUD baseline', () => {
 
   it('getProjects should return server data when available, fallback to local when server fails', async () => {
     const { serverAdapter } = await import('../../services/api/serverAdapter')
-    serverAdapter.getProjects = vi.fn(async () => [{ code: 'PRJ-TEST', name: 'X' }])
+    serverAdapter.getProjects = vi.fn(async () => [{ code: 'PRJ-TEST', name: 'X' } as any])
 
     const projects = await projectRepository.getProjects()
     expect(projects).toBeInstanceOf(Array)

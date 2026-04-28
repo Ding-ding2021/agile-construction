@@ -20,19 +20,6 @@ interface ProjectRecord {
   status?: string
 }
 
-type PrismaLike = {
-  project: {
-    findMany: (args?: any) => Promise<ProjectRecord[]>
-    findUnique: (args: { where?: { id?: string; code?: string } }) => Promise<ProjectRecord | null>
-    create: (args: { data: Partial<ProjectRecord> }) => Promise<ProjectRecord>
-    update: (args: {
-      where?: { id?: string; code?: string }
-      data: Partial<ProjectRecord>
-    }) => Promise<ProjectRecord | null>
-    delete: (args: { where?: { id?: string; code?: string } }) => Promise<ProjectRecord | null>
-  }
-}
-
 export function createMockPrismaClient(initialProjects: PartialProject[] = []) {
   // In-memory data store for the mock
   const data: ProjectRecord[] = initialProjects.map(p => ({
