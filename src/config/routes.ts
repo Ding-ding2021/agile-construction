@@ -2,12 +2,13 @@
  * 路由配置中心
  *
  * 集中管理所有 hash 路由的定义、匹配规则和组件映射。
- * 消除 App.tsx 中的硬编码 if/else 路由判断。
+ * 新页面请优先在 feature-registry.ts 中注册，本文件负责路由解析。
  */
 
 import { lazy, type ComponentType } from 'react'
 import type { ProjectDetailTab } from '../components/project/projectTabs.shared'
 import { isProjectDetailTab } from '../components/project/projectTabs.shared'
+import type { FeatureConfig } from './feature-registry'
 
 // ─── Lazy-loaded page components ───────────────────────────────
 
@@ -46,6 +47,130 @@ export const ResourcePoolPage = lazy(() => import('../components/resource/Resour
 export const CustomerManagementPage = lazy(
   () => import('../components/customer/CustomerManagementPage')
 )
+
+// ─── Feature registry（主导） ──────────────────────────────────
+
+export const FEATURE_REGISTRY: FeatureConfig[] = [
+  {
+    page: 'projects',
+    path: '#/projects',
+    component: ProjectManagementPage,
+    label: '项目管理',
+    category: 'simple',
+  },
+  {
+    page: 'personnel',
+    path: '#/personnel',
+    component: PersonnelPage,
+    label: '人员管理',
+    category: 'callback',
+  },
+  {
+    page: 'personnel-detail',
+    path: '#/personnel/users',
+    component: PersonnelUserDetailPage,
+    category: 'param',
+  },
+  {
+    page: 'tasks',
+    path: '#/tasks',
+    component: TaskManagementPage,
+    label: '任务管理',
+    category: 'simple',
+  },
+  {
+    page: 'customers',
+    path: '#/customers',
+    component: CustomerManagementPage,
+    label: '客户管理',
+    category: 'simple',
+  },
+  {
+    page: 'procurement',
+    path: '#/procurement',
+    component: ProcurementManagementPage,
+    label: '采购管理',
+    category: 'callback',
+  },
+  {
+    page: 'procurement-supplier-detail',
+    path: '#/procurement/suppliers',
+    component: SupplierDetailPage,
+    category: 'param',
+  },
+  {
+    page: 'contracts',
+    path: '#/contracts',
+    component: ContractSettlementPage,
+    label: '合同结算',
+    category: 'data',
+  },
+  {
+    page: 'orders',
+    path: '#/orders',
+    component: OrderManagementPage,
+    label: '订单管理',
+    category: 'simple',
+  },
+  {
+    page: 'facility',
+    path: '#/facility',
+    component: FacilityManagementPage,
+    label: '设施管理',
+    category: 'simple',
+  },
+  {
+    page: 'resources',
+    path: '#/resources',
+    component: ResourcePoolPage,
+    label: '资源池',
+    category: 'simple',
+  },
+  {
+    page: 'settings',
+    path: '#/settings',
+    component: SystemSettingsPage,
+    label: '系统设置',
+    category: 'simple',
+  },
+  {
+    page: 'standards',
+    path: '#/standards',
+    component: StandardManagementPage,
+    label: '标准管理',
+    category: 'simple',
+  },
+  {
+    page: 'standard-template-detail',
+    path: '#/standards/templates',
+    component: StandardTemplateDetailPage,
+    category: 'param',
+  },
+  {
+    page: 'digital-employee',
+    path: '#/digital-employee',
+    component: DigitalEmployeePage,
+    label: '数字员工',
+    category: 'simple',
+  },
+  {
+    page: 'engineer-assistant',
+    path: '#/engineer-assistant',
+    component: EngineerAssistantPage,
+    label: '工程师助手',
+    category: 'simple',
+  },
+]
+
+export const SIMPLE_PAGES = FEATURE_REGISTRY.filter(f => f.category === 'simple').map(f => f.page)
+
+export const PARAM_PAGES = FEATURE_REGISTRY.filter(f => f.category === 'param').map(f => f.page)
+
+export const CALLBACK_PAGES = FEATURE_REGISTRY.filter(f => f.category === 'callback').map(
+  f => f.page
+)
+
+export const DATA_PAGES = FEATURE_REGISTRY.filter(f => f.category === 'data').map(f => f.page)
 
 // ─── Route path constants ──────────────────────────────────────
 
@@ -326,31 +451,6 @@ export const readRouteFromHash = (): AppRoute => {
 
   return { page: 'projects' }
 }
-
-// ─── AppRouter 页面分类（集中管理）────────────────────────────
-
-export const SIMPLE_PAGES: AppRoute['page'][] = [
-  'projects',
-  'tasks',
-  'customers',
-  'orders',
-  'facility',
-  'resources',
-  'settings',
-  'standards',
-  'digital-employee',
-  'engineer-assistant',
-]
-
-export const PARAM_PAGES: AppRoute['page'][] = [
-  'personnel-detail',
-  'procurement-supplier-detail',
-  'standard-template-detail',
-]
-
-export const CALLBACK_PAGES: AppRoute['page'][] = ['personnel', 'procurement']
-
-export const DATA_PAGES: AppRoute['page'][] = ['contracts']
 
 export const isRouterHandledPage = (page: AppRoute['page']): boolean => {
   return (
