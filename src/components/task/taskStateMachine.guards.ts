@@ -1,4 +1,9 @@
-import { TASK_STATUS_TRANSITION_MAP, type TaskItem, type TaskStatus } from './taskManagement.types'
+import {
+  TASK_STATUS_TRANSITION_MAP,
+  isTaskReadonlyStatus,
+  type TaskItem,
+  type TaskStatus,
+} from './taskManagement.types'
 
 /**
  * 状态机守卫条件校验模块
@@ -329,6 +334,11 @@ export const getAvailableNextStatuses = (
   allowed: boolean
   reason?: string
 }[] => {
+  // 已完成/已关闭等只读/终态状态不应再产生后续状态
+  if (isTaskReadonlyStatus(task.status)) {
+    return []
+  }
+
   // 从状态机映射获取所有可能的下一状态
   const possibleNextStatuses = TASK_STATUS_TRANSITION_MAP[task.status] || []
 
