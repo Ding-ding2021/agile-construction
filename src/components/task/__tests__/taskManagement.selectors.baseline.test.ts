@@ -38,9 +38,9 @@ describe('taskManagement.selectors baseline', () => {
       standardBindingStatus: '已绑定',
       // required for some tests
       parentPath: undefined,
-      statusTone: 'blue' as any,
-      riskTone: 'blue' as any,
-      slaTone: 'green' as any,
+      statusTone: 'blue',
+      riskTone: 'blue',
+      slaTone: 'green',
       owner: 'owner',
       tags: [],
       ...overrides,
