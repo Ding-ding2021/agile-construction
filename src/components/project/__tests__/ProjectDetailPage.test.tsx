@@ -1,25 +1,31 @@
-import React from 'react'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import ProjectDetailPage from '../ProjectDetailPage'
-import { PROJECT_DETAIL_TABS } from '../projectTabs.shared'
+import type { ProjectItem } from '../../../data/projects'
 
-// Minimal props interface assumed by the component; if not required, this prop is ignored by the component
-const defaultProps = {
-  projectId: 'test-project',
+const mockProject: ProjectItem = {
+  code: 'PRJ001',
+  name: '测试项目',
+  brand: 'test-brand',
+  stage: 'design',
+  status: 'active',
+  statusTone: 'blue',
+  progress: 50,
+  area: 1000,
+  budget: 500000,
+  teamSize: 10,
+  dateRange: '2026-01 ~ 2026-06',
+  description: '测试项目描述',
+  city: '上海',
+  district: '浦东',
+  address: '测试地址',
+  taskCount: 5,
+  completedTasks: 2,
 }
 
 describe('ProjectDetailPage', () => {
-  test('renders and displays detail tabs', () => {
-    render(<ProjectDetailPage {...defaultProps} />)
-
-    // Tabs could be strings or objects with label text
-    const tabs = PROJECT_DETAIL_TABS
-    tabs.forEach((tab: any) => {
-      const label = typeof tab === 'string' ? tab : (tab.label ?? tab.name ?? '')
-      if (label) {
-        // Try to find tab by its label text
-        expect(screen.getByText(label)).toBeInTheDocument()
-      }
-    })
+  it('renders project name in header', () => {
+    render(<ProjectDetailPage project={mockProject} activeTab="overview" onBack={() => {}} />)
+    expect(screen.getAllByText('测试项目').length).toBeGreaterThan(0)
   })
 })

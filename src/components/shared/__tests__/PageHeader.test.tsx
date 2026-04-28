@@ -1,16 +1,16 @@
-import React from 'react'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import PageHeader from '../PageHeader'
+import PageHeader from '../navigation/PageHeader'
 
 describe('PageHeader', () => {
-  test('renders title', () => {
+  it('renders title text in an h1', () => {
     render(<PageHeader title="Dashboard" />)
-    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    const heading = screen.getByRole('heading', { name: 'Dashboard' })
+    expect(heading).toBeDefined()
   })
 
-  test('renders search input with placeholder when provided', () => {
-    render(<PageHeader title="Search" searchPlaceholder="Search items..." />)
-    const input = screen.getByPlaceholderText('Search items...')
-    expect(input).toBeInTheDocument()
+  it('renders subtitle when provided', () => {
+    render(<PageHeader title="Title" subtitle="Sub" />)
+    expect(screen.getByText('Sub')).toBeDefined()
   })
 })
