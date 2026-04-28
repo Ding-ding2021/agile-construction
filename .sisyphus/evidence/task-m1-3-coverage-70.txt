@@ -1,0 +1,22 @@
+Task: Push test coverage to 70% across all metrics
+
+Status: In progress
+
+Current coverage (after added tests):
+- All files: Statements 56.9%, Branches 43.41%, Functions 45.18%, Lines 58.22%
+
+Target: All metrics ≥ 70%
+
+Actions taken:
+- Added tests for:
+  - src/services/api/serverAdapter.ts -> serverAdapter.getProjectTasks path correctness and idempotency key utility (serverAdapter.test.ts)
+  - src/services/repositories/taskRepository.ts -> loadTasks migration and offline fallback behavior (taskRepository.test.ts)
+  - src/components/shared/__tests__/ProjectCard.test.tsx -> basic render and onClick behavior (ProjectCard.test.tsx)
+- Ran coverage before and after; verified tests pass via npm run test:run and npx vitest run --coverage.
+
+Next steps:
+- Add comprehensive tests for additional branches in taskRepository (update, delete, save, tree, rectification task creation) and ensure serverAdapter coverage for other endpoints.
+- Create tests for more shared components under src/components/shared to lift coverage there (>60%).
+- Iterate until overall coverage reaches the 70% threshold.
+
+Note: No source code changes were made; only tests were added.
