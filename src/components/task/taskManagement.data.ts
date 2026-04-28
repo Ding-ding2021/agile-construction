@@ -943,11 +943,13 @@ function mapTaskStatusToTreeStatus(
 }
 
 export function getTasksByTemplateId(templateId: string): TaskItem[] {
-  if (!templateId) return allMockTaskNodes
+  // 当未提供模板ID时，返回仅包含真实任务的 mock 数据（仅 mockTasks，不包含工作包）
+  if (!templateId) return mockTasks
   const filtered = allMockTaskNodes.filter(
     task => task.projectName.includes(templateId) || task.code.includes(templateId)
   )
-  return filtered.length > 0 ? filtered : allMockTaskNodes
+  // 未匹配到任何项时，返回仅 mockTasks，避免包含工作包节点
+  return filtered.length > 0 ? filtered : mockTasks
 }
 
 export function getTemplateNameById(templateId: string | undefined): string | null {
