@@ -4,7 +4,7 @@ import PageHeader from '../navigation/PageHeader'
 
 describe('PageHeader', () => {
   it('renders title text in an h1', () => {
-    render(<PageHeader title="Dashboard" />)
+    render(<PageHeader title="Dashboard" subtitle="Overview" />)
     const heading = screen.getByRole('heading', { name: 'Dashboard' })
     expect(heading).toBeDefined()
   })

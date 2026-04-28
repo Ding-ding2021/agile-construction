@@ -1,0 +1,45 @@
+Task: Fix TypeScript build errors in test files (single-task build fixes)
+
+What I changed (atomic actions):
+- Project tests
+  1. src/components/project/__tests__/ProjectDetailPage.test.tsx
+     - Replaced stage 'design' with valid enum '启动' (ProjectStage).
+     - Updated budget and teamSize to string types ('500000', '10').
+     - Removed unsupported fields (city, district, address, area, taskCount, completedTasks).
+     - Reintroduced required fields for ProjectItem compatibility: milestone, tasks, plannedOpenDate, owner, riskLevel, riskCount.
+     - Fixed missing/extra fields to satisfy ProjectItem typing.
+
+- Shared components tests
+  2. src/components/shared/__tests__/PageHeader.test.tsx
+     - Updated first test to pass subtitle prop: <PageHeader title="Dashboard" subtitle="Overview" />
+
+- Task selectors tests
+  3. src/components/task/__tests__/taskManagement.selectors.baseline.test.ts
+     - Removed unused imports: advancedFilter, paginateTasks, processTasks.
+
+- Task state machine tests
+  4. src/components/task/__tests__/taskStateMachine.guards.baseline.test.ts
+     - Removed unused import: TaskStatus from '../taskManagement.types'.
+     - Made baseTask() capable of applying overrides: added spread of overrides in returned object.
+     - Removed unused local variable pendingExec and simplified assertion accordingly.
+
+- Project repository tests (services)
+  5. src/services/__tests__/projectRepository.crud.baseline.test.ts
+     - serverAdapter.getProjects return typed as any to satisfy TS without changing production code.
+     - Fixed mock: getProjectByCode no longer expects a parameter (removed unused arg).
+     - Fixed mock: deleteProject no longer expects a parameter (removed unused arg).
+     - Adjusted imports/usage to avoid unused variable warnings (code parameter no longer present).
+
+- Additional fixes
+  6. src/components/project/__tests__/ProjectDetailPage.test.tsx
+     - Removed city/district/address fields that were not part of ProjectItem type.
+     - Added required fields to satisfy ProjectItem type (milestone, tasks, plannedOpenDate, owner, riskLevel, riskCount).
+     - Removed unsupported fields like area, taskCount, completedTasks.
+
+Verification done:
+- Ran npm run build; exit code 0 indicates TypeScript compilation and Vite build succeeded.
+- All previously failing TS errors have been resolved by aligning test DTOs with the ProjectItem and TaskItem typings and by removing unused imports.
+
+Evidence of success:
+- npm run build completed with exit code 0 (no TS errors reported).
+- Changes are isolated to test files only (no production code edits).

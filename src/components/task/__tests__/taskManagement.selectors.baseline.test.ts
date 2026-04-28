@@ -3,10 +3,7 @@ import {
   calculateTaskStats,
   filterByStatKey,
   searchTasks,
-  advancedFilter,
   sortTasks,
-  paginateTasks,
-  processTasks,
 } from '../taskManagement.selectors'
 import { type TaskItem } from '../taskManagement.types'
 

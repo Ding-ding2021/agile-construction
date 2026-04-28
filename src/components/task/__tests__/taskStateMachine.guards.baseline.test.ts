@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { validateStatusTransition, getAvailableNextStatuses } from '../taskStateMachine.guards'
 import type { TaskItem } from '../taskManagement.types'
-import { type TaskStatus } from '../taskManagement.types'
 
 const baseTask = (overrides: Partial<TaskItem> = {}): TaskItem => {
   return {
@@ -32,6 +31,7 @@ const baseTask = (overrides: Partial<TaskItem> = {}): TaskItem => {
     statusTone: 'blue' as any,
     riskTone: 'blue' as any,
     slaTone: 'green' as any,
+    ...(overrides as any),
   } as TaskItem
 }
 
@@ -47,8 +47,7 @@ describe('taskStateMachine guards baseline', () => {
     const nexts = getAvailableNextStatuses(t, [])
     // 至少应包含待执行且允许通过守卫
     // 注意：实现中 may include 其他状态，此处只断言存在一个可用的待执行状态
-    const pendingExec = nexts.find(n => n.status === '待执行')
-    // pendingExec 可能为 undefined depending on map; 这里容错断言为对象存在或不存在，确保函数执行无错误
+    // nexts 可能包含待执行等状态，确保返回结构正确
     expect(nexts).toBeInstanceOf(Array)
   })
 })
