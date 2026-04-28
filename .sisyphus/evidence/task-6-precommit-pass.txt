@@ -1,0 +1,24 @@
+lint-staged exit code (good): 0
+lint-staged output (good):
+[STARTED] Backing up original state...
+[COMPLETED] Backed up original state in git stash (d922e3e)
+[STARTED] Running tasks for staged files...
+[STARTED] package.json[0;90m — 2 files[0m
+[STARTED] *.{ts,tsx}[0;90m — 2 files[0m
+[STARTED] *.{css,scss,json,md}[0;90m — 0 files[0m
+[SKIPPED] *.{css,scss,json,md}[0;90m — no files[0m
+[STARTED] eslint --fix
+[COMPLETED] eslint --fix
+[STARTED] prettier --write
+[COMPLETED] prettier --write
+[COMPLETED] *.{ts,tsx}[0;90m — 2 files[0m
+[COMPLETED] package.json[0;90m — 2 files[0m
+[COMPLETED] Running tasks for staged files...
+[STARTED] Applying modifications from tasks...
+[COMPLETED] Applying modifications from tasks...
+[STARTED] Cleaning up temporary files...
+[COMPLETED] Cleaning up temporary files...
+
+tsci exit code (good): 0
+tsc output (good):
+

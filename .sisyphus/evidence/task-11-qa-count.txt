@@ -1,0 +1,5 @@
+- modules_covered: 4
+- scenarios_per_module_min: 6
+- total_scenarios_estimate: 24
+
+Note: This count reflects the planned 2 scenarios per section (Happy, Edge, Error) across 4 modules, totaling 4 * 3 * 2 = 24 scenarios.

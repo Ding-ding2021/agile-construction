@@ -1,0 +1,111 @@
+
+> agile-construction@0.0.0 lint
+> eslint .
+
+(node:73507) ESLintIgnoreWarning: The ".eslintignore" file is no longer supported. Switch to using the "ignores" property in "eslint.config.js": https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+/Users/dylan/CodeBuddy/agile-construction/local-api/server.ts
+   19:10  warning  'checkIdempotencyKey' is defined but never used                                          @typescript-eslint/no-unused-vars
+   19:31  warning  'recordIdempotencyKey' is defined but never used                                         @typescript-eslint/no-unused-vars
+  258:23  warning  '_' is assigned a value but never used                                                   @typescript-eslint/no-unused-vars
+  349:35  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  448:30  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  450:28  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  450:61  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  983:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  984:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  985:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  986:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  990:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  993:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+
+/Users/dylan/CodeBuddy/agile-construction/local-api/store/idempotency.ts
+  59:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  89:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  92:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+
+/Users/dylan/CodeBuddy/agile-construction/local-api/store/sqlite.ts
+   37:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+   59:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+   78:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  102:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+
+/Users/dylan/CodeBuddy/agile-construction/server/__tests__/projects.api.test.ts
+   3:14  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+   7:3   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-var-requires')
+   8:13  error    A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports
+   9:10  warning  'e' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+  54:31  error    A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports
+  55:18  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  56:18  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  63:23  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  83:33  error    A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports
+  84:18  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  85:18  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  92:23  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/components/project/ProjectManagementPage.tsx
+  80:9  warning  The 'safeProjects' logical expression could make the dependencies of useMemo Hook (at line 82) change on every render. To fix this, wrap the initialization of 'safeProjects' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  80:9  warning  The 'safeProjects' logical expression could make the dependencies of useMemo Hook (at line 86) change on every render. To fix this, wrap the initialization of 'safeProjects' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  80:9  warning  The 'safeProjects' logical expression could make the dependencies of useMemo Hook (at line 91) change on every render. To fix this, wrap the initialization of 'safeProjects' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+/Users/dylan/CodeBuddy/agile-construction/src/components/project/__tests__/ProjectDetailPage.test.tsx
+  17:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/components/task/__tests__/taskManagement.selectors.baseline.test.ts
+   6:3   warning  'advancedFilter' is defined but never used  @typescript-eslint/no-unused-vars
+   8:3   warning  'paginateTasks' is defined but never used   @typescript-eslint/no-unused-vars
+   9:3   warning  'processTasks' is defined but never used    @typescript-eslint/no-unused-vars
+  41:29  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  42:27  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  43:27  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/components/task/__tests__/taskStateMachine.guards.baseline.test.ts
+   4:15  warning  'TaskStatus' is defined but never used                                                @typescript-eslint/no-unused-vars
+   6:19  warning  'overrides' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  32:27  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  33:25  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  34:25  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  40:54  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  46:81  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  50:11  warning  'pendingExec' is assigned a value but never used                                      @typescript-eslint/no-unused-vars
+
+/Users/dylan/CodeBuddy/agile-construction/src/services/__tests__/projectRepository.crud.baseline.test.ts
+   11:38  warning  'code' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+   12:44  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   18:58  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   23:35  warning  'code' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+   39:29  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   49:26  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   50:23  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   57:10  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   59:68  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   64:27  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   81:69  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   90:93  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   97:62  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  101:27  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/services/api/serverAdapter.ts
+  138:16  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/services/repositories/taskRepository.ts
+  233:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/test/mocks/prisma.mock.test.ts
+   6:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/dylan/CodeBuddy/agile-construction/src/test/mocks/prisma.mock.ts
+   6:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  16:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  30:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 75 problems (3 errors, 72 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
