@@ -42,6 +42,11 @@ export type ProjectMilestone = $Result.DefaultSelection<Prisma.$ProjectMilestone
  */
 export type ProjectTask = $Result.DefaultSelection<Prisma.$ProjectTaskPayload>
 /**
+ * Model TaskRelation
+ *
+ */
+export type TaskRelation = $Result.DefaultSelection<Prisma.$TaskRelationPayload>
+/**
  * Model ProjectRisk
  *
  */
@@ -271,6 +276,16 @@ export class PrismaClient<
    * ```
    */
   get projectTask(): Prisma.ProjectTaskDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.taskRelation`: Exposes CRUD operations for the **TaskRelation** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more TaskRelations
+   * const taskRelations = await prisma.taskRelation.findMany()
+   * ```
+   */
+  get taskRelation(): Prisma.TaskRelationDelegate<ExtArgs, ClientOptions>
 
   /**
    * `prisma.projectRisk`: Exposes CRUD operations for the **ProjectRisk** model.
@@ -735,6 +750,7 @@ export namespace Prisma {
     ProjectPhase: 'ProjectPhase'
     ProjectMilestone: 'ProjectMilestone'
     ProjectTask: 'ProjectTask'
+    TaskRelation: 'TaskRelation'
     ProjectRisk: 'ProjectRisk'
     ProjectMember: 'ProjectMember'
     ProjectStatusLog: 'ProjectStatusLog'
@@ -767,6 +783,7 @@ export namespace Prisma {
         | 'projectPhase'
         | 'projectMilestone'
         | 'projectTask'
+        | 'taskRelation'
         | 'projectRisk'
         | 'projectMember'
         | 'projectStatusLog'
@@ -1217,6 +1234,80 @@ export namespace Prisma {
           }
         }
       }
+      TaskRelation: {
+        payload: Prisma.$TaskRelationPayload<ExtArgs>
+        fields: Prisma.TaskRelationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskRelationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskRelationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          findFirst: {
+            args: Prisma.TaskRelationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskRelationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          findMany: {
+            args: Prisma.TaskRelationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>[]
+          }
+          create: {
+            args: Prisma.TaskRelationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          createMany: {
+            args: Prisma.TaskRelationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TaskRelationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>[]
+          }
+          delete: {
+            args: Prisma.TaskRelationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          update: {
+            args: Prisma.TaskRelationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskRelationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskRelationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TaskRelationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TaskRelationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskRelationPayload>
+          }
+          aggregate: {
+            args: Prisma.TaskRelationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTaskRelation>
+          }
+          groupBy: {
+            args: Prisma.TaskRelationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskRelationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskRelationCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskRelationCountAggregateOutputType> | number
+          }
+        }
+      }
       ProjectRisk: {
         payload: Prisma.$ProjectRiskPayload<ExtArgs>
         fields: Prisma.ProjectRiskFieldRefs
@@ -1557,6 +1648,7 @@ export namespace Prisma {
     projectPhase?: ProjectPhaseOmit
     projectMilestone?: ProjectMilestoneOmit
     projectTask?: ProjectTaskOmit
+    taskRelation?: TaskRelationOmit
     projectRisk?: ProjectRiskOmit
     projectMember?: ProjectMemberOmit
     projectStatusLog?: ProjectStatusLogOmit
@@ -1719,6 +1811,64 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ProjectStatusLogWhereInput
+  }
+
+  /**
+   * Count Type ProjectTaskCountOutputType
+   */
+
+  export type ProjectTaskCountOutputType = {
+    childTasks: number
+    taskRelationsFrom: number
+    taskRelationsTo: number
+  }
+
+  export type ProjectTaskCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    childTasks?: boolean | ProjectTaskCountOutputTypeCountChildTasksArgs
+    taskRelationsFrom?: boolean | ProjectTaskCountOutputTypeCountTaskRelationsFromArgs
+    taskRelationsTo?: boolean | ProjectTaskCountOutputTypeCountTaskRelationsToArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProjectTaskCountOutputType without action
+   */
+  export type ProjectTaskCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTaskCountOutputType
+     */
+    select?: ProjectTaskCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjectTaskCountOutputType without action
+   */
+  export type ProjectTaskCountOutputTypeCountChildTasksArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProjectTaskWhereInput
+  }
+
+  /**
+   * ProjectTaskCountOutputType without action
+   */
+  export type ProjectTaskCountOutputTypeCountTaskRelationsFromArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TaskRelationWhereInput
+  }
+
+  /**
+   * ProjectTaskCountOutputType without action
+   */
+  export type ProjectTaskCountOutputTypeCountTaskRelationsToArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TaskRelationWhereInput
   }
 
   /**
@@ -8623,17 +8773,21 @@ export namespace Prisma {
   export type ProjectTaskAvgAggregateOutputType = {
     id: number | null
     projectId: number | null
-    progress: number | null
-    level: number | null
     parentId: number | null
+    progress: number | null
+    remindCount: number | null
+    plannedWorkHours: number | null
+    actualWorkHours: number | null
   }
 
   export type ProjectTaskSumAggregateOutputType = {
     id: number | null
     projectId: number | null
-    progress: number | null
-    level: number | null
     parentId: number | null
+    progress: number | null
+    remindCount: number | null
+    plannedWorkHours: number | null
+    actualWorkHours: number | null
   }
 
   export type ProjectTaskMinAggregateOutputType = {
@@ -8642,12 +8796,33 @@ export namespace Prisma {
     code: string | null
     name: string | null
     status: string | null
-    assignee: string | null
+    assigneeId: string | null
+    assigneeName: string | null
     startDate: string | null
     dueDate: string | null
-    progress: number | null
-    level: number | null
     parentId: number | null
+    nodeLevelType: string | null
+    priority: string | null
+    progress: number | null
+    taskType: string | null
+    sourceType: string | null
+    riskLevel: string | null
+    slaStatus: string | null
+    description: string | null
+    actualStartDate: string | null
+    actualEndDate: string | null
+    blockedReason: string | null
+    remindCount: number | null
+    tags: string | null
+    workPackageId: string | null
+    slaRuleId: string | null
+    plannedWorkHours: number | null
+    actualWorkHours: number | null
+    standardSnapshotId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedBy: string | null
+    updatedAt: Date | null
   }
 
   export type ProjectTaskMaxAggregateOutputType = {
@@ -8656,12 +8831,33 @@ export namespace Prisma {
     code: string | null
     name: string | null
     status: string | null
-    assignee: string | null
+    assigneeId: string | null
+    assigneeName: string | null
     startDate: string | null
     dueDate: string | null
-    progress: number | null
-    level: number | null
     parentId: number | null
+    nodeLevelType: string | null
+    priority: string | null
+    progress: number | null
+    taskType: string | null
+    sourceType: string | null
+    riskLevel: string | null
+    slaStatus: string | null
+    description: string | null
+    actualStartDate: string | null
+    actualEndDate: string | null
+    blockedReason: string | null
+    remindCount: number | null
+    tags: string | null
+    workPackageId: string | null
+    slaRuleId: string | null
+    plannedWorkHours: number | null
+    actualWorkHours: number | null
+    standardSnapshotId: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedBy: string | null
+    updatedAt: Date | null
   }
 
   export type ProjectTaskCountAggregateOutputType = {
@@ -8670,29 +8866,54 @@ export namespace Prisma {
     code: number
     name: number
     status: number
-    assignee: number
+    assigneeId: number
+    assigneeName: number
     startDate: number
     dueDate: number
-    progress: number
-    level: number
     parentId: number
+    nodeLevelType: number
+    priority: number
+    progress: number
+    taskType: number
+    sourceType: number
+    riskLevel: number
+    slaStatus: number
+    description: number
+    actualStartDate: number
+    actualEndDate: number
+    blockedReason: number
+    remindCount: number
+    tags: number
+    workPackageId: number
+    slaRuleId: number
+    plannedWorkHours: number
+    actualWorkHours: number
+    standardSnapshotId: number
+    createdBy: number
+    createdAt: number
+    updatedBy: number
+    updatedAt: number
     _all: number
   }
 
   export type ProjectTaskAvgAggregateInputType = {
     id?: true
     projectId?: true
-    progress?: true
-    level?: true
     parentId?: true
+    progress?: true
+    remindCount?: true
+    plannedWorkHours?: true
+    actualWorkHours?: true
   }
 
   export type ProjectTaskSumAggregateInputType = {
     id?: true
     projectId?: true
-    progress?: true
-    level?: true
     parentId?: true
+    progress?: true
+    remindCount?: true
+    plannedWorkHours?: true
+    actualWorkHours?: true
   }
 
   export type ProjectTaskMinAggregateInputType = {
@@ -8701,12 +8922,33 @@ export namespace Prisma {
     code?: true
     name?: true
     status?: true
-    assignee?: true
+    assigneeId?: true
+    assigneeName?: true
     startDate?: true
     dueDate?: true
-    progress?: true
-    level?: true
     parentId?: true
+    nodeLevelType?: true
+    priority?: true
+    progress?: true
+    taskType?: true
+    sourceType?: true
+    riskLevel?: true
+    slaStatus?: true
+    description?: true
+    actualStartDate?: true
+    actualEndDate?: true
+    blockedReason?: true
+    remindCount?: true
+    tags?: true
+    workPackageId?: true
+    slaRuleId?: true
+    plannedWorkHours?: true
+    actualWorkHours?: true
+    standardSnapshotId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedBy?: true
+    updatedAt?: true
   }
 
   export type ProjectTaskMaxAggregateInputType = {
@@ -8715,12 +8957,33 @@ export namespace Prisma {
     code?: true
     name?: true
     status?: true
-    assignee?: true
+    assigneeId?: true
+    assigneeName?: true
     startDate?: true
     dueDate?: true
-    progress?: true
-    level?: true
     parentId?: true
+    nodeLevelType?: true
+    priority?: true
+    progress?: true
+    taskType?: true
+    sourceType?: true
+    riskLevel?: true
+    slaStatus?: true
+    description?: true
+    actualStartDate?: true
+    actualEndDate?: true
+    blockedReason?: true
+    remindCount?: true
+    tags?: true
+    workPackageId?: true
+    slaRuleId?: true
+    plannedWorkHours?: true
+    actualWorkHours?: true
+    standardSnapshotId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedBy?: true
+    updatedAt?: true
   }
 
   export type ProjectTaskCountAggregateInputType = {
@@ -8729,12 +8992,33 @@ export namespace Prisma {
     code?: true
     name?: true
     status?: true
-    assignee?: true
+    assigneeId?: true
+    assigneeName?: true
     startDate?: true
     dueDate?: true
-    progress?: true
-    level?: true
     parentId?: true
+    nodeLevelType?: true
+    priority?: true
+    progress?: true
+    taskType?: true
+    sourceType?: true
+    riskLevel?: true
+    slaStatus?: true
+    description?: true
+    actualStartDate?: true
+    actualEndDate?: true
+    blockedReason?: true
+    remindCount?: true
+    tags?: true
+    workPackageId?: true
+    slaRuleId?: true
+    plannedWorkHours?: true
+    actualWorkHours?: true
+    standardSnapshotId?: true
+    createdBy?: true
+    createdAt?: true
+    updatedBy?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -8831,12 +9115,33 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee: string | null
+    assigneeId: string | null
+    assigneeName: string | null
     startDate: string | null
     dueDate: string | null
-    progress: number
-    level: number
     parentId: number | null
+    nodeLevelType: string | null
+    priority: string
+    progress: number
+    taskType: string | null
+    sourceType: string | null
+    riskLevel: string | null
+    slaStatus: string | null
+    description: string | null
+    actualStartDate: string | null
+    actualEndDate: string | null
+    blockedReason: string | null
+    remindCount: number
+    tags: string | null
+    workPackageId: string | null
+    slaRuleId: string | null
+    plannedWorkHours: number | null
+    actualWorkHours: number | null
+    standardSnapshotId: string | null
+    createdBy: string
+    createdAt: Date
+    updatedBy: string | null
+    updatedAt: Date
     _count: ProjectTaskCountAggregateOutputType | null
     _avg: ProjectTaskAvgAggregateOutputType | null
     _sum: ProjectTaskSumAggregateOutputType | null
@@ -8865,13 +9170,39 @@ export namespace Prisma {
       code?: boolean
       name?: boolean
       status?: boolean
-      assignee?: boolean
+      assigneeId?: boolean
+      assigneeName?: boolean
       startDate?: boolean
       dueDate?: boolean
-      progress?: boolean
-      level?: boolean
       parentId?: boolean
+      nodeLevelType?: boolean
+      priority?: boolean
+      progress?: boolean
+      taskType?: boolean
+      sourceType?: boolean
+      riskLevel?: boolean
+      slaStatus?: boolean
+      description?: boolean
+      actualStartDate?: boolean
+      actualEndDate?: boolean
+      blockedReason?: boolean
+      remindCount?: boolean
+      tags?: boolean
+      workPackageId?: boolean
+      slaRuleId?: boolean
+      plannedWorkHours?: boolean
+      actualWorkHours?: boolean
+      standardSnapshotId?: boolean
+      createdBy?: boolean
+      createdAt?: boolean
+      updatedBy?: boolean
+      updatedAt?: boolean
       project?: boolean | ProjectDefaultArgs<ExtArgs>
+      parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
+      childTasks?: boolean | ProjectTask$childTasksArgs<ExtArgs>
+      taskRelationsFrom?: boolean | ProjectTask$taskRelationsFromArgs<ExtArgs>
+      taskRelationsTo?: boolean | ProjectTask$taskRelationsToArgs<ExtArgs>
+      _count?: boolean | ProjectTaskCountOutputTypeDefaultArgs<ExtArgs>
     },
     ExtArgs['result']['projectTask']
   >
@@ -8885,13 +9216,35 @@ export namespace Prisma {
       code?: boolean
       name?: boolean
       status?: boolean
-      assignee?: boolean
+      assigneeId?: boolean
+      assigneeName?: boolean
       startDate?: boolean
       dueDate?: boolean
-      progress?: boolean
-      level?: boolean
       parentId?: boolean
+      nodeLevelType?: boolean
+      priority?: boolean
+      progress?: boolean
+      taskType?: boolean
+      sourceType?: boolean
+      riskLevel?: boolean
+      slaStatus?: boolean
+      description?: boolean
+      actualStartDate?: boolean
+      actualEndDate?: boolean
+      blockedReason?: boolean
+      remindCount?: boolean
+      tags?: boolean
+      workPackageId?: boolean
+      slaRuleId?: boolean
+      plannedWorkHours?: boolean
+      actualWorkHours?: boolean
+      standardSnapshotId?: boolean
+      createdBy?: boolean
+      createdAt?: boolean
+      updatedBy?: boolean
+      updatedAt?: boolean
       project?: boolean | ProjectDefaultArgs<ExtArgs>
+      parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
     },
     ExtArgs['result']['projectTask']
   >
@@ -8905,13 +9258,35 @@ export namespace Prisma {
       code?: boolean
       name?: boolean
       status?: boolean
-      assignee?: boolean
+      assigneeId?: boolean
+      assigneeName?: boolean
       startDate?: boolean
       dueDate?: boolean
-      progress?: boolean
-      level?: boolean
       parentId?: boolean
+      nodeLevelType?: boolean
+      priority?: boolean
+      progress?: boolean
+      taskType?: boolean
+      sourceType?: boolean
+      riskLevel?: boolean
+      slaStatus?: boolean
+      description?: boolean
+      actualStartDate?: boolean
+      actualEndDate?: boolean
+      blockedReason?: boolean
+      remindCount?: boolean
+      tags?: boolean
+      workPackageId?: boolean
+      slaRuleId?: boolean
+      plannedWorkHours?: boolean
+      actualWorkHours?: boolean
+      standardSnapshotId?: boolean
+      createdBy?: boolean
+      createdAt?: boolean
+      updatedBy?: boolean
+      updatedAt?: boolean
       project?: boolean | ProjectDefaultArgs<ExtArgs>
+      parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
     },
     ExtArgs['result']['projectTask']
   >
@@ -8922,12 +9297,33 @@ export namespace Prisma {
     code?: boolean
     name?: boolean
     status?: boolean
-    assignee?: boolean
+    assigneeId?: boolean
+    assigneeName?: boolean
     startDate?: boolean
     dueDate?: boolean
-    progress?: boolean
-    level?: boolean
     parentId?: boolean
+    nodeLevelType?: boolean
+    priority?: boolean
+    progress?: boolean
+    taskType?: boolean
+    sourceType?: boolean
+    riskLevel?: boolean
+    slaStatus?: boolean
+    description?: boolean
+    actualStartDate?: boolean
+    actualEndDate?: boolean
+    blockedReason?: boolean
+    remindCount?: boolean
+    tags?: boolean
+    workPackageId?: boolean
+    slaRuleId?: boolean
+    plannedWorkHours?: boolean
+    actualWorkHours?: boolean
+    standardSnapshotId?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
   }
 
   export type ProjectTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
@@ -8937,28 +9333,56 @@ export namespace Prisma {
       | 'code'
       | 'name'
       | 'status'
-      | 'assignee'
+      | 'assigneeId'
+      | 'assigneeName'
       | 'startDate'
       | 'dueDate'
+      | 'parentId'
+      | 'nodeLevelType'
+      | 'priority'
       | 'progress'
-      | 'level'
-      | 'parentId',
+      | 'taskType'
+      | 'sourceType'
+      | 'riskLevel'
+      | 'slaStatus'
+      | 'description'
+      | 'actualStartDate'
+      | 'actualEndDate'
+      | 'blockedReason'
+      | 'remindCount'
+      | 'tags'
+      | 'workPackageId'
+      | 'slaRuleId'
+      | 'plannedWorkHours'
+      | 'actualWorkHours'
+      | 'standardSnapshotId'
+      | 'createdBy'
+      | 'createdAt'
+      | 'updatedBy'
+      | 'updatedAt',
       ExtArgs['result']['projectTask']
     >
   export type ProjectTaskInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
+    childTasks?: boolean | ProjectTask$childTasksArgs<ExtArgs>
+    taskRelationsFrom?: boolean | ProjectTask$taskRelationsFromArgs<ExtArgs>
+    taskRelationsTo?: boolean | ProjectTask$taskRelationsToArgs<ExtArgs>
+    _count?: boolean | ProjectTaskCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectTaskIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
   }
   export type ProjectTaskIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    parentTask?: boolean | ProjectTask$parentTaskArgs<ExtArgs>
   }
 
   export type $ProjectTaskPayload<
@@ -8967,6 +9391,10 @@ export namespace Prisma {
     name: 'ProjectTask'
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
+      parentTask: Prisma.$ProjectTaskPayload<ExtArgs> | null
+      childTasks: Prisma.$ProjectTaskPayload<ExtArgs>[]
+      taskRelationsFrom: Prisma.$TaskRelationPayload<ExtArgs>[]
+      taskRelationsTo: Prisma.$TaskRelationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<
       {
@@ -8975,12 +9403,33 @@ export namespace Prisma {
         code: string
         name: string
         status: string
-        assignee: string | null
+        assigneeId: string | null
+        assigneeName: string | null
         startDate: string | null
         dueDate: string | null
-        progress: number
-        level: number
         parentId: number | null
+        nodeLevelType: string | null
+        priority: string
+        progress: number
+        taskType: string | null
+        sourceType: string | null
+        riskLevel: string | null
+        slaStatus: string | null
+        description: string | null
+        actualStartDate: string | null
+        actualEndDate: string | null
+        blockedReason: string | null
+        remindCount: number
+        tags: string | null
+        workPackageId: string | null
+        slaRuleId: string | null
+        plannedWorkHours: number | null
+        actualWorkHours: number | null
+        standardSnapshotId: string | null
+        createdBy: string
+        createdAt: Date
+        updatedBy: string | null
+        updatedAt: Date
       },
       ExtArgs['result']['projectTask']
     >
@@ -9502,6 +9951,37 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >
+    parentTask<T extends ProjectTask$parentTaskArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTask$parentTaskArgs<ExtArgs>>
+    ): Prisma__ProjectTaskClient<
+      $Result.GetResult<
+        Prisma.$ProjectTaskPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    childTasks<T extends ProjectTask$childTasksArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTask$childTasksArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$ProjectTaskPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+      | Null
+    >
+    taskRelationsFrom<T extends ProjectTask$taskRelationsFromArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTask$taskRelationsFromArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+      | Null
+    >
+    taskRelationsTo<T extends ProjectTask$taskRelationsToArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTask$taskRelationsToArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+      | Null
+    >
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9538,12 +10018,33 @@ export namespace Prisma {
     readonly code: FieldRef<'ProjectTask', 'String'>
     readonly name: FieldRef<'ProjectTask', 'String'>
     readonly status: FieldRef<'ProjectTask', 'String'>
-    readonly assignee: FieldRef<'ProjectTask', 'String'>
+    readonly assigneeId: FieldRef<'ProjectTask', 'String'>
+    readonly assigneeName: FieldRef<'ProjectTask', 'String'>
     readonly startDate: FieldRef<'ProjectTask', 'String'>
     readonly dueDate: FieldRef<'ProjectTask', 'String'>
-    readonly progress: FieldRef<'ProjectTask', 'Int'>
-    readonly level: FieldRef<'ProjectTask', 'Int'>
     readonly parentId: FieldRef<'ProjectTask', 'Int'>
+    readonly nodeLevelType: FieldRef<'ProjectTask', 'String'>
+    readonly priority: FieldRef<'ProjectTask', 'String'>
+    readonly progress: FieldRef<'ProjectTask', 'Int'>
+    readonly taskType: FieldRef<'ProjectTask', 'String'>
+    readonly sourceType: FieldRef<'ProjectTask', 'String'>
+    readonly riskLevel: FieldRef<'ProjectTask', 'String'>
+    readonly slaStatus: FieldRef<'ProjectTask', 'String'>
+    readonly description: FieldRef<'ProjectTask', 'String'>
+    readonly actualStartDate: FieldRef<'ProjectTask', 'String'>
+    readonly actualEndDate: FieldRef<'ProjectTask', 'String'>
+    readonly blockedReason: FieldRef<'ProjectTask', 'String'>
+    readonly remindCount: FieldRef<'ProjectTask', 'Int'>
+    readonly tags: FieldRef<'ProjectTask', 'String'>
+    readonly workPackageId: FieldRef<'ProjectTask', 'String'>
+    readonly slaRuleId: FieldRef<'ProjectTask', 'String'>
+    readonly plannedWorkHours: FieldRef<'ProjectTask', 'Int'>
+    readonly actualWorkHours: FieldRef<'ProjectTask', 'Int'>
+    readonly standardSnapshotId: FieldRef<'ProjectTask', 'String'>
+    readonly createdBy: FieldRef<'ProjectTask', 'String'>
+    readonly createdAt: FieldRef<'ProjectTask', 'DateTime'>
+    readonly updatedBy: FieldRef<'ProjectTask', 'String'>
+    readonly updatedAt: FieldRef<'ProjectTask', 'DateTime'>
   }
 
   // Custom InputTypes
@@ -9970,6 +10471,105 @@ export namespace Prisma {
   }
 
   /**
+   * ProjectTask.parentTask
+   */
+  export type ProjectTask$parentTaskArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTask
+     */
+    select?: ProjectTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTask
+     */
+    omit?: ProjectTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectTaskInclude<ExtArgs> | null
+    where?: ProjectTaskWhereInput
+  }
+
+  /**
+   * ProjectTask.childTasks
+   */
+  export type ProjectTask$childTasksArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTask
+     */
+    select?: ProjectTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTask
+     */
+    omit?: ProjectTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectTaskInclude<ExtArgs> | null
+    where?: ProjectTaskWhereInput
+    orderBy?: ProjectTaskOrderByWithRelationInput | ProjectTaskOrderByWithRelationInput[]
+    cursor?: ProjectTaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectTaskScalarFieldEnum | ProjectTaskScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTask.taskRelationsFrom
+   */
+  export type ProjectTask$taskRelationsFromArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    where?: TaskRelationWhereInput
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    cursor?: TaskRelationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskRelationScalarFieldEnum | TaskRelationScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTask.taskRelationsTo
+   */
+  export type ProjectTask$taskRelationsToArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    where?: TaskRelationWhereInput
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    cursor?: TaskRelationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskRelationScalarFieldEnum | TaskRelationScalarFieldEnum[]
+  }
+
+  /**
    * ProjectTask without action
    */
   export type ProjectTaskDefaultArgs<
@@ -9987,6 +10587,1299 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectTaskInclude<ExtArgs> | null
+  }
+
+  /**
+   * Model TaskRelation
+   */
+
+  export type AggregateTaskRelation = {
+    _count: TaskRelationCountAggregateOutputType | null
+    _avg: TaskRelationAvgAggregateOutputType | null
+    _sum: TaskRelationSumAggregateOutputType | null
+    _min: TaskRelationMinAggregateOutputType | null
+    _max: TaskRelationMaxAggregateOutputType | null
+  }
+
+  export type TaskRelationAvgAggregateOutputType = {
+    id: number | null
+    fromTaskId: number | null
+    toTaskId: number | null
+  }
+
+  export type TaskRelationSumAggregateOutputType = {
+    id: number | null
+    fromTaskId: number | null
+    toTaskId: number | null
+  }
+
+  export type TaskRelationMinAggregateOutputType = {
+    id: number | null
+    fromTaskId: number | null
+    toTaskId: number | null
+    relationType: string | null
+  }
+
+  export type TaskRelationMaxAggregateOutputType = {
+    id: number | null
+    fromTaskId: number | null
+    toTaskId: number | null
+    relationType: string | null
+  }
+
+  export type TaskRelationCountAggregateOutputType = {
+    id: number
+    fromTaskId: number
+    toTaskId: number
+    relationType: number
+    _all: number
+  }
+
+  export type TaskRelationAvgAggregateInputType = {
+    id?: true
+    fromTaskId?: true
+    toTaskId?: true
+  }
+
+  export type TaskRelationSumAggregateInputType = {
+    id?: true
+    fromTaskId?: true
+    toTaskId?: true
+  }
+
+  export type TaskRelationMinAggregateInputType = {
+    id?: true
+    fromTaskId?: true
+    toTaskId?: true
+    relationType?: true
+  }
+
+  export type TaskRelationMaxAggregateInputType = {
+    id?: true
+    fromTaskId?: true
+    toTaskId?: true
+    relationType?: true
+  }
+
+  export type TaskRelationCountAggregateInputType = {
+    id?: true
+    fromTaskId?: true
+    toTaskId?: true
+    relationType?: true
+    _all?: true
+  }
+
+  export type TaskRelationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TaskRelation to aggregate.
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskRelations to fetch.
+     */
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: TaskRelationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskRelations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskRelations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned TaskRelations
+     **/
+    _count?: true | TaskRelationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: TaskRelationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: TaskRelationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: TaskRelationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: TaskRelationMaxAggregateInputType
+  }
+
+  export type GetTaskRelationAggregateType<T extends TaskRelationAggregateArgs> = {
+    [P in keyof T & keyof AggregateTaskRelation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTaskRelation[P]>
+      : GetScalarType<T[P], AggregateTaskRelation[P]>
+  }
+
+  export type TaskRelationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TaskRelationWhereInput
+    orderBy?: TaskRelationOrderByWithAggregationInput | TaskRelationOrderByWithAggregationInput[]
+    by: TaskRelationScalarFieldEnum[] | TaskRelationScalarFieldEnum
+    having?: TaskRelationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskRelationCountAggregateInputType | true
+    _avg?: TaskRelationAvgAggregateInputType
+    _sum?: TaskRelationSumAggregateInputType
+    _min?: TaskRelationMinAggregateInputType
+    _max?: TaskRelationMaxAggregateInputType
+  }
+
+  export type TaskRelationGroupByOutputType = {
+    id: number
+    fromTaskId: number
+    toTaskId: number
+    relationType: string
+    _count: TaskRelationCountAggregateOutputType | null
+    _avg: TaskRelationAvgAggregateOutputType | null
+    _sum: TaskRelationSumAggregateOutputType | null
+    _min: TaskRelationMinAggregateOutputType | null
+    _max: TaskRelationMaxAggregateOutputType | null
+  }
+
+  type GetTaskRelationGroupByPayload<T extends TaskRelationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskRelationGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof TaskRelationGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], TaskRelationGroupByOutputType[P]>
+          : GetScalarType<T[P], TaskRelationGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type TaskRelationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      fromTaskId?: boolean
+      toTaskId?: boolean
+      relationType?: boolean
+      fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+      toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    },
+    ExtArgs['result']['taskRelation']
+  >
+
+  export type TaskRelationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      fromTaskId?: boolean
+      toTaskId?: boolean
+      relationType?: boolean
+      fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+      toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    },
+    ExtArgs['result']['taskRelation']
+  >
+
+  export type TaskRelationSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      fromTaskId?: boolean
+      toTaskId?: boolean
+      relationType?: boolean
+      fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+      toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    },
+    ExtArgs['result']['taskRelation']
+  >
+
+  export type TaskRelationSelectScalar = {
+    id?: boolean
+    fromTaskId?: boolean
+    toTaskId?: boolean
+    relationType?: boolean
+  }
+
+  export type TaskRelationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      'id' | 'fromTaskId' | 'toTaskId' | 'relationType',
+      ExtArgs['result']['taskRelation']
+    >
+  export type TaskRelationInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+  }
+  export type TaskRelationIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+  }
+  export type TaskRelationIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    fromTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+    toTask?: boolean | ProjectTaskDefaultArgs<ExtArgs>
+  }
+
+  export type $TaskRelationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'TaskRelation'
+    objects: {
+      fromTask: Prisma.$ProjectTaskPayload<ExtArgs>
+      toTask: Prisma.$ProjectTaskPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number
+        fromTaskId: number
+        toTaskId: number
+        relationType: string
+      },
+      ExtArgs['result']['taskRelation']
+    >
+    composites: {}
+  }
+
+  type TaskRelationGetPayload<S extends boolean | null | undefined | TaskRelationDefaultArgs> =
+    $Result.GetResult<Prisma.$TaskRelationPayload, S>
+
+  type TaskRelationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TaskRelationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TaskRelationCountAggregateInputType | true
+    }
+
+  export interface TaskRelationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['TaskRelation']
+      meta: { name: 'TaskRelation' }
+    }
+    /**
+     * Find zero or one TaskRelation that matches the filter.
+     * @param {TaskRelationFindUniqueArgs} args - Arguments to find a TaskRelation
+     * @example
+     * // Get one TaskRelation
+     * const taskRelation = await prisma.taskRelation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskRelationFindUniqueArgs>(
+      args: SelectSubset<T, TaskRelationFindUniqueArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one TaskRelation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TaskRelationFindUniqueOrThrowArgs} args - Arguments to find a TaskRelation
+     * @example
+     * // Get one TaskRelation
+     * const taskRelation = await prisma.taskRelation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskRelationFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, TaskRelationFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TaskRelation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationFindFirstArgs} args - Arguments to find a TaskRelation
+     * @example
+     * // Get one TaskRelation
+     * const taskRelation = await prisma.taskRelation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskRelationFindFirstArgs>(
+      args?: SelectSubset<T, TaskRelationFindFirstArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TaskRelation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationFindFirstOrThrowArgs} args - Arguments to find a TaskRelation
+     * @example
+     * // Get one TaskRelation
+     * const taskRelation = await prisma.taskRelation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskRelationFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, TaskRelationFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more TaskRelations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TaskRelations
+     * const taskRelations = await prisma.taskRelation.findMany()
+     *
+     * // Get first 10 TaskRelations
+     * const taskRelations = await prisma.taskRelation.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const taskRelationWithIdOnly = await prisma.taskRelation.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends TaskRelationFindManyArgs>(
+      args?: SelectSubset<T, TaskRelationFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >
+
+    /**
+     * Create a TaskRelation.
+     * @param {TaskRelationCreateArgs} args - Arguments to create a TaskRelation.
+     * @example
+     * // Create one TaskRelation
+     * const TaskRelation = await prisma.taskRelation.create({
+     *   data: {
+     *     // ... data to create a TaskRelation
+     *   }
+     * })
+     *
+     */
+    create<T extends TaskRelationCreateArgs>(
+      args: SelectSubset<T, TaskRelationCreateArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many TaskRelations.
+     * @param {TaskRelationCreateManyArgs} args - Arguments to create many TaskRelations.
+     * @example
+     * // Create many TaskRelations
+     * const taskRelation = await prisma.taskRelation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends TaskRelationCreateManyArgs>(
+      args?: SelectSubset<T, TaskRelationCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TaskRelations and returns the data saved in the database.
+     * @param {TaskRelationCreateManyAndReturnArgs} args - Arguments to create many TaskRelations.
+     * @example
+     * // Create many TaskRelations
+     * const taskRelation = await prisma.taskRelation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many TaskRelations and only return the `id`
+     * const taskRelationWithIdOnly = await prisma.taskRelation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends TaskRelationCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, TaskRelationCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a TaskRelation.
+     * @param {TaskRelationDeleteArgs} args - Arguments to delete one TaskRelation.
+     * @example
+     * // Delete one TaskRelation
+     * const TaskRelation = await prisma.taskRelation.delete({
+     *   where: {
+     *     // ... filter to delete one TaskRelation
+     *   }
+     * })
+     *
+     */
+    delete<T extends TaskRelationDeleteArgs>(
+      args: SelectSubset<T, TaskRelationDeleteArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one TaskRelation.
+     * @param {TaskRelationUpdateArgs} args - Arguments to update one TaskRelation.
+     * @example
+     * // Update one TaskRelation
+     * const taskRelation = await prisma.taskRelation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends TaskRelationUpdateArgs>(
+      args: SelectSubset<T, TaskRelationUpdateArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more TaskRelations.
+     * @param {TaskRelationDeleteManyArgs} args - Arguments to filter TaskRelations to delete.
+     * @example
+     * // Delete a few TaskRelations
+     * const { count } = await prisma.taskRelation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends TaskRelationDeleteManyArgs>(
+      args?: SelectSubset<T, TaskRelationDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TaskRelations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TaskRelations
+     * const taskRelation = await prisma.taskRelation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends TaskRelationUpdateManyArgs>(
+      args: SelectSubset<T, TaskRelationUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TaskRelations and returns the data updated in the database.
+     * @param {TaskRelationUpdateManyAndReturnArgs} args - Arguments to update many TaskRelations.
+     * @example
+     * // Update many TaskRelations
+     * const taskRelation = await prisma.taskRelation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more TaskRelations and only return the `id`
+     * const taskRelationWithIdOnly = await prisma.taskRelation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends TaskRelationUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, TaskRelationUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TaskRelationPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one TaskRelation.
+     * @param {TaskRelationUpsertArgs} args - Arguments to update or create a TaskRelation.
+     * @example
+     * // Update or create a TaskRelation
+     * const taskRelation = await prisma.taskRelation.upsert({
+     *   create: {
+     *     // ... data to create a TaskRelation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TaskRelation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskRelationUpsertArgs>(
+      args: SelectSubset<T, TaskRelationUpsertArgs<ExtArgs>>
+    ): Prisma__TaskRelationClient<
+      $Result.GetResult<Prisma.$TaskRelationPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of TaskRelations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationCountArgs} args - Arguments to filter TaskRelations to count.
+     * @example
+     * // Count the number of TaskRelations
+     * const count = await prisma.taskRelation.count({
+     *   where: {
+     *     // ... the filter for the TaskRelations we want to count
+     *   }
+     * })
+     **/
+    count<T extends TaskRelationCountArgs>(
+      args?: Subset<T, TaskRelationCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskRelationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TaskRelation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends TaskRelationAggregateArgs>(
+      args: Subset<T, TaskRelationAggregateArgs>
+    ): Prisma.PrismaPromise<GetTaskRelationAggregateType<T>>
+
+    /**
+     * Group by TaskRelation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskRelationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends TaskRelationGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskRelationGroupByArgs['orderBy'] }
+        : { orderBy?: TaskRelationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, TaskRelationGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors ? GetTaskRelationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the TaskRelation model
+     */
+    readonly fields: TaskRelationFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TaskRelation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskRelationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    fromTask<T extends ProjectTaskDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTaskDefaultArgs<ExtArgs>>
+    ): Prisma__ProjectTaskClient<
+      | $Result.GetResult<
+          Prisma.$ProjectTaskPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    toTask<T extends ProjectTaskDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProjectTaskDefaultArgs<ExtArgs>>
+    ): Prisma__ProjectTaskClient<
+      | $Result.GetResult<
+          Prisma.$ProjectTaskPayload<ExtArgs>,
+          T,
+          'findUniqueOrThrow',
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the TaskRelation model
+   */
+  interface TaskRelationFieldRefs {
+    readonly id: FieldRef<'TaskRelation', 'Int'>
+    readonly fromTaskId: FieldRef<'TaskRelation', 'Int'>
+    readonly toTaskId: FieldRef<'TaskRelation', 'Int'>
+    readonly relationType: FieldRef<'TaskRelation', 'String'>
+  }
+
+  // Custom InputTypes
+  /**
+   * TaskRelation findUnique
+   */
+  export type TaskRelationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskRelation to fetch.
+     */
+    where: TaskRelationWhereUniqueInput
+  }
+
+  /**
+   * TaskRelation findUniqueOrThrow
+   */
+  export type TaskRelationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskRelation to fetch.
+     */
+    where: TaskRelationWhereUniqueInput
+  }
+
+  /**
+   * TaskRelation findFirst
+   */
+  export type TaskRelationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskRelation to fetch.
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskRelations to fetch.
+     */
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TaskRelations.
+     */
+    cursor?: TaskRelationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskRelations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskRelations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskRelations.
+     */
+    distinct?: TaskRelationScalarFieldEnum | TaskRelationScalarFieldEnum[]
+  }
+
+  /**
+   * TaskRelation findFirstOrThrow
+   */
+  export type TaskRelationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskRelation to fetch.
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskRelations to fetch.
+     */
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TaskRelations.
+     */
+    cursor?: TaskRelationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskRelations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskRelations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskRelations.
+     */
+    distinct?: TaskRelationScalarFieldEnum | TaskRelationScalarFieldEnum[]
+  }
+
+  /**
+   * TaskRelation findMany
+   */
+  export type TaskRelationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskRelations to fetch.
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskRelations to fetch.
+     */
+    orderBy?: TaskRelationOrderByWithRelationInput | TaskRelationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing TaskRelations.
+     */
+    cursor?: TaskRelationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskRelations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskRelations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskRelations.
+     */
+    distinct?: TaskRelationScalarFieldEnum | TaskRelationScalarFieldEnum[]
+  }
+
+  /**
+   * TaskRelation create
+   */
+  export type TaskRelationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TaskRelation.
+     */
+    data: XOR<TaskRelationCreateInput, TaskRelationUncheckedCreateInput>
+  }
+
+  /**
+   * TaskRelation createMany
+   */
+  export type TaskRelationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many TaskRelations.
+     */
+    data: TaskRelationCreateManyInput | TaskRelationCreateManyInput[]
+  }
+
+  /**
+   * TaskRelation createManyAndReturn
+   */
+  export type TaskRelationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TaskRelations.
+     */
+    data: TaskRelationCreateManyInput | TaskRelationCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TaskRelation update
+   */
+  export type TaskRelationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TaskRelation.
+     */
+    data: XOR<TaskRelationUpdateInput, TaskRelationUncheckedUpdateInput>
+    /**
+     * Choose, which TaskRelation to update.
+     */
+    where: TaskRelationWhereUniqueInput
+  }
+
+  /**
+   * TaskRelation updateMany
+   */
+  export type TaskRelationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update TaskRelations.
+     */
+    data: XOR<TaskRelationUpdateManyMutationInput, TaskRelationUncheckedUpdateManyInput>
+    /**
+     * Filter which TaskRelations to update
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * Limit how many TaskRelations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TaskRelation updateManyAndReturn
+   */
+  export type TaskRelationUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * The data used to update TaskRelations.
+     */
+    data: XOR<TaskRelationUpdateManyMutationInput, TaskRelationUncheckedUpdateManyInput>
+    /**
+     * Filter which TaskRelations to update
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * Limit how many TaskRelations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TaskRelation upsert
+   */
+  export type TaskRelationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TaskRelation to update in case it exists.
+     */
+    where: TaskRelationWhereUniqueInput
+    /**
+     * In case the TaskRelation found by the `where` argument doesn't exist, create a new TaskRelation with this data.
+     */
+    create: XOR<TaskRelationCreateInput, TaskRelationUncheckedCreateInput>
+    /**
+     * In case the TaskRelation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskRelationUpdateInput, TaskRelationUncheckedUpdateInput>
+  }
+
+  /**
+   * TaskRelation delete
+   */
+  export type TaskRelationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
+    /**
+     * Filter which TaskRelation to delete.
+     */
+    where: TaskRelationWhereUniqueInput
+  }
+
+  /**
+   * TaskRelation deleteMany
+   */
+  export type TaskRelationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TaskRelations to delete
+     */
+    where?: TaskRelationWhereInput
+    /**
+     * Limit how many TaskRelations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TaskRelation without action
+   */
+  export type TaskRelationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskRelation
+     */
+    select?: TaskRelationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskRelation
+     */
+    omit?: TaskRelationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskRelationInclude<ExtArgs> | null
   }
 
   /**
@@ -14134,16 +16027,47 @@ export namespace Prisma {
     code: 'code'
     name: 'name'
     status: 'status'
-    assignee: 'assignee'
+    assigneeId: 'assigneeId'
+    assigneeName: 'assigneeName'
     startDate: 'startDate'
     dueDate: 'dueDate'
-    progress: 'progress'
-    level: 'level'
     parentId: 'parentId'
+    nodeLevelType: 'nodeLevelType'
+    priority: 'priority'
+    progress: 'progress'
+    taskType: 'taskType'
+    sourceType: 'sourceType'
+    riskLevel: 'riskLevel'
+    slaStatus: 'slaStatus'
+    description: 'description'
+    actualStartDate: 'actualStartDate'
+    actualEndDate: 'actualEndDate'
+    blockedReason: 'blockedReason'
+    remindCount: 'remindCount'
+    tags: 'tags'
+    workPackageId: 'workPackageId'
+    slaRuleId: 'slaRuleId'
+    plannedWorkHours: 'plannedWorkHours'
+    actualWorkHours: 'actualWorkHours'
+    standardSnapshotId: 'standardSnapshotId'
+    createdBy: 'createdBy'
+    createdAt: 'createdAt'
+    updatedBy: 'updatedBy'
+    updatedAt: 'updatedAt'
   }
 
   export type ProjectTaskScalarFieldEnum =
     (typeof ProjectTaskScalarFieldEnum)[keyof typeof ProjectTaskScalarFieldEnum]
+
+  export const TaskRelationScalarFieldEnum: {
+    id: 'id'
+    fromTaskId: 'fromTaskId'
+    toTaskId: 'toTaskId'
+    relationType: 'relationType'
+  }
+
+  export type TaskRelationScalarFieldEnum =
+    (typeof TaskRelationScalarFieldEnum)[keyof typeof TaskRelationScalarFieldEnum]
 
   export const ProjectRiskScalarFieldEnum: {
     id: 'id'
@@ -14724,13 +16648,38 @@ export namespace Prisma {
     code?: StringFilter<'ProjectTask'> | string
     name?: StringFilter<'ProjectTask'> | string
     status?: StringFilter<'ProjectTask'> | string
-    assignee?: StringNullableFilter<'ProjectTask'> | string | null
+    assigneeId?: StringNullableFilter<'ProjectTask'> | string | null
+    assigneeName?: StringNullableFilter<'ProjectTask'> | string | null
     startDate?: StringNullableFilter<'ProjectTask'> | string | null
     dueDate?: StringNullableFilter<'ProjectTask'> | string | null
-    progress?: IntFilter<'ProjectTask'> | number
-    level?: IntFilter<'ProjectTask'> | number
     parentId?: IntNullableFilter<'ProjectTask'> | number | null
+    nodeLevelType?: StringNullableFilter<'ProjectTask'> | string | null
+    priority?: StringFilter<'ProjectTask'> | string
+    progress?: IntFilter<'ProjectTask'> | number
+    taskType?: StringNullableFilter<'ProjectTask'> | string | null
+    sourceType?: StringNullableFilter<'ProjectTask'> | string | null
+    riskLevel?: StringNullableFilter<'ProjectTask'> | string | null
+    slaStatus?: StringNullableFilter<'ProjectTask'> | string | null
+    description?: StringNullableFilter<'ProjectTask'> | string | null
+    actualStartDate?: StringNullableFilter<'ProjectTask'> | string | null
+    actualEndDate?: StringNullableFilter<'ProjectTask'> | string | null
+    blockedReason?: StringNullableFilter<'ProjectTask'> | string | null
+    remindCount?: IntFilter<'ProjectTask'> | number
+    tags?: StringNullableFilter<'ProjectTask'> | string | null
+    workPackageId?: StringNullableFilter<'ProjectTask'> | string | null
+    slaRuleId?: StringNullableFilter<'ProjectTask'> | string | null
+    plannedWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+    actualWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+    standardSnapshotId?: StringNullableFilter<'ProjectTask'> | string | null
+    createdBy?: StringFilter<'ProjectTask'> | string
+    createdAt?: DateTimeFilter<'ProjectTask'> | Date | string
+    updatedBy?: StringNullableFilter<'ProjectTask'> | string | null
+    updatedAt?: DateTimeFilter<'ProjectTask'> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    parentTask?: XOR<ProjectTaskNullableScalarRelationFilter, ProjectTaskWhereInput> | null
+    childTasks?: ProjectTaskListRelationFilter
+    taskRelationsFrom?: TaskRelationListRelationFilter
+    taskRelationsTo?: TaskRelationListRelationFilter
   }
 
   export type ProjectTaskOrderByWithRelationInput = {
@@ -14739,34 +16688,84 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     status?: SortOrder
-    assignee?: SortOrderInput | SortOrder
+    assigneeId?: SortOrderInput | SortOrder
+    assigneeName?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrderInput | SortOrder
+    nodeLevelType?: SortOrderInput | SortOrder
+    priority?: SortOrder
+    progress?: SortOrder
+    taskType?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
+    riskLevel?: SortOrderInput | SortOrder
+    slaStatus?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    actualStartDate?: SortOrderInput | SortOrder
+    actualEndDate?: SortOrderInput | SortOrder
+    blockedReason?: SortOrderInput | SortOrder
+    remindCount?: SortOrder
+    tags?: SortOrderInput | SortOrder
+    workPackageId?: SortOrderInput | SortOrder
+    slaRuleId?: SortOrderInput | SortOrder
+    plannedWorkHours?: SortOrderInput | SortOrder
+    actualWorkHours?: SortOrderInput | SortOrder
+    standardSnapshotId?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
+    parentTask?: ProjectTaskOrderByWithRelationInput
+    childTasks?: ProjectTaskOrderByRelationAggregateInput
+    taskRelationsFrom?: TaskRelationOrderByRelationAggregateInput
+    taskRelationsTo?: TaskRelationOrderByRelationAggregateInput
   }
 
   export type ProjectTaskWhereUniqueInput = Prisma.AtLeast<
     {
       id?: number
+      code?: string
       AND?: ProjectTaskWhereInput | ProjectTaskWhereInput[]
       OR?: ProjectTaskWhereInput[]
       NOT?: ProjectTaskWhereInput | ProjectTaskWhereInput[]
       projectId?: IntFilter<'ProjectTask'> | number
-      code?: StringFilter<'ProjectTask'> | string
       name?: StringFilter<'ProjectTask'> | string
       status?: StringFilter<'ProjectTask'> | string
-      assignee?: StringNullableFilter<'ProjectTask'> | string | null
+      assigneeId?: StringNullableFilter<'ProjectTask'> | string | null
+      assigneeName?: StringNullableFilter<'ProjectTask'> | string | null
       startDate?: StringNullableFilter<'ProjectTask'> | string | null
       dueDate?: StringNullableFilter<'ProjectTask'> | string | null
-      progress?: IntFilter<'ProjectTask'> | number
-      level?: IntFilter<'ProjectTask'> | number
       parentId?: IntNullableFilter<'ProjectTask'> | number | null
+      nodeLevelType?: StringNullableFilter<'ProjectTask'> | string | null
+      priority?: StringFilter<'ProjectTask'> | string
+      progress?: IntFilter<'ProjectTask'> | number
+      taskType?: StringNullableFilter<'ProjectTask'> | string | null
+      sourceType?: StringNullableFilter<'ProjectTask'> | string | null
+      riskLevel?: StringNullableFilter<'ProjectTask'> | string | null
+      slaStatus?: StringNullableFilter<'ProjectTask'> | string | null
+      description?: StringNullableFilter<'ProjectTask'> | string | null
+      actualStartDate?: StringNullableFilter<'ProjectTask'> | string | null
+      actualEndDate?: StringNullableFilter<'ProjectTask'> | string | null
+      blockedReason?: StringNullableFilter<'ProjectTask'> | string | null
+      remindCount?: IntFilter<'ProjectTask'> | number
+      tags?: StringNullableFilter<'ProjectTask'> | string | null
+      workPackageId?: StringNullableFilter<'ProjectTask'> | string | null
+      slaRuleId?: StringNullableFilter<'ProjectTask'> | string | null
+      plannedWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+      actualWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+      standardSnapshotId?: StringNullableFilter<'ProjectTask'> | string | null
+      createdBy?: StringFilter<'ProjectTask'> | string
+      createdAt?: DateTimeFilter<'ProjectTask'> | Date | string
+      updatedBy?: StringNullableFilter<'ProjectTask'> | string | null
+      updatedAt?: DateTimeFilter<'ProjectTask'> | Date | string
       project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+      parentTask?: XOR<ProjectTaskNullableScalarRelationFilter, ProjectTaskWhereInput> | null
+      childTasks?: ProjectTaskListRelationFilter
+      taskRelationsFrom?: TaskRelationListRelationFilter
+      taskRelationsTo?: TaskRelationListRelationFilter
     },
-    'id'
+    'id' | 'code'
   >
 
   export type ProjectTaskOrderByWithAggregationInput = {
@@ -14775,12 +16774,33 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     status?: SortOrder
-    assignee?: SortOrderInput | SortOrder
+    assigneeId?: SortOrderInput | SortOrder
+    assigneeName?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     dueDate?: SortOrderInput | SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrderInput | SortOrder
+    nodeLevelType?: SortOrderInput | SortOrder
+    priority?: SortOrder
+    progress?: SortOrder
+    taskType?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
+    riskLevel?: SortOrderInput | SortOrder
+    slaStatus?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    actualStartDate?: SortOrderInput | SortOrder
+    actualEndDate?: SortOrderInput | SortOrder
+    blockedReason?: SortOrderInput | SortOrder
+    remindCount?: SortOrder
+    tags?: SortOrderInput | SortOrder
+    workPackageId?: SortOrderInput | SortOrder
+    slaRuleId?: SortOrderInput | SortOrder
+    plannedWorkHours?: SortOrderInput | SortOrder
+    actualWorkHours?: SortOrderInput | SortOrder
+    standardSnapshotId?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
     _count?: ProjectTaskCountOrderByAggregateInput
     _avg?: ProjectTaskAvgOrderByAggregateInput
     _max?: ProjectTaskMaxOrderByAggregateInput
@@ -14797,12 +16817,92 @@ export namespace Prisma {
     code?: StringWithAggregatesFilter<'ProjectTask'> | string
     name?: StringWithAggregatesFilter<'ProjectTask'> | string
     status?: StringWithAggregatesFilter<'ProjectTask'> | string
-    assignee?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    assigneeId?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    assigneeName?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
     startDate?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
     dueDate?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
-    progress?: IntWithAggregatesFilter<'ProjectTask'> | number
-    level?: IntWithAggregatesFilter<'ProjectTask'> | number
     parentId?: IntNullableWithAggregatesFilter<'ProjectTask'> | number | null
+    nodeLevelType?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    priority?: StringWithAggregatesFilter<'ProjectTask'> | string
+    progress?: IntWithAggregatesFilter<'ProjectTask'> | number
+    taskType?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    sourceType?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    riskLevel?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    slaStatus?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    description?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    actualStartDate?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    actualEndDate?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    blockedReason?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    remindCount?: IntWithAggregatesFilter<'ProjectTask'> | number
+    tags?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    workPackageId?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    slaRuleId?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    plannedWorkHours?: IntNullableWithAggregatesFilter<'ProjectTask'> | number | null
+    actualWorkHours?: IntNullableWithAggregatesFilter<'ProjectTask'> | number | null
+    standardSnapshotId?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    createdBy?: StringWithAggregatesFilter<'ProjectTask'> | string
+    createdAt?: DateTimeWithAggregatesFilter<'ProjectTask'> | Date | string
+    updatedBy?: StringNullableWithAggregatesFilter<'ProjectTask'> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<'ProjectTask'> | Date | string
+  }
+
+  export type TaskRelationWhereInput = {
+    AND?: TaskRelationWhereInput | TaskRelationWhereInput[]
+    OR?: TaskRelationWhereInput[]
+    NOT?: TaskRelationWhereInput | TaskRelationWhereInput[]
+    id?: IntFilter<'TaskRelation'> | number
+    fromTaskId?: IntFilter<'TaskRelation'> | number
+    toTaskId?: IntFilter<'TaskRelation'> | number
+    relationType?: StringFilter<'TaskRelation'> | string
+    fromTask?: XOR<ProjectTaskScalarRelationFilter, ProjectTaskWhereInput>
+    toTask?: XOR<ProjectTaskScalarRelationFilter, ProjectTaskWhereInput>
+  }
+
+  export type TaskRelationOrderByWithRelationInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+    relationType?: SortOrder
+    fromTask?: ProjectTaskOrderByWithRelationInput
+    toTask?: ProjectTaskOrderByWithRelationInput
+  }
+
+  export type TaskRelationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      fromTaskId_toTaskId_relationType?: TaskRelationFromTaskIdToTaskIdRelationTypeCompoundUniqueInput
+      AND?: TaskRelationWhereInput | TaskRelationWhereInput[]
+      OR?: TaskRelationWhereInput[]
+      NOT?: TaskRelationWhereInput | TaskRelationWhereInput[]
+      fromTaskId?: IntFilter<'TaskRelation'> | number
+      toTaskId?: IntFilter<'TaskRelation'> | number
+      relationType?: StringFilter<'TaskRelation'> | string
+      fromTask?: XOR<ProjectTaskScalarRelationFilter, ProjectTaskWhereInput>
+      toTask?: XOR<ProjectTaskScalarRelationFilter, ProjectTaskWhereInput>
+    },
+    'id' | 'fromTaskId_toTaskId_relationType'
+  >
+
+  export type TaskRelationOrderByWithAggregationInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+    relationType?: SortOrder
+    _count?: TaskRelationCountOrderByAggregateInput
+    _avg?: TaskRelationAvgOrderByAggregateInput
+    _max?: TaskRelationMaxOrderByAggregateInput
+    _min?: TaskRelationMinOrderByAggregateInput
+    _sum?: TaskRelationSumOrderByAggregateInput
+  }
+
+  export type TaskRelationScalarWhereWithAggregatesInput = {
+    AND?: TaskRelationScalarWhereWithAggregatesInput | TaskRelationScalarWhereWithAggregatesInput[]
+    OR?: TaskRelationScalarWhereWithAggregatesInput[]
+    NOT?: TaskRelationScalarWhereWithAggregatesInput | TaskRelationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'TaskRelation'> | number
+    fromTaskId?: IntWithAggregatesFilter<'TaskRelation'> | number
+    toTaskId?: IntWithAggregatesFilter<'TaskRelation'> | number
+    relationType?: StringWithAggregatesFilter<'TaskRelation'> | string
   }
 
   export type ProjectRiskWhereInput = {
@@ -15583,13 +17683,37 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
     progress?: number
-    level?: number
-    parentId?: number | null
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutTaskTreeInput
+    parentTask?: ProjectTaskCreateNestedOneWithoutChildTasksInput
+    childTasks?: ProjectTaskCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationCreateNestedManyWithoutToTaskInput
   }
 
   export type ProjectTaskUncheckedCreateInput = {
@@ -15598,25 +17722,73 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
-    progress?: number
-    level?: number
     parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    childTasks?: ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationUncheckedCreateNestedManyWithoutToTaskInput
   }
 
   export type ProjectTaskUpdateInput = {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutTaskTreeNestedInput
+    parentTask?: ProjectTaskUpdateOneWithoutChildTasksNestedInput
+    childTasks?: ProjectTaskUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUpdateManyWithoutToTaskNestedInput
   }
 
   export type ProjectTaskUncheckedUpdateInput = {
@@ -15625,12 +17797,36 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
-    progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTasks?: ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput
   }
 
   export type ProjectTaskCreateManyInput = {
@@ -15639,24 +17835,65 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
-    progress?: number
-    level?: number
     parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
   }
 
   export type ProjectTaskUpdateManyMutationInput = {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectTaskUncheckedUpdateManyInput = {
@@ -15665,12 +17902,77 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
-    progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskRelationCreateInput = {
+    relationType: string
+    fromTask: ProjectTaskCreateNestedOneWithoutTaskRelationsFromInput
+    toTask: ProjectTaskCreateNestedOneWithoutTaskRelationsToInput
+  }
+
+  export type TaskRelationUncheckedCreateInput = {
+    id?: number
+    fromTaskId: number
+    toTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationUpdateInput = {
+    relationType?: StringFieldUpdateOperationsInput | string
+    fromTask?: ProjectTaskUpdateOneRequiredWithoutTaskRelationsFromNestedInput
+    toTask?: ProjectTaskUpdateOneRequiredWithoutTaskRelationsToNestedInput
+  }
+
+  export type TaskRelationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fromTaskId?: IntFieldUpdateOperationsInput | number
+    toTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TaskRelationCreateManyInput = {
+    id?: number
+    fromTaskId: number
+    toTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationUpdateManyMutationInput = {
+    relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TaskRelationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fromTaskId?: IntFieldUpdateOperationsInput | number
+    toTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectRiskCreateInput = {
@@ -16390,26 +18692,64 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type ProjectTaskNullableScalarRelationFilter = {
+    is?: ProjectTaskWhereInput | null
+    isNot?: ProjectTaskWhereInput | null
+  }
+
+  export type TaskRelationListRelationFilter = {
+    every?: TaskRelationWhereInput
+    some?: TaskRelationWhereInput
+    none?: TaskRelationWhereInput
+  }
+
+  export type TaskRelationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProjectTaskCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
     code?: SortOrder
     name?: SortOrder
     status?: SortOrder
-    assignee?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrder
+    nodeLevelType?: SortOrder
+    priority?: SortOrder
+    progress?: SortOrder
+    taskType?: SortOrder
+    sourceType?: SortOrder
+    riskLevel?: SortOrder
+    slaStatus?: SortOrder
+    description?: SortOrder
+    actualStartDate?: SortOrder
+    actualEndDate?: SortOrder
+    blockedReason?: SortOrder
+    remindCount?: SortOrder
+    tags?: SortOrder
+    workPackageId?: SortOrder
+    slaRuleId?: SortOrder
+    plannedWorkHours?: SortOrder
+    actualWorkHours?: SortOrder
+    standardSnapshotId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProjectTaskAvgOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrder
+    progress?: SortOrder
+    remindCount?: SortOrder
+    plannedWorkHours?: SortOrder
+    actualWorkHours?: SortOrder
   }
 
   export type ProjectTaskMaxOrderByAggregateInput = {
@@ -16418,12 +18758,33 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     status?: SortOrder
-    assignee?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrder
+    nodeLevelType?: SortOrder
+    priority?: SortOrder
+    progress?: SortOrder
+    taskType?: SortOrder
+    sourceType?: SortOrder
+    riskLevel?: SortOrder
+    slaStatus?: SortOrder
+    description?: SortOrder
+    actualStartDate?: SortOrder
+    actualEndDate?: SortOrder
+    blockedReason?: SortOrder
+    remindCount?: SortOrder
+    tags?: SortOrder
+    workPackageId?: SortOrder
+    slaRuleId?: SortOrder
+    plannedWorkHours?: SortOrder
+    actualWorkHours?: SortOrder
+    standardSnapshotId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProjectTaskMinOrderByAggregateInput = {
@@ -16432,20 +18793,43 @@ export namespace Prisma {
     code?: SortOrder
     name?: SortOrder
     status?: SortOrder
-    assignee?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
     startDate?: SortOrder
     dueDate?: SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrder
+    nodeLevelType?: SortOrder
+    priority?: SortOrder
+    progress?: SortOrder
+    taskType?: SortOrder
+    sourceType?: SortOrder
+    riskLevel?: SortOrder
+    slaStatus?: SortOrder
+    description?: SortOrder
+    actualStartDate?: SortOrder
+    actualEndDate?: SortOrder
+    blockedReason?: SortOrder
+    remindCount?: SortOrder
+    tags?: SortOrder
+    workPackageId?: SortOrder
+    slaRuleId?: SortOrder
+    plannedWorkHours?: SortOrder
+    actualWorkHours?: SortOrder
+    standardSnapshotId?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProjectTaskSumOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
-    progress?: SortOrder
-    level?: SortOrder
     parentId?: SortOrder
+    progress?: SortOrder
+    remindCount?: SortOrder
+    plannedWorkHours?: SortOrder
+    actualWorkHours?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16462,6 +18846,50 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type ProjectTaskScalarRelationFilter = {
+    is?: ProjectTaskWhereInput
+    isNot?: ProjectTaskWhereInput
+  }
+
+  export type TaskRelationFromTaskIdToTaskIdRelationTypeCompoundUniqueInput = {
+    fromTaskId: number
+    toTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationCountOrderByAggregateInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+    relationType?: SortOrder
+  }
+
+  export type TaskRelationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+  }
+
+  export type TaskRelationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+    relationType?: SortOrder
+  }
+
+  export type TaskRelationMinOrderByAggregateInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
+    relationType?: SortOrder
+  }
+
+  export type TaskRelationSumOrderByAggregateInput = {
+    id?: SortOrder
+    fromTaskId?: SortOrder
+    toTaskId?: SortOrder
   }
 
   export type ProjectRiskCountOrderByAggregateInput = {
@@ -17133,6 +19561,93 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput
   }
 
+  export type ProjectTaskCreateNestedOneWithoutChildTasksInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutChildTasksInput,
+      ProjectTaskUncheckedCreateWithoutChildTasksInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutChildTasksInput
+    connect?: ProjectTaskWhereUniqueInput
+  }
+
+  export type ProjectTaskCreateNestedManyWithoutParentTaskInput = {
+    create?:
+      | XOR<
+          ProjectTaskCreateWithoutParentTaskInput,
+          ProjectTaskUncheckedCreateWithoutParentTaskInput
+        >
+      | ProjectTaskCreateWithoutParentTaskInput[]
+      | ProjectTaskUncheckedCreateWithoutParentTaskInput[]
+    connectOrCreate?:
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput[]
+    createMany?: ProjectTaskCreateManyParentTaskInputEnvelope
+    connect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+  }
+
+  export type TaskRelationCreateNestedManyWithoutFromTaskInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutFromTaskInput, TaskRelationUncheckedCreateWithoutFromTaskInput>
+      | TaskRelationCreateWithoutFromTaskInput[]
+      | TaskRelationUncheckedCreateWithoutFromTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutFromTaskInput
+      | TaskRelationCreateOrConnectWithoutFromTaskInput[]
+    createMany?: TaskRelationCreateManyFromTaskInputEnvelope
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+  }
+
+  export type TaskRelationCreateNestedManyWithoutToTaskInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+      | TaskRelationCreateWithoutToTaskInput[]
+      | TaskRelationUncheckedCreateWithoutToTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutToTaskInput
+      | TaskRelationCreateOrConnectWithoutToTaskInput[]
+    createMany?: TaskRelationCreateManyToTaskInputEnvelope
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+  }
+
+  export type ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput = {
+    create?:
+      | XOR<
+          ProjectTaskCreateWithoutParentTaskInput,
+          ProjectTaskUncheckedCreateWithoutParentTaskInput
+        >
+      | ProjectTaskCreateWithoutParentTaskInput[]
+      | ProjectTaskUncheckedCreateWithoutParentTaskInput[]
+    connectOrCreate?:
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput[]
+    createMany?: ProjectTaskCreateManyParentTaskInputEnvelope
+    connect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+  }
+
+  export type TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutFromTaskInput, TaskRelationUncheckedCreateWithoutFromTaskInput>
+      | TaskRelationCreateWithoutFromTaskInput[]
+      | TaskRelationUncheckedCreateWithoutFromTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutFromTaskInput
+      | TaskRelationCreateOrConnectWithoutFromTaskInput[]
+    createMany?: TaskRelationCreateManyFromTaskInputEnvelope
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+  }
+
+  export type TaskRelationUncheckedCreateNestedManyWithoutToTaskInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+      | TaskRelationCreateWithoutToTaskInput[]
+      | TaskRelationUncheckedCreateWithoutToTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutToTaskInput
+      | TaskRelationCreateOrConnectWithoutToTaskInput[]
+    createMany?: TaskRelationCreateManyToTaskInputEnvelope
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -17149,6 +19664,233 @@ export namespace Prisma {
     update?: XOR<
       XOR<ProjectUpdateToOneWithWhereWithoutTaskTreeInput, ProjectUpdateWithoutTaskTreeInput>,
       ProjectUncheckedUpdateWithoutTaskTreeInput
+    >
+  }
+
+  export type ProjectTaskUpdateOneWithoutChildTasksNestedInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutChildTasksInput,
+      ProjectTaskUncheckedCreateWithoutChildTasksInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutChildTasksInput
+    upsert?: ProjectTaskUpsertWithoutChildTasksInput
+    disconnect?: ProjectTaskWhereInput | boolean
+    delete?: ProjectTaskWhereInput | boolean
+    connect?: ProjectTaskWhereUniqueInput
+    update?: XOR<
+      XOR<
+        ProjectTaskUpdateToOneWithWhereWithoutChildTasksInput,
+        ProjectTaskUpdateWithoutChildTasksInput
+      >,
+      ProjectTaskUncheckedUpdateWithoutChildTasksInput
+    >
+  }
+
+  export type ProjectTaskUpdateManyWithoutParentTaskNestedInput = {
+    create?:
+      | XOR<
+          ProjectTaskCreateWithoutParentTaskInput,
+          ProjectTaskUncheckedCreateWithoutParentTaskInput
+        >
+      | ProjectTaskCreateWithoutParentTaskInput[]
+      | ProjectTaskUncheckedCreateWithoutParentTaskInput[]
+    connectOrCreate?:
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput[]
+    upsert?:
+      | ProjectTaskUpsertWithWhereUniqueWithoutParentTaskInput
+      | ProjectTaskUpsertWithWhereUniqueWithoutParentTaskInput[]
+    createMany?: ProjectTaskCreateManyParentTaskInputEnvelope
+    set?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    disconnect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    delete?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    connect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    update?:
+      | ProjectTaskUpdateWithWhereUniqueWithoutParentTaskInput
+      | ProjectTaskUpdateWithWhereUniqueWithoutParentTaskInput[]
+    updateMany?:
+      | ProjectTaskUpdateManyWithWhereWithoutParentTaskInput
+      | ProjectTaskUpdateManyWithWhereWithoutParentTaskInput[]
+    deleteMany?: ProjectTaskScalarWhereInput | ProjectTaskScalarWhereInput[]
+  }
+
+  export type TaskRelationUpdateManyWithoutFromTaskNestedInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutFromTaskInput, TaskRelationUncheckedCreateWithoutFromTaskInput>
+      | TaskRelationCreateWithoutFromTaskInput[]
+      | TaskRelationUncheckedCreateWithoutFromTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutFromTaskInput
+      | TaskRelationCreateOrConnectWithoutFromTaskInput[]
+    upsert?:
+      | TaskRelationUpsertWithWhereUniqueWithoutFromTaskInput
+      | TaskRelationUpsertWithWhereUniqueWithoutFromTaskInput[]
+    createMany?: TaskRelationCreateManyFromTaskInputEnvelope
+    set?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    disconnect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    delete?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    update?:
+      | TaskRelationUpdateWithWhereUniqueWithoutFromTaskInput
+      | TaskRelationUpdateWithWhereUniqueWithoutFromTaskInput[]
+    updateMany?:
+      | TaskRelationUpdateManyWithWhereWithoutFromTaskInput
+      | TaskRelationUpdateManyWithWhereWithoutFromTaskInput[]
+    deleteMany?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+  }
+
+  export type TaskRelationUpdateManyWithoutToTaskNestedInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+      | TaskRelationCreateWithoutToTaskInput[]
+      | TaskRelationUncheckedCreateWithoutToTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutToTaskInput
+      | TaskRelationCreateOrConnectWithoutToTaskInput[]
+    upsert?:
+      | TaskRelationUpsertWithWhereUniqueWithoutToTaskInput
+      | TaskRelationUpsertWithWhereUniqueWithoutToTaskInput[]
+    createMany?: TaskRelationCreateManyToTaskInputEnvelope
+    set?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    disconnect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    delete?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    update?:
+      | TaskRelationUpdateWithWhereUniqueWithoutToTaskInput
+      | TaskRelationUpdateWithWhereUniqueWithoutToTaskInput[]
+    updateMany?:
+      | TaskRelationUpdateManyWithWhereWithoutToTaskInput
+      | TaskRelationUpdateManyWithWhereWithoutToTaskInput[]
+    deleteMany?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+  }
+
+  export type ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput = {
+    create?:
+      | XOR<
+          ProjectTaskCreateWithoutParentTaskInput,
+          ProjectTaskUncheckedCreateWithoutParentTaskInput
+        >
+      | ProjectTaskCreateWithoutParentTaskInput[]
+      | ProjectTaskUncheckedCreateWithoutParentTaskInput[]
+    connectOrCreate?:
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput
+      | ProjectTaskCreateOrConnectWithoutParentTaskInput[]
+    upsert?:
+      | ProjectTaskUpsertWithWhereUniqueWithoutParentTaskInput
+      | ProjectTaskUpsertWithWhereUniqueWithoutParentTaskInput[]
+    createMany?: ProjectTaskCreateManyParentTaskInputEnvelope
+    set?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    disconnect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    delete?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    connect?: ProjectTaskWhereUniqueInput | ProjectTaskWhereUniqueInput[]
+    update?:
+      | ProjectTaskUpdateWithWhereUniqueWithoutParentTaskInput
+      | ProjectTaskUpdateWithWhereUniqueWithoutParentTaskInput[]
+    updateMany?:
+      | ProjectTaskUpdateManyWithWhereWithoutParentTaskInput
+      | ProjectTaskUpdateManyWithWhereWithoutParentTaskInput[]
+    deleteMany?: ProjectTaskScalarWhereInput | ProjectTaskScalarWhereInput[]
+  }
+
+  export type TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutFromTaskInput, TaskRelationUncheckedCreateWithoutFromTaskInput>
+      | TaskRelationCreateWithoutFromTaskInput[]
+      | TaskRelationUncheckedCreateWithoutFromTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutFromTaskInput
+      | TaskRelationCreateOrConnectWithoutFromTaskInput[]
+    upsert?:
+      | TaskRelationUpsertWithWhereUniqueWithoutFromTaskInput
+      | TaskRelationUpsertWithWhereUniqueWithoutFromTaskInput[]
+    createMany?: TaskRelationCreateManyFromTaskInputEnvelope
+    set?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    disconnect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    delete?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    update?:
+      | TaskRelationUpdateWithWhereUniqueWithoutFromTaskInput
+      | TaskRelationUpdateWithWhereUniqueWithoutFromTaskInput[]
+    updateMany?:
+      | TaskRelationUpdateManyWithWhereWithoutFromTaskInput
+      | TaskRelationUpdateManyWithWhereWithoutFromTaskInput[]
+    deleteMany?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+  }
+
+  export type TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput = {
+    create?:
+      | XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+      | TaskRelationCreateWithoutToTaskInput[]
+      | TaskRelationUncheckedCreateWithoutToTaskInput[]
+    connectOrCreate?:
+      | TaskRelationCreateOrConnectWithoutToTaskInput
+      | TaskRelationCreateOrConnectWithoutToTaskInput[]
+    upsert?:
+      | TaskRelationUpsertWithWhereUniqueWithoutToTaskInput
+      | TaskRelationUpsertWithWhereUniqueWithoutToTaskInput[]
+    createMany?: TaskRelationCreateManyToTaskInputEnvelope
+    set?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    disconnect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    delete?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    connect?: TaskRelationWhereUniqueInput | TaskRelationWhereUniqueInput[]
+    update?:
+      | TaskRelationUpdateWithWhereUniqueWithoutToTaskInput
+      | TaskRelationUpdateWithWhereUniqueWithoutToTaskInput[]
+    updateMany?:
+      | TaskRelationUpdateManyWithWhereWithoutToTaskInput
+      | TaskRelationUpdateManyWithWhereWithoutToTaskInput[]
+    deleteMany?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+  }
+
+  export type ProjectTaskCreateNestedOneWithoutTaskRelationsFromInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsFromInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutTaskRelationsFromInput
+    connect?: ProjectTaskWhereUniqueInput
+  }
+
+  export type ProjectTaskCreateNestedOneWithoutTaskRelationsToInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsToInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutTaskRelationsToInput
+    connect?: ProjectTaskWhereUniqueInput
+  }
+
+  export type ProjectTaskUpdateOneRequiredWithoutTaskRelationsFromNestedInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsFromInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutTaskRelationsFromInput
+    upsert?: ProjectTaskUpsertWithoutTaskRelationsFromInput
+    connect?: ProjectTaskWhereUniqueInput
+    update?: XOR<
+      XOR<
+        ProjectTaskUpdateToOneWithWhereWithoutTaskRelationsFromInput,
+        ProjectTaskUpdateWithoutTaskRelationsFromInput
+      >,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsFromInput
+    >
+  }
+
+  export type ProjectTaskUpdateOneRequiredWithoutTaskRelationsToNestedInput = {
+    create?: XOR<
+      ProjectTaskCreateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsToInput
+    >
+    connectOrCreate?: ProjectTaskCreateOrConnectWithoutTaskRelationsToInput
+    upsert?: ProjectTaskUpsertWithoutTaskRelationsToInput
+    connect?: ProjectTaskWhereUniqueInput
+    update?: XOR<
+      XOR<
+        ProjectTaskUpdateToOneWithWhereWithoutTaskRelationsToInput,
+        ProjectTaskUpdateWithoutTaskRelationsToInput
+      >,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsToInput
     >
   }
 
@@ -17428,12 +20170,36 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
     progress?: number
-    level?: number
-    parentId?: number | null
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    parentTask?: ProjectTaskCreateNestedOneWithoutChildTasksInput
+    childTasks?: ProjectTaskCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationCreateNestedManyWithoutToTaskInput
   }
 
   export type ProjectTaskUncheckedCreateWithoutProjectInput = {
@@ -17441,12 +20207,36 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
-    progress?: number
-    level?: number
     parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    childTasks?: ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationUncheckedCreateNestedManyWithoutToTaskInput
   }
 
   export type ProjectTaskCreateOrConnectWithoutProjectInput = {
@@ -17660,12 +20450,33 @@ export namespace Prisma {
     code?: StringFilter<'ProjectTask'> | string
     name?: StringFilter<'ProjectTask'> | string
     status?: StringFilter<'ProjectTask'> | string
-    assignee?: StringNullableFilter<'ProjectTask'> | string | null
+    assigneeId?: StringNullableFilter<'ProjectTask'> | string | null
+    assigneeName?: StringNullableFilter<'ProjectTask'> | string | null
     startDate?: StringNullableFilter<'ProjectTask'> | string | null
     dueDate?: StringNullableFilter<'ProjectTask'> | string | null
-    progress?: IntFilter<'ProjectTask'> | number
-    level?: IntFilter<'ProjectTask'> | number
     parentId?: IntNullableFilter<'ProjectTask'> | number | null
+    nodeLevelType?: StringNullableFilter<'ProjectTask'> | string | null
+    priority?: StringFilter<'ProjectTask'> | string
+    progress?: IntFilter<'ProjectTask'> | number
+    taskType?: StringNullableFilter<'ProjectTask'> | string | null
+    sourceType?: StringNullableFilter<'ProjectTask'> | string | null
+    riskLevel?: StringNullableFilter<'ProjectTask'> | string | null
+    slaStatus?: StringNullableFilter<'ProjectTask'> | string | null
+    description?: StringNullableFilter<'ProjectTask'> | string | null
+    actualStartDate?: StringNullableFilter<'ProjectTask'> | string | null
+    actualEndDate?: StringNullableFilter<'ProjectTask'> | string | null
+    blockedReason?: StringNullableFilter<'ProjectTask'> | string | null
+    remindCount?: IntFilter<'ProjectTask'> | number
+    tags?: StringNullableFilter<'ProjectTask'> | string | null
+    workPackageId?: StringNullableFilter<'ProjectTask'> | string | null
+    slaRuleId?: StringNullableFilter<'ProjectTask'> | string | null
+    plannedWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+    actualWorkHours?: IntNullableFilter<'ProjectTask'> | number | null
+    standardSnapshotId?: StringNullableFilter<'ProjectTask'> | string | null
+    createdBy?: StringFilter<'ProjectTask'> | string
+    createdAt?: DateTimeFilter<'ProjectTask'> | Date | string
+    updatedBy?: StringNullableFilter<'ProjectTask'> | string | null
+    updatedAt?: DateTimeFilter<'ProjectTask'> | Date | string
   }
 
   export type ProjectRiskUpsertWithWhereUniqueWithoutProjectInput = {
@@ -18188,6 +20999,215 @@ export namespace Prisma {
     create: XOR<ProjectCreateWithoutTaskTreeInput, ProjectUncheckedCreateWithoutTaskTreeInput>
   }
 
+  export type ProjectTaskCreateWithoutChildTasksInput = {
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutTaskTreeInput
+    parentTask?: ProjectTaskCreateNestedOneWithoutChildTasksInput
+    taskRelationsFrom?: TaskRelationCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskUncheckedCreateWithoutChildTasksInput = {
+    id?: number
+    projectId: number
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    taskRelationsFrom?: TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationUncheckedCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskCreateOrConnectWithoutChildTasksInput = {
+    where: ProjectTaskWhereUniqueInput
+    create: XOR<
+      ProjectTaskCreateWithoutChildTasksInput,
+      ProjectTaskUncheckedCreateWithoutChildTasksInput
+    >
+  }
+
+  export type ProjectTaskCreateWithoutParentTaskInput = {
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutTaskTreeInput
+    childTasks?: ProjectTaskCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskUncheckedCreateWithoutParentTaskInput = {
+    id?: number
+    projectId: number
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    childTasks?: ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput
+    taskRelationsTo?: TaskRelationUncheckedCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskCreateOrConnectWithoutParentTaskInput = {
+    where: ProjectTaskWhereUniqueInput
+    create: XOR<
+      ProjectTaskCreateWithoutParentTaskInput,
+      ProjectTaskUncheckedCreateWithoutParentTaskInput
+    >
+  }
+
+  export type ProjectTaskCreateManyParentTaskInputEnvelope = {
+    data: ProjectTaskCreateManyParentTaskInput | ProjectTaskCreateManyParentTaskInput[]
+  }
+
+  export type TaskRelationCreateWithoutFromTaskInput = {
+    relationType: string
+    toTask: ProjectTaskCreateNestedOneWithoutTaskRelationsToInput
+  }
+
+  export type TaskRelationUncheckedCreateWithoutFromTaskInput = {
+    id?: number
+    toTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationCreateOrConnectWithoutFromTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    create: XOR<
+      TaskRelationCreateWithoutFromTaskInput,
+      TaskRelationUncheckedCreateWithoutFromTaskInput
+    >
+  }
+
+  export type TaskRelationCreateManyFromTaskInputEnvelope = {
+    data: TaskRelationCreateManyFromTaskInput | TaskRelationCreateManyFromTaskInput[]
+  }
+
+  export type TaskRelationCreateWithoutToTaskInput = {
+    relationType: string
+    fromTask: ProjectTaskCreateNestedOneWithoutTaskRelationsFromInput
+  }
+
+  export type TaskRelationUncheckedCreateWithoutToTaskInput = {
+    id?: number
+    fromTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationCreateOrConnectWithoutToTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    create: XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+  }
+
+  export type TaskRelationCreateManyToTaskInputEnvelope = {
+    data: TaskRelationCreateManyToTaskInput | TaskRelationCreateManyToTaskInput[]
+  }
+
   export type ProjectUpsertWithoutTaskTreeInput = {
     update: XOR<ProjectUpdateWithoutTaskTreeInput, ProjectUncheckedUpdateWithoutTaskTreeInput>
     create: XOR<ProjectCreateWithoutTaskTreeInput, ProjectUncheckedCreateWithoutTaskTreeInput>
@@ -18270,6 +21290,532 @@ export namespace Prisma {
     risks?: ProjectRiskUncheckedUpdateManyWithoutProjectNestedInput
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
     statusLogs?: ProjectStatusLogUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectTaskUpsertWithoutChildTasksInput = {
+    update: XOR<
+      ProjectTaskUpdateWithoutChildTasksInput,
+      ProjectTaskUncheckedUpdateWithoutChildTasksInput
+    >
+    create: XOR<
+      ProjectTaskCreateWithoutChildTasksInput,
+      ProjectTaskUncheckedCreateWithoutChildTasksInput
+    >
+    where?: ProjectTaskWhereInput
+  }
+
+  export type ProjectTaskUpdateToOneWithWhereWithoutChildTasksInput = {
+    where?: ProjectTaskWhereInput
+    data: XOR<
+      ProjectTaskUpdateWithoutChildTasksInput,
+      ProjectTaskUncheckedUpdateWithoutChildTasksInput
+    >
+  }
+
+  export type ProjectTaskUpdateWithoutChildTasksInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutTaskTreeNestedInput
+    parentTask?: ProjectTaskUpdateOneWithoutChildTasksNestedInput
+    taskRelationsFrom?: TaskRelationUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUncheckedUpdateWithoutChildTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    taskRelationsFrom?: TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUpsertWithWhereUniqueWithoutParentTaskInput = {
+    where: ProjectTaskWhereUniqueInput
+    update: XOR<
+      ProjectTaskUpdateWithoutParentTaskInput,
+      ProjectTaskUncheckedUpdateWithoutParentTaskInput
+    >
+    create: XOR<
+      ProjectTaskCreateWithoutParentTaskInput,
+      ProjectTaskUncheckedCreateWithoutParentTaskInput
+    >
+  }
+
+  export type ProjectTaskUpdateWithWhereUniqueWithoutParentTaskInput = {
+    where: ProjectTaskWhereUniqueInput
+    data: XOR<
+      ProjectTaskUpdateWithoutParentTaskInput,
+      ProjectTaskUncheckedUpdateWithoutParentTaskInput
+    >
+  }
+
+  export type ProjectTaskUpdateManyWithWhereWithoutParentTaskInput = {
+    where: ProjectTaskScalarWhereInput
+    data: XOR<
+      ProjectTaskUpdateManyMutationInput,
+      ProjectTaskUncheckedUpdateManyWithoutParentTaskInput
+    >
+  }
+
+  export type TaskRelationUpsertWithWhereUniqueWithoutFromTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    update: XOR<
+      TaskRelationUpdateWithoutFromTaskInput,
+      TaskRelationUncheckedUpdateWithoutFromTaskInput
+    >
+    create: XOR<
+      TaskRelationCreateWithoutFromTaskInput,
+      TaskRelationUncheckedCreateWithoutFromTaskInput
+    >
+  }
+
+  export type TaskRelationUpdateWithWhereUniqueWithoutFromTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    data: XOR<
+      TaskRelationUpdateWithoutFromTaskInput,
+      TaskRelationUncheckedUpdateWithoutFromTaskInput
+    >
+  }
+
+  export type TaskRelationUpdateManyWithWhereWithoutFromTaskInput = {
+    where: TaskRelationScalarWhereInput
+    data: XOR<
+      TaskRelationUpdateManyMutationInput,
+      TaskRelationUncheckedUpdateManyWithoutFromTaskInput
+    >
+  }
+
+  export type TaskRelationScalarWhereInput = {
+    AND?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+    OR?: TaskRelationScalarWhereInput[]
+    NOT?: TaskRelationScalarWhereInput | TaskRelationScalarWhereInput[]
+    id?: IntFilter<'TaskRelation'> | number
+    fromTaskId?: IntFilter<'TaskRelation'> | number
+    toTaskId?: IntFilter<'TaskRelation'> | number
+    relationType?: StringFilter<'TaskRelation'> | string
+  }
+
+  export type TaskRelationUpsertWithWhereUniqueWithoutToTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    update: XOR<TaskRelationUpdateWithoutToTaskInput, TaskRelationUncheckedUpdateWithoutToTaskInput>
+    create: XOR<TaskRelationCreateWithoutToTaskInput, TaskRelationUncheckedCreateWithoutToTaskInput>
+  }
+
+  export type TaskRelationUpdateWithWhereUniqueWithoutToTaskInput = {
+    where: TaskRelationWhereUniqueInput
+    data: XOR<TaskRelationUpdateWithoutToTaskInput, TaskRelationUncheckedUpdateWithoutToTaskInput>
+  }
+
+  export type TaskRelationUpdateManyWithWhereWithoutToTaskInput = {
+    where: TaskRelationScalarWhereInput
+    data: XOR<
+      TaskRelationUpdateManyMutationInput,
+      TaskRelationUncheckedUpdateManyWithoutToTaskInput
+    >
+  }
+
+  export type ProjectTaskCreateWithoutTaskRelationsFromInput = {
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutTaskTreeInput
+    parentTask?: ProjectTaskCreateNestedOneWithoutChildTasksInput
+    childTasks?: ProjectTaskCreateNestedManyWithoutParentTaskInput
+    taskRelationsTo?: TaskRelationCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskUncheckedCreateWithoutTaskRelationsFromInput = {
+    id?: number
+    projectId: number
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    childTasks?: ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput
+    taskRelationsTo?: TaskRelationUncheckedCreateNestedManyWithoutToTaskInput
+  }
+
+  export type ProjectTaskCreateOrConnectWithoutTaskRelationsFromInput = {
+    where: ProjectTaskWhereUniqueInput
+    create: XOR<
+      ProjectTaskCreateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsFromInput
+    >
+  }
+
+  export type ProjectTaskCreateWithoutTaskRelationsToInput = {
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutTaskTreeInput
+    parentTask?: ProjectTaskCreateNestedOneWithoutChildTasksInput
+    childTasks?: ProjectTaskCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationCreateNestedManyWithoutFromTaskInput
+  }
+
+  export type ProjectTaskUncheckedCreateWithoutTaskRelationsToInput = {
+    id?: number
+    projectId: number
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    childTasks?: ProjectTaskUncheckedCreateNestedManyWithoutParentTaskInput
+    taskRelationsFrom?: TaskRelationUncheckedCreateNestedManyWithoutFromTaskInput
+  }
+
+  export type ProjectTaskCreateOrConnectWithoutTaskRelationsToInput = {
+    where: ProjectTaskWhereUniqueInput
+    create: XOR<
+      ProjectTaskCreateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsToInput
+    >
+  }
+
+  export type ProjectTaskUpsertWithoutTaskRelationsFromInput = {
+    update: XOR<
+      ProjectTaskUpdateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsFromInput
+    >
+    create: XOR<
+      ProjectTaskCreateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsFromInput
+    >
+    where?: ProjectTaskWhereInput
+  }
+
+  export type ProjectTaskUpdateToOneWithWhereWithoutTaskRelationsFromInput = {
+    where?: ProjectTaskWhereInput
+    data: XOR<
+      ProjectTaskUpdateWithoutTaskRelationsFromInput,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsFromInput
+    >
+  }
+
+  export type ProjectTaskUpdateWithoutTaskRelationsFromInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutTaskTreeNestedInput
+    parentTask?: ProjectTaskUpdateOneWithoutChildTasksNestedInput
+    childTasks?: ProjectTaskUpdateManyWithoutParentTaskNestedInput
+    taskRelationsTo?: TaskRelationUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUncheckedUpdateWithoutTaskRelationsFromInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTasks?: ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput
+    taskRelationsTo?: TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUpsertWithoutTaskRelationsToInput = {
+    update: XOR<
+      ProjectTaskUpdateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsToInput
+    >
+    create: XOR<
+      ProjectTaskCreateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedCreateWithoutTaskRelationsToInput
+    >
+    where?: ProjectTaskWhereInput
+  }
+
+  export type ProjectTaskUpdateToOneWithWhereWithoutTaskRelationsToInput = {
+    where?: ProjectTaskWhereInput
+    data: XOR<
+      ProjectTaskUpdateWithoutTaskRelationsToInput,
+      ProjectTaskUncheckedUpdateWithoutTaskRelationsToInput
+    >
+  }
+
+  export type ProjectTaskUpdateWithoutTaskRelationsToInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutTaskTreeNestedInput
+    parentTask?: ProjectTaskUpdateOneWithoutChildTasksNestedInput
+    childTasks?: ProjectTaskUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUpdateManyWithoutFromTaskNestedInput
+  }
+
+  export type ProjectTaskUncheckedUpdateWithoutTaskRelationsToInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTasks?: ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput
   }
 
   export type ProjectCreateWithoutRisksInput = {
@@ -18781,12 +22327,33 @@ export namespace Prisma {
     code: string
     name: string
     status: string
-    assignee?: string | null
+    assigneeId?: string | null
+    assigneeName?: string | null
     startDate?: string | null
     dueDate?: string | null
-    progress?: number
-    level?: number
     parentId?: number | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
   }
 
   export type ProjectRiskCreateManyProjectInput = {
@@ -18879,12 +22446,36 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
-    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentTask?: ProjectTaskUpdateOneWithoutChildTasksNestedInput
+    childTasks?: ProjectTaskUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUpdateManyWithoutToTaskNestedInput
   }
 
   export type ProjectTaskUncheckedUpdateWithoutProjectInput = {
@@ -18892,12 +22483,36 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
-    progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTasks?: ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput
   }
 
   export type ProjectTaskUncheckedUpdateManyWithoutProjectInput = {
@@ -18905,12 +22520,33 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    assignee?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableStringFieldUpdateOperationsInput | string | null
-    progress?: IntFieldUpdateOperationsInput | number
-    level?: IntFieldUpdateOperationsInput | number
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectRiskUpdateWithoutProjectInput = {
@@ -19010,6 +22646,193 @@ export namespace Prisma {
     fromStatus?: NullableStringFieldUpdateOperationsInput | string | null
     toStatus?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProjectTaskCreateManyParentTaskInput = {
+    id?: number
+    projectId: number
+    code: string
+    name: string
+    status: string
+    assigneeId?: string | null
+    assigneeName?: string | null
+    startDate?: string | null
+    dueDate?: string | null
+    nodeLevelType?: string | null
+    priority?: string
+    progress?: number
+    taskType?: string | null
+    sourceType?: string | null
+    riskLevel?: string | null
+    slaStatus?: string | null
+    description?: string | null
+    actualStartDate?: string | null
+    actualEndDate?: string | null
+    blockedReason?: string | null
+    remindCount?: number
+    tags?: string | null
+    workPackageId?: string | null
+    slaRuleId?: string | null
+    plannedWorkHours?: number | null
+    actualWorkHours?: number | null
+    standardSnapshotId?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type TaskRelationCreateManyFromTaskInput = {
+    id?: number
+    toTaskId: number
+    relationType: string
+  }
+
+  export type TaskRelationCreateManyToTaskInput = {
+    id?: number
+    fromTaskId: number
+    relationType: string
+  }
+
+  export type ProjectTaskUpdateWithoutParentTaskInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutTaskTreeNestedInput
+    childTasks?: ProjectTaskUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUncheckedUpdateWithoutParentTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTasks?: ProjectTaskUncheckedUpdateManyWithoutParentTaskNestedInput
+    taskRelationsFrom?: TaskRelationUncheckedUpdateManyWithoutFromTaskNestedInput
+    taskRelationsTo?: TaskRelationUncheckedUpdateManyWithoutToTaskNestedInput
+  }
+
+  export type ProjectTaskUncheckedUpdateManyWithoutParentTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableStringFieldUpdateOperationsInput | string | null
+    nodeLevelType?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    taskType?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    riskLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    slaStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    actualStartDate?: NullableStringFieldUpdateOperationsInput | string | null
+    actualEndDate?: NullableStringFieldUpdateOperationsInput | string | null
+    blockedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    remindCount?: IntFieldUpdateOperationsInput | number
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    workPackageId?: NullableStringFieldUpdateOperationsInput | string | null
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    actualWorkHours?: NullableIntFieldUpdateOperationsInput | number | null
+    standardSnapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskRelationUpdateWithoutFromTaskInput = {
+    relationType?: StringFieldUpdateOperationsInput | string
+    toTask?: ProjectTaskUpdateOneRequiredWithoutTaskRelationsToNestedInput
+  }
+
+  export type TaskRelationUncheckedUpdateWithoutFromTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    toTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TaskRelationUncheckedUpdateManyWithoutFromTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    toTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TaskRelationUpdateWithoutToTaskInput = {
+    relationType?: StringFieldUpdateOperationsInput | string
+    fromTask?: ProjectTaskUpdateOneRequiredWithoutTaskRelationsFromNestedInput
+  }
+
+  export type TaskRelationUncheckedUpdateWithoutToTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fromTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TaskRelationUncheckedUpdateManyWithoutToTaskInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fromTaskId?: IntFieldUpdateOperationsInput | number
+    relationType?: StringFieldUpdateOperationsInput | string
   }
 
   /**

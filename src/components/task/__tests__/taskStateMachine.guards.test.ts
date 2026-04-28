@@ -8,15 +8,22 @@ import type { TaskItem } from '../taskManagement.types'
 
 // 辅助函数：创建测试任务
 const createTask = (overrides: Partial<TaskItem> = {}): TaskItem => ({
+  id: 'test-task-001',
   name: '测试任务',
   code: 'TEST-001',
+  projectId: 'PRJ-TEST',
   projectName: '测试项目',
+  parentTaskId: null,
   parentPath: '测试路径',
   taskType: '标准任务',
   sourceType: 'manual',
   status: '待分配',
   statusTone: 'neutral',
   owner: '待分配',
+  assigneeId: '',
+  assigneeName: '待分配',
+  nodeLevelType: 'task',
+  priority: 'medium',
   plannedStartAt: '2026-04-01',
   plannedEndAt: '2026-04-10',
   slaStatus: '正常',
@@ -30,6 +37,9 @@ const createTask = (overrides: Partial<TaskItem> = {}): TaskItem => ({
   standardSnapshotId: 'snapshot-001',
   isBlocked: false,
   progress: 0,
+  tags: [],
+  createdBy: 'test',
+  createdAt: '2026-03-01T00:00:00Z',
   ...overrides,
 })
 

@@ -118,23 +118,72 @@ model ProjectMilestone {
   @@map("project_milestones")
 }
 
-// ─── 项目任务表 ────────────────────────────────────────────────
+// ─── 任务表（扩展：对齐 PRD 58 字段，P0 字段优先）─────────────
+// P0: id, code, name, projectId, status, assigneeId, plannedStartAt, plannedEndAt, createdBy, createdAt
 model ProjectTask {
-  id        Int     @id @default(autoincrement())
-  projectId Int     @map("project_id")
-  code      String
-  name      String
-  status    String
-  assignee  String?
-  startDate String? @map("start_date")
-  dueDate   String? @map("due_date")
-  progress  Int     @default(0)
-  level     Int     @default(0)
-  parentId  Int?    @map("parent_id")
+  id           Int     @id @default(autoincrement())
+  projectId    Int     @map("project_id")
+  code         String  @unique
+  name         String
+  status       String
+  assigneeId   String? @map("assignee_id")
+  assigneeName String? @map("assignee_name")
+  startDate    String? @map("start_date")
+  dueDate      String? @map("due_date")
 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // ── 树形结构（P0） ──
+  parentId      Int?    @map("parent_id")
+  nodeLevelType String? @map("node_level_type")
+
+  // ── P1 字段 ──
+  priority    String  @default("medium")
+  progress    Int     @default(0)
+  taskType    String? @map("task_type")
+  sourceType  String? @map("source_type")
+  riskLevel   String? @map("risk_level")
+  slaStatus   String? @map("sla_status")
+  description String?
+
+  // ── P2 字段 ──
+  actualStartDate    String? @map("actual_start_date")
+  actualEndDate      String? @map("actual_end_date")
+  blockedReason      String? @map("blocked_reason")
+  remindCount        Int     @default(0)
+  tags               String? // JSON array, e.g. '["消防","审批"]'
+  workPackageId      String? @map("work_package_id")
+  slaRuleId          String? @map("sla_rule_id")
+  plannedWorkHours   Int?    @map("planned_work_hours")
+  actualWorkHours    Int?    @map("actual_work_hours")
+  standardSnapshotId String? @map("standard_snapshot_id")
+
+  // ── 审计字段（P0） ──
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedBy String?  @map("updated_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // ── 关联 ──
+  project           Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parentTask        ProjectTask?   @relation("TaskTree", fields: [parentId], references: [id])
+  childTasks        ProjectTask[]  @relation("TaskTree")
+  taskRelationsFrom TaskRelation[] @relation("TaskFrom")
+  taskRelationsTo   TaskRelation[] @relation("TaskTo")
 
   @@map("project_tasks")
+}
+
+// ─── 任务关联表（前置依赖） ────────────────────────────────────
+model TaskRelation {
+  id           Int    @id @default(autoincrement())
+  fromTaskId   Int    @map("from_task_id")
+  toTaskId     Int    @map("to_task_id")
+  relationType String @map("relation_type") // finish_start | start_start | finish_finish | start_finish
+
+  fromTask ProjectTask @relation("TaskFrom", fields: [fromTaskId], references: [id], onDelete: Cascade)
+  toTask   ProjectTask @relation("TaskTo", fields: [toTaskId], references: [id], onDelete: Cascade)
+
+  @@unique([fromTaskId, toTaskId, relationType])
+  @@map("task_relations")
 }
 
 // ─── 项目风险表 ────────────────────────────────────────────────

@@ -111,16 +111,23 @@ const listContextKeysByProjectCode = (projectCode: string): string[] => {
 }
 
 const createFallbackRectificationTask = (payload: AcceptanceRectificationPayload): TaskItem => ({
+  id: `rect-${payload.projectCode}-${Date.now()}`,
   name: `${payload.nodeName}（整改）`,
   code: buildRectificationTaskCode(payload.projectCode, payload.nodeCode),
+  projectId: payload.projectCode,
   taskDescription: `由验收节点 ${payload.nodeCode} 触发的整改任务，需闭环问题项后再次提报。`,
   projectName: payload.projectName ?? payload.projectCode,
+  parentTaskId: null,
   parentPath: '项目验收 / 整改闭环',
   taskType: '标准任务',
   sourceType: 'manual',
   status: '待分配',
   statusTone: 'neutral',
   owner: '待分配',
+  assigneeId: '',
+  assigneeName: '待分配',
+  nodeLevelType: 'task',
+  priority: 'urgent',
   plannedStartAt: new Date().toISOString().slice(0, 10),
   plannedEndAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
   slaStatus: '即将超时',
@@ -132,9 +139,11 @@ const createFallbackRectificationTask = (payload: AcceptanceRectificationPayload
   standardBindingStatus: '已绑定',
   snapshotStatus: '已生成',
   standardSnapshotId: `snapshot-${payload.projectCode}-${payload.nodeCode}-${Date.now()}`,
-
   isBlocked: false,
   progress: 5,
+  tags: [],
+  createdBy: '系统',
+  createdAt: new Date().toISOString(),
 })
 
 export const taskRepository = {
@@ -148,6 +157,7 @@ export const taskRepository = {
       let remoteTasks = await serverAdapter.getProjectTasks(projectCode)
 
       // ── 自动迁移：后端为空但本地有数据时，推送本地任务到实体表 ──
+      // 这是一个过渡期机制，用于将现有的 localStorage 数据同步到后端
       if (remoteTasks.length === 0 && localTasks && localTasks.length > 0) {
         await Promise.allSettled(
           localTasks.map(task =>
@@ -158,12 +168,15 @@ export const taskRepository = {
             )
           )
         )
+        // 迁移完成后重新获取，确保数据一致
         remoteTasks = await serverAdapter.getProjectTasks(projectCode)
       }
 
+      // 双写：成功后同步到本地缓存，保证离线可用
       persistLocalTasks(contextKey, remoteTasks)
       return remoteTasks
     } catch {
+      // 网络异常或服务不可用时降级到本地缓存
       return localTasks
     }
   },
@@ -235,19 +248,33 @@ export const taskRepository = {
     }
   },
 
+  /**
+   * 从验收节点创建整改任务
+   *
+   * 当验收不通过时自动创建整改任务。策略如下：
+   * 1. 查找与当前项目匹配的上下文键（contextKey）
+   * 2. 尝试从已有任务中找到引用任务（referenceTask）来继承属性
+   *    - 优先匹配 projectName 相同的任务
+   *    - 其次查找待验收/待提交/执行中/不通过状态的任务
+   * 3. 如无引用任务则使用默认模板创建的降级任务
+   * 4. 去重：移除已有的同名整改任务后重新添加
+   */
   async createRectificationTaskFromAcceptance(
     payload: AcceptanceRectificationPayload
   ): Promise<{ contextKey: string; taskCode: string }> {
+    // 查找项目对应的 localStorage 存储键
     const contextKeys = listContextKeysByProjectCode(payload.projectCode)
     const contextKey = contextKeys[0] ?? `__${payload.projectName ?? ''}__${payload.projectCode}`
 
     const tasks = readLocalTasks(contextKey) ?? []
+    // 查找参考任务用于继承属性：首选同项目名，其次选特定状态的任务
     const referenceTask =
       tasks.find(task => task.projectName === (payload.projectName ?? task.projectName)) ??
       tasks.find(task => ['待验收', '待提交', '执行中', '不通过'].includes(task.status))
 
     const nextTaskCode = buildRectificationTaskCode(payload.projectCode, payload.nodeCode)
 
+    // 基于参考任务构建整改任务（有参考任务时继承其属性，否则使用降级模板）
     const rectificationTask: TaskItem = referenceTask
       ? {
           ...referenceTask,
@@ -275,6 +302,7 @@ export const taskRepository = {
           code: nextTaskCode,
         }
 
+    // 去重：先移除相同编码的旧任务，再将新整改任务插入队首
     const deduplicatedTasks = tasks.filter(task => task.code !== nextTaskCode)
     const nextTasks = [rectificationTask, ...deduplicatedTasks]
     persistLocalTasks(contextKey, nextTasks)
