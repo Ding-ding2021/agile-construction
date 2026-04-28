@@ -5,20 +5,23 @@ import type { ProjectItem } from '../../../data/projects'
 
 // Build a minimal ProjectItem compatible with ProjectCard props
 const mockProject: ProjectItem = {
-  name: 'Test Project',
   code: 'PRJ-TEST',
+  name: 'Test Project',
   brand: 'BrandX',
   stage: '启动' as any,
   status: '进行中',
   statusTone: 'blue' as any,
   progress: 40,
+  budget: '100000',
+  teamSize: '5',
+  dateRange: '2026-04-01 ~ 2026-04-30',
+  description: '测试项目',
   milestone: '',
   tasks: '',
   riskLevel: null,
   riskCount: 0,
   plannedOpenDate: '2026-04-01',
   owner: 'alice',
-  dateRange: '2026-04-01 ~ 2026-04-30',
 }
 
 describe('ProjectCard', () => {

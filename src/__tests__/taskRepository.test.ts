@@ -4,8 +4,6 @@ import type { TaskItem } from '../components/task/taskManagement.types'
 
 // Mock serverAdapter module used by taskRepository
 import { taskRepository } from '../services/repositories/taskRepository'
-import { createIdempotencyKey } from '../services/api/serverAdapter'
-
 vi.mock('../services/api/serverAdapter', () => {
   return {
     createIdempotencyKey: vi.fn(() => 'mock-idempotency'),
@@ -23,16 +21,7 @@ vi.mock('../services/api/serverAdapter', () => {
 
 import { serverAdapter } from '../services/api/serverAdapter'
 
-import { taskRepository as taskRepo } from '../services/repositories/taskRepository'
-
 const CONTEXT = '__PRJ__PRJ1'
-
-function localTasksObject(tasks: any[]): any {
-  return {
-    schemaVersion: 2,
-    tasks,
-  }
-}
 
 function mkTask(code: string): TaskItem {
   return {
@@ -70,7 +59,7 @@ describe('taskRepository.loadTasks', () => {
     window.localStorage.setItem(localKey, JSON.stringify({ schemaVersion: 2, tasks: [localTask] }))
 
     // remote empty on first fetch
-    ;(serverAdapter.getProjectTasks as any).mockImplementationOnce(async (code: string) => [])
+    ;(serverAdapter.getProjectTasks as any).mockImplementationOnce(async (_code: string) => [])
     ;(serverAdapter.createProjectTask as any).mockImplementationOnce(
       async (_code: string, task: any) => task
     )
@@ -79,7 +68,7 @@ describe('taskRepository.loadTasks', () => {
       mkTask('T1'),
     ])
 
-    const result = await taskRepo.loadTasks(CONTEXT)
+    const result = await taskRepository.loadTasks(CONTEXT)
 
     expect(Array.isArray(result)).toBe(true)
     // local storage should be updated to remote tasks
@@ -93,7 +82,7 @@ describe('taskRepository.loadTasks', () => {
     window.localStorage.setItem(localKey, JSON.stringify({ schemaVersion: 2, tasks: [localTask] }))
     ;(serverAdapter.getProjectTasks as any).mockRejectedValueOnce(new Error('network'))
 
-    const result = await taskRepo.loadTasks(CONTEXT)
+    const result = await taskRepository.loadTasks(CONTEXT)
     // should return local tasks cached
     expect(result).toBeTruthy()
   })
