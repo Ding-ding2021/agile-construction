@@ -133,6 +133,7 @@
 - `docs/knowledge-base/03-project-specific/01-current-tech-stack.md`
 - `docs/knowledge-base/03-project-specific/02-code-patterns.md`
 - `docs/knowledge-base/03-project-specific/03-development-standards.md`
+- `docs/knowledge-base/03-project-specific/04-opencode-platform-reference.md` — OpenCode 模式与代理体系参考
 
 ### 99-archive（历史归档）
 
