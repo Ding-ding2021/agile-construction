@@ -9,7 +9,7 @@ import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
 import TaskDetailPage from './TaskDetailPage'
-import { getTaskDetailByCode } from './taskManagement.data'
+import { allMockTaskNodes, getTaskDetailByCode } from './taskManagement.data'
 import { calculateTaskStats, processTasks, shouldResetPage } from './taskManagement.selectors'
 import type { TaskFilters, TaskViewMode, TaskItem, TaskDetail } from './taskManagement.types'
 import { taskRepository } from '../../services/repositories/taskRepository'
@@ -46,6 +46,8 @@ const TaskManagementPage = () => {
       const remoteTasks = await taskRepository.loadTasks('__all')
       if (remoteTasks && remoteTasks.length > 0) {
         setTasks(remoteTasks)
+      } else {
+        setTasks(allMockTaskNodes)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : '加载任务失败，请检查网络连接')
