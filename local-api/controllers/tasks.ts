@@ -61,6 +61,15 @@ function getProjectId(projectCode: string): number {
   return project.id
 }
 
+export function getAllTasks(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const rows = db
+    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks ORDER BY id ASC`)
+    .all() as Record<string, unknown>[]
+  const parsed = rows.map(row => ({ ...row, tags: parseTagsField(row.tags) }))
+  res.json(parsed)
+}
+
 export function getTasks(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(req.params.code)
