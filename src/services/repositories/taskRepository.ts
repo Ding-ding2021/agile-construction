@@ -241,22 +241,9 @@ export const taskRepository = {
     }
   },
 
-  // ── 保存任务：快照兼容（过渡期内保留） ──────────────────────────
+  // ── 保存任务本地缓存 ───────────────────────────────────────────
   async saveTasks(contextKey: string, tasks: TaskItem[]): Promise<void> {
     persistLocalTasks(contextKey, tasks)
-
-    try {
-      await serverAdapter.saveTaskState(
-        contextKey,
-        {
-          schemaVersion: TASK_SCHEMA_VERSION,
-          tasks,
-        },
-        `task-state-${contextKey}-${Date.now()}`
-      )
-    } catch {
-      // fallback to local cache only
-    }
   },
 
   // ── 任务实体 CRUD (V1) ────────────────────────────────────────

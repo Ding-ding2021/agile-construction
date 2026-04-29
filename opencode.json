@@ -3,6 +3,20 @@
   "instructions": [
     "docs/00-governance/coding-standards.md",
     "docs/00-governance/design-specification.md",
+    "docs/00-governance/reasoning-language.md",
     "docs/03-engineering/development-guide.md"
-  ]
+  ],
+  "plugin": ["opencode-agent-memory"],
+  "agent": {
+    "explore": {
+      "description": "Fast codebase exploration",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "general": {
+      "description": "General-purpose task execution",
+      "mode": "subagent",
+      "model": "deepseek/deepseek-v4-flash"
+    }
+  }
 }

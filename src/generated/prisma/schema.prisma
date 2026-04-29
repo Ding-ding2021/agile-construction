@@ -148,7 +148,7 @@ model ProjectTask {
   actualStartDate    String? @map("actual_start_date")
   actualEndDate      String? @map("actual_end_date")
   blockedReason      String? @map("blocked_reason")
-  remindCount        Int     @default(0)
+  remindCount        Int     @default(0) @map("remind_count")
   tags               String? // JSON array, e.g. '["消防","审批"]'
   workPackageId      String? @map("work_package_id")
   slaRuleId          String? @map("sla_rule_id")
@@ -236,4 +236,103 @@ model ProjectStatusLog {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("project_status_logs")
+}
+
+// ─── 项目模板表（标准管理 Phase A/B）────────────────────────────
+model ProjectTemplate {
+  id                  Int      @id @default(autoincrement())
+  templateId          String   @unique @map("template_id")
+  templateCode        String   @unique @map("template_code")
+  templateName        String   @map("template_name")
+  templateVersion     String   @map("template_version")
+  status              String // "draft" | "reviewing" | "ready" | "active" | "inactive" | "deprecated"
+  priority            Int      @default(0)
+  scopes              String? // JSON: TemplateScopes (brandScope, storeTypeScope, regionScope, projectTypeScope, serviceScope)
+  phaseBlueprint      String? // JSON: PhaseBlueprint[]
+  milestoneBlueprint  String? // JSON: MilestoneBlueprint[]
+  taskTemplateBinding String? // JSON: ProjectTemplateBinding[] (引用的任务模板ID列表)
+  meta                String? // JSON: TemplateMeta (createdBy, updatedBy, effectiveFrom, effectiveTo)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("project_templates")
+}
+
+// ─── 任务模板表（标准管理 Phase A）───────────────────────────────
+model TaskTemplate {
+  id                  Int      @id @default(autoincrement())
+  taskTemplateId      String   @unique @map("task_template_id")
+  taskTemplateCode    String   @unique @map("task_template_code")
+  taskTemplateName    String   @map("task_template_name")
+  taskTemplateVersion String   @map("task_template_version")
+  status              String // "draft" | "reviewing" | "ready" | "active" | "inactive" | "deprecated"
+  templateLevel       String   @map("template_level") // "project_root" | "stage" | "work_package" | "task"
+  businessDomain      String   @map("business_domain")
+  taskType            String   @map("task_type")
+  requiredFlag        Boolean  @default(false) @map("required_flag")
+  milestoneFlag       Boolean  @default(false) @map("milestone_flag")
+  ownerRole           String   @map("owner_role")
+  assigneeTypeDefault String   @map("assignee_type_default")
+  slaRuleId           String?  @map("sla_rule_id")
+  standardBinding     String? // JSON: StandardBinding (defaultStandardPackageId, executionStandardIds, acceptanceStandardIds, checklistTemplateIds)
+  dependencyBlueprint String? // JSON: DependencyBlueprint[] (fromTemplateCode, toTemplateCode, relationType, constraintType, lagDays)
+  childTemplateRefs   String? // JSON: TaskTemplateChildRef[]
+  parentTemplateCode  String?  @map("parent_template_code")
+  sortOrder           Int      @default(0) @map("sort_order")
+  meta                String? // JSON: TemplateMeta
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("task_templates")
+}
+
+// ─── 供应商表（采购管理）────────────────────────────────────────
+model Supplier {
+  id                  Int      @id @default(autoincrement())
+  code                String   @unique
+  name                String
+  category            String
+  status              String // "合作中" | "待审核" | "已暂停" | "已过期"
+  rating              String // 如 "4.8"
+  contact             String
+  city                String
+  currentTaskCount    Int      @default(0) @map("current_task_count")
+  availabilityStatus  String   @map("availability_status") // "assignable" | "busy" | "unavailable"
+  qualificationStatus String   @map("qualification_status") // "齐全" | "临期" | "需补齐"
+  serviceAreas        String? // JSON: string[] 服务区域
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("suppliers")
+}
+
+// ─── 商品类目表（采购管理，树形结构）───────────────────────────
+model ProductCategory {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  name        String
+  parentId    Int?     @map("parent_id")
+  sortOrder   Int      @default(0) @map("sort_order")
+  supplierIds String? // JSON: string[] 关联的供应商ID
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  parent   ProductCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children ProductCategory[] @relation("CategoryTree")
+
+  @@map("product_categories")
+}
+
+// ─── 模板实例化记录表（跟踪项目从模板创建的历史）─────────────
+model TemplateInstantiation {
+  id              Int      @id @default(autoincrement())
+  projectId       Int      @map("project_id")
+  templateId      String   @map("template_id")
+  templateVersion String   @map("template_version")
+  matchInput      String? // JSON: 实例化输入
+  outputSnapshot  String? // JSON: 实例化输出快照
+  createdAt       DateTime @default(now()) @map("created_at")
+  createdBy       String   @map("created_by")
+
+  @@map("template_instantiations")
 }

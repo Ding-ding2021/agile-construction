@@ -9,6 +9,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { ProjectItem } from '../data/projects'
 import type { ProjectStatus, ProjectStatusLogEntry } from '../domain/projectStatusMachine'
+import type { ParentStatus, SubStatusProgress } from '../domain/projectParentStatus'
+import { getParentStatusTone, getParentProgressFloor } from '../domain/projectStatusView'
 import {
   getProjectStageByStatus,
   getProjectStatusTone,
@@ -51,6 +53,12 @@ type ProjectStoreActions = {
     }
   ) => boolean
   addProject: (project: ProjectItem) => void
+  updateParentStatus: (
+    projectCode: string,
+    toParentStatus: ParentStatus,
+    subStatusProgress?: SubStatusProgress
+  ) => boolean
+  updateSubStatusProgress: (projectCode: string, subStatusProgress: SubStatusProgress) => boolean
 }
 
 export type ProjectStore = ProjectStoreState & ProjectStoreActions
@@ -118,6 +126,58 @@ export const useProjectStore = create<ProjectStore>()(
             [projectCode]: [log, ...(state.logs[projectCode] ?? [])].slice(0, 30),
           },
         })),
+
+      updateParentStatus: (projectCode, toParentStatus, subStatusProgress) => {
+        const state = get()
+        const project = state.projects.find(p => p.code === projectCode)
+        if (!project) return false
+
+        const floor = getParentProgressFloor(toParentStatus)
+        const progress = Math.max(project.progress, floor)
+
+        set(state => ({
+          projects: state.projects.map(p =>
+            p.code === projectCode
+              ? {
+                  ...p,
+                  parentStatus: toParentStatus,
+                  statusTone: getParentStatusTone(toParentStatus),
+                  progress,
+                  subStatusJson: subStatusProgress
+                    ? JSON.stringify(subStatusProgress)
+                    : p.subStatusJson,
+                }
+              : p
+          ),
+        }))
+        return true
+      },
+
+      updateSubStatusProgress: (projectCode, subStatusProgress) => {
+        const state = get()
+        const project = state.projects.find(p => p.code === projectCode)
+        if (!project) return false
+
+        const pStatus: ParentStatus = (project.parentStatus ?? '启动') as ParentStatus
+        const progress = getParentProgressFloor(pStatus)
+        const subProgress = subStatusProgress.items.filter(i => i.completed).length
+        const total = subStatusProgress.items.length
+        const adjustedProgress =
+          total > 0 ? Math.max(progress, Math.round((subProgress / total) * 100)) : progress
+
+        set(state => ({
+          projects: state.projects.map(p =>
+            p.code === projectCode
+              ? {
+                  ...p,
+                  subStatusJson: JSON.stringify(subStatusProgress),
+                  progress: adjustedProgress,
+                }
+              : p
+          ),
+        }))
+        return true
+      },
 
       syncProjectMilestone: (projectCode, payload) => {
         const state = get()

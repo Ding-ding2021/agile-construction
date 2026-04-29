@@ -1,12 +1,13 @@
-import { Suspense, useEffect, useMemo, useState } from 'react'
-import PersonnelPage from './components/personnel/PersonnelPage'
-import ProjectDetailPage from './components/project/ProjectDetailPage'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import TaskDetailPage from './components/task/TaskDetailPage'
 import { AppRouter } from './components/router/AppRouter'
 import { readRouteFromHash, isRouterHandledPage, type AppRoute } from './config/routes'
 import { goToProjectList, goToTaskList, goToPersonnelUser } from './config/navigation'
 import { getProjectByCode, projects as allProjects } from './data/projects'
 import { getTaskDetailByCode } from './components/task/taskManagement.data'
+
+const PersonnelPage = lazy(() => import('./components/personnel/PersonnelPage'))
+const ProjectDetailPage = lazy(() => import('./components/project/ProjectDetailPage'))
 
 const PageLoader = () => (
   <div
@@ -70,7 +71,9 @@ function App() {
   // detail 页面：注入 project 数据（AppRouter 无法处理需要外部数据的页面）
   if (route.page === 'detail' && activeProject) {
     return (
-      <ProjectDetailPage project={activeProject} activeTab={route.tab} onBack={goToProjectList} />
+      <Suspense fallback={<PageLoader />}>
+        <ProjectDetailPage project={activeProject} activeTab={route.tab} onBack={goToProjectList} />
+      </Suspense>
     )
   }
 
@@ -106,7 +109,11 @@ function App() {
 
   // personnel 页面：注入 onUserOpen 回调
   if (route.page === 'personnel') {
-    return <PersonnelPage onUserOpen={goToPersonnelUser} />
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <PersonnelPage onUserOpen={goToPersonnelUser} />
+      </Suspense>
+    )
   }
 
   // 其他所有页面由 AppRouter 处理
@@ -119,7 +126,11 @@ function App() {
   }
 
   // Fallback
-  return <PersonnelPage onUserOpen={goToPersonnelUser} />
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <PersonnelPage onUserOpen={goToPersonnelUser} />
+    </Suspense>
+  )
 }
 
 export default App

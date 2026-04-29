@@ -2,8 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { serverAdapterMock } = vi.hoisted(() => ({
   serverAdapterMock: {
-    getTaskState: vi.fn(),
-    saveTaskState: vi.fn(),
     appendAuditLog: vi.fn(),
   },
 }))
@@ -55,8 +53,6 @@ describe('taskRepository(task-center)', () => {
   beforeEach(() => {
     localStorage.clear()
     vi.clearAllMocks()
-    serverAdapterMock.getTaskState.mockRejectedValue(new Error('network fallback'))
-    serverAdapterMock.saveTaskState.mockResolvedValue(undefined)
     serverAdapterMock.appendAuditLog.mockResolvedValue(undefined)
   })
 
@@ -71,12 +67,6 @@ describe('taskRepository(task-center)', () => {
     const parsed = JSON.parse(local!)
     expect(parsed.schemaVersion).toBe(2)
     expect(parsed.tasks).toHaveLength(1)
-
-    expect(serverAdapterMock.saveTaskState).toHaveBeenCalledTimes(1)
-    expect(serverAdapterMock.saveTaskState.mock.calls[0][1]).toMatchObject({
-      schemaVersion: 2,
-      tasks,
-    })
   })
 
   it('loadTasks应兼容读取旧版数组快照', async () => {

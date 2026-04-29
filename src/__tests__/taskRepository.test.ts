@@ -13,7 +13,6 @@ vi.mock('../services/api/serverAdapter', () => {
       updateProjectTask: vi.fn(),
       deleteProjectTask: vi.fn(),
       getTaskTree: vi.fn(),
-      saveTaskState: vi.fn(),
       appendAuditLog: vi.fn(),
     },
   }

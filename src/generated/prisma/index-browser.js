@@ -269,6 +269,87 @@ exports.Prisma.ProjectStatusLogScalarFieldEnum = {
   reason: 'reason'
 };
 
+exports.Prisma.ProjectTemplateScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  templateCode: 'templateCode',
+  templateName: 'templateName',
+  templateVersion: 'templateVersion',
+  status: 'status',
+  priority: 'priority',
+  scopes: 'scopes',
+  phaseBlueprint: 'phaseBlueprint',
+  milestoneBlueprint: 'milestoneBlueprint',
+  taskTemplateBinding: 'taskTemplateBinding',
+  meta: 'meta',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskTemplateScalarFieldEnum = {
+  id: 'id',
+  taskTemplateId: 'taskTemplateId',
+  taskTemplateCode: 'taskTemplateCode',
+  taskTemplateName: 'taskTemplateName',
+  taskTemplateVersion: 'taskTemplateVersion',
+  status: 'status',
+  templateLevel: 'templateLevel',
+  businessDomain: 'businessDomain',
+  taskType: 'taskType',
+  requiredFlag: 'requiredFlag',
+  milestoneFlag: 'milestoneFlag',
+  ownerRole: 'ownerRole',
+  assigneeTypeDefault: 'assigneeTypeDefault',
+  slaRuleId: 'slaRuleId',
+  standardBinding: 'standardBinding',
+  dependencyBlueprint: 'dependencyBlueprint',
+  childTemplateRefs: 'childTemplateRefs',
+  parentTemplateCode: 'parentTemplateCode',
+  sortOrder: 'sortOrder',
+  meta: 'meta',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SupplierScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  category: 'category',
+  status: 'status',
+  rating: 'rating',
+  contact: 'contact',
+  city: 'city',
+  currentTaskCount: 'currentTaskCount',
+  availabilityStatus: 'availabilityStatus',
+  qualificationStatus: 'qualificationStatus',
+  serviceAreas: 'serviceAreas',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  parentId: 'parentId',
+  sortOrder: 'sortOrder',
+  supplierIds: 'supplierIds',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TemplateInstantiationScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  templateId: 'templateId',
+  templateVersion: 'templateVersion',
+  matchInput: 'matchInput',
+  outputSnapshot: 'outputSnapshot',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -290,7 +371,12 @@ exports.Prisma.ModelName = {
   TaskRelation: 'TaskRelation',
   ProjectRisk: 'ProjectRisk',
   ProjectMember: 'ProjectMember',
-  ProjectStatusLog: 'ProjectStatusLog'
+  ProjectStatusLog: 'ProjectStatusLog',
+  ProjectTemplate: 'ProjectTemplate',
+  TaskTemplate: 'TaskTemplate',
+  Supplier: 'Supplier',
+  ProductCategory: 'ProductCategory',
+  TemplateInstantiation: 'TemplateInstantiation'
 };
 
 /**

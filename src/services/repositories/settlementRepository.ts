@@ -1,5 +1,11 @@
 import type { ProjectItem } from '../../data/projects'
-import { serverAdapter, type SettlementSuggestion } from '../api/serverAdapter'
+
+interface SettlementSuggestion {
+  code: string
+  name: string
+  budget: string
+  acceptanceStatus: string
+}
 
 const parseBudgetToWan = (value: string): number => {
   const numeric = Number(value.replace(/[^\d.]/g, ''))
@@ -19,13 +25,6 @@ const buildLocalSuggestions = (projects: ProjectItem[]): SettlementSuggestion[] 
 
 export const settlementRepository = {
   async loadSuggestions(projects: ProjectItem[]): Promise<SettlementSuggestion[]> {
-    const localSuggestions = buildLocalSuggestions(projects)
-
-    try {
-      const remote = await serverAdapter.getSettlementState()
-      return remote.suggestions.length > 0 ? remote.suggestions : localSuggestions
-    } catch {
-      return localSuggestions
-    }
+    return buildLocalSuggestions(projects)
   },
 }

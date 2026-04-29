@@ -9,7 +9,7 @@ import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
 import TaskDetailPage from './TaskDetailPage'
-import { allMockTaskNodes, getTaskDetailByCode } from './taskManagement.data'
+import { getTaskDetailByCode } from './taskManagement.data'
 import { calculateTaskStats, processTasks, shouldResetPage } from './taskManagement.selectors'
 import type { TaskFilters, TaskViewMode, TaskItem, TaskDetail } from './taskManagement.types'
 import { taskRepository } from '../../services/repositories/taskRepository'
@@ -18,7 +18,9 @@ import { Drawer } from '@mui/material'
 const TaskManagementPage = () => {
   const currentHash = typeof window === 'undefined' ? '#/tasks' : window.location.hash || '#/tasks'
 
-  const [tasks, setTasks] = useState<TaskItem[]>(allMockTaskNodes)
+  const [tasks, setTasks] = useState<TaskItem[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<TaskFilters>({
     statKey: 'all',
@@ -36,14 +38,36 @@ const TaskManagementPage = () => {
     [selectedTaskCode]
   )
 
-  // 从 Repository 加载真实数据，降级到 mock
-  useEffect(() => {
-    taskRepository.loadTasks('__all').then(remoteTasks => {
+  // 从 Repository 加载真实数据
+  const loadRemoteTasks = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const remoteTasks = await taskRepository.loadTasks('__all')
       if (remoteTasks && remoteTasks.length > 0) {
         setTasks(remoteTasks)
       }
-    })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '加载任务失败，请检查网络连接')
+    } finally {
+      setIsLoading(false)
+    }
   }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    loadRemoteTasks().then(() => {
+      // 确保组件卸载后不更新
+      if (cancelled) return
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [loadRemoteTasks])
+
+  const handleRetry = useCallback(() => {
+    loadRemoteTasks()
+  }, [loadRemoteTasks])
 
   const stats = useMemo(() => calculateTaskStats(tasks), [tasks])
 
@@ -91,88 +115,121 @@ const TaskManagementPage = () => {
             searchPlaceholder="搜索..."
           />
           <div className="tm-body">
-            <StatsCards
-              items={[
-                {
-                  key: 'all',
-                  icon: '1.svg',
-                  label: '全部任务数',
-                  value: stats.total,
-                  tone: 'blue',
-                },
-                {
-                  key: 'pendingAssign',
-                  icon: '3.svg',
-                  label: '待分配数',
-                  value: stats.pendingAssign,
-                  tone: 'blue',
-                },
-                {
-                  key: 'executing',
-                  icon: '5.svg',
-                  label: '执行中数',
-                  value: stats.executing,
-                  tone: 'blue',
-                },
-                {
-                  key: 'pendingSubmit',
-                  icon: '7.svg',
-                  label: '待提交数',
-                  value: stats.pendingSubmit,
-                  tone: 'orange',
-                },
-                {
-                  key: 'pendingAcceptance',
-                  icon: '1.svg',
-                  label: '待验收数',
-                  value: stats.pendingAcceptance,
-                  tone: 'orange',
-                },
-                {
-                  key: 'slaRisk',
-                  icon: '3.svg',
-                  label: '超时/即将超时数',
-                  value: stats.slaWarningOrOverdue,
-                  tone: 'red',
-                },
-                {
-                  key: 'blocked',
-                  icon: '5.svg',
-                  label: '阻塞任务数',
-                  value: stats.blocked,
-                  tone: 'red',
-                },
-              ]}
-              activeKey={filters.statKey}
-              onItemClick={key => {
-                updateFilters({ statKey: key as TaskFilters['statKey'] })
-                setCurrentPage(1)
-              }}
-              className="pm-stats-row"
-              assetBase="/assets/CodeBubbyAssets/3947_2"
-            />
+            {isLoading && (
+              <div
+                className="tm-loading"
+                style={{ padding: '40px', textAlign: 'center', color: 'var(--pm-text-secondary)' }}
+              >
+                加载中...
+              </div>
+            )}
+            {error && (
+              <div className="tm-error" style={{ padding: '40px', textAlign: 'center' }}>
+                <p style={{ color: 'var(--pm-error, #ef5350)', marginBottom: 12 }}>
+                  加载失败：{error}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  style={{
+                    padding: '8px 24px',
+                    background: 'var(--pm-primary, #1976d2)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}
+                >
+                  重试
+                </button>
+              </div>
+            )}
+            {!isLoading && !error && (
+              <>
+                <StatsCards
+                  items={[
+                    {
+                      key: 'all',
+                      icon: '1.svg',
+                      label: '全部任务数',
+                      value: stats.total,
+                      tone: 'blue',
+                    },
+                    {
+                      key: 'pendingAssign',
+                      icon: '3.svg',
+                      label: '待分配数',
+                      value: stats.pendingAssign,
+                      tone: 'blue',
+                    },
+                    {
+                      key: 'executing',
+                      icon: '5.svg',
+                      label: '执行中数',
+                      value: stats.executing,
+                      tone: 'blue',
+                    },
+                    {
+                      key: 'pendingSubmit',
+                      icon: '7.svg',
+                      label: '待提交数',
+                      value: stats.pendingSubmit,
+                      tone: 'orange',
+                    },
+                    {
+                      key: 'pendingAcceptance',
+                      icon: '1.svg',
+                      label: '待验收数',
+                      value: stats.pendingAcceptance,
+                      tone: 'orange',
+                    },
+                    {
+                      key: 'slaRisk',
+                      icon: '3.svg',
+                      label: '超时/即将超时数',
+                      value: stats.slaWarningOrOverdue,
+                      tone: 'red',
+                    },
+                    {
+                      key: 'blocked',
+                      icon: '5.svg',
+                      label: '阻塞任务数',
+                      value: stats.blocked,
+                      tone: 'red',
+                    },
+                  ]}
+                  activeKey={filters.statKey}
+                  onItemClick={key => {
+                    updateFilters({ statKey: key as TaskFilters['statKey'] })
+                    setCurrentPage(1)
+                  }}
+                  className="pm-stats-row"
+                  assetBase="/assets/CodeBubbyAssets/3947_2"
+                />
 
-            <section className="tm-table-section">
-              <TaskToolbar
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                searchQuery={searchQuery}
-                onSearchChange={updateSearchQuery}
-                filters={filters}
-                onFiltersChange={updateFilters}
-              />
+                <section className="tm-table-section">
+                  <TaskToolbar
+                    viewMode={viewMode}
+                    onViewModeChange={setViewMode}
+                    searchQuery={searchQuery}
+                    onSearchChange={updateSearchQuery}
+                    filters={filters}
+                    onFiltersChange={updateFilters}
+                  />
 
-              <TaskListView
-                tasks={processedTasks}
-                pagination={pagination}
-                onPageChange={setCurrentPage}
-                searchQuery={searchQuery}
-                viewMode={viewMode}
-                onOpenTaskDetail={taskCode => {
-                  setSelectedTaskCode(taskCode)
-                }}
-              />
-            </section>
+                  <TaskListView
+                    tasks={processedTasks}
+                    pagination={pagination}
+                    onPageChange={setCurrentPage}
+                    searchQuery={searchQuery}
+                    viewMode={viewMode}
+                    onOpenTaskDetail={taskCode => {
+                      setSelectedTaskCode(taskCode)
+                    }}
+                  />
+                </section>
+              </>
+            )}
           </div>
         </main>
       </div>
