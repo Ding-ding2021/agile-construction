@@ -1,5 +1,6 @@
 import type { TaskFlowLog, TaskItem } from '../../components/task/taskManagement.types'
 import type { TemplateAuditEvent } from '../../components/standard/template-contract.types'
+import { allMockTaskNodes } from '../../components/task/taskManagement.data'
 import { createIdempotencyKey, serverAdapter } from '../api/serverAdapter'
 
 export type AcceptanceRectificationPayload = {
@@ -150,6 +151,23 @@ export const taskRepository = {
   // ── 加载任务：实体 API 优先，降级到 localStorage ────────────────
   async loadTasks(contextKey: string): Promise<TaskItem[] | null> {
     const localTasks = readLocalTasks(contextKey)
+
+    // __all 特例：调用跨项目 API
+    if (contextKey === '__all') {
+      try {
+        const remoteTasks = await serverAdapter.getAllTasks()
+        persistLocalTasks('__all', remoteTasks)
+        return remoteTasks
+      } catch {
+        // 后端不可用时：localStorage 有数据则用，否则 fallback 到 mock 作为初始种子
+        if (localTasks && localTasks.length > 0) {
+          return localTasks
+        }
+        persistLocalTasks('__all', allMockTaskNodes)
+        return allMockTaskNodes
+      }
+    }
+
     // contextKey 格式通常为 `__{projectName}__{projectCode}`，提取 projectCode
     const projectCode = contextKey.split('__').pop() ?? contextKey
 
@@ -157,7 +175,6 @@ export const taskRepository = {
       let remoteTasks = await serverAdapter.getProjectTasks(projectCode)
 
       // ── 自动迁移：后端为空但本地有数据时，推送本地任务到实体表 ──
-      // 这是一个过渡期机制，用于将现有的 localStorage 数据同步到后端
       if (remoteTasks.length === 0 && localTasks && localTasks.length > 0) {
         await Promise.allSettled(
           localTasks.map(task =>
@@ -168,7 +185,6 @@ export const taskRepository = {
             )
           )
         )
-        // 迁移完成后重新获取，确保数据一致
         remoteTasks = await serverAdapter.getProjectTasks(projectCode)
       }
 

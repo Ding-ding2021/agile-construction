@@ -65,6 +65,8 @@ export const serverAdapter = {
     }),
 
   // ── 任务实体 CRUD (V1) ────────────────────────────────────────
+  getAllTasks: () => apiRequest<TaskItem[]>(withEnv('/tasks/all'), { scope: 'task_list_read' }),
+
   getProjectTasks: (projectCode: string) =>
     apiRequest<TaskItem[]>(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks`), {
       scope: 'task_list_read',
