@@ -494,6 +494,99 @@
   border-color: var(--pm-red-25);
 }
 
+.status-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.parent-status-badge {
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.parent-status-badge.blue {
+  color: var(--pm-blue-light);
+  background: var(--pm-blue-15);
+  border-color: var(--pm-blue-25);
+}
+
+.parent-status-badge.yellow {
+  color: var(--pm-orange-gold);
+  background: var(--pm-orange-15);
+  border-color: var(--pm-orange-25);
+}
+
+.parent-status-badge.green {
+  color: var(--pm-green-light);
+  background: var(--pm-green-15);
+  border-color: var(--pm-green-25);
+}
+
+.parent-status-badge.red {
+  color: var(--pm-red);
+  background: var(--pm-red-15);
+  border-color: var(--pm-red-25);
+}
+
+.sub-status-item {
+  grid-column: 1 / -1;
+}
+
+.sub-status-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sub-status-chip {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--pm-text-60);
+  background: var(--pm-element);
+  border: 1px solid var(--pm-border-light);
+  transition: all 0.2s;
+}
+
+.sub-status-chip.completed {
+  color: var(--pm-green-light);
+  background: var(--pm-green-15);
+  border-color: var(--pm-green-25);
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.sub-status-chip.milestone {
+  border-color: var(--pm-primary);
+  border-style: dashed;
+}
+
+.sub-status-chip.milestone.completed {
+  border-style: solid;
+}
+
+.milestone-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pm-primary);
+}
+
 .with-icon img {
   width: 12px;
   height: 12px;

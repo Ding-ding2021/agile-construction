@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint (core go-live chain)
-        run: npx eslint src/App.tsx src/components/task/TaskManagementPage.tsx src/components/project/ProjectAcceptanceView.tsx src/components/contracts/ContractSettlementPage.tsx "src/services/**/*.ts"
+      - name: Lint (full project)
+        run: npx eslint "src/**/*.{ts,tsx}"
 
       - name: Verify stage3 docs
         run: |

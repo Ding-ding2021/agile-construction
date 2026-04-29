@@ -1,9 +1,10 @@
 import type { AcceptanceMilestoneSyncPayload } from '../../components/project/ProjectAcceptanceView'
-import {
-  createIdempotencyKey,
-  serverAdapter,
-  type AcceptanceStateSnapshot,
-} from '../api/serverAdapter'
+
+interface AcceptanceStateSnapshot {
+  nodes: Array<Record<string, unknown>>
+  milestones: Array<Record<string, unknown>>
+  summary?: AcceptanceMilestoneSyncPayload
+}
 
 const ACCEPTANCE_STORAGE_PREFIX = 'pm-acceptance-state-v1'
 
@@ -35,15 +36,7 @@ const persistLocalState = (projectCode: string, payload: AcceptanceStateSnapshot
 
 export const acceptanceRepository = {
   async load(projectCode: string): Promise<AcceptanceStateSnapshot | null> {
-    const localState = readLocalState(projectCode)
-
-    try {
-      const remote = await serverAdapter.getAcceptanceState(projectCode)
-      persistLocalState(projectCode, remote)
-      return remote
-    } catch {
-      return localState
-    }
+    return readLocalState(projectCode)
   },
 
   async save(
@@ -53,15 +46,5 @@ export const acceptanceRepository = {
   ): Promise<void> {
     const nextPayload = { ...payload, summary }
     persistLocalState(projectCode, nextPayload)
-
-    try {
-      await serverAdapter.saveAcceptanceState(
-        projectCode,
-        nextPayload,
-        createIdempotencyKey('acceptance', projectCode)
-      )
-    } catch {
-      // fallback to local cache only
-    }
   },
 }

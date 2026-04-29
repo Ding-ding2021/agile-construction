@@ -61,6 +61,31 @@ export type ProjectMember = $Result.DefaultSelection<Prisma.$ProjectMemberPayloa
  *
  */
 export type ProjectStatusLog = $Result.DefaultSelection<Prisma.$ProjectStatusLogPayload>
+/**
+ * Model ProjectTemplate
+ *
+ */
+export type ProjectTemplate = $Result.DefaultSelection<Prisma.$ProjectTemplatePayload>
+/**
+ * Model TaskTemplate
+ *
+ */
+export type TaskTemplate = $Result.DefaultSelection<Prisma.$TaskTemplatePayload>
+/**
+ * Model Supplier
+ *
+ */
+export type Supplier = $Result.DefaultSelection<Prisma.$SupplierPayload>
+/**
+ * Model ProductCategory
+ *
+ */
+export type ProductCategory = $Result.DefaultSelection<Prisma.$ProductCategoryPayload>
+/**
+ * Model TemplateInstantiation
+ *
+ */
+export type TemplateInstantiation = $Result.DefaultSelection<Prisma.$TemplateInstantiationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -316,6 +341,56 @@ export class PrismaClient<
    * ```
    */
   get projectStatusLog(): Prisma.ProjectStatusLogDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.projectTemplate`: Exposes CRUD operations for the **ProjectTemplate** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ProjectTemplates
+   * const projectTemplates = await prisma.projectTemplate.findMany()
+   * ```
+   */
+  get projectTemplate(): Prisma.ProjectTemplateDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.taskTemplate`: Exposes CRUD operations for the **TaskTemplate** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more TaskTemplates
+   * const taskTemplates = await prisma.taskTemplate.findMany()
+   * ```
+   */
+  get taskTemplate(): Prisma.TaskTemplateDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.supplier`: Exposes CRUD operations for the **Supplier** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more Suppliers
+   * const suppliers = await prisma.supplier.findMany()
+   * ```
+   */
+  get supplier(): Prisma.SupplierDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.productCategory`: Exposes CRUD operations for the **ProductCategory** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ProductCategories
+   * const productCategories = await prisma.productCategory.findMany()
+   * ```
+   */
+  get productCategory(): Prisma.ProductCategoryDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.templateInstantiation`: Exposes CRUD operations for the **TemplateInstantiation** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more TemplateInstantiations
+   * const templateInstantiations = await prisma.templateInstantiation.findMany()
+   * ```
+   */
+  get templateInstantiation(): Prisma.TemplateInstantiationDelegate<ExtArgs, ClientOptions>
 }
 
 export namespace Prisma {
@@ -754,6 +829,11 @@ export namespace Prisma {
     ProjectRisk: 'ProjectRisk'
     ProjectMember: 'ProjectMember'
     ProjectStatusLog: 'ProjectStatusLog'
+    ProjectTemplate: 'ProjectTemplate'
+    TaskTemplate: 'TaskTemplate'
+    Supplier: 'Supplier'
+    ProductCategory: 'ProductCategory'
+    TemplateInstantiation: 'TemplateInstantiation'
   }
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -787,6 +867,11 @@ export namespace Prisma {
         | 'projectRisk'
         | 'projectMember'
         | 'projectStatusLog'
+        | 'projectTemplate'
+        | 'taskTemplate'
+        | 'supplier'
+        | 'productCategory'
+        | 'templateInstantiation'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1530,6 +1615,376 @@ export namespace Prisma {
           }
         }
       }
+      ProjectTemplate: {
+        payload: Prisma.$ProjectTemplatePayload<ExtArgs>
+        fields: Prisma.ProjectTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.ProjectTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.ProjectTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.ProjectTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          update: {
+            args: Prisma.ProjectTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectTemplate>
+          }
+          groupBy: {
+            args: Prisma.ProjectTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      TaskTemplate: {
+        payload: Prisma.$TaskTemplatePayload<ExtArgs>
+        fields: Prisma.TaskTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.TaskTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.TaskTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.TaskTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.TaskTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TaskTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.TaskTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          update: {
+            args: Prisma.TaskTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TaskTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.TaskTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.TaskTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTaskTemplate>
+          }
+          groupBy: {
+            args: Prisma.TaskTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      Supplier: {
+        payload: Prisma.$SupplierPayload<ExtArgs>
+        fields: Prisma.SupplierFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupplierFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupplierFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          findFirst: {
+            args: Prisma.SupplierFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupplierFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          findMany: {
+            args: Prisma.SupplierFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>[]
+          }
+          create: {
+            args: Prisma.SupplierCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          createMany: {
+            args: Prisma.SupplierCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupplierCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>[]
+          }
+          delete: {
+            args: Prisma.SupplierDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          update: {
+            args: Prisma.SupplierUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupplierDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupplierUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SupplierUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>[]
+          }
+          upsert: {
+            args: Prisma.SupplierUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupplierPayload>
+          }
+          aggregate: {
+            args: Prisma.SupplierAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupplier>
+          }
+          groupBy: {
+            args: Prisma.SupplierGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupplierGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupplierCountArgs<ExtArgs>
+            result: $Utils.Optional<SupplierCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductCategory: {
+        payload: Prisma.$ProductCategoryPayload<ExtArgs>
+        fields: Prisma.ProductCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.ProductCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.ProductCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.ProductCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          update: {
+            args: Prisma.ProductCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductCategory>
+          }
+          groupBy: {
+            args: Prisma.ProductCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductCategoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      TemplateInstantiation: {
+        payload: Prisma.$TemplateInstantiationPayload<ExtArgs>
+        fields: Prisma.TemplateInstantiationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TemplateInstantiationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TemplateInstantiationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          findFirst: {
+            args: Prisma.TemplateInstantiationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TemplateInstantiationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          findMany: {
+            args: Prisma.TemplateInstantiationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>[]
+          }
+          create: {
+            args: Prisma.TemplateInstantiationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          createMany: {
+            args: Prisma.TemplateInstantiationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TemplateInstantiationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>[]
+          }
+          delete: {
+            args: Prisma.TemplateInstantiationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          update: {
+            args: Prisma.TemplateInstantiationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TemplateInstantiationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TemplateInstantiationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TemplateInstantiationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TemplateInstantiationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TemplateInstantiationPayload>
+          }
+          aggregate: {
+            args: Prisma.TemplateInstantiationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTemplateInstantiation>
+          }
+          groupBy: {
+            args: Prisma.TemplateInstantiationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TemplateInstantiationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TemplateInstantiationCountArgs<ExtArgs>
+            result: $Utils.Optional<TemplateInstantiationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1652,6 +2107,11 @@ export namespace Prisma {
     projectRisk?: ProjectRiskOmit
     projectMember?: ProjectMemberOmit
     projectStatusLog?: ProjectStatusLogOmit
+    projectTemplate?: ProjectTemplateOmit
+    taskTemplate?: TaskTemplateOmit
+    supplier?: SupplierOmit
+    productCategory?: ProductCategoryOmit
+    templateInstantiation?: TemplateInstantiationOmit
   }
 
   /* Types for Logging */
@@ -1869,6 +2329,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: TaskRelationWhereInput
+  }
+
+  /**
+   * Count Type ProductCategoryCountOutputType
+   */
+
+  export type ProductCategoryCountOutputType = {
+    children: number
+  }
+
+  export type ProductCategoryCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    children?: boolean | ProductCategoryCountOutputTypeCountChildrenArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductCategoryCountOutputType without action
+   */
+  export type ProductCategoryCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategoryCountOutputType
+     */
+    select?: ProductCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductCategoryCountOutputType without action
+   */
+  export type ProductCategoryCountOutputTypeCountChildrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProductCategoryWhereInput
   }
 
   /**
@@ -15923,6 +16419,6782 @@ export namespace Prisma {
   }
 
   /**
+   * Model ProjectTemplate
+   */
+
+  export type AggregateProjectTemplate = {
+    _count: ProjectTemplateCountAggregateOutputType | null
+    _avg: ProjectTemplateAvgAggregateOutputType | null
+    _sum: ProjectTemplateSumAggregateOutputType | null
+    _min: ProjectTemplateMinAggregateOutputType | null
+    _max: ProjectTemplateMaxAggregateOutputType | null
+  }
+
+  export type ProjectTemplateAvgAggregateOutputType = {
+    id: number | null
+    priority: number | null
+  }
+
+  export type ProjectTemplateSumAggregateOutputType = {
+    id: number | null
+    priority: number | null
+  }
+
+  export type ProjectTemplateMinAggregateOutputType = {
+    id: number | null
+    templateId: string | null
+    templateCode: string | null
+    templateName: string | null
+    templateVersion: string | null
+    status: string | null
+    priority: number | null
+    scopes: string | null
+    phaseBlueprint: string | null
+    milestoneBlueprint: string | null
+    taskTemplateBinding: string | null
+    meta: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectTemplateMaxAggregateOutputType = {
+    id: number | null
+    templateId: string | null
+    templateCode: string | null
+    templateName: string | null
+    templateVersion: string | null
+    status: string | null
+    priority: number | null
+    scopes: string | null
+    phaseBlueprint: string | null
+    milestoneBlueprint: string | null
+    taskTemplateBinding: string | null
+    meta: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectTemplateCountAggregateOutputType = {
+    id: number
+    templateId: number
+    templateCode: number
+    templateName: number
+    templateVersion: number
+    status: number
+    priority: number
+    scopes: number
+    phaseBlueprint: number
+    milestoneBlueprint: number
+    taskTemplateBinding: number
+    meta: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type ProjectTemplateAvgAggregateInputType = {
+    id?: true
+    priority?: true
+  }
+
+  export type ProjectTemplateSumAggregateInputType = {
+    id?: true
+    priority?: true
+  }
+
+  export type ProjectTemplateMinAggregateInputType = {
+    id?: true
+    templateId?: true
+    templateCode?: true
+    templateName?: true
+    templateVersion?: true
+    status?: true
+    priority?: true
+    scopes?: true
+    phaseBlueprint?: true
+    milestoneBlueprint?: true
+    taskTemplateBinding?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectTemplateMaxAggregateInputType = {
+    id?: true
+    templateId?: true
+    templateCode?: true
+    templateName?: true
+    templateVersion?: true
+    status?: true
+    priority?: true
+    scopes?: true
+    phaseBlueprint?: true
+    milestoneBlueprint?: true
+    taskTemplateBinding?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectTemplateCountAggregateInputType = {
+    id?: true
+    templateId?: true
+    templateCode?: true
+    templateName?: true
+    templateVersion?: true
+    status?: true
+    priority?: true
+    scopes?: true
+    phaseBlueprint?: true
+    milestoneBlueprint?: true
+    taskTemplateBinding?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProjectTemplateAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProjectTemplate to aggregate.
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProjectTemplates to fetch.
+     */
+    orderBy?: ProjectTemplateOrderByWithRelationInput | ProjectTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ProjectTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProjectTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProjectTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ProjectTemplates
+     **/
+    _count?: true | ProjectTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: ProjectTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: ProjectTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ProjectTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ProjectTemplateMaxAggregateInputType
+  }
+
+  export type GetProjectTemplateAggregateType<T extends ProjectTemplateAggregateArgs> = {
+    [P in keyof T & keyof AggregateProjectTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectTemplate[P]>
+      : GetScalarType<T[P], AggregateProjectTemplate[P]>
+  }
+
+  export type ProjectTemplateGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProjectTemplateWhereInput
+    orderBy?:
+      | ProjectTemplateOrderByWithAggregationInput
+      | ProjectTemplateOrderByWithAggregationInput[]
+    by: ProjectTemplateScalarFieldEnum[] | ProjectTemplateScalarFieldEnum
+    having?: ProjectTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectTemplateCountAggregateInputType | true
+    _avg?: ProjectTemplateAvgAggregateInputType
+    _sum?: ProjectTemplateSumAggregateInputType
+    _min?: ProjectTemplateMinAggregateInputType
+    _max?: ProjectTemplateMaxAggregateInputType
+  }
+
+  export type ProjectTemplateGroupByOutputType = {
+    id: number
+    templateId: string
+    templateCode: string
+    templateName: string
+    templateVersion: string
+    status: string
+    priority: number
+    scopes: string | null
+    phaseBlueprint: string | null
+    milestoneBlueprint: string | null
+    taskTemplateBinding: string | null
+    meta: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProjectTemplateCountAggregateOutputType | null
+    _avg: ProjectTemplateAvgAggregateOutputType | null
+    _sum: ProjectTemplateSumAggregateOutputType | null
+    _min: ProjectTemplateMinAggregateOutputType | null
+    _max: ProjectTemplateMaxAggregateOutputType | null
+  }
+
+  type GetProjectTemplateGroupByPayload<T extends ProjectTemplateGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<ProjectTemplateGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof ProjectTemplateGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+  export type ProjectTemplateSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      templateId?: boolean
+      templateCode?: boolean
+      templateName?: boolean
+      templateVersion?: boolean
+      status?: boolean
+      priority?: boolean
+      scopes?: boolean
+      phaseBlueprint?: boolean
+      milestoneBlueprint?: boolean
+      taskTemplateBinding?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['projectTemplate']
+  >
+
+  export type ProjectTemplateSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      templateId?: boolean
+      templateCode?: boolean
+      templateName?: boolean
+      templateVersion?: boolean
+      status?: boolean
+      priority?: boolean
+      scopes?: boolean
+      phaseBlueprint?: boolean
+      milestoneBlueprint?: boolean
+      taskTemplateBinding?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['projectTemplate']
+  >
+
+  export type ProjectTemplateSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      templateId?: boolean
+      templateCode?: boolean
+      templateName?: boolean
+      templateVersion?: boolean
+      status?: boolean
+      priority?: boolean
+      scopes?: boolean
+      phaseBlueprint?: boolean
+      milestoneBlueprint?: boolean
+      taskTemplateBinding?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['projectTemplate']
+  >
+
+  export type ProjectTemplateSelectScalar = {
+    id?: boolean
+    templateId?: boolean
+    templateCode?: boolean
+    templateName?: boolean
+    templateVersion?: boolean
+    status?: boolean
+    priority?: boolean
+    scopes?: boolean
+    phaseBlueprint?: boolean
+    milestoneBlueprint?: boolean
+    taskTemplateBinding?: boolean
+    meta?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProjectTemplateOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | 'id'
+    | 'templateId'
+    | 'templateCode'
+    | 'templateName'
+    | 'templateVersion'
+    | 'status'
+    | 'priority'
+    | 'scopes'
+    | 'phaseBlueprint'
+    | 'milestoneBlueprint'
+    | 'taskTemplateBinding'
+    | 'meta'
+    | 'createdAt'
+    | 'updatedAt',
+    ExtArgs['result']['projectTemplate']
+  >
+
+  export type $ProjectTemplatePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'ProjectTemplate'
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number
+        templateId: string
+        templateCode: string
+        templateName: string
+        templateVersion: string
+        status: string
+        priority: number
+        scopes: string | null
+        phaseBlueprint: string | null
+        milestoneBlueprint: string | null
+        taskTemplateBinding: string | null
+        meta: string | null
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs['result']['projectTemplate']
+    >
+    composites: {}
+  }
+
+  type ProjectTemplateGetPayload<
+    S extends boolean | null | undefined | ProjectTemplateDefaultArgs,
+  > = $Result.GetResult<Prisma.$ProjectTemplatePayload, S>
+
+  type ProjectTemplateCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<ProjectTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: ProjectTemplateCountAggregateInputType | true
+  }
+
+  export interface ProjectTemplateDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['ProjectTemplate']
+      meta: { name: 'ProjectTemplate' }
+    }
+    /**
+     * Find zero or one ProjectTemplate that matches the filter.
+     * @param {ProjectTemplateFindUniqueArgs} args - Arguments to find a ProjectTemplate
+     * @example
+     * // Get one ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectTemplateFindUniqueArgs>(
+      args: SelectSubset<T, ProjectTemplateFindUniqueArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one ProjectTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectTemplateFindUniqueOrThrowArgs} args - Arguments to find a ProjectTemplate
+     * @example
+     * // Get one ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectTemplateFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ProjectTemplateFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProjectTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateFindFirstArgs} args - Arguments to find a ProjectTemplate
+     * @example
+     * // Get one ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectTemplateFindFirstArgs>(
+      args?: SelectSubset<T, ProjectTemplateFindFirstArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProjectTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateFindFirstOrThrowArgs} args - Arguments to find a ProjectTemplate
+     * @example
+     * // Get one ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectTemplateFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ProjectTemplateFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more ProjectTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectTemplates
+     * const projectTemplates = await prisma.projectTemplate.findMany()
+     *
+     * // Get first 10 ProjectTemplates
+     * const projectTemplates = await prisma.projectTemplate.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const projectTemplateWithIdOnly = await prisma.projectTemplate.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ProjectTemplateFindManyArgs>(
+      args?: SelectSubset<T, ProjectTemplateFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ProjectTemplatePayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >
+
+    /**
+     * Create a ProjectTemplate.
+     * @param {ProjectTemplateCreateArgs} args - Arguments to create a ProjectTemplate.
+     * @example
+     * // Create one ProjectTemplate
+     * const ProjectTemplate = await prisma.projectTemplate.create({
+     *   data: {
+     *     // ... data to create a ProjectTemplate
+     *   }
+     * })
+     *
+     */
+    create<T extends ProjectTemplateCreateArgs>(
+      args: SelectSubset<T, ProjectTemplateCreateArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<Prisma.$ProjectTemplatePayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many ProjectTemplates.
+     * @param {ProjectTemplateCreateManyArgs} args - Arguments to create many ProjectTemplates.
+     * @example
+     * // Create many ProjectTemplates
+     * const projectTemplate = await prisma.projectTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ProjectTemplateCreateManyArgs>(
+      args?: SelectSubset<T, ProjectTemplateCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectTemplates and returns the data saved in the database.
+     * @param {ProjectTemplateCreateManyAndReturnArgs} args - Arguments to create many ProjectTemplates.
+     * @example
+     * // Create many ProjectTemplates
+     * const projectTemplate = await prisma.projectTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ProjectTemplates and only return the `id`
+     * const projectTemplateWithIdOnly = await prisma.projectTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ProjectTemplateCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ProjectTemplateCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a ProjectTemplate.
+     * @param {ProjectTemplateDeleteArgs} args - Arguments to delete one ProjectTemplate.
+     * @example
+     * // Delete one ProjectTemplate
+     * const ProjectTemplate = await prisma.projectTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectTemplate
+     *   }
+     * })
+     *
+     */
+    delete<T extends ProjectTemplateDeleteArgs>(
+      args: SelectSubset<T, ProjectTemplateDeleteArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<Prisma.$ProjectTemplatePayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one ProjectTemplate.
+     * @param {ProjectTemplateUpdateArgs} args - Arguments to update one ProjectTemplate.
+     * @example
+     * // Update one ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ProjectTemplateUpdateArgs>(
+      args: SelectSubset<T, ProjectTemplateUpdateArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<Prisma.$ProjectTemplatePayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more ProjectTemplates.
+     * @param {ProjectTemplateDeleteManyArgs} args - Arguments to filter ProjectTemplates to delete.
+     * @example
+     * // Delete a few ProjectTemplates
+     * const { count } = await prisma.projectTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ProjectTemplateDeleteManyArgs>(
+      args?: SelectSubset<T, ProjectTemplateDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectTemplates
+     * const projectTemplate = await prisma.projectTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ProjectTemplateUpdateManyArgs>(
+      args: SelectSubset<T, ProjectTemplateUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectTemplates and returns the data updated in the database.
+     * @param {ProjectTemplateUpdateManyAndReturnArgs} args - Arguments to update many ProjectTemplates.
+     * @example
+     * // Update many ProjectTemplates
+     * const projectTemplate = await prisma.projectTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ProjectTemplates and only return the `id`
+     * const projectTemplateWithIdOnly = await prisma.projectTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ProjectTemplateUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ProjectTemplateUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProjectTemplatePayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one ProjectTemplate.
+     * @param {ProjectTemplateUpsertArgs} args - Arguments to update or create a ProjectTemplate.
+     * @example
+     * // Update or create a ProjectTemplate
+     * const projectTemplate = await prisma.projectTemplate.upsert({
+     *   create: {
+     *     // ... data to create a ProjectTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectTemplateUpsertArgs>(
+      args: SelectSubset<T, ProjectTemplateUpsertArgs<ExtArgs>>
+    ): Prisma__ProjectTemplateClient<
+      $Result.GetResult<Prisma.$ProjectTemplatePayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of ProjectTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateCountArgs} args - Arguments to filter ProjectTemplates to count.
+     * @example
+     * // Count the number of ProjectTemplates
+     * const count = await prisma.projectTemplate.count({
+     *   where: {
+     *     // ... the filter for the ProjectTemplates we want to count
+     *   }
+     * })
+     **/
+    count<T extends ProjectTemplateCountArgs>(
+      args?: Subset<T, ProjectTemplateCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ProjectTemplateAggregateArgs>(
+      args: Subset<T, ProjectTemplateAggregateArgs>
+    ): Prisma.PrismaPromise<GetProjectTemplateAggregateType<T>>
+
+    /**
+     * Group by ProjectTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ProjectTemplateGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ProjectTemplateGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors
+      ? GetProjectTemplateGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the ProjectTemplate model
+     */
+    readonly fields: ProjectTemplateFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectTemplateClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the ProjectTemplate model
+   */
+  interface ProjectTemplateFieldRefs {
+    readonly id: FieldRef<'ProjectTemplate', 'Int'>
+    readonly templateId: FieldRef<'ProjectTemplate', 'String'>
+    readonly templateCode: FieldRef<'ProjectTemplate', 'String'>
+    readonly templateName: FieldRef<'ProjectTemplate', 'String'>
+    readonly templateVersion: FieldRef<'ProjectTemplate', 'String'>
+    readonly status: FieldRef<'ProjectTemplate', 'String'>
+    readonly priority: FieldRef<'ProjectTemplate', 'Int'>
+    readonly scopes: FieldRef<'ProjectTemplate', 'String'>
+    readonly phaseBlueprint: FieldRef<'ProjectTemplate', 'String'>
+    readonly milestoneBlueprint: FieldRef<'ProjectTemplate', 'String'>
+    readonly taskTemplateBinding: FieldRef<'ProjectTemplate', 'String'>
+    readonly meta: FieldRef<'ProjectTemplate', 'String'>
+    readonly createdAt: FieldRef<'ProjectTemplate', 'DateTime'>
+    readonly updatedAt: FieldRef<'ProjectTemplate', 'DateTime'>
+  }
+
+  // Custom InputTypes
+  /**
+   * ProjectTemplate findUnique
+   */
+  export type ProjectTemplateFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectTemplate to fetch.
+     */
+    where: ProjectTemplateWhereUniqueInput
+  }
+
+  /**
+   * ProjectTemplate findUniqueOrThrow
+   */
+  export type ProjectTemplateFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectTemplate to fetch.
+     */
+    where: ProjectTemplateWhereUniqueInput
+  }
+
+  /**
+   * ProjectTemplate findFirst
+   */
+  export type ProjectTemplateFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectTemplate to fetch.
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProjectTemplates to fetch.
+     */
+    orderBy?: ProjectTemplateOrderByWithRelationInput | ProjectTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProjectTemplates.
+     */
+    cursor?: ProjectTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProjectTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProjectTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProjectTemplates.
+     */
+    distinct?: ProjectTemplateScalarFieldEnum | ProjectTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTemplate findFirstOrThrow
+   */
+  export type ProjectTemplateFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectTemplate to fetch.
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProjectTemplates to fetch.
+     */
+    orderBy?: ProjectTemplateOrderByWithRelationInput | ProjectTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProjectTemplates.
+     */
+    cursor?: ProjectTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProjectTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProjectTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProjectTemplates.
+     */
+    distinct?: ProjectTemplateScalarFieldEnum | ProjectTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTemplate findMany
+   */
+  export type ProjectTemplateFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectTemplates to fetch.
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProjectTemplates to fetch.
+     */
+    orderBy?: ProjectTemplateOrderByWithRelationInput | ProjectTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ProjectTemplates.
+     */
+    cursor?: ProjectTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProjectTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProjectTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProjectTemplates.
+     */
+    distinct?: ProjectTemplateScalarFieldEnum | ProjectTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTemplate create
+   */
+  export type ProjectTemplateCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectTemplate.
+     */
+    data: XOR<ProjectTemplateCreateInput, ProjectTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectTemplate createMany
+   */
+  export type ProjectTemplateCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ProjectTemplates.
+     */
+    data: ProjectTemplateCreateManyInput | ProjectTemplateCreateManyInput[]
+  }
+
+  /**
+   * ProjectTemplate createManyAndReturn
+   */
+  export type ProjectTemplateCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectTemplates.
+     */
+    data: ProjectTemplateCreateManyInput | ProjectTemplateCreateManyInput[]
+  }
+
+  /**
+   * ProjectTemplate update
+   */
+  export type ProjectTemplateUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectTemplate.
+     */
+    data: XOR<ProjectTemplateUpdateInput, ProjectTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectTemplate to update.
+     */
+    where: ProjectTemplateWhereUniqueInput
+  }
+
+  /**
+   * ProjectTemplate updateMany
+   */
+  export type ProjectTemplateUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ProjectTemplates.
+     */
+    data: XOR<ProjectTemplateUpdateManyMutationInput, ProjectTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectTemplates to update
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * Limit how many ProjectTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectTemplate updateManyAndReturn
+   */
+  export type ProjectTemplateUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectTemplates.
+     */
+    data: XOR<ProjectTemplateUpdateManyMutationInput, ProjectTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectTemplates to update
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * Limit how many ProjectTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectTemplate upsert
+   */
+  export type ProjectTemplateUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectTemplate to update in case it exists.
+     */
+    where: ProjectTemplateWhereUniqueInput
+    /**
+     * In case the ProjectTemplate found by the `where` argument doesn't exist, create a new ProjectTemplate with this data.
+     */
+    create: XOR<ProjectTemplateCreateInput, ProjectTemplateUncheckedCreateInput>
+    /**
+     * In case the ProjectTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectTemplateUpdateInput, ProjectTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectTemplate delete
+   */
+  export type ProjectTemplateDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+    /**
+     * Filter which ProjectTemplate to delete.
+     */
+    where: ProjectTemplateWhereUniqueInput
+  }
+
+  /**
+   * ProjectTemplate deleteMany
+   */
+  export type ProjectTemplateDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProjectTemplates to delete
+     */
+    where?: ProjectTemplateWhereInput
+    /**
+     * Limit how many ProjectTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectTemplate without action
+   */
+  export type ProjectTemplateDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProjectTemplate
+     */
+    select?: ProjectTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTemplate
+     */
+    omit?: ProjectTemplateOmit<ExtArgs> | null
+  }
+
+  /**
+   * Model TaskTemplate
+   */
+
+  export type AggregateTaskTemplate = {
+    _count: TaskTemplateCountAggregateOutputType | null
+    _avg: TaskTemplateAvgAggregateOutputType | null
+    _sum: TaskTemplateSumAggregateOutputType | null
+    _min: TaskTemplateMinAggregateOutputType | null
+    _max: TaskTemplateMaxAggregateOutputType | null
+  }
+
+  export type TaskTemplateAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type TaskTemplateSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type TaskTemplateMinAggregateOutputType = {
+    id: number | null
+    taskTemplateId: string | null
+    taskTemplateCode: string | null
+    taskTemplateName: string | null
+    taskTemplateVersion: string | null
+    status: string | null
+    templateLevel: string | null
+    businessDomain: string | null
+    taskType: string | null
+    requiredFlag: boolean | null
+    milestoneFlag: boolean | null
+    ownerRole: string | null
+    assigneeTypeDefault: string | null
+    slaRuleId: string | null
+    standardBinding: string | null
+    dependencyBlueprint: string | null
+    childTemplateRefs: string | null
+    parentTemplateCode: string | null
+    sortOrder: number | null
+    meta: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TaskTemplateMaxAggregateOutputType = {
+    id: number | null
+    taskTemplateId: string | null
+    taskTemplateCode: string | null
+    taskTemplateName: string | null
+    taskTemplateVersion: string | null
+    status: string | null
+    templateLevel: string | null
+    businessDomain: string | null
+    taskType: string | null
+    requiredFlag: boolean | null
+    milestoneFlag: boolean | null
+    ownerRole: string | null
+    assigneeTypeDefault: string | null
+    slaRuleId: string | null
+    standardBinding: string | null
+    dependencyBlueprint: string | null
+    childTemplateRefs: string | null
+    parentTemplateCode: string | null
+    sortOrder: number | null
+    meta: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TaskTemplateCountAggregateOutputType = {
+    id: number
+    taskTemplateId: number
+    taskTemplateCode: number
+    taskTemplateName: number
+    taskTemplateVersion: number
+    status: number
+    templateLevel: number
+    businessDomain: number
+    taskType: number
+    requiredFlag: number
+    milestoneFlag: number
+    ownerRole: number
+    assigneeTypeDefault: number
+    slaRuleId: number
+    standardBinding: number
+    dependencyBlueprint: number
+    childTemplateRefs: number
+    parentTemplateCode: number
+    sortOrder: number
+    meta: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type TaskTemplateAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type TaskTemplateSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type TaskTemplateMinAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    taskTemplateCode?: true
+    taskTemplateName?: true
+    taskTemplateVersion?: true
+    status?: true
+    templateLevel?: true
+    businessDomain?: true
+    taskType?: true
+    requiredFlag?: true
+    milestoneFlag?: true
+    ownerRole?: true
+    assigneeTypeDefault?: true
+    slaRuleId?: true
+    standardBinding?: true
+    dependencyBlueprint?: true
+    childTemplateRefs?: true
+    parentTemplateCode?: true
+    sortOrder?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TaskTemplateMaxAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    taskTemplateCode?: true
+    taskTemplateName?: true
+    taskTemplateVersion?: true
+    status?: true
+    templateLevel?: true
+    businessDomain?: true
+    taskType?: true
+    requiredFlag?: true
+    milestoneFlag?: true
+    ownerRole?: true
+    assigneeTypeDefault?: true
+    slaRuleId?: true
+    standardBinding?: true
+    dependencyBlueprint?: true
+    childTemplateRefs?: true
+    parentTemplateCode?: true
+    sortOrder?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TaskTemplateCountAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    taskTemplateCode?: true
+    taskTemplateName?: true
+    taskTemplateVersion?: true
+    status?: true
+    templateLevel?: true
+    businessDomain?: true
+    taskType?: true
+    requiredFlag?: true
+    milestoneFlag?: true
+    ownerRole?: true
+    assigneeTypeDefault?: true
+    slaRuleId?: true
+    standardBinding?: true
+    dependencyBlueprint?: true
+    childTemplateRefs?: true
+    parentTemplateCode?: true
+    sortOrder?: true
+    meta?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TaskTemplateAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TaskTemplate to aggregate.
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskTemplates to fetch.
+     */
+    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: TaskTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned TaskTemplates
+     **/
+    _count?: true | TaskTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: TaskTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: TaskTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: TaskTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: TaskTemplateMaxAggregateInputType
+  }
+
+  export type GetTaskTemplateAggregateType<T extends TaskTemplateAggregateArgs> = {
+    [P in keyof T & keyof AggregateTaskTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTaskTemplate[P]>
+      : GetScalarType<T[P], AggregateTaskTemplate[P]>
+  }
+
+  export type TaskTemplateGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TaskTemplateWhereInput
+    orderBy?: TaskTemplateOrderByWithAggregationInput | TaskTemplateOrderByWithAggregationInput[]
+    by: TaskTemplateScalarFieldEnum[] | TaskTemplateScalarFieldEnum
+    having?: TaskTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskTemplateCountAggregateInputType | true
+    _avg?: TaskTemplateAvgAggregateInputType
+    _sum?: TaskTemplateSumAggregateInputType
+    _min?: TaskTemplateMinAggregateInputType
+    _max?: TaskTemplateMaxAggregateInputType
+  }
+
+  export type TaskTemplateGroupByOutputType = {
+    id: number
+    taskTemplateId: string
+    taskTemplateCode: string
+    taskTemplateName: string
+    taskTemplateVersion: string
+    status: string
+    templateLevel: string
+    businessDomain: string
+    taskType: string
+    requiredFlag: boolean
+    milestoneFlag: boolean
+    ownerRole: string
+    assigneeTypeDefault: string
+    slaRuleId: string | null
+    standardBinding: string | null
+    dependencyBlueprint: string | null
+    childTemplateRefs: string | null
+    parentTemplateCode: string | null
+    sortOrder: number
+    meta: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TaskTemplateCountAggregateOutputType | null
+    _avg: TaskTemplateAvgAggregateOutputType | null
+    _sum: TaskTemplateSumAggregateOutputType | null
+    _min: TaskTemplateMinAggregateOutputType | null
+    _max: TaskTemplateMaxAggregateOutputType | null
+  }
+
+  type GetTaskTemplateGroupByPayload<T extends TaskTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskTemplateGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof TaskTemplateGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], TaskTemplateGroupByOutputType[P]>
+          : GetScalarType<T[P], TaskTemplateGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type TaskTemplateSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      taskTemplateId?: boolean
+      taskTemplateCode?: boolean
+      taskTemplateName?: boolean
+      taskTemplateVersion?: boolean
+      status?: boolean
+      templateLevel?: boolean
+      businessDomain?: boolean
+      taskType?: boolean
+      requiredFlag?: boolean
+      milestoneFlag?: boolean
+      ownerRole?: boolean
+      assigneeTypeDefault?: boolean
+      slaRuleId?: boolean
+      standardBinding?: boolean
+      dependencyBlueprint?: boolean
+      childTemplateRefs?: boolean
+      parentTemplateCode?: boolean
+      sortOrder?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['taskTemplate']
+  >
+
+  export type TaskTemplateSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      taskTemplateId?: boolean
+      taskTemplateCode?: boolean
+      taskTemplateName?: boolean
+      taskTemplateVersion?: boolean
+      status?: boolean
+      templateLevel?: boolean
+      businessDomain?: boolean
+      taskType?: boolean
+      requiredFlag?: boolean
+      milestoneFlag?: boolean
+      ownerRole?: boolean
+      assigneeTypeDefault?: boolean
+      slaRuleId?: boolean
+      standardBinding?: boolean
+      dependencyBlueprint?: boolean
+      childTemplateRefs?: boolean
+      parentTemplateCode?: boolean
+      sortOrder?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['taskTemplate']
+  >
+
+  export type TaskTemplateSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      taskTemplateId?: boolean
+      taskTemplateCode?: boolean
+      taskTemplateName?: boolean
+      taskTemplateVersion?: boolean
+      status?: boolean
+      templateLevel?: boolean
+      businessDomain?: boolean
+      taskType?: boolean
+      requiredFlag?: boolean
+      milestoneFlag?: boolean
+      ownerRole?: boolean
+      assigneeTypeDefault?: boolean
+      slaRuleId?: boolean
+      standardBinding?: boolean
+      dependencyBlueprint?: boolean
+      childTemplateRefs?: boolean
+      parentTemplateCode?: boolean
+      sortOrder?: boolean
+      meta?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['taskTemplate']
+  >
+
+  export type TaskTemplateSelectScalar = {
+    id?: boolean
+    taskTemplateId?: boolean
+    taskTemplateCode?: boolean
+    taskTemplateName?: boolean
+    taskTemplateVersion?: boolean
+    status?: boolean
+    templateLevel?: boolean
+    businessDomain?: boolean
+    taskType?: boolean
+    requiredFlag?: boolean
+    milestoneFlag?: boolean
+    ownerRole?: boolean
+    assigneeTypeDefault?: boolean
+    slaRuleId?: boolean
+    standardBinding?: boolean
+    dependencyBlueprint?: boolean
+    childTemplateRefs?: boolean
+    parentTemplateCode?: boolean
+    sortOrder?: boolean
+    meta?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TaskTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      | 'id'
+      | 'taskTemplateId'
+      | 'taskTemplateCode'
+      | 'taskTemplateName'
+      | 'taskTemplateVersion'
+      | 'status'
+      | 'templateLevel'
+      | 'businessDomain'
+      | 'taskType'
+      | 'requiredFlag'
+      | 'milestoneFlag'
+      | 'ownerRole'
+      | 'assigneeTypeDefault'
+      | 'slaRuleId'
+      | 'standardBinding'
+      | 'dependencyBlueprint'
+      | 'childTemplateRefs'
+      | 'parentTemplateCode'
+      | 'sortOrder'
+      | 'meta'
+      | 'createdAt'
+      | 'updatedAt',
+      ExtArgs['result']['taskTemplate']
+    >
+
+  export type $TaskTemplatePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'TaskTemplate'
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number
+        taskTemplateId: string
+        taskTemplateCode: string
+        taskTemplateName: string
+        taskTemplateVersion: string
+        status: string
+        templateLevel: string
+        businessDomain: string
+        taskType: string
+        requiredFlag: boolean
+        milestoneFlag: boolean
+        ownerRole: string
+        assigneeTypeDefault: string
+        slaRuleId: string | null
+        standardBinding: string | null
+        dependencyBlueprint: string | null
+        childTemplateRefs: string | null
+        parentTemplateCode: string | null
+        sortOrder: number
+        meta: string | null
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs['result']['taskTemplate']
+    >
+    composites: {}
+  }
+
+  type TaskTemplateGetPayload<S extends boolean | null | undefined | TaskTemplateDefaultArgs> =
+    $Result.GetResult<Prisma.$TaskTemplatePayload, S>
+
+  type TaskTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TaskTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TaskTemplateCountAggregateInputType | true
+    }
+
+  export interface TaskTemplateDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['TaskTemplate']
+      meta: { name: 'TaskTemplate' }
+    }
+    /**
+     * Find zero or one TaskTemplate that matches the filter.
+     * @param {TaskTemplateFindUniqueArgs} args - Arguments to find a TaskTemplate
+     * @example
+     * // Get one TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskTemplateFindUniqueArgs>(
+      args: SelectSubset<T, TaskTemplateFindUniqueArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one TaskTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TaskTemplateFindUniqueOrThrowArgs} args - Arguments to find a TaskTemplate
+     * @example
+     * // Get one TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskTemplateFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, TaskTemplateFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TaskTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateFindFirstArgs} args - Arguments to find a TaskTemplate
+     * @example
+     * // Get one TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskTemplateFindFirstArgs>(
+      args?: SelectSubset<T, TaskTemplateFindFirstArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TaskTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateFindFirstOrThrowArgs} args - Arguments to find a TaskTemplate
+     * @example
+     * // Get one TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskTemplateFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, TaskTemplateFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more TaskTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TaskTemplates
+     * const taskTemplates = await prisma.taskTemplate.findMany()
+     *
+     * // Get first 10 TaskTemplates
+     * const taskTemplates = await prisma.taskTemplate.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const taskTemplateWithIdOnly = await prisma.taskTemplate.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends TaskTemplateFindManyArgs>(
+      args?: SelectSubset<T, TaskTemplateFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >
+
+    /**
+     * Create a TaskTemplate.
+     * @param {TaskTemplateCreateArgs} args - Arguments to create a TaskTemplate.
+     * @example
+     * // Create one TaskTemplate
+     * const TaskTemplate = await prisma.taskTemplate.create({
+     *   data: {
+     *     // ... data to create a TaskTemplate
+     *   }
+     * })
+     *
+     */
+    create<T extends TaskTemplateCreateArgs>(
+      args: SelectSubset<T, TaskTemplateCreateArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many TaskTemplates.
+     * @param {TaskTemplateCreateManyArgs} args - Arguments to create many TaskTemplates.
+     * @example
+     * // Create many TaskTemplates
+     * const taskTemplate = await prisma.taskTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends TaskTemplateCreateManyArgs>(
+      args?: SelectSubset<T, TaskTemplateCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TaskTemplates and returns the data saved in the database.
+     * @param {TaskTemplateCreateManyAndReturnArgs} args - Arguments to create many TaskTemplates.
+     * @example
+     * // Create many TaskTemplates
+     * const taskTemplate = await prisma.taskTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many TaskTemplates and only return the `id`
+     * const taskTemplateWithIdOnly = await prisma.taskTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends TaskTemplateCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, TaskTemplateCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a TaskTemplate.
+     * @param {TaskTemplateDeleteArgs} args - Arguments to delete one TaskTemplate.
+     * @example
+     * // Delete one TaskTemplate
+     * const TaskTemplate = await prisma.taskTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one TaskTemplate
+     *   }
+     * })
+     *
+     */
+    delete<T extends TaskTemplateDeleteArgs>(
+      args: SelectSubset<T, TaskTemplateDeleteArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one TaskTemplate.
+     * @param {TaskTemplateUpdateArgs} args - Arguments to update one TaskTemplate.
+     * @example
+     * // Update one TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends TaskTemplateUpdateArgs>(
+      args: SelectSubset<T, TaskTemplateUpdateArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more TaskTemplates.
+     * @param {TaskTemplateDeleteManyArgs} args - Arguments to filter TaskTemplates to delete.
+     * @example
+     * // Delete a few TaskTemplates
+     * const { count } = await prisma.taskTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends TaskTemplateDeleteManyArgs>(
+      args?: SelectSubset<T, TaskTemplateDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TaskTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TaskTemplates
+     * const taskTemplate = await prisma.taskTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends TaskTemplateUpdateManyArgs>(
+      args: SelectSubset<T, TaskTemplateUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TaskTemplates and returns the data updated in the database.
+     * @param {TaskTemplateUpdateManyAndReturnArgs} args - Arguments to update many TaskTemplates.
+     * @example
+     * // Update many TaskTemplates
+     * const taskTemplate = await prisma.taskTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more TaskTemplates and only return the `id`
+     * const taskTemplateWithIdOnly = await prisma.taskTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends TaskTemplateUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, TaskTemplateUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TaskTemplatePayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one TaskTemplate.
+     * @param {TaskTemplateUpsertArgs} args - Arguments to update or create a TaskTemplate.
+     * @example
+     * // Update or create a TaskTemplate
+     * const taskTemplate = await prisma.taskTemplate.upsert({
+     *   create: {
+     *     // ... data to create a TaskTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TaskTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskTemplateUpsertArgs>(
+      args: SelectSubset<T, TaskTemplateUpsertArgs<ExtArgs>>
+    ): Prisma__TaskTemplateClient<
+      $Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of TaskTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateCountArgs} args - Arguments to filter TaskTemplates to count.
+     * @example
+     * // Count the number of TaskTemplates
+     * const count = await prisma.taskTemplate.count({
+     *   where: {
+     *     // ... the filter for the TaskTemplates we want to count
+     *   }
+     * })
+     **/
+    count<T extends TaskTemplateCountArgs>(
+      args?: Subset<T, TaskTemplateCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TaskTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends TaskTemplateAggregateArgs>(
+      args: Subset<T, TaskTemplateAggregateArgs>
+    ): Prisma.PrismaPromise<GetTaskTemplateAggregateType<T>>
+
+    /**
+     * Group by TaskTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends TaskTemplateGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: TaskTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, TaskTemplateGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors ? GetTaskTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the TaskTemplate model
+     */
+    readonly fields: TaskTemplateFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TaskTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskTemplateClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the TaskTemplate model
+   */
+  interface TaskTemplateFieldRefs {
+    readonly id: FieldRef<'TaskTemplate', 'Int'>
+    readonly taskTemplateId: FieldRef<'TaskTemplate', 'String'>
+    readonly taskTemplateCode: FieldRef<'TaskTemplate', 'String'>
+    readonly taskTemplateName: FieldRef<'TaskTemplate', 'String'>
+    readonly taskTemplateVersion: FieldRef<'TaskTemplate', 'String'>
+    readonly status: FieldRef<'TaskTemplate', 'String'>
+    readonly templateLevel: FieldRef<'TaskTemplate', 'String'>
+    readonly businessDomain: FieldRef<'TaskTemplate', 'String'>
+    readonly taskType: FieldRef<'TaskTemplate', 'String'>
+    readonly requiredFlag: FieldRef<'TaskTemplate', 'Boolean'>
+    readonly milestoneFlag: FieldRef<'TaskTemplate', 'Boolean'>
+    readonly ownerRole: FieldRef<'TaskTemplate', 'String'>
+    readonly assigneeTypeDefault: FieldRef<'TaskTemplate', 'String'>
+    readonly slaRuleId: FieldRef<'TaskTemplate', 'String'>
+    readonly standardBinding: FieldRef<'TaskTemplate', 'String'>
+    readonly dependencyBlueprint: FieldRef<'TaskTemplate', 'String'>
+    readonly childTemplateRefs: FieldRef<'TaskTemplate', 'String'>
+    readonly parentTemplateCode: FieldRef<'TaskTemplate', 'String'>
+    readonly sortOrder: FieldRef<'TaskTemplate', 'Int'>
+    readonly meta: FieldRef<'TaskTemplate', 'String'>
+    readonly createdAt: FieldRef<'TaskTemplate', 'DateTime'>
+    readonly updatedAt: FieldRef<'TaskTemplate', 'DateTime'>
+  }
+
+  // Custom InputTypes
+  /**
+   * TaskTemplate findUnique
+   */
+  export type TaskTemplateFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which TaskTemplate to fetch.
+     */
+    where: TaskTemplateWhereUniqueInput
+  }
+
+  /**
+   * TaskTemplate findUniqueOrThrow
+   */
+  export type TaskTemplateFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which TaskTemplate to fetch.
+     */
+    where: TaskTemplateWhereUniqueInput
+  }
+
+  /**
+   * TaskTemplate findFirst
+   */
+  export type TaskTemplateFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which TaskTemplate to fetch.
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskTemplates to fetch.
+     */
+    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TaskTemplates.
+     */
+    cursor?: TaskTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskTemplates.
+     */
+    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * TaskTemplate findFirstOrThrow
+   */
+  export type TaskTemplateFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which TaskTemplate to fetch.
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskTemplates to fetch.
+     */
+    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TaskTemplates.
+     */
+    cursor?: TaskTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskTemplates.
+     */
+    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * TaskTemplate findMany
+   */
+  export type TaskTemplateFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which TaskTemplates to fetch.
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TaskTemplates to fetch.
+     */
+    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing TaskTemplates.
+     */
+    cursor?: TaskTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TaskTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TaskTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TaskTemplates.
+     */
+    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * TaskTemplate create
+   */
+  export type TaskTemplateCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a TaskTemplate.
+     */
+    data: XOR<TaskTemplateCreateInput, TaskTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * TaskTemplate createMany
+   */
+  export type TaskTemplateCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many TaskTemplates.
+     */
+    data: TaskTemplateCreateManyInput | TaskTemplateCreateManyInput[]
+  }
+
+  /**
+   * TaskTemplate createManyAndReturn
+   */
+  export type TaskTemplateCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many TaskTemplates.
+     */
+    data: TaskTemplateCreateManyInput | TaskTemplateCreateManyInput[]
+  }
+
+  /**
+   * TaskTemplate update
+   */
+  export type TaskTemplateUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a TaskTemplate.
+     */
+    data: XOR<TaskTemplateUpdateInput, TaskTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which TaskTemplate to update.
+     */
+    where: TaskTemplateWhereUniqueInput
+  }
+
+  /**
+   * TaskTemplate updateMany
+   */
+  export type TaskTemplateUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update TaskTemplates.
+     */
+    data: XOR<TaskTemplateUpdateManyMutationInput, TaskTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which TaskTemplates to update
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * Limit how many TaskTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TaskTemplate updateManyAndReturn
+   */
+  export type TaskTemplateUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update TaskTemplates.
+     */
+    data: XOR<TaskTemplateUpdateManyMutationInput, TaskTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which TaskTemplates to update
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * Limit how many TaskTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TaskTemplate upsert
+   */
+  export type TaskTemplateUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the TaskTemplate to update in case it exists.
+     */
+    where: TaskTemplateWhereUniqueInput
+    /**
+     * In case the TaskTemplate found by the `where` argument doesn't exist, create a new TaskTemplate with this data.
+     */
+    create: XOR<TaskTemplateCreateInput, TaskTemplateUncheckedCreateInput>
+    /**
+     * In case the TaskTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskTemplateUpdateInput, TaskTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * TaskTemplate delete
+   */
+  export type TaskTemplateDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+    /**
+     * Filter which TaskTemplate to delete.
+     */
+    where: TaskTemplateWhereUniqueInput
+  }
+
+  /**
+   * TaskTemplate deleteMany
+   */
+  export type TaskTemplateDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TaskTemplates to delete
+     */
+    where?: TaskTemplateWhereInput
+    /**
+     * Limit how many TaskTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TaskTemplate without action
+   */
+  export type TaskTemplateDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TaskTemplate
+     */
+    select?: TaskTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TaskTemplate
+     */
+    omit?: TaskTemplateOmit<ExtArgs> | null
+  }
+
+  /**
+   * Model Supplier
+   */
+
+  export type AggregateSupplier = {
+    _count: SupplierCountAggregateOutputType | null
+    _avg: SupplierAvgAggregateOutputType | null
+    _sum: SupplierSumAggregateOutputType | null
+    _min: SupplierMinAggregateOutputType | null
+    _max: SupplierMaxAggregateOutputType | null
+  }
+
+  export type SupplierAvgAggregateOutputType = {
+    id: number | null
+    currentTaskCount: number | null
+  }
+
+  export type SupplierSumAggregateOutputType = {
+    id: number | null
+    currentTaskCount: number | null
+  }
+
+  export type SupplierMinAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    category: string | null
+    status: string | null
+    rating: string | null
+    contact: string | null
+    city: string | null
+    currentTaskCount: number | null
+    availabilityStatus: string | null
+    qualificationStatus: string | null
+    serviceAreas: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupplierMaxAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    category: string | null
+    status: string | null
+    rating: string | null
+    contact: string | null
+    city: string | null
+    currentTaskCount: number | null
+    availabilityStatus: string | null
+    qualificationStatus: string | null
+    serviceAreas: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupplierCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    category: number
+    status: number
+    rating: number
+    contact: number
+    city: number
+    currentTaskCount: number
+    availabilityStatus: number
+    qualificationStatus: number
+    serviceAreas: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type SupplierAvgAggregateInputType = {
+    id?: true
+    currentTaskCount?: true
+  }
+
+  export type SupplierSumAggregateInputType = {
+    id?: true
+    currentTaskCount?: true
+  }
+
+  export type SupplierMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    category?: true
+    status?: true
+    rating?: true
+    contact?: true
+    city?: true
+    currentTaskCount?: true
+    availabilityStatus?: true
+    qualificationStatus?: true
+    serviceAreas?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupplierMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    category?: true
+    status?: true
+    rating?: true
+    contact?: true
+    city?: true
+    currentTaskCount?: true
+    availabilityStatus?: true
+    qualificationStatus?: true
+    serviceAreas?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupplierCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    category?: true
+    status?: true
+    rating?: true
+    contact?: true
+    city?: true
+    currentTaskCount?: true
+    availabilityStatus?: true
+    qualificationStatus?: true
+    serviceAreas?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SupplierAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Supplier to aggregate.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Suppliers
+     **/
+    _count?: true | SupplierCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: SupplierAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: SupplierSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: SupplierMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: SupplierMaxAggregateInputType
+  }
+
+  export type GetSupplierAggregateType<T extends SupplierAggregateArgs> = {
+    [P in keyof T & keyof AggregateSupplier]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupplier[P]>
+      : GetScalarType<T[P], AggregateSupplier[P]>
+  }
+
+  export type SupplierGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: SupplierWhereInput
+    orderBy?: SupplierOrderByWithAggregationInput | SupplierOrderByWithAggregationInput[]
+    by: SupplierScalarFieldEnum[] | SupplierScalarFieldEnum
+    having?: SupplierScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupplierCountAggregateInputType | true
+    _avg?: SupplierAvgAggregateInputType
+    _sum?: SupplierSumAggregateInputType
+    _min?: SupplierMinAggregateInputType
+    _max?: SupplierMaxAggregateInputType
+  }
+
+  export type SupplierGroupByOutputType = {
+    id: number
+    code: string
+    name: string
+    category: string
+    status: string
+    rating: string
+    contact: string
+    city: string
+    currentTaskCount: number
+    availabilityStatus: string
+    qualificationStatus: string
+    serviceAreas: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SupplierCountAggregateOutputType | null
+    _avg: SupplierAvgAggregateOutputType | null
+    _sum: SupplierSumAggregateOutputType | null
+    _min: SupplierMinAggregateOutputType | null
+    _max: SupplierMaxAggregateOutputType | null
+  }
+
+  type GetSupplierGroupByPayload<T extends SupplierGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupplierGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof SupplierGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], SupplierGroupByOutputType[P]>
+          : GetScalarType<T[P], SupplierGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type SupplierSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        id?: boolean
+        code?: boolean
+        name?: boolean
+        category?: boolean
+        status?: boolean
+        rating?: boolean
+        contact?: boolean
+        city?: boolean
+        currentTaskCount?: boolean
+        availabilityStatus?: boolean
+        qualificationStatus?: boolean
+        serviceAreas?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+      },
+      ExtArgs['result']['supplier']
+    >
+
+  export type SupplierSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      code?: boolean
+      name?: boolean
+      category?: boolean
+      status?: boolean
+      rating?: boolean
+      contact?: boolean
+      city?: boolean
+      currentTaskCount?: boolean
+      availabilityStatus?: boolean
+      qualificationStatus?: boolean
+      serviceAreas?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['supplier']
+  >
+
+  export type SupplierSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      code?: boolean
+      name?: boolean
+      category?: boolean
+      status?: boolean
+      rating?: boolean
+      contact?: boolean
+      city?: boolean
+      currentTaskCount?: boolean
+      availabilityStatus?: boolean
+      qualificationStatus?: boolean
+      serviceAreas?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs['result']['supplier']
+  >
+
+  export type SupplierSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    category?: boolean
+    status?: boolean
+    rating?: boolean
+    contact?: boolean
+    city?: boolean
+    currentTaskCount?: boolean
+    availabilityStatus?: boolean
+    qualificationStatus?: boolean
+    serviceAreas?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      | 'id'
+      | 'code'
+      | 'name'
+      | 'category'
+      | 'status'
+      | 'rating'
+      | 'contact'
+      | 'city'
+      | 'currentTaskCount'
+      | 'availabilityStatus'
+      | 'qualificationStatus'
+      | 'serviceAreas'
+      | 'createdAt'
+      | 'updatedAt',
+      ExtArgs['result']['supplier']
+    >
+
+  export type $SupplierPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      name: 'Supplier'
+      objects: {}
+      scalars: $Extensions.GetPayloadResult<
+        {
+          id: number
+          code: string
+          name: string
+          category: string
+          status: string
+          rating: string
+          contact: string
+          city: string
+          currentTaskCount: number
+          availabilityStatus: string
+          qualificationStatus: string
+          serviceAreas: string | null
+          createdAt: Date
+          updatedAt: Date
+        },
+        ExtArgs['result']['supplier']
+      >
+      composites: {}
+    }
+
+  type SupplierGetPayload<S extends boolean | null | undefined | SupplierDefaultArgs> =
+    $Result.GetResult<Prisma.$SupplierPayload, S>
+
+  type SupplierCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<
+    SupplierFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit'
+  > & {
+    select?: SupplierCountAggregateInputType | true
+  }
+
+  export interface SupplierDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Supplier']; meta: { name: 'Supplier' } }
+    /**
+     * Find zero or one Supplier that matches the filter.
+     * @param {SupplierFindUniqueArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupplierFindUniqueArgs>(
+      args: SelectSubset<T, SupplierFindUniqueArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<
+        Prisma.$SupplierPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one Supplier that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SupplierFindUniqueOrThrowArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupplierFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, SupplierFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<
+        Prisma.$SupplierPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first Supplier that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindFirstArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupplierFindFirstArgs>(
+      args?: SelectSubset<T, SupplierFindFirstArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first Supplier that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindFirstOrThrowArgs} args - Arguments to find a Supplier
+     * @example
+     * // Get one Supplier
+     * const supplier = await prisma.supplier.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupplierFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, SupplierFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more Suppliers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Suppliers
+     * const suppliers = await prisma.supplier.findMany()
+     *
+     * // Get first 10 Suppliers
+     * const suppliers = await prisma.supplier.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const supplierWithIdOnly = await prisma.supplier.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends SupplierFindManyArgs>(
+      args?: SelectSubset<T, SupplierFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >
+
+    /**
+     * Create a Supplier.
+     * @param {SupplierCreateArgs} args - Arguments to create a Supplier.
+     * @example
+     * // Create one Supplier
+     * const Supplier = await prisma.supplier.create({
+     *   data: {
+     *     // ... data to create a Supplier
+     *   }
+     * })
+     *
+     */
+    create<T extends SupplierCreateArgs>(
+      args: SelectSubset<T, SupplierCreateArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many Suppliers.
+     * @param {SupplierCreateManyArgs} args - Arguments to create many Suppliers.
+     * @example
+     * // Create many Suppliers
+     * const supplier = await prisma.supplier.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends SupplierCreateManyArgs>(
+      args?: SelectSubset<T, SupplierCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Suppliers and returns the data saved in the database.
+     * @param {SupplierCreateManyAndReturnArgs} args - Arguments to create many Suppliers.
+     * @example
+     * // Create many Suppliers
+     * const supplier = await prisma.supplier.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Suppliers and only return the `id`
+     * const supplierWithIdOnly = await prisma.supplier.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends SupplierCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, SupplierCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$SupplierPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a Supplier.
+     * @param {SupplierDeleteArgs} args - Arguments to delete one Supplier.
+     * @example
+     * // Delete one Supplier
+     * const Supplier = await prisma.supplier.delete({
+     *   where: {
+     *     // ... filter to delete one Supplier
+     *   }
+     * })
+     *
+     */
+    delete<T extends SupplierDeleteArgs>(
+      args: SelectSubset<T, SupplierDeleteArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one Supplier.
+     * @param {SupplierUpdateArgs} args - Arguments to update one Supplier.
+     * @example
+     * // Update one Supplier
+     * const supplier = await prisma.supplier.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends SupplierUpdateArgs>(
+      args: SelectSubset<T, SupplierUpdateArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more Suppliers.
+     * @param {SupplierDeleteManyArgs} args - Arguments to filter Suppliers to delete.
+     * @example
+     * // Delete a few Suppliers
+     * const { count } = await prisma.supplier.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends SupplierDeleteManyArgs>(
+      args?: SelectSubset<T, SupplierDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suppliers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Suppliers
+     * const supplier = await prisma.supplier.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends SupplierUpdateManyArgs>(
+      args: SelectSubset<T, SupplierUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suppliers and returns the data updated in the database.
+     * @param {SupplierUpdateManyAndReturnArgs} args - Arguments to update many Suppliers.
+     * @example
+     * // Update many Suppliers
+     * const supplier = await prisma.supplier.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more Suppliers and only return the `id`
+     * const supplierWithIdOnly = await prisma.supplier.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends SupplierUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, SupplierUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$SupplierPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one Supplier.
+     * @param {SupplierUpsertArgs} args - Arguments to update or create a Supplier.
+     * @example
+     * // Update or create a Supplier
+     * const supplier = await prisma.supplier.upsert({
+     *   create: {
+     *     // ... data to create a Supplier
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Supplier we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupplierUpsertArgs>(
+      args: SelectSubset<T, SupplierUpsertArgs<ExtArgs>>
+    ): Prisma__SupplierClient<
+      $Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of Suppliers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierCountArgs} args - Arguments to filter Suppliers to count.
+     * @example
+     * // Count the number of Suppliers
+     * const count = await prisma.supplier.count({
+     *   where: {
+     *     // ... the filter for the Suppliers we want to count
+     *   }
+     * })
+     **/
+    count<T extends SupplierCountArgs>(
+      args?: Subset<T, SupplierCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupplierCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Supplier.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends SupplierAggregateArgs>(
+      args: Subset<T, SupplierAggregateArgs>
+    ): Prisma.PrismaPromise<GetSupplierAggregateType<T>>
+
+    /**
+     * Group by Supplier.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupplierGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends SupplierGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupplierGroupByArgs['orderBy'] }
+        : { orderBy?: SupplierGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, SupplierGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors ? GetSupplierGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the Supplier model
+     */
+    readonly fields: SupplierFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Supplier.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupplierClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the Supplier model
+   */
+  interface SupplierFieldRefs {
+    readonly id: FieldRef<'Supplier', 'Int'>
+    readonly code: FieldRef<'Supplier', 'String'>
+    readonly name: FieldRef<'Supplier', 'String'>
+    readonly category: FieldRef<'Supplier', 'String'>
+    readonly status: FieldRef<'Supplier', 'String'>
+    readonly rating: FieldRef<'Supplier', 'String'>
+    readonly contact: FieldRef<'Supplier', 'String'>
+    readonly city: FieldRef<'Supplier', 'String'>
+    readonly currentTaskCount: FieldRef<'Supplier', 'Int'>
+    readonly availabilityStatus: FieldRef<'Supplier', 'String'>
+    readonly qualificationStatus: FieldRef<'Supplier', 'String'>
+    readonly serviceAreas: FieldRef<'Supplier', 'String'>
+    readonly createdAt: FieldRef<'Supplier', 'DateTime'>
+    readonly updatedAt: FieldRef<'Supplier', 'DateTime'>
+  }
+
+  // Custom InputTypes
+  /**
+   * Supplier findUnique
+   */
+  export type SupplierFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier findUniqueOrThrow
+   */
+  export type SupplierFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier findFirst
+   */
+  export type SupplierFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Suppliers.
+     */
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier findFirstOrThrow
+   */
+  export type SupplierFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter, which Supplier to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Suppliers.
+     */
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier findMany
+   */
+  export type SupplierFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter, which Suppliers to fetch.
+     */
+    where?: SupplierWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Suppliers to fetch.
+     */
+    orderBy?: SupplierOrderByWithRelationInput | SupplierOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Suppliers.
+     */
+    cursor?: SupplierWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Suppliers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Suppliers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Suppliers.
+     */
+    distinct?: SupplierScalarFieldEnum | SupplierScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier create
+   */
+  export type SupplierCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Supplier.
+     */
+    data: XOR<SupplierCreateInput, SupplierUncheckedCreateInput>
+  }
+
+  /**
+   * Supplier createMany
+   */
+  export type SupplierCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many Suppliers.
+     */
+    data: SupplierCreateManyInput | SupplierCreateManyInput[]
+  }
+
+  /**
+   * Supplier createManyAndReturn
+   */
+  export type SupplierCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * The data used to create many Suppliers.
+     */
+    data: SupplierCreateManyInput | SupplierCreateManyInput[]
+  }
+
+  /**
+   * Supplier update
+   */
+  export type SupplierUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Supplier.
+     */
+    data: XOR<SupplierUpdateInput, SupplierUncheckedUpdateInput>
+    /**
+     * Choose, which Supplier to update.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier updateMany
+   */
+  export type SupplierUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update Suppliers.
+     */
+    data: XOR<SupplierUpdateManyMutationInput, SupplierUncheckedUpdateManyInput>
+    /**
+     * Filter which Suppliers to update
+     */
+    where?: SupplierWhereInput
+    /**
+     * Limit how many Suppliers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Supplier updateManyAndReturn
+   */
+  export type SupplierUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * The data used to update Suppliers.
+     */
+    data: XOR<SupplierUpdateManyMutationInput, SupplierUncheckedUpdateManyInput>
+    /**
+     * Filter which Suppliers to update
+     */
+    where?: SupplierWhereInput
+    /**
+     * Limit how many Suppliers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Supplier upsert
+   */
+  export type SupplierUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Supplier to update in case it exists.
+     */
+    where: SupplierWhereUniqueInput
+    /**
+     * In case the Supplier found by the `where` argument doesn't exist, create a new Supplier with this data.
+     */
+    create: XOR<SupplierCreateInput, SupplierUncheckedCreateInput>
+    /**
+     * In case the Supplier was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupplierUpdateInput, SupplierUncheckedUpdateInput>
+  }
+
+  /**
+   * Supplier delete
+   */
+  export type SupplierDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Filter which Supplier to delete.
+     */
+    where: SupplierWhereUniqueInput
+  }
+
+  /**
+   * Supplier deleteMany
+   */
+  export type SupplierDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Suppliers to delete
+     */
+    where?: SupplierWhereInput
+    /**
+     * Limit how many Suppliers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Supplier without action
+   */
+  export type SupplierDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+  }
+
+  /**
+   * Model ProductCategory
+   */
+
+  export type AggregateProductCategory = {
+    _count: ProductCategoryCountAggregateOutputType | null
+    _avg: ProductCategoryAvgAggregateOutputType | null
+    _sum: ProductCategorySumAggregateOutputType | null
+    _min: ProductCategoryMinAggregateOutputType | null
+    _max: ProductCategoryMaxAggregateOutputType | null
+  }
+
+  export type ProductCategoryAvgAggregateOutputType = {
+    id: number | null
+    parentId: number | null
+    sortOrder: number | null
+  }
+
+  export type ProductCategorySumAggregateOutputType = {
+    id: number | null
+    parentId: number | null
+    sortOrder: number | null
+  }
+
+  export type ProductCategoryMinAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    parentId: number | null
+    sortOrder: number | null
+    supplierIds: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductCategoryMaxAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    parentId: number | null
+    sortOrder: number | null
+    supplierIds: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductCategoryCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    parentId: number
+    sortOrder: number
+    supplierIds: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type ProductCategoryAvgAggregateInputType = {
+    id?: true
+    parentId?: true
+    sortOrder?: true
+  }
+
+  export type ProductCategorySumAggregateInputType = {
+    id?: true
+    parentId?: true
+    sortOrder?: true
+  }
+
+  export type ProductCategoryMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    parentId?: true
+    sortOrder?: true
+    supplierIds?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductCategoryMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    parentId?: true
+    sortOrder?: true
+    supplierIds?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductCategoryCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    parentId?: true
+    sortOrder?: true
+    supplierIds?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductCategoryAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProductCategory to aggregate.
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProductCategories to fetch.
+     */
+    orderBy?: ProductCategoryOrderByWithRelationInput | ProductCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ProductCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProductCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProductCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ProductCategories
+     **/
+    _count?: true | ProductCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: ProductCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: ProductCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ProductCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ProductCategoryMaxAggregateInputType
+  }
+
+  export type GetProductCategoryAggregateType<T extends ProductCategoryAggregateArgs> = {
+    [P in keyof T & keyof AggregateProductCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductCategory[P]>
+      : GetScalarType<T[P], AggregateProductCategory[P]>
+  }
+
+  export type ProductCategoryGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProductCategoryWhereInput
+    orderBy?:
+      | ProductCategoryOrderByWithAggregationInput
+      | ProductCategoryOrderByWithAggregationInput[]
+    by: ProductCategoryScalarFieldEnum[] | ProductCategoryScalarFieldEnum
+    having?: ProductCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductCategoryCountAggregateInputType | true
+    _avg?: ProductCategoryAvgAggregateInputType
+    _sum?: ProductCategorySumAggregateInputType
+    _min?: ProductCategoryMinAggregateInputType
+    _max?: ProductCategoryMaxAggregateInputType
+  }
+
+  export type ProductCategoryGroupByOutputType = {
+    id: number
+    code: string
+    name: string
+    parentId: number | null
+    sortOrder: number
+    supplierIds: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductCategoryCountAggregateOutputType | null
+    _avg: ProductCategoryAvgAggregateOutputType | null
+    _sum: ProductCategorySumAggregateOutputType | null
+    _min: ProductCategoryMinAggregateOutputType | null
+    _max: ProductCategoryMaxAggregateOutputType | null
+  }
+
+  type GetProductCategoryGroupByPayload<T extends ProductCategoryGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<ProductCategoryGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof ProductCategoryGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+  export type ProductCategorySelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      code?: boolean
+      name?: boolean
+      parentId?: boolean
+      sortOrder?: boolean
+      supplierIds?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+      children?: boolean | ProductCategory$childrenArgs<ExtArgs>
+      _count?: boolean | ProductCategoryCountOutputTypeDefaultArgs<ExtArgs>
+    },
+    ExtArgs['result']['productCategory']
+  >
+
+  export type ProductCategorySelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      code?: boolean
+      name?: boolean
+      parentId?: boolean
+      sortOrder?: boolean
+      supplierIds?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+    },
+    ExtArgs['result']['productCategory']
+  >
+
+  export type ProductCategorySelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      code?: boolean
+      name?: boolean
+      parentId?: boolean
+      sortOrder?: boolean
+      supplierIds?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+    },
+    ExtArgs['result']['productCategory']
+  >
+
+  export type ProductCategorySelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    parentId?: boolean
+    sortOrder?: boolean
+    supplierIds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductCategoryOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    'id' | 'code' | 'name' | 'parentId' | 'sortOrder' | 'supplierIds' | 'createdAt' | 'updatedAt',
+    ExtArgs['result']['productCategory']
+  >
+  export type ProductCategoryInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+    children?: boolean | ProductCategory$childrenArgs<ExtArgs>
+    _count?: boolean | ProductCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductCategoryIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+  }
+  export type ProductCategoryIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    parent?: boolean | ProductCategory$parentArgs<ExtArgs>
+  }
+
+  export type $ProductCategoryPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'ProductCategory'
+    objects: {
+      parent: Prisma.$ProductCategoryPayload<ExtArgs> | null
+      children: Prisma.$ProductCategoryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number
+        code: string
+        name: string
+        parentId: number | null
+        sortOrder: number
+        supplierIds: string | null
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs['result']['productCategory']
+    >
+    composites: {}
+  }
+
+  type ProductCategoryGetPayload<
+    S extends boolean | null | undefined | ProductCategoryDefaultArgs,
+  > = $Result.GetResult<Prisma.$ProductCategoryPayload, S>
+
+  type ProductCategoryCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<ProductCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: ProductCategoryCountAggregateInputType | true
+  }
+
+  export interface ProductCategoryDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['ProductCategory']
+      meta: { name: 'ProductCategory' }
+    }
+    /**
+     * Find zero or one ProductCategory that matches the filter.
+     * @param {ProductCategoryFindUniqueArgs} args - Arguments to find a ProductCategory
+     * @example
+     * // Get one ProductCategory
+     * const productCategory = await prisma.productCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductCategoryFindUniqueArgs>(
+      args: SelectSubset<T, ProductCategoryFindUniqueArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one ProductCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductCategoryFindUniqueOrThrowArgs} args - Arguments to find a ProductCategory
+     * @example
+     * // Get one ProductCategory
+     * const productCategory = await prisma.productCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductCategoryFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ProductCategoryFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProductCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryFindFirstArgs} args - Arguments to find a ProductCategory
+     * @example
+     * // Get one ProductCategory
+     * const productCategory = await prisma.productCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductCategoryFindFirstArgs>(
+      args?: SelectSubset<T, ProductCategoryFindFirstArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProductCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryFindFirstOrThrowArgs} args - Arguments to find a ProductCategory
+     * @example
+     * // Get one ProductCategory
+     * const productCategory = await prisma.productCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductCategoryFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ProductCategoryFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more ProductCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductCategories
+     * const productCategories = await prisma.productCategory.findMany()
+     *
+     * // Get first 10 ProductCategories
+     * const productCategories = await prisma.productCategory.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const productCategoryWithIdOnly = await prisma.productCategory.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ProductCategoryFindManyArgs>(
+      args?: SelectSubset<T, ProductCategoryFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >
+
+    /**
+     * Create a ProductCategory.
+     * @param {ProductCategoryCreateArgs} args - Arguments to create a ProductCategory.
+     * @example
+     * // Create one ProductCategory
+     * const ProductCategory = await prisma.productCategory.create({
+     *   data: {
+     *     // ... data to create a ProductCategory
+     *   }
+     * })
+     *
+     */
+    create<T extends ProductCategoryCreateArgs>(
+      args: SelectSubset<T, ProductCategoryCreateArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many ProductCategories.
+     * @param {ProductCategoryCreateManyArgs} args - Arguments to create many ProductCategories.
+     * @example
+     * // Create many ProductCategories
+     * const productCategory = await prisma.productCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ProductCategoryCreateManyArgs>(
+      args?: SelectSubset<T, ProductCategoryCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductCategories and returns the data saved in the database.
+     * @param {ProductCategoryCreateManyAndReturnArgs} args - Arguments to create many ProductCategories.
+     * @example
+     * // Create many ProductCategories
+     * const productCategory = await prisma.productCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ProductCategories and only return the `id`
+     * const productCategoryWithIdOnly = await prisma.productCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ProductCategoryCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ProductCategoryCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a ProductCategory.
+     * @param {ProductCategoryDeleteArgs} args - Arguments to delete one ProductCategory.
+     * @example
+     * // Delete one ProductCategory
+     * const ProductCategory = await prisma.productCategory.delete({
+     *   where: {
+     *     // ... filter to delete one ProductCategory
+     *   }
+     * })
+     *
+     */
+    delete<T extends ProductCategoryDeleteArgs>(
+      args: SelectSubset<T, ProductCategoryDeleteArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one ProductCategory.
+     * @param {ProductCategoryUpdateArgs} args - Arguments to update one ProductCategory.
+     * @example
+     * // Update one ProductCategory
+     * const productCategory = await prisma.productCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ProductCategoryUpdateArgs>(
+      args: SelectSubset<T, ProductCategoryUpdateArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more ProductCategories.
+     * @param {ProductCategoryDeleteManyArgs} args - Arguments to filter ProductCategories to delete.
+     * @example
+     * // Delete a few ProductCategories
+     * const { count } = await prisma.productCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ProductCategoryDeleteManyArgs>(
+      args?: SelectSubset<T, ProductCategoryDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductCategories
+     * const productCategory = await prisma.productCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ProductCategoryUpdateManyArgs>(
+      args: SelectSubset<T, ProductCategoryUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductCategories and returns the data updated in the database.
+     * @param {ProductCategoryUpdateManyAndReturnArgs} args - Arguments to update many ProductCategories.
+     * @example
+     * // Update many ProductCategories
+     * const productCategory = await prisma.productCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ProductCategories and only return the `id`
+     * const productCategoryWithIdOnly = await prisma.productCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ProductCategoryUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ProductCategoryUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one ProductCategory.
+     * @param {ProductCategoryUpsertArgs} args - Arguments to update or create a ProductCategory.
+     * @example
+     * // Update or create a ProductCategory
+     * const productCategory = await prisma.productCategory.upsert({
+     *   create: {
+     *     // ... data to create a ProductCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductCategoryUpsertArgs>(
+      args: SelectSubset<T, ProductCategoryUpsertArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of ProductCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryCountArgs} args - Arguments to filter ProductCategories to count.
+     * @example
+     * // Count the number of ProductCategories
+     * const count = await prisma.productCategory.count({
+     *   where: {
+     *     // ... the filter for the ProductCategories we want to count
+     *   }
+     * })
+     **/
+    count<T extends ProductCategoryCountArgs>(
+      args?: Subset<T, ProductCategoryCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ProductCategoryAggregateArgs>(
+      args: Subset<T, ProductCategoryAggregateArgs>
+    ): Prisma.PrismaPromise<GetProductCategoryAggregateType<T>>
+
+    /**
+     * Group by ProductCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ProductCategoryGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: ProductCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ProductCategoryGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors
+      ? GetProductCategoryGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the ProductCategory model
+     */
+    readonly fields: ProductCategoryFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductCategoryClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    parent<T extends ProductCategory$parentArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProductCategory$parentArgs<ExtArgs>>
+    ): Prisma__ProductCategoryClient<
+      $Result.GetResult<
+        Prisma.$ProductCategoryPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    children<T extends ProductCategory$childrenArgs<ExtArgs> = {}>(
+      args?: Subset<T, ProductCategory$childrenArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+      | Null
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the ProductCategory model
+   */
+  interface ProductCategoryFieldRefs {
+    readonly id: FieldRef<'ProductCategory', 'Int'>
+    readonly code: FieldRef<'ProductCategory', 'String'>
+    readonly name: FieldRef<'ProductCategory', 'String'>
+    readonly parentId: FieldRef<'ProductCategory', 'Int'>
+    readonly sortOrder: FieldRef<'ProductCategory', 'Int'>
+    readonly supplierIds: FieldRef<'ProductCategory', 'String'>
+    readonly createdAt: FieldRef<'ProductCategory', 'DateTime'>
+    readonly updatedAt: FieldRef<'ProductCategory', 'DateTime'>
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductCategory findUnique
+   */
+  export type ProductCategoryFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductCategory to fetch.
+     */
+    where: ProductCategoryWhereUniqueInput
+  }
+
+  /**
+   * ProductCategory findUniqueOrThrow
+   */
+  export type ProductCategoryFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductCategory to fetch.
+     */
+    where: ProductCategoryWhereUniqueInput
+  }
+
+  /**
+   * ProductCategory findFirst
+   */
+  export type ProductCategoryFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductCategory to fetch.
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProductCategories to fetch.
+     */
+    orderBy?: ProductCategoryOrderByWithRelationInput | ProductCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProductCategories.
+     */
+    cursor?: ProductCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProductCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProductCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProductCategories.
+     */
+    distinct?: ProductCategoryScalarFieldEnum | ProductCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ProductCategory findFirstOrThrow
+   */
+  export type ProductCategoryFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductCategory to fetch.
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProductCategories to fetch.
+     */
+    orderBy?: ProductCategoryOrderByWithRelationInput | ProductCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProductCategories.
+     */
+    cursor?: ProductCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProductCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProductCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProductCategories.
+     */
+    distinct?: ProductCategoryScalarFieldEnum | ProductCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ProductCategory findMany
+   */
+  export type ProductCategoryFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductCategories to fetch.
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProductCategories to fetch.
+     */
+    orderBy?: ProductCategoryOrderByWithRelationInput | ProductCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ProductCategories.
+     */
+    cursor?: ProductCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProductCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProductCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProductCategories.
+     */
+    distinct?: ProductCategoryScalarFieldEnum | ProductCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ProductCategory create
+   */
+  export type ProductCategoryCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductCategory.
+     */
+    data: XOR<ProductCategoryCreateInput, ProductCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * ProductCategory createMany
+   */
+  export type ProductCategoryCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ProductCategories.
+     */
+    data: ProductCategoryCreateManyInput | ProductCategoryCreateManyInput[]
+  }
+
+  /**
+   * ProductCategory createManyAndReturn
+   */
+  export type ProductCategoryCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductCategories.
+     */
+    data: ProductCategoryCreateManyInput | ProductCategoryCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductCategory update
+   */
+  export type ProductCategoryUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductCategory.
+     */
+    data: XOR<ProductCategoryUpdateInput, ProductCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which ProductCategory to update.
+     */
+    where: ProductCategoryWhereUniqueInput
+  }
+
+  /**
+   * ProductCategory updateMany
+   */
+  export type ProductCategoryUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ProductCategories.
+     */
+    data: XOR<ProductCategoryUpdateManyMutationInput, ProductCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductCategories to update
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * Limit how many ProductCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductCategory updateManyAndReturn
+   */
+  export type ProductCategoryUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductCategories.
+     */
+    data: XOR<ProductCategoryUpdateManyMutationInput, ProductCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductCategories to update
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * Limit how many ProductCategories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductCategory upsert
+   */
+  export type ProductCategoryUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductCategory to update in case it exists.
+     */
+    where: ProductCategoryWhereUniqueInput
+    /**
+     * In case the ProductCategory found by the `where` argument doesn't exist, create a new ProductCategory with this data.
+     */
+    create: XOR<ProductCategoryCreateInput, ProductCategoryUncheckedCreateInput>
+    /**
+     * In case the ProductCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductCategoryUpdateInput, ProductCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductCategory delete
+   */
+  export type ProductCategoryDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which ProductCategory to delete.
+     */
+    where: ProductCategoryWhereUniqueInput
+  }
+
+  /**
+   * ProductCategory deleteMany
+   */
+  export type ProductCategoryDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProductCategories to delete
+     */
+    where?: ProductCategoryWhereInput
+    /**
+     * Limit how many ProductCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductCategory.parent
+   */
+  export type ProductCategory$parentArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    where?: ProductCategoryWhereInput
+  }
+
+  /**
+   * ProductCategory.children
+   */
+  export type ProductCategory$childrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+    where?: ProductCategoryWhereInput
+    orderBy?: ProductCategoryOrderByWithRelationInput | ProductCategoryOrderByWithRelationInput[]
+    cursor?: ProductCategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductCategoryScalarFieldEnum | ProductCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ProductCategory without action
+   */
+  export type ProductCategoryDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProductCategory
+     */
+    select?: ProductCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductCategory
+     */
+    omit?: ProductCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductCategoryInclude<ExtArgs> | null
+  }
+
+  /**
+   * Model TemplateInstantiation
+   */
+
+  export type AggregateTemplateInstantiation = {
+    _count: TemplateInstantiationCountAggregateOutputType | null
+    _avg: TemplateInstantiationAvgAggregateOutputType | null
+    _sum: TemplateInstantiationSumAggregateOutputType | null
+    _min: TemplateInstantiationMinAggregateOutputType | null
+    _max: TemplateInstantiationMaxAggregateOutputType | null
+  }
+
+  export type TemplateInstantiationAvgAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+  }
+
+  export type TemplateInstantiationSumAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+  }
+
+  export type TemplateInstantiationMinAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+    templateId: string | null
+    templateVersion: string | null
+    matchInput: string | null
+    outputSnapshot: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type TemplateInstantiationMaxAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+    templateId: string | null
+    templateVersion: string | null
+    matchInput: string | null
+    outputSnapshot: string | null
+    createdAt: Date | null
+    createdBy: string | null
+  }
+
+  export type TemplateInstantiationCountAggregateOutputType = {
+    id: number
+    projectId: number
+    templateId: number
+    templateVersion: number
+    matchInput: number
+    outputSnapshot: number
+    createdAt: number
+    createdBy: number
+    _all: number
+  }
+
+  export type TemplateInstantiationAvgAggregateInputType = {
+    id?: true
+    projectId?: true
+  }
+
+  export type TemplateInstantiationSumAggregateInputType = {
+    id?: true
+    projectId?: true
+  }
+
+  export type TemplateInstantiationMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    templateId?: true
+    templateVersion?: true
+    matchInput?: true
+    outputSnapshot?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type TemplateInstantiationMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    templateId?: true
+    templateVersion?: true
+    matchInput?: true
+    outputSnapshot?: true
+    createdAt?: true
+    createdBy?: true
+  }
+
+  export type TemplateInstantiationCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    templateId?: true
+    templateVersion?: true
+    matchInput?: true
+    outputSnapshot?: true
+    createdAt?: true
+    createdBy?: true
+    _all?: true
+  }
+
+  export type TemplateInstantiationAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TemplateInstantiation to aggregate.
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TemplateInstantiations to fetch.
+     */
+    orderBy?:
+      | TemplateInstantiationOrderByWithRelationInput
+      | TemplateInstantiationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: TemplateInstantiationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TemplateInstantiations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TemplateInstantiations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned TemplateInstantiations
+     **/
+    _count?: true | TemplateInstantiationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: TemplateInstantiationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: TemplateInstantiationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: TemplateInstantiationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: TemplateInstantiationMaxAggregateInputType
+  }
+
+  export type GetTemplateInstantiationAggregateType<T extends TemplateInstantiationAggregateArgs> =
+    {
+      [P in keyof T & keyof AggregateTemplateInstantiation]: P extends '_count' | 'count'
+        ? T[P] extends true
+          ? number
+          : GetScalarType<T[P], AggregateTemplateInstantiation[P]>
+        : GetScalarType<T[P], AggregateTemplateInstantiation[P]>
+    }
+
+  export type TemplateInstantiationGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TemplateInstantiationWhereInput
+    orderBy?:
+      | TemplateInstantiationOrderByWithAggregationInput
+      | TemplateInstantiationOrderByWithAggregationInput[]
+    by: TemplateInstantiationScalarFieldEnum[] | TemplateInstantiationScalarFieldEnum
+    having?: TemplateInstantiationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TemplateInstantiationCountAggregateInputType | true
+    _avg?: TemplateInstantiationAvgAggregateInputType
+    _sum?: TemplateInstantiationSumAggregateInputType
+    _min?: TemplateInstantiationMinAggregateInputType
+    _max?: TemplateInstantiationMaxAggregateInputType
+  }
+
+  export type TemplateInstantiationGroupByOutputType = {
+    id: number
+    projectId: number
+    templateId: string
+    templateVersion: string
+    matchInput: string | null
+    outputSnapshot: string | null
+    createdAt: Date
+    createdBy: string
+    _count: TemplateInstantiationCountAggregateOutputType | null
+    _avg: TemplateInstantiationAvgAggregateOutputType | null
+    _sum: TemplateInstantiationSumAggregateOutputType | null
+    _min: TemplateInstantiationMinAggregateOutputType | null
+    _max: TemplateInstantiationMaxAggregateOutputType | null
+  }
+
+  type GetTemplateInstantiationGroupByPayload<T extends TemplateInstantiationGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<TemplateInstantiationGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof TemplateInstantiationGroupByOutputType]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TemplateInstantiationGroupByOutputType[P]>
+            : GetScalarType<T[P], TemplateInstantiationGroupByOutputType[P]>
+        }
+      >
+    >
+
+  export type TemplateInstantiationSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      projectId?: boolean
+      templateId?: boolean
+      templateVersion?: boolean
+      matchInput?: boolean
+      outputSnapshot?: boolean
+      createdAt?: boolean
+      createdBy?: boolean
+    },
+    ExtArgs['result']['templateInstantiation']
+  >
+
+  export type TemplateInstantiationSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      projectId?: boolean
+      templateId?: boolean
+      templateVersion?: boolean
+      matchInput?: boolean
+      outputSnapshot?: boolean
+      createdAt?: boolean
+      createdBy?: boolean
+    },
+    ExtArgs['result']['templateInstantiation']
+  >
+
+  export type TemplateInstantiationSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      projectId?: boolean
+      templateId?: boolean
+      templateVersion?: boolean
+      matchInput?: boolean
+      outputSnapshot?: boolean
+      createdAt?: boolean
+      createdBy?: boolean
+    },
+    ExtArgs['result']['templateInstantiation']
+  >
+
+  export type TemplateInstantiationSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    templateId?: boolean
+    templateVersion?: boolean
+    matchInput?: boolean
+    outputSnapshot?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+  }
+
+  export type TemplateInstantiationOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | 'id'
+    | 'projectId'
+    | 'templateId'
+    | 'templateVersion'
+    | 'matchInput'
+    | 'outputSnapshot'
+    | 'createdAt'
+    | 'createdBy',
+    ExtArgs['result']['templateInstantiation']
+  >
+
+  export type $TemplateInstantiationPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: 'TemplateInstantiation'
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number
+        projectId: number
+        templateId: string
+        templateVersion: string
+        matchInput: string | null
+        outputSnapshot: string | null
+        createdAt: Date
+        createdBy: string
+      },
+      ExtArgs['result']['templateInstantiation']
+    >
+    composites: {}
+  }
+
+  type TemplateInstantiationGetPayload<
+    S extends boolean | null | undefined | TemplateInstantiationDefaultArgs,
+  > = $Result.GetResult<Prisma.$TemplateInstantiationPayload, S>
+
+  type TemplateInstantiationCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<TemplateInstantiationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: TemplateInstantiationCountAggregateInputType | true
+  }
+
+  export interface TemplateInstantiationDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>['model']['TemplateInstantiation']
+      meta: { name: 'TemplateInstantiation' }
+    }
+    /**
+     * Find zero or one TemplateInstantiation that matches the filter.
+     * @param {TemplateInstantiationFindUniqueArgs} args - Arguments to find a TemplateInstantiation
+     * @example
+     * // Get one TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TemplateInstantiationFindUniqueArgs>(
+      args: SelectSubset<T, TemplateInstantiationFindUniqueArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'findUnique',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one TemplateInstantiation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TemplateInstantiationFindUniqueOrThrowArgs} args - Arguments to find a TemplateInstantiation
+     * @example
+     * // Get one TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TemplateInstantiationFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, TemplateInstantiationFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TemplateInstantiation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationFindFirstArgs} args - Arguments to find a TemplateInstantiation
+     * @example
+     * // Get one TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TemplateInstantiationFindFirstArgs>(
+      args?: SelectSubset<T, TemplateInstantiationFindFirstArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'findFirst',
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first TemplateInstantiation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationFindFirstOrThrowArgs} args - Arguments to find a TemplateInstantiation
+     * @example
+     * // Get one TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TemplateInstantiationFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, TemplateInstantiationFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'findFirstOrThrow',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more TemplateInstantiations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TemplateInstantiations
+     * const templateInstantiations = await prisma.templateInstantiation.findMany()
+     *
+     * // Get first 10 TemplateInstantiations
+     * const templateInstantiations = await prisma.templateInstantiation.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const templateInstantiationWithIdOnly = await prisma.templateInstantiation.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends TemplateInstantiationFindManyArgs>(
+      args?: SelectSubset<T, TemplateInstantiationFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'findMany',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a TemplateInstantiation.
+     * @param {TemplateInstantiationCreateArgs} args - Arguments to create a TemplateInstantiation.
+     * @example
+     * // Create one TemplateInstantiation
+     * const TemplateInstantiation = await prisma.templateInstantiation.create({
+     *   data: {
+     *     // ... data to create a TemplateInstantiation
+     *   }
+     * })
+     *
+     */
+    create<T extends TemplateInstantiationCreateArgs>(
+      args: SelectSubset<T, TemplateInstantiationCreateArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'create',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many TemplateInstantiations.
+     * @param {TemplateInstantiationCreateManyArgs} args - Arguments to create many TemplateInstantiations.
+     * @example
+     * // Create many TemplateInstantiations
+     * const templateInstantiation = await prisma.templateInstantiation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends TemplateInstantiationCreateManyArgs>(
+      args?: SelectSubset<T, TemplateInstantiationCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TemplateInstantiations and returns the data saved in the database.
+     * @param {TemplateInstantiationCreateManyAndReturnArgs} args - Arguments to create many TemplateInstantiations.
+     * @example
+     * // Create many TemplateInstantiations
+     * const templateInstantiation = await prisma.templateInstantiation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many TemplateInstantiations and only return the `id`
+     * const templateInstantiationWithIdOnly = await prisma.templateInstantiation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends TemplateInstantiationCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, TemplateInstantiationCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'createManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a TemplateInstantiation.
+     * @param {TemplateInstantiationDeleteArgs} args - Arguments to delete one TemplateInstantiation.
+     * @example
+     * // Delete one TemplateInstantiation
+     * const TemplateInstantiation = await prisma.templateInstantiation.delete({
+     *   where: {
+     *     // ... filter to delete one TemplateInstantiation
+     *   }
+     * })
+     *
+     */
+    delete<T extends TemplateInstantiationDeleteArgs>(
+      args: SelectSubset<T, TemplateInstantiationDeleteArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'delete',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one TemplateInstantiation.
+     * @param {TemplateInstantiationUpdateArgs} args - Arguments to update one TemplateInstantiation.
+     * @example
+     * // Update one TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends TemplateInstantiationUpdateArgs>(
+      args: SelectSubset<T, TemplateInstantiationUpdateArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'update',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more TemplateInstantiations.
+     * @param {TemplateInstantiationDeleteManyArgs} args - Arguments to filter TemplateInstantiations to delete.
+     * @example
+     * // Delete a few TemplateInstantiations
+     * const { count } = await prisma.templateInstantiation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends TemplateInstantiationDeleteManyArgs>(
+      args?: SelectSubset<T, TemplateInstantiationDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TemplateInstantiations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TemplateInstantiations
+     * const templateInstantiation = await prisma.templateInstantiation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends TemplateInstantiationUpdateManyArgs>(
+      args: SelectSubset<T, TemplateInstantiationUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TemplateInstantiations and returns the data updated in the database.
+     * @param {TemplateInstantiationUpdateManyAndReturnArgs} args - Arguments to update many TemplateInstantiations.
+     * @example
+     * // Update many TemplateInstantiations
+     * const templateInstantiation = await prisma.templateInstantiation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more TemplateInstantiations and only return the `id`
+     * const templateInstantiationWithIdOnly = await prisma.templateInstantiation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends TemplateInstantiationUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, TemplateInstantiationUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'updateManyAndReturn',
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one TemplateInstantiation.
+     * @param {TemplateInstantiationUpsertArgs} args - Arguments to update or create a TemplateInstantiation.
+     * @example
+     * // Update or create a TemplateInstantiation
+     * const templateInstantiation = await prisma.templateInstantiation.upsert({
+     *   create: {
+     *     // ... data to create a TemplateInstantiation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TemplateInstantiation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TemplateInstantiationUpsertArgs>(
+      args: SelectSubset<T, TemplateInstantiationUpsertArgs<ExtArgs>>
+    ): Prisma__TemplateInstantiationClient<
+      $Result.GetResult<
+        Prisma.$TemplateInstantiationPayload<ExtArgs>,
+        T,
+        'upsert',
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of TemplateInstantiations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationCountArgs} args - Arguments to filter TemplateInstantiations to count.
+     * @example
+     * // Count the number of TemplateInstantiations
+     * const count = await prisma.templateInstantiation.count({
+     *   where: {
+     *     // ... the filter for the TemplateInstantiations we want to count
+     *   }
+     * })
+     **/
+    count<T extends TemplateInstantiationCountArgs>(
+      args?: Subset<T, TemplateInstantiationCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TemplateInstantiationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TemplateInstantiation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends TemplateInstantiationAggregateArgs>(
+      args: Subset<T, TemplateInstantiationAggregateArgs>
+    ): Prisma.PrismaPromise<GetTemplateInstantiationAggregateType<T>>
+
+    /**
+     * Group by TemplateInstantiation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TemplateInstantiationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends TemplateInstantiationGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TemplateInstantiationGroupByArgs['orderBy'] }
+        : { orderBy?: TemplateInstantiationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`]
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, TemplateInstantiationGroupByArgs, OrderByArg> & InputErrors
+    ): {} extends InputErrors
+      ? GetTemplateInstantiationGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the TemplateInstantiation model
+     */
+    readonly fields: TemplateInstantiationFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TemplateInstantiation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TemplateInstantiationClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the TemplateInstantiation model
+   */
+  interface TemplateInstantiationFieldRefs {
+    readonly id: FieldRef<'TemplateInstantiation', 'Int'>
+    readonly projectId: FieldRef<'TemplateInstantiation', 'Int'>
+    readonly templateId: FieldRef<'TemplateInstantiation', 'String'>
+    readonly templateVersion: FieldRef<'TemplateInstantiation', 'String'>
+    readonly matchInput: FieldRef<'TemplateInstantiation', 'String'>
+    readonly outputSnapshot: FieldRef<'TemplateInstantiation', 'String'>
+    readonly createdAt: FieldRef<'TemplateInstantiation', 'DateTime'>
+    readonly createdBy: FieldRef<'TemplateInstantiation', 'String'>
+  }
+
+  // Custom InputTypes
+  /**
+   * TemplateInstantiation findUnique
+   */
+  export type TemplateInstantiationFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter, which TemplateInstantiation to fetch.
+     */
+    where: TemplateInstantiationWhereUniqueInput
+  }
+
+  /**
+   * TemplateInstantiation findUniqueOrThrow
+   */
+  export type TemplateInstantiationFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter, which TemplateInstantiation to fetch.
+     */
+    where: TemplateInstantiationWhereUniqueInput
+  }
+
+  /**
+   * TemplateInstantiation findFirst
+   */
+  export type TemplateInstantiationFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter, which TemplateInstantiation to fetch.
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TemplateInstantiations to fetch.
+     */
+    orderBy?:
+      | TemplateInstantiationOrderByWithRelationInput
+      | TemplateInstantiationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TemplateInstantiations.
+     */
+    cursor?: TemplateInstantiationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TemplateInstantiations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TemplateInstantiations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TemplateInstantiations.
+     */
+    distinct?: TemplateInstantiationScalarFieldEnum | TemplateInstantiationScalarFieldEnum[]
+  }
+
+  /**
+   * TemplateInstantiation findFirstOrThrow
+   */
+  export type TemplateInstantiationFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter, which TemplateInstantiation to fetch.
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TemplateInstantiations to fetch.
+     */
+    orderBy?:
+      | TemplateInstantiationOrderByWithRelationInput
+      | TemplateInstantiationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TemplateInstantiations.
+     */
+    cursor?: TemplateInstantiationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TemplateInstantiations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TemplateInstantiations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TemplateInstantiations.
+     */
+    distinct?: TemplateInstantiationScalarFieldEnum | TemplateInstantiationScalarFieldEnum[]
+  }
+
+  /**
+   * TemplateInstantiation findMany
+   */
+  export type TemplateInstantiationFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter, which TemplateInstantiations to fetch.
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TemplateInstantiations to fetch.
+     */
+    orderBy?:
+      | TemplateInstantiationOrderByWithRelationInput
+      | TemplateInstantiationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing TemplateInstantiations.
+     */
+    cursor?: TemplateInstantiationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TemplateInstantiations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TemplateInstantiations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TemplateInstantiations.
+     */
+    distinct?: TemplateInstantiationScalarFieldEnum | TemplateInstantiationScalarFieldEnum[]
+  }
+
+  /**
+   * TemplateInstantiation create
+   */
+  export type TemplateInstantiationCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * The data needed to create a TemplateInstantiation.
+     */
+    data: XOR<TemplateInstantiationCreateInput, TemplateInstantiationUncheckedCreateInput>
+  }
+
+  /**
+   * TemplateInstantiation createMany
+   */
+  export type TemplateInstantiationCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many TemplateInstantiations.
+     */
+    data: TemplateInstantiationCreateManyInput | TemplateInstantiationCreateManyInput[]
+  }
+
+  /**
+   * TemplateInstantiation createManyAndReturn
+   */
+  export type TemplateInstantiationCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TemplateInstantiations.
+     */
+    data: TemplateInstantiationCreateManyInput | TemplateInstantiationCreateManyInput[]
+  }
+
+  /**
+   * TemplateInstantiation update
+   */
+  export type TemplateInstantiationUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * The data needed to update a TemplateInstantiation.
+     */
+    data: XOR<TemplateInstantiationUpdateInput, TemplateInstantiationUncheckedUpdateInput>
+    /**
+     * Choose, which TemplateInstantiation to update.
+     */
+    where: TemplateInstantiationWhereUniqueInput
+  }
+
+  /**
+   * TemplateInstantiation updateMany
+   */
+  export type TemplateInstantiationUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update TemplateInstantiations.
+     */
+    data: XOR<
+      TemplateInstantiationUpdateManyMutationInput,
+      TemplateInstantiationUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which TemplateInstantiations to update
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * Limit how many TemplateInstantiations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TemplateInstantiation updateManyAndReturn
+   */
+  export type TemplateInstantiationUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * The data used to update TemplateInstantiations.
+     */
+    data: XOR<
+      TemplateInstantiationUpdateManyMutationInput,
+      TemplateInstantiationUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which TemplateInstantiations to update
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * Limit how many TemplateInstantiations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TemplateInstantiation upsert
+   */
+  export type TemplateInstantiationUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * The filter to search for the TemplateInstantiation to update in case it exists.
+     */
+    where: TemplateInstantiationWhereUniqueInput
+    /**
+     * In case the TemplateInstantiation found by the `where` argument doesn't exist, create a new TemplateInstantiation with this data.
+     */
+    create: XOR<TemplateInstantiationCreateInput, TemplateInstantiationUncheckedCreateInput>
+    /**
+     * In case the TemplateInstantiation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TemplateInstantiationUpdateInput, TemplateInstantiationUncheckedUpdateInput>
+  }
+
+  /**
+   * TemplateInstantiation delete
+   */
+  export type TemplateInstantiationDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+    /**
+     * Filter which TemplateInstantiation to delete.
+     */
+    where: TemplateInstantiationWhereUniqueInput
+  }
+
+  /**
+   * TemplateInstantiation deleteMany
+   */
+  export type TemplateInstantiationDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which TemplateInstantiations to delete
+     */
+    where?: TemplateInstantiationWhereInput
+    /**
+     * Limit how many TemplateInstantiations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TemplateInstantiation without action
+   */
+  export type TemplateInstantiationDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the TemplateInstantiation
+     */
+    select?: TemplateInstantiationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TemplateInstantiation
+     */
+    omit?: TemplateInstantiationOmit<ExtArgs> | null
+  }
+
+  /**
    * Enums
    */
 
@@ -16115,6 +23387,102 @@ export namespace Prisma {
   export type ProjectStatusLogScalarFieldEnum =
     (typeof ProjectStatusLogScalarFieldEnum)[keyof typeof ProjectStatusLogScalarFieldEnum]
 
+  export const ProjectTemplateScalarFieldEnum: {
+    id: 'id'
+    templateId: 'templateId'
+    templateCode: 'templateCode'
+    templateName: 'templateName'
+    templateVersion: 'templateVersion'
+    status: 'status'
+    priority: 'priority'
+    scopes: 'scopes'
+    phaseBlueprint: 'phaseBlueprint'
+    milestoneBlueprint: 'milestoneBlueprint'
+    taskTemplateBinding: 'taskTemplateBinding'
+    meta: 'meta'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
+  }
+
+  export type ProjectTemplateScalarFieldEnum =
+    (typeof ProjectTemplateScalarFieldEnum)[keyof typeof ProjectTemplateScalarFieldEnum]
+
+  export const TaskTemplateScalarFieldEnum: {
+    id: 'id'
+    taskTemplateId: 'taskTemplateId'
+    taskTemplateCode: 'taskTemplateCode'
+    taskTemplateName: 'taskTemplateName'
+    taskTemplateVersion: 'taskTemplateVersion'
+    status: 'status'
+    templateLevel: 'templateLevel'
+    businessDomain: 'businessDomain'
+    taskType: 'taskType'
+    requiredFlag: 'requiredFlag'
+    milestoneFlag: 'milestoneFlag'
+    ownerRole: 'ownerRole'
+    assigneeTypeDefault: 'assigneeTypeDefault'
+    slaRuleId: 'slaRuleId'
+    standardBinding: 'standardBinding'
+    dependencyBlueprint: 'dependencyBlueprint'
+    childTemplateRefs: 'childTemplateRefs'
+    parentTemplateCode: 'parentTemplateCode'
+    sortOrder: 'sortOrder'
+    meta: 'meta'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
+  }
+
+  export type TaskTemplateScalarFieldEnum =
+    (typeof TaskTemplateScalarFieldEnum)[keyof typeof TaskTemplateScalarFieldEnum]
+
+  export const SupplierScalarFieldEnum: {
+    id: 'id'
+    code: 'code'
+    name: 'name'
+    category: 'category'
+    status: 'status'
+    rating: 'rating'
+    contact: 'contact'
+    city: 'city'
+    currentTaskCount: 'currentTaskCount'
+    availabilityStatus: 'availabilityStatus'
+    qualificationStatus: 'qualificationStatus'
+    serviceAreas: 'serviceAreas'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
+  }
+
+  export type SupplierScalarFieldEnum =
+    (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
+
+  export const ProductCategoryScalarFieldEnum: {
+    id: 'id'
+    code: 'code'
+    name: 'name'
+    parentId: 'parentId'
+    sortOrder: 'sortOrder'
+    supplierIds: 'supplierIds'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
+  }
+
+  export type ProductCategoryScalarFieldEnum =
+    (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum]
+
+  export const TemplateInstantiationScalarFieldEnum: {
+    id: 'id'
+    projectId: 'projectId'
+    templateId: 'templateId'
+    templateVersion: 'templateVersion'
+    matchInput: 'matchInput'
+    outputSnapshot: 'outputSnapshot'
+    createdAt: 'createdAt'
+    createdBy: 'createdBy'
+  }
+
+  export type TemplateInstantiationScalarFieldEnum =
+    (typeof TemplateInstantiationScalarFieldEnum)[keyof typeof TemplateInstantiationScalarFieldEnum]
+
   export const SortOrder: {
     asc: 'asc'
     desc: 'desc'
@@ -16147,6 +23515,11 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
 
   /**
    * Reference to a field of type 'Float'
@@ -17156,6 +24529,514 @@ export namespace Prisma {
     fromStatus?: StringNullableWithAggregatesFilter<'ProjectStatusLog'> | string | null
     toStatus?: StringNullableWithAggregatesFilter<'ProjectStatusLog'> | string | null
     reason?: StringNullableWithAggregatesFilter<'ProjectStatusLog'> | string | null
+  }
+
+  export type ProjectTemplateWhereInput = {
+    AND?: ProjectTemplateWhereInput | ProjectTemplateWhereInput[]
+    OR?: ProjectTemplateWhereInput[]
+    NOT?: ProjectTemplateWhereInput | ProjectTemplateWhereInput[]
+    id?: IntFilter<'ProjectTemplate'> | number
+    templateId?: StringFilter<'ProjectTemplate'> | string
+    templateCode?: StringFilter<'ProjectTemplate'> | string
+    templateName?: StringFilter<'ProjectTemplate'> | string
+    templateVersion?: StringFilter<'ProjectTemplate'> | string
+    status?: StringFilter<'ProjectTemplate'> | string
+    priority?: IntFilter<'ProjectTemplate'> | number
+    scopes?: StringNullableFilter<'ProjectTemplate'> | string | null
+    phaseBlueprint?: StringNullableFilter<'ProjectTemplate'> | string | null
+    milestoneBlueprint?: StringNullableFilter<'ProjectTemplate'> | string | null
+    taskTemplateBinding?: StringNullableFilter<'ProjectTemplate'> | string | null
+    meta?: StringNullableFilter<'ProjectTemplate'> | string | null
+    createdAt?: DateTimeFilter<'ProjectTemplate'> | Date | string
+    updatedAt?: DateTimeFilter<'ProjectTemplate'> | Date | string
+  }
+
+  export type ProjectTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    templateCode?: SortOrder
+    templateName?: SortOrder
+    templateVersion?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    scopes?: SortOrderInput | SortOrder
+    phaseBlueprint?: SortOrderInput | SortOrder
+    milestoneBlueprint?: SortOrderInput | SortOrder
+    taskTemplateBinding?: SortOrderInput | SortOrder
+    meta?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectTemplateWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      templateId?: string
+      templateCode?: string
+      AND?: ProjectTemplateWhereInput | ProjectTemplateWhereInput[]
+      OR?: ProjectTemplateWhereInput[]
+      NOT?: ProjectTemplateWhereInput | ProjectTemplateWhereInput[]
+      templateName?: StringFilter<'ProjectTemplate'> | string
+      templateVersion?: StringFilter<'ProjectTemplate'> | string
+      status?: StringFilter<'ProjectTemplate'> | string
+      priority?: IntFilter<'ProjectTemplate'> | number
+      scopes?: StringNullableFilter<'ProjectTemplate'> | string | null
+      phaseBlueprint?: StringNullableFilter<'ProjectTemplate'> | string | null
+      milestoneBlueprint?: StringNullableFilter<'ProjectTemplate'> | string | null
+      taskTemplateBinding?: StringNullableFilter<'ProjectTemplate'> | string | null
+      meta?: StringNullableFilter<'ProjectTemplate'> | string | null
+      createdAt?: DateTimeFilter<'ProjectTemplate'> | Date | string
+      updatedAt?: DateTimeFilter<'ProjectTemplate'> | Date | string
+    },
+    'id' | 'templateId' | 'templateCode'
+  >
+
+  export type ProjectTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    templateCode?: SortOrder
+    templateName?: SortOrder
+    templateVersion?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    scopes?: SortOrderInput | SortOrder
+    phaseBlueprint?: SortOrderInput | SortOrder
+    milestoneBlueprint?: SortOrderInput | SortOrder
+    taskTemplateBinding?: SortOrderInput | SortOrder
+    meta?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProjectTemplateCountOrderByAggregateInput
+    _avg?: ProjectTemplateAvgOrderByAggregateInput
+    _max?: ProjectTemplateMaxOrderByAggregateInput
+    _min?: ProjectTemplateMinOrderByAggregateInput
+    _sum?: ProjectTemplateSumOrderByAggregateInput
+  }
+
+  export type ProjectTemplateScalarWhereWithAggregatesInput = {
+    AND?:
+      | ProjectTemplateScalarWhereWithAggregatesInput
+      | ProjectTemplateScalarWhereWithAggregatesInput[]
+    OR?: ProjectTemplateScalarWhereWithAggregatesInput[]
+    NOT?:
+      | ProjectTemplateScalarWhereWithAggregatesInput
+      | ProjectTemplateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'ProjectTemplate'> | number
+    templateId?: StringWithAggregatesFilter<'ProjectTemplate'> | string
+    templateCode?: StringWithAggregatesFilter<'ProjectTemplate'> | string
+    templateName?: StringWithAggregatesFilter<'ProjectTemplate'> | string
+    templateVersion?: StringWithAggregatesFilter<'ProjectTemplate'> | string
+    status?: StringWithAggregatesFilter<'ProjectTemplate'> | string
+    priority?: IntWithAggregatesFilter<'ProjectTemplate'> | number
+    scopes?: StringNullableWithAggregatesFilter<'ProjectTemplate'> | string | null
+    phaseBlueprint?: StringNullableWithAggregatesFilter<'ProjectTemplate'> | string | null
+    milestoneBlueprint?: StringNullableWithAggregatesFilter<'ProjectTemplate'> | string | null
+    taskTemplateBinding?: StringNullableWithAggregatesFilter<'ProjectTemplate'> | string | null
+    meta?: StringNullableWithAggregatesFilter<'ProjectTemplate'> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<'ProjectTemplate'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'ProjectTemplate'> | Date | string
+  }
+
+  export type TaskTemplateWhereInput = {
+    AND?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
+    OR?: TaskTemplateWhereInput[]
+    NOT?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
+    id?: IntFilter<'TaskTemplate'> | number
+    taskTemplateId?: StringFilter<'TaskTemplate'> | string
+    taskTemplateCode?: StringFilter<'TaskTemplate'> | string
+    taskTemplateName?: StringFilter<'TaskTemplate'> | string
+    taskTemplateVersion?: StringFilter<'TaskTemplate'> | string
+    status?: StringFilter<'TaskTemplate'> | string
+    templateLevel?: StringFilter<'TaskTemplate'> | string
+    businessDomain?: StringFilter<'TaskTemplate'> | string
+    taskType?: StringFilter<'TaskTemplate'> | string
+    requiredFlag?: BoolFilter<'TaskTemplate'> | boolean
+    milestoneFlag?: BoolFilter<'TaskTemplate'> | boolean
+    ownerRole?: StringFilter<'TaskTemplate'> | string
+    assigneeTypeDefault?: StringFilter<'TaskTemplate'> | string
+    slaRuleId?: StringNullableFilter<'TaskTemplate'> | string | null
+    standardBinding?: StringNullableFilter<'TaskTemplate'> | string | null
+    dependencyBlueprint?: StringNullableFilter<'TaskTemplate'> | string | null
+    childTemplateRefs?: StringNullableFilter<'TaskTemplate'> | string | null
+    parentTemplateCode?: StringNullableFilter<'TaskTemplate'> | string | null
+    sortOrder?: IntFilter<'TaskTemplate'> | number
+    meta?: StringNullableFilter<'TaskTemplate'> | string | null
+    createdAt?: DateTimeFilter<'TaskTemplate'> | Date | string
+    updatedAt?: DateTimeFilter<'TaskTemplate'> | Date | string
+  }
+
+  export type TaskTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    taskTemplateCode?: SortOrder
+    taskTemplateName?: SortOrder
+    taskTemplateVersion?: SortOrder
+    status?: SortOrder
+    templateLevel?: SortOrder
+    businessDomain?: SortOrder
+    taskType?: SortOrder
+    requiredFlag?: SortOrder
+    milestoneFlag?: SortOrder
+    ownerRole?: SortOrder
+    assigneeTypeDefault?: SortOrder
+    slaRuleId?: SortOrderInput | SortOrder
+    standardBinding?: SortOrderInput | SortOrder
+    dependencyBlueprint?: SortOrderInput | SortOrder
+    childTemplateRefs?: SortOrderInput | SortOrder
+    parentTemplateCode?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    meta?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskTemplateWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      taskTemplateId?: string
+      taskTemplateCode?: string
+      AND?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
+      OR?: TaskTemplateWhereInput[]
+      NOT?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
+      taskTemplateName?: StringFilter<'TaskTemplate'> | string
+      taskTemplateVersion?: StringFilter<'TaskTemplate'> | string
+      status?: StringFilter<'TaskTemplate'> | string
+      templateLevel?: StringFilter<'TaskTemplate'> | string
+      businessDomain?: StringFilter<'TaskTemplate'> | string
+      taskType?: StringFilter<'TaskTemplate'> | string
+      requiredFlag?: BoolFilter<'TaskTemplate'> | boolean
+      milestoneFlag?: BoolFilter<'TaskTemplate'> | boolean
+      ownerRole?: StringFilter<'TaskTemplate'> | string
+      assigneeTypeDefault?: StringFilter<'TaskTemplate'> | string
+      slaRuleId?: StringNullableFilter<'TaskTemplate'> | string | null
+      standardBinding?: StringNullableFilter<'TaskTemplate'> | string | null
+      dependencyBlueprint?: StringNullableFilter<'TaskTemplate'> | string | null
+      childTemplateRefs?: StringNullableFilter<'TaskTemplate'> | string | null
+      parentTemplateCode?: StringNullableFilter<'TaskTemplate'> | string | null
+      sortOrder?: IntFilter<'TaskTemplate'> | number
+      meta?: StringNullableFilter<'TaskTemplate'> | string | null
+      createdAt?: DateTimeFilter<'TaskTemplate'> | Date | string
+      updatedAt?: DateTimeFilter<'TaskTemplate'> | Date | string
+    },
+    'id' | 'taskTemplateId' | 'taskTemplateCode'
+  >
+
+  export type TaskTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    taskTemplateCode?: SortOrder
+    taskTemplateName?: SortOrder
+    taskTemplateVersion?: SortOrder
+    status?: SortOrder
+    templateLevel?: SortOrder
+    businessDomain?: SortOrder
+    taskType?: SortOrder
+    requiredFlag?: SortOrder
+    milestoneFlag?: SortOrder
+    ownerRole?: SortOrder
+    assigneeTypeDefault?: SortOrder
+    slaRuleId?: SortOrderInput | SortOrder
+    standardBinding?: SortOrderInput | SortOrder
+    dependencyBlueprint?: SortOrderInput | SortOrder
+    childTemplateRefs?: SortOrderInput | SortOrder
+    parentTemplateCode?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    meta?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TaskTemplateCountOrderByAggregateInput
+    _avg?: TaskTemplateAvgOrderByAggregateInput
+    _max?: TaskTemplateMaxOrderByAggregateInput
+    _min?: TaskTemplateMinOrderByAggregateInput
+    _sum?: TaskTemplateSumOrderByAggregateInput
+  }
+
+  export type TaskTemplateScalarWhereWithAggregatesInput = {
+    AND?: TaskTemplateScalarWhereWithAggregatesInput | TaskTemplateScalarWhereWithAggregatesInput[]
+    OR?: TaskTemplateScalarWhereWithAggregatesInput[]
+    NOT?: TaskTemplateScalarWhereWithAggregatesInput | TaskTemplateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'TaskTemplate'> | number
+    taskTemplateId?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    taskTemplateCode?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    taskTemplateName?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    taskTemplateVersion?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    status?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    templateLevel?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    businessDomain?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    taskType?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    requiredFlag?: BoolWithAggregatesFilter<'TaskTemplate'> | boolean
+    milestoneFlag?: BoolWithAggregatesFilter<'TaskTemplate'> | boolean
+    ownerRole?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    assigneeTypeDefault?: StringWithAggregatesFilter<'TaskTemplate'> | string
+    slaRuleId?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    standardBinding?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    dependencyBlueprint?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    childTemplateRefs?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    parentTemplateCode?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    sortOrder?: IntWithAggregatesFilter<'TaskTemplate'> | number
+    meta?: StringNullableWithAggregatesFilter<'TaskTemplate'> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<'TaskTemplate'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'TaskTemplate'> | Date | string
+  }
+
+  export type SupplierWhereInput = {
+    AND?: SupplierWhereInput | SupplierWhereInput[]
+    OR?: SupplierWhereInput[]
+    NOT?: SupplierWhereInput | SupplierWhereInput[]
+    id?: IntFilter<'Supplier'> | number
+    code?: StringFilter<'Supplier'> | string
+    name?: StringFilter<'Supplier'> | string
+    category?: StringFilter<'Supplier'> | string
+    status?: StringFilter<'Supplier'> | string
+    rating?: StringFilter<'Supplier'> | string
+    contact?: StringFilter<'Supplier'> | string
+    city?: StringFilter<'Supplier'> | string
+    currentTaskCount?: IntFilter<'Supplier'> | number
+    availabilityStatus?: StringFilter<'Supplier'> | string
+    qualificationStatus?: StringFilter<'Supplier'> | string
+    serviceAreas?: StringNullableFilter<'Supplier'> | string | null
+    createdAt?: DateTimeFilter<'Supplier'> | Date | string
+    updatedAt?: DateTimeFilter<'Supplier'> | Date | string
+  }
+
+  export type SupplierOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    rating?: SortOrder
+    contact?: SortOrder
+    city?: SortOrder
+    currentTaskCount?: SortOrder
+    availabilityStatus?: SortOrder
+    qualificationStatus?: SortOrder
+    serviceAreas?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      code?: string
+      AND?: SupplierWhereInput | SupplierWhereInput[]
+      OR?: SupplierWhereInput[]
+      NOT?: SupplierWhereInput | SupplierWhereInput[]
+      name?: StringFilter<'Supplier'> | string
+      category?: StringFilter<'Supplier'> | string
+      status?: StringFilter<'Supplier'> | string
+      rating?: StringFilter<'Supplier'> | string
+      contact?: StringFilter<'Supplier'> | string
+      city?: StringFilter<'Supplier'> | string
+      currentTaskCount?: IntFilter<'Supplier'> | number
+      availabilityStatus?: StringFilter<'Supplier'> | string
+      qualificationStatus?: StringFilter<'Supplier'> | string
+      serviceAreas?: StringNullableFilter<'Supplier'> | string | null
+      createdAt?: DateTimeFilter<'Supplier'> | Date | string
+      updatedAt?: DateTimeFilter<'Supplier'> | Date | string
+    },
+    'id' | 'code'
+  >
+
+  export type SupplierOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    rating?: SortOrder
+    contact?: SortOrder
+    city?: SortOrder
+    currentTaskCount?: SortOrder
+    availabilityStatus?: SortOrder
+    qualificationStatus?: SortOrder
+    serviceAreas?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SupplierCountOrderByAggregateInput
+    _avg?: SupplierAvgOrderByAggregateInput
+    _max?: SupplierMaxOrderByAggregateInput
+    _min?: SupplierMinOrderByAggregateInput
+    _sum?: SupplierSumOrderByAggregateInput
+  }
+
+  export type SupplierScalarWhereWithAggregatesInput = {
+    AND?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
+    OR?: SupplierScalarWhereWithAggregatesInput[]
+    NOT?: SupplierScalarWhereWithAggregatesInput | SupplierScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'Supplier'> | number
+    code?: StringWithAggregatesFilter<'Supplier'> | string
+    name?: StringWithAggregatesFilter<'Supplier'> | string
+    category?: StringWithAggregatesFilter<'Supplier'> | string
+    status?: StringWithAggregatesFilter<'Supplier'> | string
+    rating?: StringWithAggregatesFilter<'Supplier'> | string
+    contact?: StringWithAggregatesFilter<'Supplier'> | string
+    city?: StringWithAggregatesFilter<'Supplier'> | string
+    currentTaskCount?: IntWithAggregatesFilter<'Supplier'> | number
+    availabilityStatus?: StringWithAggregatesFilter<'Supplier'> | string
+    qualificationStatus?: StringWithAggregatesFilter<'Supplier'> | string
+    serviceAreas?: StringNullableWithAggregatesFilter<'Supplier'> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<'Supplier'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'Supplier'> | Date | string
+  }
+
+  export type ProductCategoryWhereInput = {
+    AND?: ProductCategoryWhereInput | ProductCategoryWhereInput[]
+    OR?: ProductCategoryWhereInput[]
+    NOT?: ProductCategoryWhereInput | ProductCategoryWhereInput[]
+    id?: IntFilter<'ProductCategory'> | number
+    code?: StringFilter<'ProductCategory'> | string
+    name?: StringFilter<'ProductCategory'> | string
+    parentId?: IntNullableFilter<'ProductCategory'> | number | null
+    sortOrder?: IntFilter<'ProductCategory'> | number
+    supplierIds?: StringNullableFilter<'ProductCategory'> | string | null
+    createdAt?: DateTimeFilter<'ProductCategory'> | Date | string
+    updatedAt?: DateTimeFilter<'ProductCategory'> | Date | string
+    parent?: XOR<ProductCategoryNullableScalarRelationFilter, ProductCategoryWhereInput> | null
+    children?: ProductCategoryListRelationFilter
+  }
+
+  export type ProductCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    supplierIds?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    parent?: ProductCategoryOrderByWithRelationInput
+    children?: ProductCategoryOrderByRelationAggregateInput
+  }
+
+  export type ProductCategoryWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      code?: string
+      AND?: ProductCategoryWhereInput | ProductCategoryWhereInput[]
+      OR?: ProductCategoryWhereInput[]
+      NOT?: ProductCategoryWhereInput | ProductCategoryWhereInput[]
+      name?: StringFilter<'ProductCategory'> | string
+      parentId?: IntNullableFilter<'ProductCategory'> | number | null
+      sortOrder?: IntFilter<'ProductCategory'> | number
+      supplierIds?: StringNullableFilter<'ProductCategory'> | string | null
+      createdAt?: DateTimeFilter<'ProductCategory'> | Date | string
+      updatedAt?: DateTimeFilter<'ProductCategory'> | Date | string
+      parent?: XOR<ProductCategoryNullableScalarRelationFilter, ProductCategoryWhereInput> | null
+      children?: ProductCategoryListRelationFilter
+    },
+    'id' | 'code'
+  >
+
+  export type ProductCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    supplierIds?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductCategoryCountOrderByAggregateInput
+    _avg?: ProductCategoryAvgOrderByAggregateInput
+    _max?: ProductCategoryMaxOrderByAggregateInput
+    _min?: ProductCategoryMinOrderByAggregateInput
+    _sum?: ProductCategorySumOrderByAggregateInput
+  }
+
+  export type ProductCategoryScalarWhereWithAggregatesInput = {
+    AND?:
+      | ProductCategoryScalarWhereWithAggregatesInput
+      | ProductCategoryScalarWhereWithAggregatesInput[]
+    OR?: ProductCategoryScalarWhereWithAggregatesInput[]
+    NOT?:
+      | ProductCategoryScalarWhereWithAggregatesInput
+      | ProductCategoryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'ProductCategory'> | number
+    code?: StringWithAggregatesFilter<'ProductCategory'> | string
+    name?: StringWithAggregatesFilter<'ProductCategory'> | string
+    parentId?: IntNullableWithAggregatesFilter<'ProductCategory'> | number | null
+    sortOrder?: IntWithAggregatesFilter<'ProductCategory'> | number
+    supplierIds?: StringNullableWithAggregatesFilter<'ProductCategory'> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<'ProductCategory'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'ProductCategory'> | Date | string
+  }
+
+  export type TemplateInstantiationWhereInput = {
+    AND?: TemplateInstantiationWhereInput | TemplateInstantiationWhereInput[]
+    OR?: TemplateInstantiationWhereInput[]
+    NOT?: TemplateInstantiationWhereInput | TemplateInstantiationWhereInput[]
+    id?: IntFilter<'TemplateInstantiation'> | number
+    projectId?: IntFilter<'TemplateInstantiation'> | number
+    templateId?: StringFilter<'TemplateInstantiation'> | string
+    templateVersion?: StringFilter<'TemplateInstantiation'> | string
+    matchInput?: StringNullableFilter<'TemplateInstantiation'> | string | null
+    outputSnapshot?: StringNullableFilter<'TemplateInstantiation'> | string | null
+    createdAt?: DateTimeFilter<'TemplateInstantiation'> | Date | string
+    createdBy?: StringFilter<'TemplateInstantiation'> | string
+  }
+
+  export type TemplateInstantiationOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    templateId?: SortOrder
+    templateVersion?: SortOrder
+    matchInput?: SortOrderInput | SortOrder
+    outputSnapshot?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type TemplateInstantiationWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number
+      AND?: TemplateInstantiationWhereInput | TemplateInstantiationWhereInput[]
+      OR?: TemplateInstantiationWhereInput[]
+      NOT?: TemplateInstantiationWhereInput | TemplateInstantiationWhereInput[]
+      projectId?: IntFilter<'TemplateInstantiation'> | number
+      templateId?: StringFilter<'TemplateInstantiation'> | string
+      templateVersion?: StringFilter<'TemplateInstantiation'> | string
+      matchInput?: StringNullableFilter<'TemplateInstantiation'> | string | null
+      outputSnapshot?: StringNullableFilter<'TemplateInstantiation'> | string | null
+      createdAt?: DateTimeFilter<'TemplateInstantiation'> | Date | string
+      createdBy?: StringFilter<'TemplateInstantiation'> | string
+    },
+    'id'
+  >
+
+  export type TemplateInstantiationOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    templateId?: SortOrder
+    templateVersion?: SortOrder
+    matchInput?: SortOrderInput | SortOrder
+    outputSnapshot?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    _count?: TemplateInstantiationCountOrderByAggregateInput
+    _avg?: TemplateInstantiationAvgOrderByAggregateInput
+    _max?: TemplateInstantiationMaxOrderByAggregateInput
+    _min?: TemplateInstantiationMinOrderByAggregateInput
+    _sum?: TemplateInstantiationSumOrderByAggregateInput
+  }
+
+  export type TemplateInstantiationScalarWhereWithAggregatesInput = {
+    AND?:
+      | TemplateInstantiationScalarWhereWithAggregatesInput
+      | TemplateInstantiationScalarWhereWithAggregatesInput[]
+    OR?: TemplateInstantiationScalarWhereWithAggregatesInput[]
+    NOT?:
+      | TemplateInstantiationScalarWhereWithAggregatesInput
+      | TemplateInstantiationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<'TemplateInstantiation'> | number
+    projectId?: IntWithAggregatesFilter<'TemplateInstantiation'> | number
+    templateId?: StringWithAggregatesFilter<'TemplateInstantiation'> | string
+    templateVersion?: StringWithAggregatesFilter<'TemplateInstantiation'> | string
+    matchInput?: StringNullableWithAggregatesFilter<'TemplateInstantiation'> | string | null
+    outputSnapshot?: StringNullableWithAggregatesFilter<'TemplateInstantiation'> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<'TemplateInstantiation'> | Date | string
+    createdBy?: StringWithAggregatesFilter<'TemplateInstantiation'> | string
   }
 
   export type AuditLogCreateInput = {
@@ -18222,6 +26103,561 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ProjectTemplateCreateInput = {
+    templateId: string
+    templateCode: string
+    templateName: string
+    templateVersion: string
+    status: string
+    priority?: number
+    scopes?: string | null
+    phaseBlueprint?: string | null
+    milestoneBlueprint?: string | null
+    taskTemplateBinding?: string | null
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectTemplateUncheckedCreateInput = {
+    id?: number
+    templateId: string
+    templateCode: string
+    templateName: string
+    templateVersion: string
+    status: string
+    priority?: number
+    scopes?: string | null
+    phaseBlueprint?: string | null
+    milestoneBlueprint?: string | null
+    taskTemplateBinding?: string | null
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectTemplateUpdateInput = {
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    scopes?: NullableStringFieldUpdateOperationsInput | string | null
+    phaseBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    milestoneBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    taskTemplateBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectTemplateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    scopes?: NullableStringFieldUpdateOperationsInput | string | null
+    phaseBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    milestoneBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    taskTemplateBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectTemplateCreateManyInput = {
+    id?: number
+    templateId: string
+    templateCode: string
+    templateName: string
+    templateVersion: string
+    status: string
+    priority?: number
+    scopes?: string | null
+    phaseBlueprint?: string | null
+    milestoneBlueprint?: string | null
+    taskTemplateBinding?: string | null
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectTemplateUpdateManyMutationInput = {
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    scopes?: NullableStringFieldUpdateOperationsInput | string | null
+    phaseBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    milestoneBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    taskTemplateBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectTemplateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateCode?: StringFieldUpdateOperationsInput | string
+    templateName?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    scopes?: NullableStringFieldUpdateOperationsInput | string | null
+    phaseBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    milestoneBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    taskTemplateBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskTemplateCreateInput = {
+    taskTemplateId: string
+    taskTemplateCode: string
+    taskTemplateName: string
+    taskTemplateVersion: string
+    status: string
+    templateLevel: string
+    businessDomain: string
+    taskType: string
+    requiredFlag?: boolean
+    milestoneFlag?: boolean
+    ownerRole: string
+    assigneeTypeDefault: string
+    slaRuleId?: string | null
+    standardBinding?: string | null
+    dependencyBlueprint?: string | null
+    childTemplateRefs?: string | null
+    parentTemplateCode?: string | null
+    sortOrder?: number
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskTemplateUncheckedCreateInput = {
+    id?: number
+    taskTemplateId: string
+    taskTemplateCode: string
+    taskTemplateName: string
+    taskTemplateVersion: string
+    status: string
+    templateLevel: string
+    businessDomain: string
+    taskType: string
+    requiredFlag?: boolean
+    milestoneFlag?: boolean
+    ownerRole: string
+    assigneeTypeDefault: string
+    slaRuleId?: string | null
+    standardBinding?: string | null
+    dependencyBlueprint?: string | null
+    childTemplateRefs?: string | null
+    parentTemplateCode?: string | null
+    sortOrder?: number
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskTemplateUpdateInput = {
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    taskTemplateCode?: StringFieldUpdateOperationsInput | string
+    taskTemplateName?: StringFieldUpdateOperationsInput | string
+    taskTemplateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    templateLevel?: StringFieldUpdateOperationsInput | string
+    businessDomain?: StringFieldUpdateOperationsInput | string
+    taskType?: StringFieldUpdateOperationsInput | string
+    requiredFlag?: BoolFieldUpdateOperationsInput | boolean
+    milestoneFlag?: BoolFieldUpdateOperationsInput | boolean
+    ownerRole?: StringFieldUpdateOperationsInput | string
+    assigneeTypeDefault?: StringFieldUpdateOperationsInput | string
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    standardBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    dependencyBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    childTemplateRefs?: NullableStringFieldUpdateOperationsInput | string | null
+    parentTemplateCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskTemplateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    taskTemplateCode?: StringFieldUpdateOperationsInput | string
+    taskTemplateName?: StringFieldUpdateOperationsInput | string
+    taskTemplateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    templateLevel?: StringFieldUpdateOperationsInput | string
+    businessDomain?: StringFieldUpdateOperationsInput | string
+    taskType?: StringFieldUpdateOperationsInput | string
+    requiredFlag?: BoolFieldUpdateOperationsInput | boolean
+    milestoneFlag?: BoolFieldUpdateOperationsInput | boolean
+    ownerRole?: StringFieldUpdateOperationsInput | string
+    assigneeTypeDefault?: StringFieldUpdateOperationsInput | string
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    standardBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    dependencyBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    childTemplateRefs?: NullableStringFieldUpdateOperationsInput | string | null
+    parentTemplateCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskTemplateCreateManyInput = {
+    id?: number
+    taskTemplateId: string
+    taskTemplateCode: string
+    taskTemplateName: string
+    taskTemplateVersion: string
+    status: string
+    templateLevel: string
+    businessDomain: string
+    taskType: string
+    requiredFlag?: boolean
+    milestoneFlag?: boolean
+    ownerRole: string
+    assigneeTypeDefault: string
+    slaRuleId?: string | null
+    standardBinding?: string | null
+    dependencyBlueprint?: string | null
+    childTemplateRefs?: string | null
+    parentTemplateCode?: string | null
+    sortOrder?: number
+    meta?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskTemplateUpdateManyMutationInput = {
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    taskTemplateCode?: StringFieldUpdateOperationsInput | string
+    taskTemplateName?: StringFieldUpdateOperationsInput | string
+    taskTemplateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    templateLevel?: StringFieldUpdateOperationsInput | string
+    businessDomain?: StringFieldUpdateOperationsInput | string
+    taskType?: StringFieldUpdateOperationsInput | string
+    requiredFlag?: BoolFieldUpdateOperationsInput | boolean
+    milestoneFlag?: BoolFieldUpdateOperationsInput | boolean
+    ownerRole?: StringFieldUpdateOperationsInput | string
+    assigneeTypeDefault?: StringFieldUpdateOperationsInput | string
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    standardBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    dependencyBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    childTemplateRefs?: NullableStringFieldUpdateOperationsInput | string | null
+    parentTemplateCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskTemplateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    taskTemplateCode?: StringFieldUpdateOperationsInput | string
+    taskTemplateName?: StringFieldUpdateOperationsInput | string
+    taskTemplateVersion?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    templateLevel?: StringFieldUpdateOperationsInput | string
+    businessDomain?: StringFieldUpdateOperationsInput | string
+    taskType?: StringFieldUpdateOperationsInput | string
+    requiredFlag?: BoolFieldUpdateOperationsInput | boolean
+    milestoneFlag?: BoolFieldUpdateOperationsInput | boolean
+    ownerRole?: StringFieldUpdateOperationsInput | string
+    assigneeTypeDefault?: StringFieldUpdateOperationsInput | string
+    slaRuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    standardBinding?: NullableStringFieldUpdateOperationsInput | string | null
+    dependencyBlueprint?: NullableStringFieldUpdateOperationsInput | string | null
+    childTemplateRefs?: NullableStringFieldUpdateOperationsInput | string | null
+    parentTemplateCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    meta?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierCreateInput = {
+    code: string
+    name: string
+    category: string
+    status: string
+    rating: string
+    contact: string
+    city: string
+    currentTaskCount?: number
+    availabilityStatus: string
+    qualificationStatus: string
+    serviceAreas?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupplierUncheckedCreateInput = {
+    id?: number
+    code: string
+    name: string
+    category: string
+    status: string
+    rating: string
+    contact: string
+    city: string
+    currentTaskCount?: number
+    availabilityStatus: string
+    qualificationStatus: string
+    serviceAreas?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupplierUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    rating?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    currentTaskCount?: IntFieldUpdateOperationsInput | number
+    availabilityStatus?: StringFieldUpdateOperationsInput | string
+    qualificationStatus?: StringFieldUpdateOperationsInput | string
+    serviceAreas?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    rating?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    currentTaskCount?: IntFieldUpdateOperationsInput | number
+    availabilityStatus?: StringFieldUpdateOperationsInput | string
+    qualificationStatus?: StringFieldUpdateOperationsInput | string
+    serviceAreas?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierCreateManyInput = {
+    id?: number
+    code: string
+    name: string
+    category: string
+    status: string
+    rating: string
+    contact: string
+    city: string
+    currentTaskCount?: number
+    availabilityStatus: string
+    qualificationStatus: string
+    serviceAreas?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupplierUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    rating?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    currentTaskCount?: IntFieldUpdateOperationsInput | number
+    availabilityStatus?: StringFieldUpdateOperationsInput | string
+    qualificationStatus?: StringFieldUpdateOperationsInput | string
+    serviceAreas?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplierUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    rating?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    currentTaskCount?: IntFieldUpdateOperationsInput | number
+    availabilityStatus?: StringFieldUpdateOperationsInput | string
+    qualificationStatus?: StringFieldUpdateOperationsInput | string
+    serviceAreas?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductCategoryCreateInput = {
+    code: string
+    name: string
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: ProductCategoryCreateNestedOneWithoutChildrenInput
+    children?: ProductCategoryCreateNestedManyWithoutParentInput
+  }
+
+  export type ProductCategoryUncheckedCreateInput = {
+    id?: number
+    code: string
+    name: string
+    parentId?: number | null
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ProductCategoryUncheckedCreateNestedManyWithoutParentInput
+  }
+
+  export type ProductCategoryUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ProductCategoryUpdateOneWithoutChildrenNestedInput
+    children?: ProductCategoryUpdateManyWithoutParentNestedInput
+  }
+
+  export type ProductCategoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ProductCategoryUncheckedUpdateManyWithoutParentNestedInput
+  }
+
+  export type ProductCategoryCreateManyInput = {
+    id?: number
+    code: string
+    name: string
+    parentId?: number | null
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCategoryUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductCategoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TemplateInstantiationCreateInput = {
+    projectId: number
+    templateId: string
+    templateVersion: string
+    matchInput?: string | null
+    outputSnapshot?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type TemplateInstantiationUncheckedCreateInput = {
+    id?: number
+    projectId: number
+    templateId: string
+    templateVersion: string
+    matchInput?: string | null
+    outputSnapshot?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type TemplateInstantiationUpdateInput = {
+    projectId?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    matchInput?: NullableStringFieldUpdateOperationsInput | string | null
+    outputSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TemplateInstantiationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    matchInput?: NullableStringFieldUpdateOperationsInput | string | null
+    outputSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TemplateInstantiationCreateManyInput = {
+    id?: number
+    projectId: number
+    templateId: string
+    templateVersion: string
+    matchInput?: string | null
+    outputSnapshot?: string | null
+    createdAt?: Date | string
+    createdBy: string
+  }
+
+  export type TemplateInstantiationUpdateManyMutationInput = {
+    projectId?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    matchInput?: NullableStringFieldUpdateOperationsInput | string | null
+    outputSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TemplateInstantiationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    templateId?: StringFieldUpdateOperationsInput | string
+    templateVersion?: StringFieldUpdateOperationsInput | string
+    matchInput?: NullableStringFieldUpdateOperationsInput | string | null
+    outputSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -19029,6 +27465,329 @@ export namespace Prisma {
   }
 
   export type ProjectStatusLogSumOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+  }
+
+  export type ProjectTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    templateCode?: SortOrder
+    templateName?: SortOrder
+    templateVersion?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    scopes?: SortOrder
+    phaseBlueprint?: SortOrder
+    milestoneBlueprint?: SortOrder
+    taskTemplateBinding?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectTemplateAvgOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+  }
+
+  export type ProjectTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    templateCode?: SortOrder
+    templateName?: SortOrder
+    templateVersion?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    scopes?: SortOrder
+    phaseBlueprint?: SortOrder
+    milestoneBlueprint?: SortOrder
+    taskTemplateBinding?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    templateCode?: SortOrder
+    templateName?: SortOrder
+    templateVersion?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    scopes?: SortOrder
+    phaseBlueprint?: SortOrder
+    milestoneBlueprint?: SortOrder
+    taskTemplateBinding?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectTemplateSumOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type TaskTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    taskTemplateCode?: SortOrder
+    taskTemplateName?: SortOrder
+    taskTemplateVersion?: SortOrder
+    status?: SortOrder
+    templateLevel?: SortOrder
+    businessDomain?: SortOrder
+    taskType?: SortOrder
+    requiredFlag?: SortOrder
+    milestoneFlag?: SortOrder
+    ownerRole?: SortOrder
+    assigneeTypeDefault?: SortOrder
+    slaRuleId?: SortOrder
+    standardBinding?: SortOrder
+    dependencyBlueprint?: SortOrder
+    childTemplateRefs?: SortOrder
+    parentTemplateCode?: SortOrder
+    sortOrder?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskTemplateAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type TaskTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    taskTemplateCode?: SortOrder
+    taskTemplateName?: SortOrder
+    taskTemplateVersion?: SortOrder
+    status?: SortOrder
+    templateLevel?: SortOrder
+    businessDomain?: SortOrder
+    taskType?: SortOrder
+    requiredFlag?: SortOrder
+    milestoneFlag?: SortOrder
+    ownerRole?: SortOrder
+    assigneeTypeDefault?: SortOrder
+    slaRuleId?: SortOrder
+    standardBinding?: SortOrder
+    dependencyBlueprint?: SortOrder
+    childTemplateRefs?: SortOrder
+    parentTemplateCode?: SortOrder
+    sortOrder?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    taskTemplateCode?: SortOrder
+    taskTemplateName?: SortOrder
+    taskTemplateVersion?: SortOrder
+    status?: SortOrder
+    templateLevel?: SortOrder
+    businessDomain?: SortOrder
+    taskType?: SortOrder
+    requiredFlag?: SortOrder
+    milestoneFlag?: SortOrder
+    ownerRole?: SortOrder
+    assigneeTypeDefault?: SortOrder
+    slaRuleId?: SortOrder
+    standardBinding?: SortOrder
+    dependencyBlueprint?: SortOrder
+    childTemplateRefs?: SortOrder
+    parentTemplateCode?: SortOrder
+    sortOrder?: SortOrder
+    meta?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskTemplateSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type SupplierCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    rating?: SortOrder
+    contact?: SortOrder
+    city?: SortOrder
+    currentTaskCount?: SortOrder
+    availabilityStatus?: SortOrder
+    qualificationStatus?: SortOrder
+    serviceAreas?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierAvgOrderByAggregateInput = {
+    id?: SortOrder
+    currentTaskCount?: SortOrder
+  }
+
+  export type SupplierMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    rating?: SortOrder
+    contact?: SortOrder
+    city?: SortOrder
+    currentTaskCount?: SortOrder
+    availabilityStatus?: SortOrder
+    qualificationStatus?: SortOrder
+    serviceAreas?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    rating?: SortOrder
+    contact?: SortOrder
+    city?: SortOrder
+    currentTaskCount?: SortOrder
+    availabilityStatus?: SortOrder
+    qualificationStatus?: SortOrder
+    serviceAreas?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupplierSumOrderByAggregateInput = {
+    id?: SortOrder
+    currentTaskCount?: SortOrder
+  }
+
+  export type ProductCategoryNullableScalarRelationFilter = {
+    is?: ProductCategoryWhereInput | null
+    isNot?: ProductCategoryWhereInput | null
+  }
+
+  export type ProductCategoryListRelationFilter = {
+    every?: ProductCategoryWhereInput
+    some?: ProductCategoryWhereInput
+    none?: ProductCategoryWhereInput
+  }
+
+  export type ProductCategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    parentId?: SortOrder
+    sortOrder?: SortOrder
+    supplierIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductCategoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    parentId?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type ProductCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    parentId?: SortOrder
+    sortOrder?: SortOrder
+    supplierIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    parentId?: SortOrder
+    sortOrder?: SortOrder
+    supplierIds?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductCategorySumOrderByAggregateInput = {
+    id?: SortOrder
+    parentId?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type TemplateInstantiationCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    templateId?: SortOrder
+    templateVersion?: SortOrder
+    matchInput?: SortOrder
+    outputSnapshot?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type TemplateInstantiationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+  }
+
+  export type TemplateInstantiationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    templateId?: SortOrder
+    templateVersion?: SortOrder
+    matchInput?: SortOrder
+    outputSnapshot?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type TemplateInstantiationMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    templateId?: SortOrder
+    templateVersion?: SortOrder
+    matchInput?: SortOrder
+    outputSnapshot?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type TemplateInstantiationSumOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
   }
@@ -19945,6 +28704,124 @@ export namespace Prisma {
     >
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type ProductCategoryCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<
+      ProductCategoryCreateWithoutChildrenInput,
+      ProductCategoryUncheckedCreateWithoutChildrenInput
+    >
+    connectOrCreate?: ProductCategoryCreateOrConnectWithoutChildrenInput
+    connect?: ProductCategoryWhereUniqueInput
+  }
+
+  export type ProductCategoryCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<
+          ProductCategoryCreateWithoutParentInput,
+          ProductCategoryUncheckedCreateWithoutParentInput
+        >
+      | ProductCategoryCreateWithoutParentInput[]
+      | ProductCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?:
+      | ProductCategoryCreateOrConnectWithoutParentInput
+      | ProductCategoryCreateOrConnectWithoutParentInput[]
+    createMany?: ProductCategoryCreateManyParentInputEnvelope
+    connect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+  }
+
+  export type ProductCategoryUncheckedCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<
+          ProductCategoryCreateWithoutParentInput,
+          ProductCategoryUncheckedCreateWithoutParentInput
+        >
+      | ProductCategoryCreateWithoutParentInput[]
+      | ProductCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?:
+      | ProductCategoryCreateOrConnectWithoutParentInput
+      | ProductCategoryCreateOrConnectWithoutParentInput[]
+    createMany?: ProductCategoryCreateManyParentInputEnvelope
+    connect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+  }
+
+  export type ProductCategoryUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<
+      ProductCategoryCreateWithoutChildrenInput,
+      ProductCategoryUncheckedCreateWithoutChildrenInput
+    >
+    connectOrCreate?: ProductCategoryCreateOrConnectWithoutChildrenInput
+    upsert?: ProductCategoryUpsertWithoutChildrenInput
+    disconnect?: ProductCategoryWhereInput | boolean
+    delete?: ProductCategoryWhereInput | boolean
+    connect?: ProductCategoryWhereUniqueInput
+    update?: XOR<
+      XOR<
+        ProductCategoryUpdateToOneWithWhereWithoutChildrenInput,
+        ProductCategoryUpdateWithoutChildrenInput
+      >,
+      ProductCategoryUncheckedUpdateWithoutChildrenInput
+    >
+  }
+
+  export type ProductCategoryUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<
+          ProductCategoryCreateWithoutParentInput,
+          ProductCategoryUncheckedCreateWithoutParentInput
+        >
+      | ProductCategoryCreateWithoutParentInput[]
+      | ProductCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?:
+      | ProductCategoryCreateOrConnectWithoutParentInput
+      | ProductCategoryCreateOrConnectWithoutParentInput[]
+    upsert?:
+      | ProductCategoryUpsertWithWhereUniqueWithoutParentInput
+      | ProductCategoryUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ProductCategoryCreateManyParentInputEnvelope
+    set?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    disconnect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    delete?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    connect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    update?:
+      | ProductCategoryUpdateWithWhereUniqueWithoutParentInput
+      | ProductCategoryUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?:
+      | ProductCategoryUpdateManyWithWhereWithoutParentInput
+      | ProductCategoryUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ProductCategoryScalarWhereInput | ProductCategoryScalarWhereInput[]
+  }
+
+  export type ProductCategoryUncheckedUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<
+          ProductCategoryCreateWithoutParentInput,
+          ProductCategoryUncheckedCreateWithoutParentInput
+        >
+      | ProductCategoryCreateWithoutParentInput[]
+      | ProductCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?:
+      | ProductCategoryCreateOrConnectWithoutParentInput
+      | ProductCategoryCreateOrConnectWithoutParentInput[]
+    upsert?:
+      | ProductCategoryUpsertWithWhereUniqueWithoutParentInput
+      | ProductCategoryUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ProductCategoryCreateManyParentInputEnvelope
+    set?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    disconnect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    delete?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    connect?: ProductCategoryWhereUniqueInput | ProductCategoryWhereUniqueInput[]
+    update?:
+      | ProductCategoryUpdateWithWhereUniqueWithoutParentInput
+      | ProductCategoryUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?:
+      | ProductCategoryUpdateManyWithWhereWithoutParentInput
+      | ProductCategoryUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ProductCategoryScalarWhereInput | ProductCategoryScalarWhereInput[]
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -20106,6 +28983,19 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProjectPhaseCreateWithoutProjectInput = {
@@ -22304,6 +31194,151 @@ export namespace Prisma {
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   }
 
+  export type ProductCategoryCreateWithoutChildrenInput = {
+    code: string
+    name: string
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: ProductCategoryCreateNestedOneWithoutChildrenInput
+  }
+
+  export type ProductCategoryUncheckedCreateWithoutChildrenInput = {
+    id?: number
+    code: string
+    name: string
+    parentId?: number | null
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCategoryCreateOrConnectWithoutChildrenInput = {
+    where: ProductCategoryWhereUniqueInput
+    create: XOR<
+      ProductCategoryCreateWithoutChildrenInput,
+      ProductCategoryUncheckedCreateWithoutChildrenInput
+    >
+  }
+
+  export type ProductCategoryCreateWithoutParentInput = {
+    code: string
+    name: string
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ProductCategoryCreateNestedManyWithoutParentInput
+  }
+
+  export type ProductCategoryUncheckedCreateWithoutParentInput = {
+    id?: number
+    code: string
+    name: string
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ProductCategoryUncheckedCreateNestedManyWithoutParentInput
+  }
+
+  export type ProductCategoryCreateOrConnectWithoutParentInput = {
+    where: ProductCategoryWhereUniqueInput
+    create: XOR<
+      ProductCategoryCreateWithoutParentInput,
+      ProductCategoryUncheckedCreateWithoutParentInput
+    >
+  }
+
+  export type ProductCategoryCreateManyParentInputEnvelope = {
+    data: ProductCategoryCreateManyParentInput | ProductCategoryCreateManyParentInput[]
+  }
+
+  export type ProductCategoryUpsertWithoutChildrenInput = {
+    update: XOR<
+      ProductCategoryUpdateWithoutChildrenInput,
+      ProductCategoryUncheckedUpdateWithoutChildrenInput
+    >
+    create: XOR<
+      ProductCategoryCreateWithoutChildrenInput,
+      ProductCategoryUncheckedCreateWithoutChildrenInput
+    >
+    where?: ProductCategoryWhereInput
+  }
+
+  export type ProductCategoryUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: ProductCategoryWhereInput
+    data: XOR<
+      ProductCategoryUpdateWithoutChildrenInput,
+      ProductCategoryUncheckedUpdateWithoutChildrenInput
+    >
+  }
+
+  export type ProductCategoryUpdateWithoutChildrenInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ProductCategoryUpdateOneWithoutChildrenNestedInput
+  }
+
+  export type ProductCategoryUncheckedUpdateWithoutChildrenInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductCategoryUpsertWithWhereUniqueWithoutParentInput = {
+    where: ProductCategoryWhereUniqueInput
+    update: XOR<
+      ProductCategoryUpdateWithoutParentInput,
+      ProductCategoryUncheckedUpdateWithoutParentInput
+    >
+    create: XOR<
+      ProductCategoryCreateWithoutParentInput,
+      ProductCategoryUncheckedCreateWithoutParentInput
+    >
+  }
+
+  export type ProductCategoryUpdateWithWhereUniqueWithoutParentInput = {
+    where: ProductCategoryWhereUniqueInput
+    data: XOR<
+      ProductCategoryUpdateWithoutParentInput,
+      ProductCategoryUncheckedUpdateWithoutParentInput
+    >
+  }
+
+  export type ProductCategoryUpdateManyWithWhereWithoutParentInput = {
+    where: ProductCategoryScalarWhereInput
+    data: XOR<
+      ProductCategoryUpdateManyMutationInput,
+      ProductCategoryUncheckedUpdateManyWithoutParentInput
+    >
+  }
+
+  export type ProductCategoryScalarWhereInput = {
+    AND?: ProductCategoryScalarWhereInput | ProductCategoryScalarWhereInput[]
+    OR?: ProductCategoryScalarWhereInput[]
+    NOT?: ProductCategoryScalarWhereInput | ProductCategoryScalarWhereInput[]
+    id?: IntFilter<'ProductCategory'> | number
+    code?: StringFilter<'ProductCategory'> | string
+    name?: StringFilter<'ProductCategory'> | string
+    parentId?: IntNullableFilter<'ProductCategory'> | number | null
+    sortOrder?: IntFilter<'ProductCategory'> | number
+    supplierIds?: StringNullableFilter<'ProductCategory'> | string | null
+    createdAt?: DateTimeFilter<'ProductCategory'> | Date | string
+    updatedAt?: DateTimeFilter<'ProductCategory'> | Date | string
+  }
+
   export type ProjectPhaseCreateManyProjectInput = {
     id?: number
     name: string
@@ -22833,6 +31868,47 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     fromTaskId?: IntFieldUpdateOperationsInput | number
     relationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProductCategoryCreateManyParentInput = {
+    id?: number
+    code: string
+    name: string
+    sortOrder?: number
+    supplierIds?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCategoryUpdateWithoutParentInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ProductCategoryUpdateManyWithoutParentNestedInput
+  }
+
+  export type ProductCategoryUncheckedUpdateWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ProductCategoryUncheckedUpdateManyWithoutParentNestedInput
+  }
+
+  export type ProductCategoryUncheckedUpdateManyWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    supplierIds?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   /**

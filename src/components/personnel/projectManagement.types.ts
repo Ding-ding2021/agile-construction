@@ -55,6 +55,8 @@ export interface ProjectItem {
   brand: string
   stage: ProjectStage
   status: string
+  parentStatus?: string // 新版两级：父状态
+  subStatusJson?: string // JSON: SubStatusProgress
   statusTone: 'blue' | 'yellow' | 'green' | 'red'
   progress: number
   milestone: string

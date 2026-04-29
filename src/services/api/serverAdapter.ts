@@ -1,37 +1,7 @@
 import type { ProjectItem } from '../../data/projects'
-import type { ProjectStatusLogEntry } from '../../domain/projectStatusMachine'
-import type { AcceptanceMilestoneSyncPayload } from '../../components/project/ProjectAcceptanceView'
 import type { TaskItem } from '../../components/task/taskManagement.types'
+import type { TaskTreeViewModel } from '../../components/task/taskManagement.data'
 import { apiRequest } from './client'
-
-// ─── Snapshot Types (Deprecated,保留兼容) ───────────────────────
-
-export type ProjectStateSnapshot = {
-  projects: ProjectItem[]
-  logs: Record<string, ProjectStatusLogEntry[]>
-}
-
-export type TaskStateSnapshot = {
-  schemaVersion?: number
-  tasks: TaskItem[]
-}
-
-export type AcceptanceStateSnapshot = {
-  nodes: Array<Record<string, unknown>>
-  milestones: Array<Record<string, unknown>>
-  summary?: AcceptanceMilestoneSyncPayload
-}
-
-export type SettlementSuggestion = {
-  code: string
-  name: string
-  budget: string
-  acceptanceStatus: string
-}
-
-export type SettlementStateSnapshot = {
-  suggestions: SettlementSuggestion[]
-}
 
 // ─── Entity Types (V1 实体化模式) ───────────────────────────────
 
@@ -135,9 +105,12 @@ export const serverAdapter = {
     ),
 
   getTaskTree: (projectCode: string) =>
-    apiRequest<any>(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/tree`), {
-      scope: 'task_tree_read',
-    }),
+    apiRequest<TaskTreeViewModel>(
+      withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/tree`),
+      {
+        scope: 'task_tree_read',
+      }
+    ),
 
   // ── 审计日志 ──────────────────────────────────────────────────
   getAuditLogs: () =>
@@ -154,55 +127,5 @@ export const serverAdapter = {
       },
       idempotencyKey,
       scope: 'audit_log_write',
-    }),
-
-  // ── 快照接口 (Deprecated, 过渡期保留) ──────────────────────────
-  /** @deprecated 使用 getProjects + getProjectByCode */
-  getProjectState: () =>
-    apiRequest<ProjectStateSnapshot>(withEnv('/projects/state'), { scope: 'project_state_read' }),
-  /** @deprecated 使用 createProject / updateProject */
-  saveProjectState: (payload: ProjectStateSnapshot, idempotencyKey: string) =>
-    apiRequest<void>(withEnv('/projects/state'), {
-      method: 'PUT',
-      body: payload,
-      idempotencyKey,
-      scope: 'project_state_write',
-    }),
-  /** @deprecated 使用 getProjectTasks */
-  getTaskState: (contextKey: string) =>
-    apiRequest<TaskStateSnapshot>(
-      withEnv(`/tasks/state?contextKey=${encodeURIComponent(contextKey)}`),
-      { scope: 'task_state_read' }
-    ),
-  /** @deprecated 使用 createProjectTask */
-  saveTaskState: (contextKey: string, payload: TaskStateSnapshot, idempotencyKey: string) =>
-    apiRequest<void>(withEnv(`/tasks/state?contextKey=${encodeURIComponent(contextKey)}`), {
-      method: 'PUT',
-      body: payload,
-      idempotencyKey,
-      scope: 'task_state_write',
-    }),
-  /** @deprecated 保留兼容 */
-  getAcceptanceState: (projectCode: string) =>
-    apiRequest<AcceptanceStateSnapshot>(
-      withEnv(`/acceptance/state?projectCode=${encodeURIComponent(projectCode)}`),
-      { scope: 'acceptance_state_read' }
-    ),
-  /** @deprecated 保留兼容 */
-  saveAcceptanceState: (
-    projectCode: string,
-    payload: AcceptanceStateSnapshot,
-    idempotencyKey: string
-  ) =>
-    apiRequest<void>(withEnv(`/acceptance/state?projectCode=${encodeURIComponent(projectCode)}`), {
-      method: 'PUT',
-      body: payload,
-      idempotencyKey,
-      scope: 'acceptance_state_write',
-    }),
-  /** @deprecated 保留兼容 */
-  getSettlementState: () =>
-    apiRequest<SettlementStateSnapshot>(withEnv('/settlement/state'), {
-      scope: 'settlement_state_read',
     }),
 }

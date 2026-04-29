@@ -1,12 +1,22 @@
-import type { ProjectItem } from '../../data/projects';
+import type { ProjectItem } from '../../data/projects'
+import type { ParentStatus, SubStatusProgress } from '../../domain/projectParentStatus'
+import { getParentStatusLabel } from '../../domain/projectParentStatus'
 
 type ProjectInfoCardProps = {
-  project: ProjectItem;
-};
+  project: ProjectItem
+}
 
-const ASSET_BASE = '/assets/CodeBubbyAssets/3923_861';
+const ASSET_BASE = '/assets/CodeBubbyAssets/3923_861'
 
 const ProjectInfoCard = ({ project }: ProjectInfoCardProps) => {
+  const subStatusProgress: SubStatusProgress | null = project.subStatusJson
+    ? (JSON.parse(project.subStatusJson) as SubStatusProgress)
+    : null
+
+  const parentLabel = project.parentStatus
+    ? getParentStatusLabel(project.parentStatus as ParentStatus)
+    : null
+
   return (
     <div className="card project-info-card">
       <div className="card-header">
@@ -19,8 +29,30 @@ const ProjectInfoCard = ({ project }: ProjectInfoCardProps) => {
       <div className="project-info-details">
         <div className="info-item status-item">
           <span className="info-label">状态</span>
-          <span className={`project-status-badge ${project.statusTone}`}>{project.status}</span>
+          <div className="status-badges">
+            {parentLabel && (
+              <span className={`parent-status-badge ${project.statusTone}`}>{parentLabel}</span>
+            )}
+            <span className={`project-status-badge ${project.statusTone}`}>{project.status}</span>
+          </div>
         </div>
+        {subStatusProgress && subStatusProgress.items.length > 0 && (
+          <div className="info-item sub-status-item">
+            <span className="info-label">子状态</span>
+            <div className="sub-status-list">
+              {subStatusProgress.items.map(item => (
+                <span
+                  key={item.subStatusId}
+                  className={`sub-status-chip ${item.completed ? 'completed' : ''} ${item.isMilestone ? 'milestone' : ''}`}
+                  title={item.isMilestone ? '里程碑' : undefined}
+                >
+                  {item.isMilestone && <span className="milestone-dot" />}
+                  {item.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="info-item">
           <span className="info-label">负责人</span>
           <span className="info-value">{project.owner}</span>
@@ -42,7 +74,7 @@ const ProjectInfoCard = ({ project }: ProjectInfoCardProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProjectInfoCard;
+export default ProjectInfoCard

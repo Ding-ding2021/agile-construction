@@ -119,22 +119,9 @@ export const projectRepository = {
     }
   },
 
-  // ── 保存状态：快照兼容（过渡期内保留） ──────────────────────────
+  // ── 保存本地状态 ────────────────────────────────────────────
   async saveState(state: ProjectState): Promise<void> {
     persistLocalState(state)
-
-    try {
-      await serverAdapter.saveProjectState(state, createIdempotencyKey('project-state'))
-    } catch (err) {
-      const error = StructuredError.fromRaw(
-        err,
-        'NETWORK_ERROR',
-        'repository',
-        'save-remote-state',
-        { raw: err }
-      )
-      errorLogger.log(error)
-    }
   },
 
   // ── 项目实体 CRUD (V1) ────────────────────────────────────────
