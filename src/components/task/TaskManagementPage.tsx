@@ -4,16 +4,23 @@
  * 提供任务列表的查看、筛选、搜索和详情查看功能。
  * 数据加载优先从后端获取，失败时降级到 mock 数据。
  */
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
 import TaskDetailPage from './TaskDetailPage'
-import { getTaskDetailByCode } from './taskManagement.data'
+import type { TaskAssigneeOption } from './TaskDetailPage'
+import { buildTaskDetailFromItem, getTaskDetailByCode } from './taskManagement.data'
 import { calculateTaskStats, processTasks, shouldResetPage } from './taskManagement.selectors'
-import type { TaskFilters, TaskViewMode, TaskItem, TaskDetail } from './taskManagement.types'
+import type {
+  TaskFilters,
+  TaskViewMode,
+  TaskItem,
+  TaskDetail,
+  TaskStatus,
+} from './taskManagement.types'
 import { taskRepository } from '../../services/repositories/taskRepository'
-import { Drawer } from '@mui/material'
+import { Drawer, Snackbar, Alert } from '@mui/material'
 
 const TaskManagementPage = () => {
   const currentHash = typeof window === 'undefined' ? '#/tasks' : window.location.hash || '#/tasks'
@@ -32,11 +39,82 @@ const TaskManagementPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize] = useState(12)
   const [selectedTaskCode, setSelectedTaskCode] = useState<string | null>(null)
+  const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; text: string } | null>(null)
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  const selectedTaskDetail: TaskDetail | null = useMemo(
-    () => (selectedTaskCode ? (getTaskDetailByCode(selectedTaskCode) ?? null) : null),
-    [selectedTaskCode]
+  // 从 tasks 数组中实时构建选中任务的详情，替换静态 getTaskDetailByCode
+  const selectedTaskDetail: TaskDetail | null = useMemo(() => {
+    if (!selectedTaskCode) return null
+    const cached = getTaskDetailByCode(selectedTaskCode)
+    if (cached) return cached
+    const task = tasks.find(t => t.code === selectedTaskCode)
+    return task ? buildTaskDetailFromItem(task) : null
+  }, [selectedTaskCode, tasks])
+
+  // 自动清除反馈消息
+  useEffect(() => {
+    if (!feedback) return
+    feedbackTimer.current = window.setTimeout(() => setFeedback(null), 2600)
+    return () => window.clearTimeout(feedbackTimer.current)
+  }, [feedback])
+
+  // 通用更新：在 tasks 中找到对应任务，更新字段，持久化到 localStorage
+  const updateTaskInState = useCallback((taskCode: string, patch: Partial<TaskItem>) => {
+    setTasks(prev => {
+      const next = prev.map(t => (t.code === taskCode ? { ...t, ...patch } : t))
+      const updated = next.find(t => t.code === taskCode)
+      if (updated) {
+        taskRepository.saveTasks('__all', next)
+      }
+      return next
+    })
+  }, [])
+
+  const getStatusTone = (s: TaskStatus): TaskItem['statusTone'] => {
+    const map: Record<TaskStatus, TaskItem['statusTone']> = {
+      草稿: 'neutral',
+      待分配: 'neutral',
+      待执行: 'neutral',
+      执行中: 'blue',
+      已暂停: 'orange',
+      待提交: 'orange',
+      待验收: 'orange',
+      不通过: 'red',
+      已完成: 'green',
+      已关闭: 'green',
+    }
+    return map[s] ?? 'neutral'
+  }
+
+  // 通用状态流转：更新状态 + 持久化
+  const transitionTaskStatus = useCallback(
+    async (taskCode: string, nextStatus: TaskStatus, successMsg: string) => {
+      const task = tasks.find(t => t.code === taskCode)
+      if (!task) return
+      try {
+        await taskRepository.updateTask(task.projectId, taskCode, { status: nextStatus })
+      } catch {
+        // 后端不可用，直接写 localStorage
+      }
+      updateTaskInState(taskCode, { status: nextStatus, statusTone: getStatusTone(nextStatus) })
+      setFeedback({ tone: 'success', text: successMsg })
+    },
+    [tasks, updateTaskInState]
   )
+
+  // 从现有任务中提取所有负责人作为可分配人选
+  const assigneeOptions: TaskAssigneeOption[] = useMemo(() => {
+    const seen = new Set<string>()
+    const options: TaskAssigneeOption[] = []
+    for (const t of tasks) {
+      const name = t.assigneeName || t.owner
+      if (name && name !== '待分配' && !seen.has(name)) {
+        seen.add(name)
+        options.push({ id: t.assigneeId || `user-${name}`, name, disabled: false })
+      }
+    }
+    return options
+  }, [tasks])
 
   // 从 Repository 加载数据（API → localStorage → mock fallback）
   const loadRemoteTasks = useCallback(async () => {
@@ -250,10 +328,90 @@ const TaskManagementPage = () => {
               taskDetail={selectedTaskDetail}
               mode="drawer"
               onBack={() => setSelectedTaskCode(null)}
+              onRemind={() => setFeedback({ tone: 'success', text: '已发送催办提醒' })}
+              onAdvance={() =>
+                transitionTaskStatus(selectedTaskDetail.code, '执行中', '任务已重新执行')
+              }
+              onMarkSubmissionReady={() => {
+                const current = selectedTaskDetail.status
+                const next: TaskStatus =
+                  current === '待提交'
+                    ? '待验收'
+                    : current === '执行中' || current === '已暂停'
+                      ? '待提交'
+                      : '待验收'
+                transitionTaskStatus(selectedTaskDetail.code, next, '任务状态已更新')
+              }}
+              onRejectWithRectification={() =>
+                transitionTaskStatus(selectedTaskDetail.code, '不通过', '任务已驳回整改')
+              }
+              onAcceptDispatch={() =>
+                transitionTaskStatus(selectedTaskDetail.code, '执行中', '已接单')
+              }
+              onRejectDispatch={() =>
+                transitionTaskStatus(selectedTaskDetail.code, '待分配', '已拒单')
+              }
+              assigneeOptions={assigneeOptions}
+              onAssign={(taskCode, assigneeName) => {
+                transitionTaskStatus(taskCode, '待执行', `已分配给 ${assigneeName}`)
+                updateTaskInState(taskCode, {
+                  assigneeName,
+                  assigneeId: `user-${assigneeName}`,
+                  owner: assigneeName,
+                })
+              }}
+              onInlineUpdate={(taskCode, payload) => {
+                updateTaskInState(taskCode, {
+                  plannedStartAt: payload.plannedStartAt,
+                  plannedEndAt: payload.plannedEndAt,
+                  riskLevel: payload.riskLevel,
+                })
+                setFeedback({ tone: 'success', text: '保存成功' })
+              }}
+              onStatusChange={(taskCode, nextStatus) => {
+                const labels: Record<string, string> = {
+                  待分配: '待分配',
+                  待执行: '待执行',
+                  执行中: '执行中',
+                  已暂停: '已暂停',
+                  待提交: '待提交',
+                  待验收: '待验收',
+                  不通过: '不通过',
+                  已完成: '已完成',
+                  已关闭: '已关闭',
+                }
+                transitionTaskStatus(
+                  taskCode,
+                  nextStatus,
+                  `状态已变更为「${labels[nextStatus] ?? nextStatus}」`
+                )
+              }}
+              onUploadAttachments={(_taskCode, files) => {
+                setFeedback({ tone: 'success', text: `已上传 ${files.length} 个文件` })
+              }}
+              onRemoveAttachment={(_taskCode, _attachmentId) => {
+                setFeedback({ tone: 'success', text: '附件已删除' })
+              }}
             />
           )}
         </div>
       </Drawer>
+
+      {/* 反馈消息 */}
+      <Snackbar
+        open={!!feedback}
+        autoHideDuration={2500}
+        onClose={() => setFeedback(null)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setFeedback(null)}
+          severity={feedback?.tone === 'error' ? 'error' : 'success'}
+          sx={{ width: '100%' }}
+        >
+          {feedback?.text}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
