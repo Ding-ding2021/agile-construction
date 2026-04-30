@@ -282,6 +282,19 @@ const AVAILABLE_STATUS_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
 export const isTaskReadonlyStatus = (status: TaskStatus): boolean =>
   READONLY_TASK_STATUS.includes(status)
 
+export const STATUS_TONE_MAP: Record<TaskStatus, TaskStatusTone> = {
+  草稿: 'neutral',
+  待分配: 'neutral',
+  待执行: 'neutral',
+  执行中: 'blue',
+  已暂停: 'orange',
+  待提交: 'orange',
+  待验收: 'orange',
+  不通过: 'red',
+  已完成: 'green',
+  已关闭: 'green',
+}
+
 export const TASK_STATUS_TRANSITION_MAP = AVAILABLE_STATUS_TRANSITIONS
 
 export const resolveAvailableStatusOptions = (currentStatus: TaskStatus): TaskStatus[] => {

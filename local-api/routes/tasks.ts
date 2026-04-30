@@ -8,6 +8,7 @@ const router = Router()
 router.get('/', taskCtrl.getTasks)
 router.post('/', taskCtrl.createTask)
 router.get('/tree', taskCtrl.getTaskTree)
+router.get('/code/:taskCode', taskCtrl.getTaskByCode)
 router.put('/:taskId', taskCtrl.updateTask)
 router.delete('/:taskId', taskCtrl.deleteTask)
 
