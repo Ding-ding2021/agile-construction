@@ -3879,22 +3879,21 @@ body {
   font-weight: 600;
   color: var(--cal-text-muted);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-header + .rbc-header {
-  border-left: 1px solid var(--cal-border);
+  border-left: none;
 }
 
-/* 月视图容器 — 去除默认白色边框 */
+/* 月视图容器 — 无边框 */
 .tm-calendar .rbc-month-view {
-  border: 1px solid var(--cal-border);
-  border-radius: 8px;
+  border: none;
 }
 .tm-calendar .rbc-month-row {
-  border-top: 1px solid var(--cal-border);
+  border-top: none;
 }
 .tm-calendar .rbc-day-bg + .rbc-day-bg {
-  border-left: 1px solid var(--cal-border);
+  border-left: none;
 }
 .tm-calendar .rbc-day-bg {
   background: transparent;
@@ -3946,22 +3945,21 @@ body {
   font-weight: 500;
 }
 
-/* Week / Day 视图 */
+/* Week / Day 视图 — 无分隔线 */
 .tm-calendar .rbc-time-view {
-  border: 1px solid var(--cal-border);
-  border-radius: 8px;
+  border: none;
 }
 .tm-calendar .rbc-time-header {
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-time-content {
-  border-top: 1px solid var(--cal-border);
+  border-top: none;
 }
 .tm-calendar .rbc-time-gutter .rbc-timeslot-group {
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-time-header > .rbc-row:first-child {
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-time-header-cell {
   min-height: 36px;
@@ -3972,22 +3970,19 @@ body {
   padding: 2px 6px;
 }
 .tm-calendar .rbc-timeslot-group {
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-time-content > * + * > * {
-  border-left: 1px solid var(--cal-border);
+  border-left: none;
 }
 .tm-calendar .rbc-time-column .rbc-timeslot-group {
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-day-slot .rbc-time-slot {
-  border-top: 1px solid var(--cal-border);
+  border-top: none;
 }
 .tm-calendar .rbc-time-gutter .rbc-label {
-  border-right: 1px solid var(--cal-border);
-}
-.tm-calendar .rbc-current-time-indicator {
-  border-top: 1px solid var(--pm-blue);
+  border-right: none;
 }
 
 /* 选中/聚焦状态 — 不显示蓝色外框 */
@@ -3996,17 +3991,9 @@ body {
   outline: none;
 }
 
-/* Agenda 视图 */
+/* Agenda 视图 — 无边框 */
 .tm-calendar .rbc-agenda-view {
-  border: 1px solid var(--cal-border);
-  border-radius: 8px;
-}
-.tm-calendar .rbc-agenda-view table.rbc-agenda-table {
   border: none;
-  border-collapse: collapse;
-}
-.tm-calendar .rbc-agenda-view table.rbc-agenda-table + .rbc-agenda-table {
-  border-top: 1px solid var(--cal-border);
 }
 .tm-calendar .rbc-agenda-table {
   color: var(--cal-text);
@@ -4017,13 +4004,13 @@ body {
   color: var(--cal-text-muted);
   text-transform: uppercase;
   padding: 6px 8px;
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
   background: var(--cal-header);
 }
 .tm-calendar .rbc-agenda-table td {
   padding: 6px 8px;
   font-size: 12px;
-  border-bottom: 1px solid var(--cal-border);
+  border-bottom: none;
 }
 .tm-calendar .rbc-agenda-time-cell {
   color: var(--cal-text-muted);
