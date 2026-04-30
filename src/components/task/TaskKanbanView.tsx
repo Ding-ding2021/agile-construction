@@ -47,21 +47,41 @@ function DraggableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: strin
     <Paper
       ref={setNodeRef}
       variant="outlined"
-      {...listeners}
       {...attributes}
       onClick={() => onOpen?.(task.code)}
       sx={{
         p: 1.5,
-        cursor: 'grab',
         borderRadius: 'var(--pm-radius-md)',
         bgcolor: isDragging ? 'var(--pm-primary-15)' : 'var(--pm-card)',
         borderColor: isDragging ? 'var(--pm-primary)' : 'var(--pm-border)',
         opacity: isDragging ? 0.4 : 1,
         transition: 'all 0.15s',
+        cursor: 'pointer',
         '&:hover': { bgcolor: 'var(--pm-element-hover)', borderColor: 'var(--pm-primary-15)' },
-        touchAction: 'none',
       }}
     >
+      {/* 拖拽手柄 — 卡片右上角 */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 0.5, mt: -0.5, mr: -0.5 }}>
+        <Box
+          {...listeners}
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 24,
+            height: 24,
+            borderRadius: 1,
+            cursor: 'grab',
+            color: 'var(--pm-text-40)',
+            fontSize: 14,
+            lineHeight: 1,
+            '&:hover': { bgcolor: 'var(--pm-element-hover)', color: 'var(--pm-text-70)' },
+            touchAction: 'none',
+          }}
+        >
+          ⠿
+        </Box>
+      </Box>
       <Typography
         sx={{
           fontSize: 13,
@@ -240,7 +260,6 @@ export default function TaskKanbanView({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       collisionDetection={pointerWithin}
-      activationConstraint={{ distance: 8 }}
     >
       <Box sx={{ display: 'flex', gap: 3, p: 3, overflowX: 'auto', minHeight: 400 }}>
         {columns.map(col => (
