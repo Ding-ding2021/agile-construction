@@ -25,8 +25,7 @@ import { STATUS_TONE_MAP } from './taskManagement.types'
 import TaskKanbanView from './TaskKanbanView'
 import TaskCalendarView from './TaskCalendarView'
 import { taskRepository } from '../../services/repositories/taskRepository'
-import { Drawer, Snackbar, Alert, Chip } from '@mui/material'
-import WifiOff from '@mui/icons-material/WifiOff'
+import { Drawer, Snackbar, Alert } from '@mui/material'
 
 const TaskManagementPage = () => {
   const currentHash = typeof window === 'undefined' ? '#/tasks' : window.location.hash || '#/tasks'
@@ -50,16 +49,8 @@ const TaskManagementPage = () => {
   const [showImport, setShowImport] = useState(false)
   const [showExport, setShowExport] = useState(false)
   const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; text: string } | null>(null)
-  const [isOffline, setIsOffline] = useState(false)
   const transitioningRef = useRef(new Set<string>())
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-
-  // 监听离线事件
-  useEffect(() => {
-    const handler = () => setIsOffline(true)
-    window.addEventListener('pm:remote-fallback', handler)
-    return () => window.removeEventListener('pm:remote-fallback', handler)
-  }, [])
 
   // 异步获取任务详情：API 优先，降级到 mock
   useEffect(() => {
@@ -238,24 +229,6 @@ const TaskManagementPage = () => {
             searchPlaceholder="搜索..."
           />
           <div className="tm-body">
-            {isOffline && (
-              <Chip
-                icon={<WifiOff sx={{ fontSize: 14 }} />}
-                label="离线模式 — 数据可能不是最新的"
-                size="small"
-                sx={{
-                  position: 'fixed',
-                  top: 8,
-                  right: 8,
-                  zIndex: 9999,
-                  bgcolor: 'rgba(254,154,0,0.15)',
-                  color: 'var(--pm-orange)',
-                  fontWeight: 500,
-                  fontSize: 11,
-                  height: 28,
-                }}
-              />
-            )}
             {isLoading && (
               <div
                 className="tm-loading"
