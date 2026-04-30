@@ -380,7 +380,13 @@ const TaskManagementPage = () => {
                     />
                   )}
                   {viewMode === 'kanban' && (
-                    <TaskKanbanView tasks={processedTasks} onOpenTaskDetail={setSelectedTaskCode} />
+                    <TaskKanbanView
+                      tasks={processedTasks}
+                      onOpenTaskDetail={setSelectedTaskCode}
+                      onStatusChange={(taskCode, nextStatus) =>
+                        transitionTaskStatus(taskCode, nextStatus, `状态已变更: ${nextStatus}`)
+                      }
+                    />
                   )}
                   {viewMode === 'calendar' && (
                     <TaskCalendarView
