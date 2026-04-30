@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
+import { extractProjectCode } from './projectHelpers'
 
 const COLUMNS =
   'id, project_id as projectId, type, at, operator, message, from_status as fromStatus, to_status as toStatus, reason'
@@ -16,7 +17,7 @@ function getProjectId(projectCode: string): number {
 
 export function getStatusLogs(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
-  const projectId = getProjectId(req.params.code)
+  const projectId = getProjectId(extractProjectCode(req))
   const rows = db
     .prepare(`SELECT ${COLUMNS} FROM project_status_logs WHERE project_id = ? ORDER BY at DESC`)
     .all(projectId)

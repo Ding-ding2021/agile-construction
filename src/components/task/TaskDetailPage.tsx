@@ -479,6 +479,10 @@ const TaskDetailPage = ({
                         : '标准派生'
                 }
               />
+              {taskDetail.milestoneFlag && <InfoRow label="里程碑节点" value="是" />}
+              {taskDetail.isRectification && (
+                <InfoRow label="整改任务" value={taskDetail.rectificationReason ?? '是'} />
+              )}
             </Stack>
           </CardSection>
 
@@ -740,6 +744,68 @@ const TaskDetailPage = ({
               )}
             </Stack>
           </CardSection>
+
+          {/* ── 提交记录 ── */}
+          {taskDetail.submissions?.length > 0 && (
+            <CardSection>
+              <SectionTitle>提交记录 ({taskDetail.submissions.length})</SectionTitle>
+              <Stack spacing={1.5}>
+                {taskDetail.submissions.map(sub => (
+                  <Paper key={sub.id} variant="outlined" sx={{ p: 1.5, bgcolor: COLORS.inputBg }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {sub.submissionType === 'normal'
+                          ? '常规提交'
+                          : sub.submissionType === 'rectification'
+                            ? '整改提交'
+                            : '补充提交'}
+                      </Typography>
+                      <Chip
+                        size="small"
+                        label={
+                          sub.status === 'accepted'
+                            ? '已通过'
+                            : sub.status === 'rejected'
+                              ? '已驳回'
+                              : '待审核'
+                        }
+                        color={
+                          sub.status === 'accepted'
+                            ? 'success'
+                            : sub.status === 'rejected'
+                              ? 'error'
+                              : 'default'
+                        }
+                        variant="outlined"
+                      />
+                    </Box>
+                    {sub.description && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: 'block', mb: 0.5 }}
+                      >
+                        {sub.description}
+                      </Typography>
+                    )}
+                    <Typography variant="caption" color="text.secondary">
+                      {sub.submittedBy} · {sub.submittedAt}
+                    </Typography>
+                    {sub.reviewResult && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: 'block' }}
+                      >
+                        审核：{sub.reviewedBy} · {sub.reviewResult === 'pass' ? '通过' : '驳回'}
+                        {sub.reviewComment && ` (${sub.reviewComment})`}
+                      </Typography>
+                    )}
+                  </Paper>
+                ))}
+              </Stack>
+            </CardSection>
+          )}
 
           {/* ── 关联任务 ── */}
           {taskDetail.relations.length > 0 && (

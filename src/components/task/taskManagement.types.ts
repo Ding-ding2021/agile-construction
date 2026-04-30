@@ -84,6 +84,18 @@ export interface TaskItem {
   slaStatus: TaskSlaStatus
   /** 任务描述 */
   taskDescription?: string
+  /** 是否必做（P1） */
+  requiredFlag: boolean
+  /** 是否里程碑节点（P1） */
+  milestoneFlag: boolean
+  /** 责任角色 */
+  ownerRole?: string
+  /** 执行方类型 internal|vendor */
+  assigneeType?: TaskAssigneeType
+  /** 所属品牌 ID */
+  brandId?: string
+  /** 所属门店 ID */
+  storeId?: string
 
   // ── P2 字段 ──
   /** 实际开始时间 */
@@ -114,6 +126,16 @@ export interface TaskItem {
   plannedWorkHours?: number
   /** 实际工时（小时） */
   actualWorkHours?: number
+  /** 派生来源任务 ID（整改链路） */
+  derivedFromTaskId?: string
+  /** 是否整改任务 */
+  isRectification: boolean
+  /** 整改原因 */
+  rectificationReason?: string
+  /** 关闭原因 */
+  closeReason?: string
+  /** 重开次数 */
+  reopenCount: number
   /** 更新人 */
   updatedBy?: string
   /** 更新时间 */
@@ -158,6 +180,33 @@ export interface TaskRelation {
   toTaskName?: string
 }
 
+export interface TaskEventLog {
+  id: string
+  taskId: string
+  eventType: 'status_change' | 'field_change' | 'comment' | 'attachment' | 'assign' | 'favorite'
+  eventAction: string
+  beforeValue?: unknown
+  afterValue?: unknown
+  operatorId: string
+  operatorSource: 'user' | 'agent' | 'system'
+  createdAt: string
+}
+
+export interface TaskSubmission {
+  id: string
+  taskId: string
+  submissionType: 'normal' | 'rectification' | 'supplement'
+  description?: string
+  attachmentIds: string[]
+  status: 'submitted' | 'rejected' | 'accepted'
+  submittedBy: string
+  submittedAt: string
+  reviewedBy?: string
+  reviewResult?: 'pass' | 'reject'
+  reviewComment?: string
+  reviewedAt?: string
+}
+
 export interface TaskFlowLog {
   id: string
   action: string
@@ -175,6 +224,10 @@ export interface TaskDetail extends TaskItem {
   attachments: TaskAttachment[]
   relations: TaskRelation[]
   flowLogs: TaskFlowLog[]
+  /** 提交记录 */
+  submissions: TaskSubmission[]
+  /** 事件日志（替代 flowLogs） */
+  eventLogs: TaskEventLog[]
 }
 
 export interface TaskStats {
@@ -222,8 +275,8 @@ const AVAILABLE_STATUS_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
   待提交: ['待验收', '执行中', '不通过'],
   待验收: ['已完成', '不通过'],
   不通过: ['待执行', '执行中', '已关闭'],
-  已完成: ['已完成', '待分配'],
-  已关闭: ['已关闭', '待分配'],
+  已完成: ['待分配'],
+  已关闭: ['待分配'],
 }
 
 export const isTaskReadonlyStatus = (status: TaskStatus): boolean =>
