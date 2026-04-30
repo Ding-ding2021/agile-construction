@@ -1,4 +1,9 @@
-import type { TaskFlowLog, TaskItem } from '../../components/task/taskManagement.types'
+import type {
+  TaskFlowLog,
+  TaskItem,
+  TaskDetail,
+  TaskAssigneeType,
+} from '../../components/task/taskManagement.types'
 import type { TemplateAuditEvent } from '../../components/standard/template-contract.types'
 import { allMockTaskNodes } from '../../components/task/taskManagement.data'
 import { createIdempotencyKey, serverAdapter } from '../api/serverAdapter'
@@ -194,6 +199,86 @@ export const taskRepository = {
     } catch {
       // 网络异常或服务不可用时降级到本地缓存
       return localTasks
+    }
+  },
+
+  // ── 获取任务详情（含日志、提交记录，API 优先） ─────────────────
+  async getTaskDetail(projectCode: string, taskCode: string): Promise<TaskDetail | null> {
+    try {
+      const task = await serverAdapter.getTaskByCode(projectCode, taskCode)
+      const taskId = (task as unknown as Record<string, unknown>).id as number
+
+      const [logs, submissions] = await Promise.all([
+        serverAdapter.getTaskLogs(projectCode, taskId).catch(() => []),
+        serverAdapter.getTaskSubmissions(projectCode, taskId).catch(() => []),
+      ])
+
+      const ownerName = task.owner === '待分配' ? '' : task.owner
+      const flowLogs: TaskFlowLog[] = logs.map(log => ({
+        id: `log-${log.id}`,
+        action: log.eventAction,
+        operator: log.operatorId,
+        detail: log.eventType,
+        time: log.createdAt,
+      }))
+
+      return {
+        ...task,
+        assigneeType: (ownerName ? 'internal' : 'external') as TaskAssigneeType,
+        executionStandards: [],
+        acceptanceStandards: [],
+        checklist: [],
+        attachments: [],
+        relations: [],
+        flowLogs,
+        submissions,
+        eventLogs: logs as unknown as TaskDetail['eventLogs'],
+      }
+    } catch {
+      return null
+    }
+  },
+
+  // ── 创建提交记录 ─────────────────────────────────────────────
+  async createSubmission(
+    projectCode: string,
+    taskCode: string,
+    taskId: number,
+    payload: { description?: string }
+  ): Promise<boolean> {
+    try {
+      await serverAdapter.createTaskSubmission(
+        projectCode,
+        taskId,
+        { ...payload, submissionType: 'normal' },
+        createIdempotencyKey('submission-create', `${taskCode}-${Date.now()}`)
+      )
+      return true
+    } catch {
+      return false
+    }
+  },
+
+  // ── 审核提交记录 ─────────────────────────────────────────────
+  async reviewSubmission(
+    projectCode: string,
+    taskCode: string,
+    taskId: number,
+    subId: number,
+    result: 'pass' | 'reject',
+    comment?: string
+  ): Promise<boolean> {
+    try {
+      await serverAdapter.reviewTaskSubmission(
+        projectCode,
+        taskId,
+        subId,
+        { reviewResult: result, reviewComment: comment || null, reviewedBy: '当前用户' },
+        createIdempotencyKey('submission-review', `${taskCode}-${Date.now()}`)
+      )
+      return true
+    } catch {
+      return false
     }
   },
 

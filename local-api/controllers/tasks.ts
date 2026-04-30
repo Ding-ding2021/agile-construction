@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
+import type Database from 'better-sqlite3'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
 import { extractProjectCode } from './projectHelpers'
@@ -11,8 +12,8 @@ const TASK_COLUMNS = [
   'status',
   'assignee_id as assigneeId',
   'assignee_name as assigneeName',
-  'start_date as startDate',
-  'due_date as dueDate',
+  'start_date as plannedStartAt',
+  'due_date as plannedEndAt',
   'parent_id as parentId',
   'node_level_type as nodeLevelType',
   'priority',
@@ -28,8 +29,8 @@ const TASK_COLUMNS = [
   'assignee_type as assigneeType',
   'brand_id as brandId',
   'store_id as storeId',
-  'actual_start_date as actualStartDate',
-  'actual_end_date as actualEndDate',
+  'actual_start_date as actualStartAt',
+  'actual_end_date as actualEndAt',
   'blocked_reason as blockedReason',
   'remind_count as remindCount',
   'tags',
@@ -50,6 +51,9 @@ const TASK_COLUMNS = [
   'updated_by as updatedBy',
   'updated_at as updatedAt',
 ].join(', ')
+
+/** 带 projectName 的完整列定义（需要 JOIN projects 表） */
+const TASK_COLUMNS_FULL = `${TASK_COLUMNS}, p.name as projectName`
 
 /** SQLite 返回 0/1 整数，转换为前端期望的 boolean */
 function formatBoolField(row: Record<string, unknown>, fields: string[]): void {
@@ -73,6 +77,26 @@ function parseTagsField(tags: unknown): string[] {
   return []
 }
 
+/** 为行数据添加计算字段 */
+function addComputedFields(row: Record<string, unknown>, db?: Database.Database): void {
+  // isBlocked：有阻塞原因即为阻塞
+  row.isBlocked = !!row.blockedReason
+  // predecessorStatus：查询前置任务状态
+  if (db && row.id) {
+    const pre = db
+      .prepare(
+        `SELECT t.status FROM task_relations r
+         JOIN project_tasks t ON t.id = r.to_task_id
+         WHERE r.from_task_id = ? AND r.relation_type = 'finish_start'
+         LIMIT 1`
+      )
+      .get(row.id) as { status: string } | undefined
+    row.predecessorStatus = pre ? pre.status : '无前置任务'
+  } else {
+    row.predecessorStatus = '无前置任务'
+  }
+}
+
 function getProjectId(projectCode: string): number {
   const db = getDatabase()
   const project = db.prepare('SELECT id FROM projects WHERE code = ?').get(projectCode) as
@@ -86,31 +110,71 @@ function getProjectId(projectCode: string): number {
 
 export function getAllTasks(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
+  const page = Math.max(1, parseInt(req.query.page as string) || 1)
+  const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize as string) || 50))
+  const offset = (page - 1) * pageSize
+
+  const countRow = db.prepare('SELECT COUNT(*) as total FROM project_tasks').get() as {
+    total: number
+  }
   const rows = db
-    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks ORDER BY id ASC`)
-    .all() as Record<string, unknown>[]
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
+       ORDER BY id ASC LIMIT ? OFFSET ?`
+    )
+    .all(pageSize, offset) as Record<string, unknown>[]
   const parsed = rows.map(row => {
     const r = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
     formatBoolField(r, BOOL_FIELDS)
+    addComputedFields(r, db)
     return r
   })
-  res.json(parsed)
+  res.json({
+    data: parsed,
+    pagination: {
+      page,
+      pageSize,
+      total: countRow.total,
+      totalPages: Math.ceil(countRow.total / pageSize),
+    },
+  })
 }
 
 export function getTasks(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(extractProjectCode(req))
+  const page = Math.max(1, parseInt(req.query.page as string) || 1)
+  const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize as string) || 50))
+  const offset = (page - 1) * pageSize
+
+  const countRow = db
+    .prepare('SELECT COUNT(*) as total FROM project_tasks WHERE project_id = ?')
+    .get(projectId) as { total: number }
 
   const rows = db
-    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks WHERE project_id = ? ORDER BY id ASC`)
-    .all(projectId) as Record<string, unknown>[]
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
+       WHERE project_id = ? ORDER BY id ASC LIMIT ? OFFSET ?`
+    )
+    .all(projectId, pageSize, offset) as Record<string, unknown>[]
 
   const parsed = rows.map(row => {
     const r = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
     formatBoolField(r, BOOL_FIELDS)
+    addComputedFields(r, db)
     return r
   })
-  res.json(parsed)
+  res.json({
+    data: parsed,
+    pagination: {
+      page,
+      pageSize,
+      total: countRow.total,
+      totalPages: Math.ceil(countRow.total / pageSize),
+    },
+  })
 }
 
 export function createTask(req: Request, res: Response, _next: NextFunction): void {
@@ -192,11 +256,17 @@ export function createTask(req: Request, res: Response, _next: NextFunction): vo
   })
 
   const created = db
-    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks WHERE id = ?`)
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE id = ?`
+    )
     .get(result.lastInsertRowid) as Record<string, unknown> | undefined
 
   const response = created ? { ...created, tags: parseTagsField(created.tags) } : created
-  if (response) formatBoolField(response as Record<string, unknown>, BOOL_FIELDS)
+  if (response) {
+    formatBoolField(response as Record<string, unknown>, BOOL_FIELDS)
+    addComputedFields(response as Record<string, unknown>, db)
+  }
 
   res.status(201).json(response)
 }
@@ -206,12 +276,17 @@ export function getTaskTree(req: Request, res: Response, _next: NextFunction): v
   const projectId = getProjectId(extractProjectCode(req))
 
   const rows = db
-    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks WHERE project_id = ?`)
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
+       WHERE project_id = ?`
+    )
     .all(projectId) as Record<string, unknown>[]
 
   const tasks = rows.map(r => {
     const task = { ...r, tags: parseTagsField(r.tags) } as Record<string, unknown>
     formatBoolField(task, BOOL_FIELDS)
+    addComputedFields(task, db)
     return task
   })
 
@@ -225,22 +300,73 @@ export function getTaskTree(req: Request, res: Response, _next: NextFunction): v
   res.json({ tasks: tree })
 }
 
-function parseTaskId(raw: string): number {
+/** 接受数字 ID 或字符串 taskCode，统一解析为数字 ID */
+function resolveTaskId(db: Database.Database, projectId: number, raw: string): number {
   const id = parseInt(raw)
-  if (isNaN(id)) throw new ApiError('无效的任务 ID', 'INVALID_REQUEST', 400)
-  return id
+  if (!isNaN(id)) return id
+  const row = db
+    .prepare('SELECT id FROM project_tasks WHERE code = ? AND project_id = ?')
+    .get(raw, projectId) as { id: number } | undefined
+  if (!row) throw new ApiError('Task not found', 'NOT_FOUND', 404)
+  return row.id
+}
+
+export function getTaskByCode(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskCode = req.params.taskCode
+
+  const row = db
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
+       WHERE code = ? AND project_id = ?`
+    )
+    .get(taskCode, projectId) as Record<string, unknown> | undefined
+
+  if (!row) {
+    throw new ApiError('Task not found', 'NOT_FOUND', 404)
+  }
+
+  const parsed = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
+  formatBoolField(parsed, BOOL_FIELDS)
+  addComputedFields(parsed, db)
+  res.json(parsed)
 }
 
 export function updateTask(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(extractProjectCode(req))
-  const taskId = parseTaskId(req.params.taskId)
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
   const body = req.body
+
+  const ALLOWED_UPDATE_FIELDS = new Set([
+    'status',
+    'assigneeId',
+    'assigneeName',
+    'name',
+    'priority',
+    'progress',
+    'riskLevel',
+    'slaStatus',
+    'description',
+    'taskDescription',
+    'blockedReason',
+    'tags',
+    'remindCount',
+    'actualStartAt',
+    'actualEndAt',
+    'plannedStartAt',
+    'plannedEndAt',
+    'startDate',
+    'dueDate',
+  ])
 
   const setClauses: string[] = []
   const params: Record<string, unknown> = {}
 
   for (const [k, v] of Object.entries(body)) {
+    if (!ALLOWED_UPDATE_FIELDS.has(k)) continue
     const col = k.replace(/[A-Z]/g, m => '_' + m.toLowerCase())
     setClauses.push(`${col} = @${k}`)
     params[k] = v
@@ -261,11 +387,17 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
   }
 
   const updated = db
-    .prepare(`SELECT ${TASK_COLUMNS} FROM project_tasks WHERE id = ?`)
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE id = ?`
+    )
     .get(taskId) as Record<string, unknown> | undefined
 
   const response = updated ? { ...updated, tags: parseTagsField(updated.tags) } : updated
-  if (response) formatBoolField(response as Record<string, unknown>, BOOL_FIELDS)
+  if (response) {
+    formatBoolField(response as Record<string, unknown>, BOOL_FIELDS)
+    addComputedFields(response as Record<string, unknown>, db)
+  }
 
   res.json(response)
 }
@@ -273,7 +405,20 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
 export function deleteTask(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(extractProjectCode(req))
-  const taskId = parseTaskId(req.params.taskId)
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+
+  // 检查是否有子任务
+  const childCount = db
+    .prepare('SELECT COUNT(*) as cnt FROM project_tasks WHERE parent_id = ? AND project_id = ?')
+    .get(taskId, projectId) as { cnt: number }
+
+  if (childCount.cnt > 0) {
+    throw new ApiError(
+      `无法删除：存在 ${childCount.cnt} 个子任务。请先删除子任务或使用 ?force=true`,
+      'HAS_CHILDREN',
+      409
+    )
+  }
 
   const result = db
     .prepare('DELETE FROM project_tasks WHERE id = ? AND project_id = ?')
