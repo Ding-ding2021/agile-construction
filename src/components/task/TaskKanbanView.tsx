@@ -240,6 +240,7 @@ export default function TaskKanbanView({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       collisionDetection={pointerWithin}
+      activationConstraint={{ distance: 8 }}
     >
       <Box sx={{ display: 'flex', gap: 3, p: 3, overflowX: 'auto', minHeight: 400 }}>
         {columns.map(col => (
