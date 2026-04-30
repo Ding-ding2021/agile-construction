@@ -780,7 +780,7 @@ export const statusOptions: TaskStatus[] = [
 export const riskOptions: TaskRiskLevel[] = ['高风险', '中风险', '低风险']
 export const slaOptions: TaskSlaStatus[] = ['超时', '即将超时', '正常']
 
-const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
+export const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
   const isDone = task.status === '已完成' || task.status === '已关闭'
   const ownerName = task.owner === '待分配' ? '' : task.owner
 
