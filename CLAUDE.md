@@ -60,4 +60,45 @@ To add a new page: register it in `routes.ts` (FEATURE_REGISTRY + pageComponentR
 - `docs/README.md` is the single entry point index (84+ markdown files)
 - Architecture decisions: `docs/02-architecture/`
 - Coding standards: `docs/00-governance/coding-standards.md`
+- Project management: `docs/00-governance/project-management-guide.md`
 - Comments follow engineering pattern: only for key logic, boundary conditions, complex state flows (Chinese comments for maintainability)
+
+## Project Management
+
+Issues are tracked via GitHub Issues + Projects. See `docs/00-governance/project-management-guide.md` for full workflow.
+
+### Issue Interaction (via gh CLI)
+
+```bash
+# List open issues for current phase
+gh issue list --label "phase:1-foundation" --state open
+
+# View issue details
+gh issue view <number>
+
+# Create a new feature issue
+gh issue create --title "[Feature] XXX" --label "type:feature,phase:2-standards" --project "敏捷建店管理平台"
+
+# Add progress comment
+gh issue comment <number> --body "Progress: implementation done, build/lint pass"
+
+# Close issue (after human verification)
+gh issue close <number> --comment "Verified. build/lint/test pass."
+
+# Reopen
+gh issue reopen <number>
+```
+
+### Python Scripts
+
+- `scripts/gh-setup.py --init` — 初始化 labels, milestones, issues
+- `scripts/gh-sync.py` — 查看今日工作日志 / 同步 Issue 状态
+- `scripts/gh-release.py --milestone "Phase X"` — 创建发布
+- `scripts/plan-issues.json` — 33 个开发任务的 JSON 数据源
+
+### Workflow
+
+1. Human picks task → moves Issue to "In Progress"
+2. AI implements → runs build/lint/test → writes daily log → commits
+3. AI moves Issue to "In Review", human verifies
+4. Human closes Issue → moves to "Done"

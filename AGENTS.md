@@ -55,16 +55,58 @@ Prettier 配置：`semi: false`, `singleQuote: true`, `printWidth: 100`, `arrowP
 - **禁止**修改 `src/data/` 中类型定义不同步更新 UI 消费方
 - **修改前**先 `npm run lint`
 
+## 项目管理
+
+完整流程见 `docs/00-governance/project-management-guide.md`
+
+### 常用 gh CLI 命令
+
+```bash
+# 列出当前阶段任务
+gh issue list --label "phase:1-foundation" --state open --json number,title,labels
+
+# 查看 Issue
+gh issue view <number>
+
+# 创建 Issue
+gh issue create --title "[Px-Tx] 任务名" --label "type:feature,phase:2-standards" \
+  --milestone "Phase 2" --project "敏捷建店管理平台"
+
+# 关闭 Issue（验收通过后）
+gh issue close <number> --comment "验收通过，build/lint/test 通过"
+```
+
+### 工作流概览
+
+```
+Backlog → Ready → In Progress → AI Completed → In Review → Done
+```
+
+- **同一时间只有一个 In Progress**
+- **质量门禁**: build/lint/test 通过 → Human 验收 → 关闭
+- **Python 脚本**: `python scripts/gh-sync.py` 查看今日日志
+
+### 标签体系（20 个）
+
+- type: feature / bug / refactor / docs / test / infra / release
+- phase: 1-foundation / 1.5-base-finish / 2-standards / 3-tasks / 4-procurement / 5-agent / 6-e2e
+- priority: P0(阻塞) / P1(当前迭代) / P2(下次) / P3(排期外)
+- status: blocked / in-review
+
 ## 任务结束协议
 
 每次完成开发任务后，执行：
 
-### A. 写入每日日志
+### A. 写入每日日志（含 Issue 引用）
 
 将任务内容写入 `.workbuddy/memory/YYYY-MM-DD.md`，格式：
 
 ```markdown
 ## {任务简述}
+
+### 关联 Issue
+
+- #{number}: {issue title}
 
 ### 问题/需求
 
@@ -78,6 +120,7 @@ Prettier 配置：`semi: false`, `singleQuote: true`, `printWidth: 100`, `arrowP
 
 - lint: {结果}
 - build: {结果}
+- test: {结果}
 ```
 
 ### B. 更新长期记忆（如有以下情况）
