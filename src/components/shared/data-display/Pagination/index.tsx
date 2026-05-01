@@ -1,8 +1,11 @@
+const PAGE_SIZE_OPTIONS = [10, 20, 30, 50]
+
 type PaginationProps = {
   total: number
   currentPage: number
   pageSize: number
   onPageChange: (page: number) => void
+  onPageSizeChange?: (size: number) => void
   classNamePrefix?: 'pm' | 'tm' | 'sm' | 'cm' | 'om' | 'pcm' | 'fm' | 'csm'
 }
 
@@ -11,6 +14,7 @@ const Pagination = ({
   currentPage,
   pageSize,
   onPageChange,
+  onPageSizeChange,
   classNamePrefix = 'pm',
 }: PaginationProps) => {
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
@@ -24,9 +28,26 @@ const Pagination = ({
           </div>
           <div className={`${classNamePrefix}-page-size`}>
             <span>每页显示</span>
-            <button type="button" className={`${classNamePrefix}-page-size-btn`}>
-              <span>{pageSize} 条</span>
-            </button>
+            <select
+              className={`${classNamePrefix}-page-size-btn`}
+              value={pageSize}
+              onChange={e => onPageSizeChange?.(Number(e.target.value))}
+              style={{
+                background: 'transparent',
+                color: 'inherit',
+                border: 'none',
+                fontFamily: 'inherit',
+                fontSize: 'inherit',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
+            >
+              {PAGE_SIZE_OPTIONS.map(size => (
+                <option key={size} value={size}>
+                  {size} 条
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

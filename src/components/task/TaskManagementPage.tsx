@@ -26,6 +26,13 @@ import TaskKanbanView from './TaskKanbanView'
 import TaskCalendarView from './TaskCalendarView'
 import { taskRepository } from '../../services/repositories/taskRepository'
 import { Drawer, Snackbar, Alert } from '@mui/material'
+import Assignment from '@mui/icons-material/Assignment'
+import PersonAdd from '@mui/icons-material/PersonAdd'
+import PlayCircle from '@mui/icons-material/PlayCircle'
+import Send from '@mui/icons-material/Send'
+import HowToVote from '@mui/icons-material/HowToVote'
+import Warning from '@mui/icons-material/Warning'
+import Error from '@mui/icons-material/Error'
 
 const TaskManagementPage = () => {
   const currentHash = typeof window === 'undefined' ? '#/tasks' : window.location.hash || '#/tasks'
@@ -42,7 +49,7 @@ const TaskManagementPage = () => {
     sortBy: 'default',
   })
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize] = useState(12)
+  const [pageSize, setPageSize] = useState(10)
   const [selectedTaskCode, setSelectedTaskCode] = useState<string | null>(null)
   const [selectedTaskDetail, setSelectedTaskDetail] = useState<TaskDetail | null>(null)
   const [isDetailLoading, setIsDetailLoading] = useState(false)
@@ -264,49 +271,49 @@ const TaskManagementPage = () => {
                   items={[
                     {
                       key: 'all',
-                      icon: '1.svg',
+                      iconComponent: Assignment,
                       label: '全部任务数',
                       value: stats.total,
                       tone: 'blue',
                     },
                     {
                       key: 'pendingAssign',
-                      icon: '3.svg',
+                      iconComponent: PersonAdd,
                       label: '待分配数',
                       value: stats.pendingAssign,
                       tone: 'blue',
                     },
                     {
                       key: 'executing',
-                      icon: '5.svg',
+                      iconComponent: PlayCircle,
                       label: '执行中数',
                       value: stats.executing,
                       tone: 'blue',
                     },
                     {
                       key: 'pendingSubmit',
-                      icon: '7.svg',
+                      iconComponent: Send,
                       label: '待提交数',
                       value: stats.pendingSubmit,
                       tone: 'orange',
                     },
                     {
                       key: 'pendingAcceptance',
-                      icon: '1.svg',
+                      iconComponent: HowToVote,
                       label: '待验收数',
                       value: stats.pendingAcceptance,
                       tone: 'orange',
                     },
                     {
                       key: 'slaRisk',
-                      icon: '3.svg',
+                      iconComponent: Warning,
                       label: '超时/即将超时数',
                       value: stats.slaWarningOrOverdue,
                       tone: 'red',
                     },
                     {
                       key: 'blocked',
-                      icon: '5.svg',
+                      iconComponent: Error,
                       label: '阻塞任务数',
                       value: stats.blocked,
                       tone: 'red',
@@ -318,7 +325,6 @@ const TaskManagementPage = () => {
                     setCurrentPage(1)
                   }}
                   className="pm-stats-row"
-                  assetBase="/assets/CodeBubbyAssets/3947_2"
                 />
 
                 <section className="tm-table-section">
@@ -338,6 +344,10 @@ const TaskManagementPage = () => {
                       tasks={processedTasks}
                       pagination={pagination}
                       onPageChange={setCurrentPage}
+                      onPageSizeChange={size => {
+                        setPageSize(size)
+                        setCurrentPage(1)
+                      }}
                       onOpenTaskDetail={taskCode => {
                         setSelectedTaskCode(taskCode)
                       }}

@@ -4,11 +4,13 @@ import StatusChip from '../ui/StatusChip'
 import type { PaginationState, TaskItem } from './taskManagement.types'
 import { STATUS_TONE_MAP } from './taskManagement.types'
 import Pagination from '../shared/data-display/Pagination'
+import MoreHoriz from '@mui/icons-material/MoreHoriz'
 
 type TaskListViewProps = {
   tasks: TaskItem[]
   pagination: PaginationState
   onPageChange: (page: number) => void
+  onPageSizeChange?: (size: number) => void
   onOpenTaskDetail?: (taskCode: string) => void
   onBatchAssign?: (taskCodes: string[]) => void
   onBatchUrge?: (taskCodes: string[]) => void
@@ -94,20 +96,7 @@ function ActionCell() {
         cursor: 'pointer',
       }}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="5" r="1" />
-        <circle cx="12" cy="12" r="1" />
-        <circle cx="12" cy="19" r="1" />
-      </svg>
+      <MoreHoriz sx={{ fontSize: 16 }} />
     </span>
   )
 }
@@ -138,6 +127,7 @@ const TaskListView = ({
   tasks,
   pagination,
   onPageChange,
+  onPageSizeChange,
   onOpenTaskDetail,
   onBatchAssign,
   onBatchUrge,
@@ -204,6 +194,7 @@ const TaskListView = ({
         currentPage={pagination.currentPage}
         pageSize={pagination.pageSize}
         onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
         classNamePrefix="tm"
       />
     </div>

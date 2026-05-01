@@ -1,9 +1,12 @@
 import Icon from '../../icons/Icon'
+import type { ComponentType } from 'react'
 
 type StatCardLayout = 'vertical' | 'horizontal'
 
 type StatCardProps = {
-  icon: string
+  icon?: string
+  /** MUI 图标组件（优先级高于 icon） */
+  iconComponent?: ComponentType<{ sx?: object }>
   label: string
   value: string | number
   tone: 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'cyan'
@@ -29,6 +32,7 @@ const inferTrend = (delta: string | undefined): 'up' | 'down' | 'neutral' => {
 
 const StatCard = ({
   icon,
+  iconComponent,
   label,
   value,
   tone,
@@ -61,9 +65,16 @@ const StatCard = ({
         ? 'arrow-down'
         : undefined
 
+  const MuiIcon = iconComponent
   const iconEl = (
     <div className={`${classNamePrefix}-stat-icon-wrap ${classNamePrefix}-stat-icon`}>
-      {icon.includes('.') ? <img src={`${assetBase}/${icon}`} alt="" /> : <span>{icon}</span>}
+      {MuiIcon ? (
+        <MuiIcon sx={{ fontSize: 20, color: 'inherit' }} />
+      ) : icon?.includes('.') ? (
+        <img src={`${assetBase}/${icon}`} alt="" />
+      ) : (
+        <span>{icon}</span>
+      )}
     </div>
   )
 

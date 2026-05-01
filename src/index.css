@@ -309,7 +309,7 @@ input {
 }
 
 .pm-header {
-  height: 64px;
+  height: 48px;
   background: var(--pm-header-bg);
   border-bottom: 1px solid var(--pm-border-light);
   display: flex;
@@ -2942,6 +2942,11 @@ body {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+}
+
+/* 任务管理列表页：头部高度 64px */
+.tm-app .pm-header {
+  height: 64px;
 }
 
 .tm-glow {

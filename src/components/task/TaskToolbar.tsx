@@ -1,5 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { type TaskFilters, type TaskViewMode } from './taskManagement.types'
+import TableView from '@mui/icons-material/TableView'
+import ViewKanban from '@mui/icons-material/ViewKanban'
+import CalendarMonth from '@mui/icons-material/CalendarMonth'
+import MoreHoriz from '@mui/icons-material/MoreHoriz'
+import Search from '@mui/icons-material/Search'
+import Add from '@mui/icons-material/Add'
+import FilterList from '@mui/icons-material/FilterList'
+import Sort from '@mui/icons-material/Sort'
+import GroupWork from '@mui/icons-material/GroupWork'
 
 type TaskToolbarProps = {
   viewMode: TaskViewMode
@@ -13,13 +22,18 @@ type TaskToolbarProps = {
   onOpenExport?: () => void
 }
 
-const VIEW_ASSETS = '/assets/CodeBubbyAssets/3848_19'
+const VIEW_ICONS: Record<TaskViewMode, typeof TableView> = {
+  list: TableView,
+  kanban: ViewKanban,
+  calendar: CalendarMonth,
+}
 
-const viewModes: Array<{ mode: TaskViewMode; label: string; icon: string }> = [
-  { mode: 'list', label: '表格', icon: '10.svg' },
-  { mode: 'kanban', label: '看板', icon: '11.svg' },
-  { mode: 'calendar', label: '日历', icon: '12.svg' },
-]
+const viewModes: TaskViewMode[] = ['list', 'kanban', 'calendar']
+const viewLabels: Record<TaskViewMode, string> = {
+  list: '表格',
+  kanban: '看板',
+  calendar: '日历',
+}
 
 function MoreMenu({ onImport, onExport }: { onImport?: () => void; onExport?: () => void }) {
   const [open, setOpen] = useState(false)
@@ -52,20 +66,7 @@ function MoreMenu({ onImport, onExport }: { onImport?: () => void; onExport?: ()
           cursor: 'pointer',
         }}
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="5" r="1" />
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="12" cy="19" r="1" />
-        </svg>
+        <MoreHoriz sx={{ fontSize: 16, color: 'rgba(255,255,255,0.70)' }} />
       </button>
       {open && (
         <div
@@ -144,44 +145,38 @@ const TaskToolbar = ({
         flexWrap: 'wrap',
       }}
     >
-      {/* 视图切换 — 复用项目管理页面的 pm-view-toggle 样式 */}
+      {/* 视图切换 */}
       <div className="pm-view-toggle" role="tablist" aria-label="视图切换">
-        {viewModes.map(view => (
-          <button
-            key={view.mode}
-            type="button"
-            className={`pm-view-btn ${viewMode === view.mode ? 'active' : ''}`}
-            onClick={() => onViewModeChange(view.mode)}
-          >
-            <img src={`${VIEW_ASSETS}/${view.icon}`} alt="" />
-            <span>{view.label}</span>
-          </button>
-        ))}
+        {viewModes.map(mode => {
+          const Icon = VIEW_ICONS[mode]
+          return (
+            <button
+              key={mode}
+              type="button"
+              className={`pm-view-btn ${viewMode === mode ? 'active' : ''}`}
+              onClick={() => onViewModeChange(mode)}
+            >
+              <Icon sx={{ fontSize: 14 }} />
+              <span>{viewLabels[mode]}</span>
+            </button>
+          )
+        })}
       </div>
 
       {/* 右侧操作 */}
       <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
         <div style={{ position: 'relative' }}>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="rgba(255,255,255,0.40)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
+          <Search
+            sx={{
+              fontSize: 14,
+              color: 'rgba(255,255,255,0.40)',
               position: 'absolute',
               left: 10,
               top: '50%',
               transform: 'translateY(-50%)',
               pointerEvents: 'none',
             }}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
+          />
           <input
             placeholder="搜索"
             value={searchQuery}
@@ -200,9 +195,9 @@ const TaskToolbar = ({
           />
         </div>
 
-        <FilterButton label="筛选" />
-        <FilterButton label="排序" />
-        <FilterButton label="分组" />
+        <FilterButton icon={<FilterList sx={{ fontSize: 12 }} />} label="筛选" />
+        <FilterButton icon={<Sort sx={{ fontSize: 12 }} />} label="排序" />
+        <FilterButton icon={<GroupWork sx={{ fontSize: 12 }} />} label="分组" />
 
         <button
           type="button"
@@ -223,19 +218,7 @@ const TaskToolbar = ({
               '0px 4px 6px -4px rgba(28,57,142,0.5), 0px 10px 15px -3px rgba(28,57,142,0.5)',
           }}
         >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <Add sx={{ fontSize: 14 }} />
           新建
         </button>
 
@@ -245,7 +228,7 @@ const TaskToolbar = ({
   )
 }
 
-function FilterButton({ label }: { label: string }) {
+function FilterButton({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <button
       type="button"
@@ -263,27 +246,7 @@ function FilterButton({ label }: { label: string }) {
         fontFamily: 'inherit',
       }}
     >
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={{ marginRight: 2 }}
-      >
-        <line x1="4" y1="21" x2="4" y2="14" />
-        <line x1="4" y1="10" x2="4" y2="3" />
-        <line x1="12" y1="21" x2="12" y2="12" />
-        <line x1="12" y1="8" x2="12" y2="3" />
-        <line x1="20" y1="21" x2="20" y2="16" />
-        <line x1="20" y1="12" x2="20" y2="3" />
-        <line x1="1" y1="14" x2="7" y2="14" />
-        <line x1="9" y1="8" x2="15" y2="8" />
-        <line x1="17" y1="16" x2="23" y2="16" />
-      </svg>
+      {icon}
       {label}
     </button>
   )
