@@ -1,199 +1,306 @@
-import { useEffect, useRef, useState } from 'react';
-import type { TaskFilters, TaskViewMode } from './taskManagement.types';
-import { groupOptions, sortOptions, statusOptions, riskOptions, slaOptions } from './taskManagement.data';
+import { useState, useRef, useEffect } from 'react'
+import { type TaskFilters, type TaskViewMode } from './taskManagement.types'
 
 type TaskToolbarProps = {
-  viewMode: TaskViewMode;
-  onViewModeChange: (mode: TaskViewMode) => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  filters: TaskFilters;
-  onFiltersChange: (filters: Partial<TaskFilters>) => void;
-};
+  viewMode: TaskViewMode
+  onViewModeChange: (mode: TaskViewMode) => void
+  searchQuery: string
+  onSearchChange: (query: string) => void
+  filters: TaskFilters
+  onFiltersChange: (filters: Partial<TaskFilters>) => void
+  onCreateTask?: () => void
+  onOpenImport?: () => void
+  onOpenExport?: () => void
+}
 
-const viewModes: Array<{ mode: TaskViewMode; label: string; icon: string }> = [
-  { mode: 'grid', label: '网格', icon: '9.svg' },
-  { mode: 'list', label: '列表', icon: '10.svg' },
-  { mode: 'kanban', label: '看板', icon: '11.svg' },
-  { mode: 'calendar', label: '日历', icon: '12.svg' },
-];
+const viewModes: Array<{ mode: TaskViewMode; label: string }> = [
+  { mode: 'list', label: '表格' },
+  { mode: 'kanban', label: '看板' },
+  { mode: 'calendar', label: '日历' },
+]
+
+function MoreMenu({ onImport, onExport }: { onImport?: () => void; onExport?: () => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-flex' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        style={{
+          width: 32,
+          height: 32,
+          padding: 0,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: 'none',
+          borderRadius: 10,
+          background: 'transparent',
+          color: 'rgba(255,255,255,0.70)',
+          cursor: 'pointer',
+        }}
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="5" r="1" />
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="12" cy="19" r="1" />
+        </svg>
+      </button>
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            right: 0,
+            marginTop: 4,
+            minWidth: 150,
+            background: 'var(--pm-bg)',
+            border: '1px solid var(--pm-border)',
+            borderRadius: 12,
+            boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.2)',
+            padding: 4,
+            zIndex: 50,
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              onImport?.()
+              setOpen(false)
+            }}
+            style={menuItemStyle}
+          >
+            导入任务
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              onExport?.()
+              setOpen(false)
+            }}
+            style={menuItemStyle}
+          >
+            导出任务
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const menuItemStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  padding: '8px 12px',
+  border: 'none',
+  borderRadius: 8,
+  fontSize: 13,
+  cursor: 'pointer',
+  width: '100%',
+  background: 'transparent',
+  color: 'rgba(255,255,255,0.70)',
+  fontFamily: 'inherit',
+  textAlign: 'left',
+}
 
 const TaskToolbar = ({
   viewMode,
   onViewModeChange,
   searchQuery,
   onSearchChange,
-  filters,
-  onFiltersChange,
+  onOpenImport,
+  onOpenExport,
 }: TaskToolbarProps) => {
-  const [showGroupMenu, setShowGroupMenu] = useState(false);
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
-  const [showSortMenu, setShowSortMenu] = useState(false);
-
-  const groupRef = useRef<HTMLDivElement>(null);
-  const filterRef = useRef<HTMLDivElement>(null);
-  const sortRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (groupRef.current && !groupRef.current.contains(event.target as Node)) {
-        setShowGroupMenu(false);
-      }
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
-        setShowFilterMenu(false);
-      }
-      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-        setShowSortMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
-    <div className="tm-table-toolbar">
-      <div className="tm-view-toggle">
-        {viewModes.map((view) => (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '8px 16px',
+        borderBottom: '1px solid var(--pm-border-light, rgba(255,255,255,0.08))',
+        flexWrap: 'wrap',
+      }}
+    >
+      {/* 视图切换 */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 2,
+          background: 'rgba(255,255,255,0.04)',
+          borderRadius: 8,
+          padding: 2,
+        }}
+      >
+        {viewModes.map(view => (
           <button
             key={view.mode}
             type="button"
-            className={`tm-view-btn ${viewMode === view.mode ? 'active' : ''}`}
             onClick={() => onViewModeChange(view.mode)}
+            style={{
+              padding: '5px 12px',
+              border: 'none',
+              borderRadius: 6,
+              background: viewMode === view.mode ? 'rgba(255,255,255,0.08)' : 'transparent',
+              color: viewMode === view.mode ? '#ffffff' : 'rgba(255,255,255,0.40)',
+              fontSize: 12,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+            }}
           >
-            <img src={`/assets/CodeBubbyAssets/3947_2/${view.icon}`} alt="" />
-            <span>{view.label}</span>
+            {view.label}
           </button>
         ))}
       </div>
 
-      <div className="tm-toolbar-right">
-        <div className="tm-search-input-wrap">
-          <img src="/assets/CodeBubbyAssets/3947_2/15.svg" alt="" />
+      {/* 右侧操作 */}
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ position: 'relative' }}>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="rgba(255,255,255,0.40)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              position: 'absolute',
+              left: 10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              pointerEvents: 'none',
+            }}
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input
-            type="text"
-            placeholder="搜索任务..."
+            placeholder="搜索"
             value={searchQuery}
-            onChange={(event) => onSearchChange(event.target.value)}
+            onChange={e => onSearchChange(e.target.value)}
+            style={{
+              padding: '6px 12px 6px 32px',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 10,
+              background: 'rgba(255,255,255,0.05)',
+              color: '#fff',
+              fontSize: 12,
+              width: 180,
+              outline: 'none',
+              fontFamily: 'inherit',
+            }}
           />
         </div>
 
-        <div ref={groupRef} className="tm-toolbar-menu-wrap">
-          <button type="button" className="tm-filter-btn" onClick={() => setShowGroupMenu((v) => !v)}>
-            <img src="/assets/CodeBubbyAssets/3947_2/16.svg" alt="" />
-            <span>分组</span>
-            <img src="/assets/CodeBubbyAssets/3947_2/17.svg" alt="" />
-          </button>
-          {showGroupMenu && (
-            <div className="tm-dropdown-menu">
-              {groupOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className={`tm-dropdown-item ${filters.groupBy === option.value ? 'active' : ''}`}
-                  onClick={() => {
-                    onFiltersChange({ groupBy: option.value as TaskFilters['groupBy'] });
-                    setShowGroupMenu(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <FilterButton label="筛选" />
+        <FilterButton label="排序" />
+        <FilterButton label="分组" />
 
-        <div ref={filterRef} className="tm-toolbar-menu-wrap">
-          <button type="button" className="tm-filter-btn" onClick={() => setShowFilterMenu((v) => !v)}>
-            <img src="/assets/CodeBubbyAssets/3947_2/13.svg" alt="" />
-            <span>筛选</span>
-          </button>
-          {showFilterMenu && (
-            <div className="tm-dropdown-menu tm-filter-dropdown">
-              <div className="tm-filter-section-title">状态</div>
-              {statusOptions.map((status) => (
-                <button
-                  key={status}
-                  type="button"
-                  className={`tm-dropdown-item ${filters.status === status ? 'active' : ''}`}
-                  onClick={() => onFiltersChange({ status: filters.status === status ? undefined : status })}
-                >
-                  {status}
-                </button>
-              ))}
+        <MoreMenu onImport={onOpenImport} onExport={onOpenExport} />
 
-              <div className="tm-filter-section-title">风险等级</div>
-              {riskOptions.map((risk) => (
-                <button
-                  key={risk}
-                  type="button"
-                  className={`tm-dropdown-item ${filters.riskLevel === risk ? 'active' : ''}`}
-                  onClick={() => onFiltersChange({ riskLevel: filters.riskLevel === risk ? undefined : risk })}
-                >
-                  {risk}
-                </button>
-              ))}
-
-              <div className="tm-filter-section-title">SLA状态</div>
-              {slaOptions.map((slaStatus) => (
-                <button
-                  key={slaStatus}
-                  type="button"
-                  className={`tm-dropdown-item ${filters.slaStatus === slaStatus ? 'active' : ''}`}
-                  onClick={() => onFiltersChange({ slaStatus: filters.slaStatus === slaStatus ? undefined : slaStatus })}
-                >
-                  {slaStatus}
-                </button>
-              ))}
-
-              <div className="tm-filter-section-title">阻塞</div>
-              <button
-                type="button"
-                className={`tm-dropdown-item ${filters.blockedOnly ? 'active' : ''}`}
-                onClick={() => onFiltersChange({ blockedOnly: !filters.blockedOnly || undefined })}
-              >
-                仅看阻塞任务
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div ref={sortRef} className="tm-toolbar-menu-wrap">
-          <button type="button" className="tm-filter-btn" onClick={() => setShowSortMenu((v) => !v)}>
-            <img src="/assets/CodeBubbyAssets/3947_2/18.svg" alt="" />
-            <span>排序</span>
-            <img src="/assets/CodeBubbyAssets/3947_2/19.svg" alt="" />
-          </button>
-          {showSortMenu && (
-            <div className="tm-dropdown-menu">
-              {sortOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className={`tm-dropdown-item ${filters.sortBy === option.value ? 'active' : ''}`}
-                  onClick={() => {
-                    onFiltersChange({ sortBy: option.value as TaskFilters['sortBy'] });
-                    setShowSortMenu(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <button type="button" className="tm-add-task-btn">
-          <img src="/assets/CodeBubbyAssets/3947_2/14.svg" alt="" />
-          <span>新建任务</span>
-        </button>
-
-        <button type="button" className="tm-toolbar-icon-btn" aria-label="更多">
-          <img src="/assets/CodeBubbyAssets/3947_2/20.svg" alt="" />
+        <button
+          type="button"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '6px 14px',
+            background: '#154DD9',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 14,
+            fontSize: 12,
+            fontWeight: 500,
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            boxShadow:
+              '0px 4px 6px -4px rgba(28,57,142,0.5), 0px 10px 15px -3px rgba(28,57,142,0.5)',
+          }}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          新建
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TaskToolbar;
+function FilterButton({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '5px 12px',
+        border: '1px solid rgba(255,255,255,0.2)',
+        borderRadius: 14,
+        background: 'transparent',
+        color: 'rgba(255,255,255,0.70)',
+        fontSize: 12,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+      }}
+    >
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ marginRight: 2 }}
+      >
+        <line x1="4" y1="21" x2="4" y2="14" />
+        <line x1="4" y1="10" x2="4" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12" y2="3" />
+        <line x1="20" y1="21" x2="20" y2="16" />
+        <line x1="20" y1="12" x2="20" y2="3" />
+        <line x1="1" y1="14" x2="7" y2="14" />
+        <line x1="9" y1="8" x2="15" y2="8" />
+        <line x1="17" y1="16" x2="23" y2="16" />
+      </svg>
+      {label}
+    </button>
+  )
+}
+
+export default TaskToolbar

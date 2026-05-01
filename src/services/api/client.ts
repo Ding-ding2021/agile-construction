@@ -50,6 +50,9 @@ const buildHeaders = (options: ApiClientOptions): HeadersInit => {
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() || '/api'
 
 const isUnsetEnvRequest = (path: string) => /[?&]envId=unset-env(?:&|$)/.test(path)
+const isLocalDev =
+  !import.meta.env.VITE_TCB_ENV_ID ||
+  (import.meta.env.VITE_TCB_ENV_ID as string | undefined)?.trim() === 'unset-env'
 
 const emitRemoteFallback = (
   scope: string,
@@ -86,7 +89,7 @@ export const apiRequest = async <T>(path: string, options: ApiClientOptions = {}
   const scenario = options.scenario ?? path
   let attempt = 0
 
-  if (isUnsetEnvRequest(path)) {
+  if (!isLocalDev && isUnsetEnvRequest(path)) {
     console.info(`[API] 未配置云端环境，直接使用本地模式: ${scenario}`)
     throw new ApiError('云端环境未配置，已切换本地模式', 0, 'REMOTE_DISABLED')
   }

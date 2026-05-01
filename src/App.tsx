@@ -4,7 +4,9 @@ import { AppRouter } from './components/router/AppRouter'
 import { readRouteFromHash, isRouterHandledPage, type AppRoute } from './config/routes'
 import { goToProjectList, goToTaskList, goToPersonnelUser } from './config/navigation'
 import { getProjectByCode, projects as allProjects } from './data/projects'
-import { getTaskDetailByCode } from './components/task/taskManagement.data'
+import { resolveTaskDetail } from './components/task/taskManagement.data'
+import { taskRepository } from './services/repositories/taskRepository'
+import type { TaskDetail } from './components/task/taskManagement.types'
 
 const PersonnelPage = lazy(() => import('./components/personnel/PersonnelPage'))
 const ProjectDetailPage = lazy(() => import('./components/project/ProjectDetailPage'))
@@ -40,6 +42,8 @@ const PageLoader = () => (
 
 function App() {
   const [route, setRoute] = useState<AppRoute>(() => readRouteFromHash())
+  const [activeTaskDetail, setActiveTaskDetail] = useState<TaskDetail | null>(null)
+  const [isTaskDetailLoading, setIsTaskDetailLoading] = useState(false)
 
   useEffect(() => {
     if (!window.location.hash || window.location.hash === '#') {
@@ -54,18 +58,74 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
+  // 全页任务详情：API 优先，降级到 mock
+  useEffect(() => {
+    if (route.page !== 'task-detail') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveTaskDetail(null)
+      return
+    }
+
+    let cancelled = false
+    setIsTaskDetailLoading(true)
+
+    // 先通过 mock 数据快速展示，再异步尝试 API
+    const mockDetail = resolveTaskDetail(route.taskCode)
+    if (mockDetail) {
+      setActiveTaskDetail(mockDetail)
+      setIsTaskDetailLoading(false)
+    }
+
+    // 异步尝试从 API 获取更完整的数据
+    taskRepository
+      .loadTasks('__all')
+      .then(tasks => {
+        if (cancelled) return
+        const task = tasks?.find(t => t.code === route.taskCode)
+        if (!task?.projectId) return
+        return taskRepository.getTaskDetail(task.projectId, route.taskCode)
+      })
+      .then(apiDetail => {
+        if (cancelled || !apiDetail) return
+        const fallback = resolveTaskDetail(route.taskCode)
+        if (fallback) {
+          // 合并 API 数据与 mock 数据
+          setActiveTaskDetail({
+            ...fallback,
+            ...apiDetail,
+            flowLogs: apiDetail.flowLogs.length > 0 ? apiDetail.flowLogs : fallback.flowLogs,
+            attachments:
+              apiDetail.attachments.length > 0 ? apiDetail.attachments : fallback.attachments,
+            checklist: apiDetail.checklist.length > 0 ? apiDetail.checklist : fallback.checklist,
+            executionStandards:
+              apiDetail.executionStandards.length > 0
+                ? apiDetail.executionStandards
+                : fallback.executionStandards,
+            acceptanceStandards:
+              apiDetail.acceptanceStandards.length > 0
+                ? apiDetail.acceptanceStandards
+                : fallback.acceptanceStandards,
+            relations: apiDetail.relations.length > 0 ? apiDetail.relations : fallback.relations,
+          })
+        } else {
+          setActiveTaskDetail(apiDetail)
+        }
+        setIsTaskDetailLoading(false)
+      })
+      .catch(() => {
+        if (!cancelled) setIsTaskDetailLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [route])
+
   const activeProject = useMemo(() => {
     if (route.page !== 'detail') {
       return null
     }
     return getProjectByCode(route.code) ?? null
-  }, [route])
-
-  const activeTaskDetail = useMemo(() => {
-    if (route.page !== 'task-detail') {
-      return null
-    }
-    return getTaskDetailByCode(route.taskCode)
   }, [route])
 
   // detail 页面：注入 project 数据（AppRouter 无法处理需要外部数据的页面）
@@ -79,6 +139,10 @@ function App() {
 
   // task-detail 页面：注入 task 数据
   if (route.page === 'task-detail') {
+    if (isTaskDetailLoading) {
+      return <PageLoader />
+    }
+
     if (activeTaskDetail) {
       return <TaskDetailPage taskDetail={activeTaskDetail} onBack={goToTaskList} />
     }
