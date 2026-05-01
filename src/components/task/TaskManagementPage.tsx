@@ -9,8 +9,10 @@ import { AppSidebar, PageHeader, StatsCards } from '../shared'
 import TaskListView from './TaskListView'
 import TaskToolbar from './TaskToolbar'
 import TaskDetailPage from './TaskDetailPage'
+import { ImportDialog, ExportPanel } from '../ui'
+import type { ExportConfig } from '../ui'
 import type { TaskAssigneeOption } from './TaskDetailPage'
-import { buildTaskDetailFromItem, getTaskDetailByCode } from './taskManagement.data'
+import { resolveTaskDetail } from './taskManagement.data'
 import { calculateTaskStats, processTasks, shouldResetPage } from './taskManagement.selectors'
 import type {
   TaskFilters,
@@ -19,6 +21,9 @@ import type {
   TaskDetail,
   TaskStatus,
 } from './taskManagement.types'
+import { STATUS_TONE_MAP } from './taskManagement.types'
+import TaskKanbanView from './TaskKanbanView'
+import TaskCalendarView from './TaskCalendarView'
 import { taskRepository } from '../../services/repositories/taskRepository'
 import { Drawer, Snackbar, Alert } from '@mui/material'
 
@@ -29,26 +34,68 @@ const TaskManagementPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [viewMode, setViewMode] = useState<TaskViewMode>('list')
   const [filters, setFilters] = useState<TaskFilters>({
     statKey: 'all',
     searchQuery: '',
     groupBy: 'none',
     sortBy: 'default',
   })
-  const [viewMode, setViewMode] = useState<TaskViewMode>('list')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize] = useState(12)
   const [selectedTaskCode, setSelectedTaskCode] = useState<string | null>(null)
+  const [selectedTaskDetail, setSelectedTaskDetail] = useState<TaskDetail | null>(null)
+  const [isDetailLoading, setIsDetailLoading] = useState(false)
+  const [showImport, setShowImport] = useState(false)
+  const [showExport, setShowExport] = useState(false)
   const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; text: string } | null>(null)
+  const transitioningRef = useRef(new Set<string>())
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  // 从 tasks 数组中实时构建选中任务的详情，替换静态 getTaskDetailByCode
-  const selectedTaskDetail: TaskDetail | null = useMemo(() => {
-    if (!selectedTaskCode) return null
-    const cached = getTaskDetailByCode(selectedTaskCode)
-    if (cached) return cached
+  // 异步获取任务详情：API 优先，降级到 mock
+  useEffect(() => {
+    if (!selectedTaskCode) {
+      setSelectedTaskDetail(null)
+      return
+    }
+
+    let cancelled = false
+    setIsDetailLoading(true)
+
     const task = tasks.find(t => t.code === selectedTaskCode)
-    return task ? buildTaskDetailFromItem(task) : null
+    const projectCode = task?.projectId
+
+    if (projectCode) {
+      taskRepository
+        .getTaskDetail(projectCode, selectedTaskCode)
+        .then(apiDetail => {
+          if (cancelled) return
+          if (apiDetail) {
+            const fallback = task ? resolveTaskDetail(selectedTaskCode, [task]) : null
+            const merged = fallback ? { ...fallback, ...apiDetail } : apiDetail
+            setSelectedTaskDetail(merged)
+            setIsDetailLoading(false)
+            return
+          }
+          fallbackToLocal()
+        })
+        .catch(() => {
+          if (!cancelled) fallbackToLocal()
+        })
+    } else {
+      fallbackToLocal()
+    }
+
+    function fallbackToLocal() {
+      if (selectedTaskCode) {
+        setSelectedTaskDetail(resolveTaskDetail(selectedTaskCode, tasks))
+      }
+      setIsDetailLoading(false)
+    }
+
+    return () => {
+      cancelled = true
+    }
   }, [selectedTaskCode, tasks])
 
   // 自动清除反馈消息
@@ -70,33 +117,22 @@ const TaskManagementPage = () => {
     })
   }, [])
 
-  const getStatusTone = (s: TaskStatus): TaskItem['statusTone'] => {
-    const map: Record<TaskStatus, TaskItem['statusTone']> = {
-      草稿: 'neutral',
-      待分配: 'neutral',
-      待执行: 'neutral',
-      执行中: 'blue',
-      已暂停: 'orange',
-      待提交: 'orange',
-      待验收: 'orange',
-      不通过: 'red',
-      已完成: 'green',
-      已关闭: 'green',
-    }
-    return map[s] ?? 'neutral'
-  }
-
-  // 通用状态流转：更新状态 + 持久化
+  // 通用状态流转：更新状态 + 持久化（带防重复提交）
   const transitionTaskStatus = useCallback(
     async (taskCode: string, nextStatus: TaskStatus, successMsg: string) => {
       const task = tasks.find(t => t.code === taskCode)
-      if (!task) return
+      if (!task || transitioningRef.current.has(taskCode)) return
+      transitioningRef.current.add(taskCode)
       try {
         await taskRepository.updateTask(task.projectId, taskCode, { status: nextStatus })
       } catch {
         // 后端不可用，直接写 localStorage
       }
-      updateTaskInState(taskCode, { status: nextStatus, statusTone: getStatusTone(nextStatus) })
+      updateTaskInState(taskCode, {
+        status: nextStatus,
+        statusTone: STATUS_TONE_MAP[nextStatus] ?? 'neutral',
+      })
+      transitioningRef.current.delete(taskCode)
       setFeedback({ tone: 'success', text: successMsg })
     },
     [tasks, updateTaskInState]
@@ -293,18 +329,44 @@ const TaskManagementPage = () => {
                     onSearchChange={updateSearchQuery}
                     filters={filters}
                     onFiltersChange={updateFilters}
+                    onOpenImport={() => setShowImport(true)}
+                    onOpenExport={() => setShowExport(true)}
                   />
 
-                  <TaskListView
-                    tasks={processedTasks}
-                    pagination={pagination}
-                    onPageChange={setCurrentPage}
-                    searchQuery={searchQuery}
-                    viewMode={viewMode}
-                    onOpenTaskDetail={taskCode => {
-                      setSelectedTaskCode(taskCode)
-                    }}
-                  />
+                  {viewMode === 'list' && (
+                    <TaskListView
+                      tasks={processedTasks}
+                      pagination={pagination}
+                      onPageChange={setCurrentPage}
+                      onOpenTaskDetail={taskCode => {
+                        setSelectedTaskCode(taskCode)
+                      }}
+                      onBatchAssign={codes => {
+                        setFeedback({ tone: 'success', text: `已分配 ${codes.length} 个任务` })
+                      }}
+                      onBatchUrge={codes => {
+                        setFeedback({ tone: 'success', text: `已催办 ${codes.length} 个任务` })
+                      }}
+                      onBatchExport={codes => {
+                        setFeedback({ tone: 'success', text: `已导出 ${codes.length} 个任务` })
+                      }}
+                    />
+                  )}
+                  {viewMode === 'kanban' && (
+                    <TaskKanbanView
+                      tasks={processedTasks}
+                      onOpenTaskDetail={setSelectedTaskCode}
+                      onStatusChange={(taskCode, nextStatus) =>
+                        transitionTaskStatus(taskCode, nextStatus, `状态已变更: ${nextStatus}`)
+                      }
+                    />
+                  )}
+                  {viewMode === 'calendar' && (
+                    <TaskCalendarView
+                      tasks={processedTasks}
+                      onOpenTaskDetail={setSelectedTaskCode}
+                    />
+                  )}
                 </section>
               </>
             )}
@@ -313,7 +375,7 @@ const TaskManagementPage = () => {
       </div>
 
       {/* 任务详情侧拉弹窗 */}
-      <Drawer anchor="right" open={!!selectedTaskDetail} onClose={() => setSelectedTaskCode(null)}>
+      <Drawer anchor="right" open={!!selectedTaskCode} onClose={() => setSelectedTaskCode(null)}>
         <div
           style={{
             width: 680,
@@ -323,34 +385,46 @@ const TaskManagementPage = () => {
             borderLeft: '1px solid rgba(255,255,255,0.08)',
           }}
         >
+          {isDetailLoading && (
+            <div style={{ padding: 40, textAlign: 'center', color: '#8899bb' }}>加载中...</div>
+          )}
           {selectedTaskDetail && (
             <TaskDetailPage
               taskDetail={selectedTaskDetail}
               mode="drawer"
               onBack={() => setSelectedTaskCode(null)}
               onRemind={() => setFeedback({ tone: 'success', text: '已发送催办提醒' })}
-              onAdvance={() =>
-                transitionTaskStatus(selectedTaskDetail.code, '执行中', '任务已重新执行')
-              }
-              onMarkSubmissionReady={() => {
-                const current = selectedTaskDetail.status
-                const next: TaskStatus =
-                  current === '待提交'
-                    ? '待验收'
-                    : current === '执行中' || current === '已暂停'
-                      ? '待提交'
-                      : '待验收'
-                transitionTaskStatus(selectedTaskDetail.code, next, '任务状态已更新')
+              onCreateSubmission={async (taskCode, payload) => {
+                const taskId = Number(selectedTaskDetail.id)
+                if (!isNaN(taskId)) {
+                  await taskRepository.createSubmission(
+                    selectedTaskDetail.projectId,
+                    taskCode,
+                    taskId,
+                    payload
+                  )
+                }
+                transitionTaskStatus(taskCode, '待验收', '提交验收成功')
               }}
-              onRejectWithRectification={() =>
-                transitionTaskStatus(selectedTaskDetail.code, '不通过', '任务已驳回整改')
-              }
-              onAcceptDispatch={() =>
-                transitionTaskStatus(selectedTaskDetail.code, '执行中', '已接单')
-              }
-              onRejectDispatch={() =>
-                transitionTaskStatus(selectedTaskDetail.code, '待分配', '已拒单')
-              }
+              onReviewSubmission={async (taskCode, reviewPayload) => {
+                const taskId = Number(selectedTaskDetail.id)
+                const subId = Number(reviewPayload.submissionId)
+                if (!isNaN(taskId) && !isNaN(subId)) {
+                  await taskRepository.reviewSubmission(
+                    selectedTaskDetail.projectId,
+                    taskCode,
+                    taskId,
+                    subId,
+                    reviewPayload.result,
+                    reviewPayload.comment
+                  )
+                }
+                if (reviewPayload.result === 'pass') {
+                  transitionTaskStatus(taskCode, '已完成', '验收通过')
+                } else {
+                  transitionTaskStatus(taskCode, '不通过', '已驳回整改')
+                }
+              }}
               assigneeOptions={assigneeOptions}
               onAssign={(taskCode, assigneeName) => {
                 transitionTaskStatus(taskCode, '待执行', `已分配给 ${assigneeName}`)
@@ -396,6 +470,26 @@ const TaskManagementPage = () => {
           )}
         </div>
       </Drawer>
+
+      {/* 导入 / 导出 Dialog */}
+      <ImportDialog
+        open={showImport}
+        onClose={() => setShowImport(false)}
+        onImport={() => setFeedback({ tone: 'success', text: '导入成功' })}
+      />
+      <ExportPanel
+        open={showExport}
+        onClose={() => setShowExport(false)}
+        onExport={(config: ExportConfig) => {
+          setFeedback({
+            tone: 'success',
+            text: `导出 ${config.scope === 'all' ? tasks.length : processedTasks.length} 条任务`,
+          })
+          setShowExport(false)
+        }}
+        filteredCount={processedTasks.length}
+        totalCount={tasks.length}
+      />
 
       {/* 反馈消息 */}
       <Snackbar

@@ -963,3 +963,14 @@ export function getTemplateInstantiationDiagnostics(
   if (!templateId) return null
   return { errors: [], warnings: [] }
 }
+
+/** 统一详情降级：先查缓存，再按 tasks 列表回退到 buildTaskDetailFromItem */
+export function resolveTaskDetail(taskCode: string, tasks?: TaskItem[]): TaskDetail | null {
+  const cached = getTaskDetailByCode(taskCode)
+  if (cached) return cached
+  if (tasks) {
+    const task = tasks.find(t => t.code === taskCode)
+    if (task) return buildTaskDetailFromItem(task)
+  }
+  return null
+}
