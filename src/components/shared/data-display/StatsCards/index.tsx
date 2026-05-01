@@ -1,10 +1,13 @@
 import StatCard from '../StatCard'
+import type { ComponentType } from 'react'
 
 type StatsCardsTone = 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'cyan'
 
 type StatsCardsItem = {
   key: string
-  icon: string
+  icon?: string
+  /** MUI 图标组件（优先级高于 icon） */
+  iconComponent?: ComponentType<{ sx?: object }>
   label: string
   value: string | number
   tone: StatsCardsTone
@@ -38,6 +41,7 @@ const StatsCards = ({
         <StatCard
           key={item.key}
           icon={item.icon}
+          iconComponent={item.iconComponent}
           label={item.label}
           value={item.value}
           tone={item.tone}
