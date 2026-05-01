@@ -49,6 +49,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['施工', '审批'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -80,6 +84,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['电气', '施工'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -111,6 +119,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['消防', '调试'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -142,6 +154,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'manual',
     tags: ['验收', '整改'],
     createdBy: '李娜',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T10:00:00Z',
   },
   // ════════════════════════════════════════════════════════════
@@ -176,6 +192,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['外立面', '验收'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   {
@@ -207,6 +227,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['机电', '安装'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   {
@@ -238,6 +262,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['电气', '测试'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   // ════════════════════════════════════════════════════════════
@@ -272,6 +300,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['家具', '安装'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-28T08:00:00Z',
   },
   {
@@ -303,6 +335,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'manual',
     tags: ['VI', '复核'],
     createdBy: '李娜',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T09:00:00Z',
   },
   {
@@ -334,6 +370,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['安全', '巡检'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   // ════════════════════════════════════════════════════════════
@@ -368,6 +408,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'manual',
     tags: ['消防', '审批', '证照'],
     createdBy: '赵敏',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-28T14:00:00Z',
   },
   {
@@ -399,6 +443,10 @@ export const mockTasks: TaskItem[] = [
     sourceType: 'template',
     tags: ['培训', '考核'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T08:00:00Z',
   },
 ]
@@ -434,6 +482,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['施工准备'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -465,6 +517,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['水电'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -496,6 +552,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['消防'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -527,6 +587,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['验收'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-20T08:00:00Z',
   },
   {
@@ -558,6 +622,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['外立面'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   {
@@ -589,6 +657,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['机电'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   {
@@ -620,6 +692,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['电气'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-22T08:00:00Z',
   },
   {
@@ -651,6 +727,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['家具'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-28T08:00:00Z',
   },
   {
@@ -682,6 +762,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'manual',
     tags: ['品牌'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T08:00:00Z',
   },
   {
@@ -713,6 +797,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['证照'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T08:00:00Z',
   },
   {
@@ -744,6 +832,10 @@ export const mockWorkPackages: TaskItem[] = [
     sourceType: 'template',
     tags: ['培训'],
     createdBy: '系统',
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdAt: '2026-03-25T08:00:00Z',
   },
 ]
@@ -787,6 +879,8 @@ export const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
   return {
     ...task,
     assigneeType: (ownerName ? 'internal' : 'external') as TaskAssigneeType,
+    submissions: [],
+    eventLogs: [],
     executionStandards: ['按门店施工标准执行并拍照留档。', '关键节点需在当日 18:00 前更新进度。'],
     acceptanceStandards: ['验收资料齐全（照片/记录/签字）。', '不符合项需闭环后方可通过。'],
     checklist: [
@@ -962,4 +1056,15 @@ export function getTemplateInstantiationDiagnostics(
 ): { errors: string[]; warnings: string[] } | null {
   if (!templateId) return null
   return { errors: [], warnings: [] }
+}
+
+/** 统一详情降级：先查缓存，再按 tasks 列表回退到 buildTaskDetailFromItem */
+export function resolveTaskDetail(taskCode: string, tasks?: TaskItem[]): TaskDetail | null {
+  const cached = getTaskDetailByCode(taskCode)
+  if (cached) return cached
+  if (tasks) {
+    const task = tasks.find(t => t.code === taskCode)
+    if (task) return buildTaskDetailFromItem(task)
+  }
+  return null
 }

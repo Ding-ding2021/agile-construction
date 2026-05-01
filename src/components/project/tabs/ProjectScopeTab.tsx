@@ -85,7 +85,7 @@ const ProjectScopeTab = ({ project }: ProjectScopeTabProps) => {
       createdAt: new Date().toISOString(),
       updatedBy: undefined,
       updatedAt: undefined,
-    } as TaskItem
+    } as unknown as TaskItem
 
     try {
       const created = await taskRepository.createProjectTask(project.code, newTask)

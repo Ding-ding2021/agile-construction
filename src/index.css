@@ -13,6 +13,7 @@
   --pm-header-bg: rgba(5, 19, 56, 0.8);
   --pm-primary: #154dd9;
   --pm-primary-light: #1a5ae8;
+  --pm-primary-dark: #1248c5;
   --pm-primary-15: rgba(21, 77, 217, 0.15);
   --pm-primary-light-8: rgba(70, 137, 234, 0.08);
   --pm-primary-shadow-50: rgba(28, 57, 142, 0.5);
@@ -22,7 +23,8 @@
   --pm-card: rgba(255, 255, 255, 0.04);
   --pm-element: rgba(255, 255, 255, 0.03);
   --pm-element-hover: rgba(255, 255, 255, 0.06);
-  --pm-input-bg: rgba(255, 255, 255, 0.05);
+  --pm-input: rgba(255, 255, 255, 0.05);
+  --pm-input-bg: var(--pm-input);
 
   /* Text */
   --pm-text-white: #ffffff;
@@ -64,14 +66,15 @@
   /* Orange */
   --pm-orange: #fe9a00;
   --pm-orange-gold: #ffb900;
+  --pm-orange-light: #ffb900;
   --pm-orange-15: rgba(254, 154, 0, 0.15);
   --pm-orange-25: rgba(254, 154, 0, 0.25);
 
   /* Red */
-  --pm-red: #ff6467;
-  --pm-red-light: #fb2c36;
-  --pm-red-15: rgba(251, 44, 54, 0.15);
-  --pm-red-25: rgba(251, 44, 54, 0.25);
+  --pm-red: #ff4d4f;
+  --pm-red-light: #ff7875;
+  --pm-red-15: rgba(255, 77, 79, 0.15);
+  --pm-red-25: rgba(255, 77, 79, 0.25);
 
   /* Spacing */
   --pm-spacing-xs: 4px;
@@ -86,6 +89,10 @@
   --pm-radius-lg: 16px;
   --pm-radius-xl: 20px;
   --pm-radius-full: 9999px;
+  /* 按用途命名（线框图规范） */
+  --pm-radius-card: 16px;
+  --pm-radius-btn: 14px;
+  --pm-radius-input: 10px;
 
   /* Shadows */
   --pm-shadow-10: rgba(0, 0, 0, 0.1);
@@ -3817,4 +3824,194 @@ body {
 
 .tm-link-btn:hover {
   background: var(--pm-blue-15);
+}
+
+/* ════════════════════════════════════════
+   react-big-calendar — 暗色玻璃态主题
+   ════════════════════════════════════════ */
+.tm-calendar {
+  --cal-bg: #051338;
+  --cal-border: rgba(255, 255, 255, 0.08);
+  --cal-text: rgba(255, 255, 255, 0.8);
+  --cal-text-muted: rgba(255, 255, 255, 0.4);
+  --cal-header: rgba(255, 255, 255, 0.06);
+  --cal-hover: rgba(255, 255, 255, 0.03);
+  --cal-today: rgba(21, 77, 217, 0.12);
+  --cal-weekend: rgba(255, 255, 255, 0.02);
+}
+
+.tm-calendar .rbc-calendar {
+  background: var(--cal-bg);
+  color: var(--cal-text);
+}
+
+/* 工具栏 */
+.tm-calendar .rbc-toolbar {
+  margin-bottom: 12px;
+  gap: 8px;
+}
+.tm-calendar .rbc-toolbar button {
+  color: var(--cal-text);
+  background: transparent;
+  border: 1px solid var(--cal-border);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tm-calendar .rbc-toolbar button:hover {
+  background: var(--cal-hover);
+}
+.tm-calendar .rbc-toolbar button.rbc-active {
+  background: var(--pm-primary);
+  border-color: var(--pm-primary);
+  color: #fff;
+}
+.tm-calendar .rbc-toolbar-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 表头 */
+.tm-calendar .rbc-header {
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  border-bottom: none;
+}
+.tm-calendar .rbc-header + .rbc-header {
+  border-left: none;
+}
+
+/* 月视图容器 — 无边框 */
+.tm-calendar .rbc-month-view {
+  border: none;
+}
+.tm-calendar .rbc-month-row {
+  border-top: none;
+}
+.tm-calendar .rbc-day-bg + .rbc-day-bg {
+  border-left: none;
+}
+.tm-calendar .rbc-day-bg {
+  background: transparent;
+}
+.tm-calendar .rbc-today {
+  background: var(--cal-today);
+}
+.tm-calendar .rbc-off-range-bg {
+  background: rgba(255, 255, 255, 0.02);
+}
+.tm-calendar .rbc-off-range {
+  color: var(--cal-text-muted);
+}
+
+/* 日期数字 */
+.tm-calendar .rbc-date-cell {
+  padding: 2px 4px;
+  font-size: 12px;
+  text-align: left;
+}
+.tm-calendar .rbc-date-cell a {
+  color: var(--cal-text-muted);
+}
+.tm-calendar .rbc-date-cell.rbc-now a {
+  color: var(--pm-blue-light);
+  font-weight: 700;
+}
+
+/* 事件 */
+.tm-calendar .rbc-event {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.tm-calendar .rbc-event:hover {
+  opacity: 0.85;
+}
+.tm-calendar .rbc-event-content {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 更多链接 (+N more) */
+.tm-calendar .rbc-show-more {
+  color: var(--pm-blue-light);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Week / Day 视图 — 无分隔线 */
+.tm-calendar .rbc-time-view {
+  border: none;
+}
+.tm-calendar .rbc-time-header {
+  border-bottom: none;
+}
+.tm-calendar .rbc-time-content {
+  border-top: none;
+}
+.tm-calendar .rbc-time-gutter .rbc-timeslot-group {
+  border-bottom: none;
+}
+.tm-calendar .rbc-time-header > .rbc-row:first-child {
+  border-bottom: none;
+}
+.tm-calendar .rbc-time-header-cell {
+  min-height: 36px;
+}
+.tm-calendar .rbc-label {
+  font-size: 11px;
+  color: var(--cal-text-muted);
+  padding: 2px 6px;
+}
+.tm-calendar .rbc-timeslot-group {
+  border-bottom: none;
+}
+.tm-calendar .rbc-time-content > * + * > * {
+  border-left: none;
+}
+.tm-calendar .rbc-time-column .rbc-timeslot-group {
+  border-bottom: none;
+}
+.tm-calendar .rbc-day-slot .rbc-time-slot {
+  border-top: none;
+}
+.tm-calendar .rbc-time-gutter .rbc-label {
+  border-right: none;
+}
+
+/* 选中/聚焦状态 — 不显示蓝色外框 */
+.tm-calendar .rbc-show-more:focus,
+.tm-calendar .rbc-event:focus {
+  outline: none;
+}
+
+/* Agenda 视图 — 无边框 */
+.tm-calendar .rbc-agenda-view {
+  border: none;
+}
+.tm-calendar .rbc-agenda-table {
+  color: var(--cal-text);
+}
+.tm-calendar .rbc-agenda-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-bottom: none;
+  background: var(--cal-header);
+}
+.tm-calendar .rbc-agenda-table td {
+  padding: 6px 8px;
+  font-size: 12px;
+  border-bottom: none;
+}
+.tm-calendar .rbc-agenda-time-cell {
+  color: var(--cal-text-muted);
 }

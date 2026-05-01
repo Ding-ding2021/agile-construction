@@ -17,14 +17,19 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.0",
     "@mui/lab": "^9.0.0-beta.2",
     "@mui/material": "^9.0.0",
+    "@mui/x-date-pickers": "^9.0.4",
+    "@types/react-big-calendar": "^1.16.3",
     "better-sqlite3": "^11.7.0",
+    "dayjs": "^1.11.20",
     "express": "^5.2.1",
     "react": "^19.2.4",
+    "react-big-calendar": "^1.19.4",
     "react-dom": "^19.2.4",
     "zustand": "^5.0.12"
   },

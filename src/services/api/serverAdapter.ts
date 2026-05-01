@@ -114,6 +114,92 @@ export const serverAdapter = {
       }
     ),
 
+  // ── 任务详情 / 日志 / 提交（V1 扩展） ────────────────────────────
+  getTaskByCode: (projectCode: string, taskCode: string) =>
+    apiRequest<TaskItem>(
+      withEnv(
+        `/projects/${encodeURIComponent(projectCode)}/tasks/code/${encodeURIComponent(taskCode)}`
+      ),
+      { scope: 'task_detail_read' }
+    ),
+
+  getTaskLogs: (projectCode: string, taskId: number) =>
+    apiRequest<
+      Array<{
+        id: number
+        taskId: number
+        eventType: string
+        eventAction: string
+        beforeValue: unknown
+        afterValue: unknown
+        operatorId: string
+        operatorSource: string
+        createdAt: string
+      }>
+    >(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/${taskId}/logs`), {
+      scope: 'task_log_read',
+    }),
+
+  getTaskSubmissions: (projectCode: string, taskId: number) =>
+    apiRequest<
+      Array<{
+        id: number
+        taskId: number
+        submissionType: string
+        description: string | null
+        attachmentIds: string[] | null
+        status: string
+        submittedBy: string
+        submittedAt: string
+        reviewedBy: string | null
+        reviewResult: string | null
+        reviewComment: string | null
+        reviewedAt: string | null
+      }>
+    >(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/${taskId}/submissions`), {
+      scope: 'task_submission_read',
+    }),
+
+  createTaskSubmission: (
+    projectCode: string,
+    taskId: number,
+    payload: { submissionType?: string; description?: string },
+    idempotencyKey: string
+  ) =>
+    apiRequest<{
+      id: number
+      taskId: number
+      submissionType: string
+      description: string | null
+      status: string
+      submittedBy: string
+      submittedAt: string
+    }>(withEnv(`/projects/${encodeURIComponent(projectCode)}/tasks/${taskId}/submissions`), {
+      method: 'POST',
+      body: payload,
+      idempotencyKey,
+      scope: 'task_submission_create',
+    }),
+
+  reviewTaskSubmission: (
+    projectCode: string,
+    taskId: number,
+    subId: number,
+    payload: { reviewResult: string; reviewedBy?: string; reviewComment?: string },
+    idempotencyKey: string
+  ) =>
+    apiRequest<{
+      id: number
+      status: string
+      reviewResult: string
+      reviewComment: string | null
+    }>(
+      withEnv(
+        `/projects/${encodeURIComponent(projectCode)}/tasks/${taskId}/submissions/${subId}/review`
+      ),
+      { method: 'PUT', body: payload, idempotencyKey, scope: 'task_submission_review' }
+    ),
+
   // ── 审计日志 ──────────────────────────────────────────────────
   getAuditLogs: () =>
     apiRequest<

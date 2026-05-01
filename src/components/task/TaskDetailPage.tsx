@@ -5,9 +5,24 @@
  * 核心功能包括：编辑任务属性（负责人、计划时间、风险等级）、
  * 状态流转、附件管理、检查项追踪、流转日志查看。
  */
-import { useState, type ChangeEvent } from 'react'
+import { useState, type SyntheticEvent } from 'react'
 import type { TaskDetail, TaskPriority, TaskRiskLevel, TaskStatus } from './taskManagement.types'
-import { resolveAvailableStatusOptions, isTaskReadonlyStatus } from './taskManagement.types'
+import {
+  resolveAvailableStatusOptions,
+  isTaskReadonlyStatus,
+  STATUS_TONE_MAP,
+} from './taskManagement.types'
+import {
+  StatusChip,
+  CardSection,
+  SectionTitle,
+  Field,
+  FieldRow,
+  SubmitDialog,
+  ReviewDialog,
+  AttachmentList,
+} from '../ui'
+import StatusSelect, { type StatusTone } from '../ui/StatusSelect'
 
 // MUI Components
 import {
@@ -23,23 +38,27 @@ import {
   InputLabel,
   IconButton,
   Stack,
-  styled,
+  Tabs,
+  Tab,
+  LinearProgress,
 } from '@mui/material'
 
 // MUI Icons
 import {
-  ArrowBack,
   Notifications,
-  PlayArrow,
-  CloudUpload,
-  Delete,
-  InsertDriveFile,
   Close,
   Save,
   CheckCircle,
   Cancel,
-  AccountTree,
+  CloudUpload,
   LocalOffer,
+  NavigateBefore,
+  NavigateNext,
+  VisibilityOutlined,
+  StarBorder,
+  ChatBubbleOutlineOutlined,
+  MoreHoriz,
+  WarningAmber,
 } from '@mui/icons-material'
 
 export type TaskAssigneeOption = {
@@ -59,12 +78,14 @@ type TaskDetailPageProps = {
   taskDetail: TaskDetail
   onBack: () => void
   mode?: 'page' | 'drawer'
+  currentIndex?: number
+  totalCount?: number
+  onPrev?: () => void
+  onNext?: () => void
   onRemind?: () => void
-  onAdvance?: () => void
-  onMarkSubmissionReady?: () => void
-  onRejectWithRectification?: () => void
-  onAcceptDispatch?: () => void
-  onRejectDispatch?: () => void
+  onWatch?: () => void
+  onFavorite?: () => void
+  onComment?: () => void
   assigneeOptions?: TaskAssigneeOption[]
   onAssign?: (
     taskCode: string,
@@ -78,6 +99,15 @@ type TaskDetailPageProps = {
   onStatusChange?: (taskCode: string, nextStatus: TaskStatus) => void
   onUploadAttachments?: (taskCode: string, files: File[]) => void
   onRemoveAttachment?: (taskCode: string, attachmentId: string) => void
+  onCreateSubmission?: (taskCode: string, payload: { description?: string }) => void
+  onReviewSubmission?: (
+    taskCode: string,
+    payload: {
+      submissionId: string
+      result: 'pass' | 'reject'
+      comment?: string
+    }
+  ) => void
 }
 
 // ─── 设计令牌（映射到 src/index.css 中定义的 --pm-* CSS 变量） ──────
@@ -88,10 +118,12 @@ const COLORS = {
   bg: t('bg'),
   card: t('card'),
   border: t('border'),
-  inputBg: t('element'),
+  borderLight: t('border-light'),
   textWhite: t('text-white'),
   text70: t('text-70'),
+  text40: t('text-40'),
   blue: t('blue'),
+  blueLight: t('blue-light'),
   green: t('green'),
   orange: t('orange'),
   red: t('red'),
@@ -116,27 +148,8 @@ const NODE_TYPE_LABEL: Record<string, string> = {
   subtask: '子任务',
 }
 
-// ─── 共享子组件 ───────────────────────────────────────────────
-
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant="subtitle1" sx={{ fontWeight: 600, color: COLORS.blue, mb: 1.5 }}>
-    {children}
-  </Typography>
-)
-
-const CardSection = ({ children }: { children: React.ReactNode }) => (
-  <Paper
-    variant="outlined"
-    sx={{
-      p: 2.5,
-      bgcolor: COLORS.card,
-      borderColor: COLORS.border,
-      borderRadius: '16px',
-    }}
-  >
-    {children}
-  </Paper>
-)
+// ─── 局部子组件 ───────────────────────────────────────────────
+// FormField 是 TextField 的只读封装，仅在详情页使用，暂不提取
 
 const FormField = ({
   label,
@@ -157,59 +170,33 @@ const FormField = ({
     rows={multiline ? 3 : 1}
     slotProps={{ input: { readOnly: true } }}
     sx={{
-      '& .MuiOutlinedInput-root': { backgroundColor: COLORS.inputBg },
+      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
       '& .MuiInputBase-input': { color: COLORS.textWhite },
     }}
   />
 )
 
-const StatusChip = styled(Chip)<{ statustone?: string }>(({ statustone }) => {
-  const colors: Record<string, { bg: string; color: string }> = {
-    green: { bg: 'var(--pm-green-15)', color: 'var(--pm-green)' },
-    blue: { bg: 'var(--pm-blue-15)', color: 'var(--pm-blue-light)' },
-    orange: { bg: 'var(--pm-orange-15)', color: 'var(--pm-orange-gold)' },
-    red: { bg: 'var(--pm-red-15)', color: 'var(--pm-red)' },
-    neutral: { bg: 'var(--pm-border)', color: 'var(--pm-text-70)' },
-  }
-  const colorSet = colors[statustone || 'neutral']
-  return {
-    backgroundColor: colorSet.bg,
-    color: colorSet.color,
-    fontWeight: 600,
-    fontSize: '0.75rem',
-    height: 28,
-  }
-})
-
-const InfoRow = ({ label, value }: { label: string; value: string }) => (
-  <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
-    <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-      {label}
-    </Typography>
-    <Typography variant="body2" sx={{ color: COLORS.textWhite, fontWeight: 500 }}>
-      {value}
-    </Typography>
-  </Box>
-)
-
 const TaskDetailPage = ({
   taskDetail,
   onBack,
-  mode = 'page',
+  mode: _mode = 'page',
+  currentIndex,
+  totalCount,
+  onPrev,
+  onNext,
   onRemind,
-  onAdvance,
-  onMarkSubmissionReady,
-  onRejectWithRectification,
-  onAcceptDispatch,
-  onRejectDispatch,
+  onWatch,
+  onFavorite,
+  onComment,
   assigneeOptions = [],
   onAssign,
   onInlineUpdate,
   onStatusChange,
   onUploadAttachments,
   onRemoveAttachment,
+  onCreateSubmission,
+  onReviewSubmission,
 }: TaskDetailPageProps) => {
-  const isDrawer = mode === 'drawer'
   const isReadonly = isTaskReadonlyStatus(taskDetail.status)
 
   // 编辑状态
@@ -217,7 +204,13 @@ const TaskDetailPage = ({
   const [plannedStartAt, setPlannedStartAt] = useState(taskDetail.plannedStartAt)
   const [plannedEndAt, setPlannedEndAt] = useState(taskDetail.plannedEndAt)
   const [riskLevel, setRiskLevel] = useState<TaskRiskLevel>(taskDetail.riskLevel)
-  const [statusDraft, setStatusDraft] = useState<TaskStatus>(taskDetail.status)
+  const [activeTab, setActiveTab] = useState(0)
+
+  // Dialog 状态
+  const [showSubmitDialog, setShowSubmitDialog] = useState(false)
+  const [showReviewDialog, setShowReviewDialog] = useState(false)
+
+  const handleTabChange = (_e: SyntheticEvent, v: number) => setActiveTab(v)
 
   // 检测草稿态是否有未保存的变更，用于控制"保存/重置"按钮的显示
   const hasChanges =
@@ -226,20 +219,19 @@ const TaskDetailPage = ({
     plannedEndAt !== taskDetail.plannedEndAt ||
     riskLevel !== taskDetail.riskLevel
 
-  const getStatusTone = (status: TaskStatus): string => {
-    const toneMap: Record<TaskStatus, string> = {
-      草稿: 'neutral',
-      待分配: 'neutral',
-      待执行: 'neutral',
-      执行中: 'blue',
-      已暂停: 'orange',
-      待提交: 'orange',
-      待验收: 'orange',
-      不通过: 'red',
-      已完成: 'green',
-      已关闭: 'green',
+  const handleStatusSelect = (nextStatus: string) => {
+    const next = nextStatus as TaskStatus
+    if (taskDetail.status === '待提交' && next === '待验收') {
+      setShowSubmitDialog(true)
+      return
     }
-    return toneMap[status] || 'neutral'
+    if (next === '待验收' || next === '不通过') {
+      if (taskDetail.status === '待验收') {
+        setShowReviewDialog(true)
+        return
+      }
+    }
+    onStatusChange?.(taskDetail.code, next)
   }
 
   // 保存编辑：先处理负责人变更（如果指定了接单人），再更新计划时间和风险等级
@@ -250,561 +242,623 @@ const TaskDetailPage = ({
     onInlineUpdate?.(taskDetail.code, { plannedStartAt, plannedEndAt, riskLevel })
   }
 
-  // 状态变更：仅当用户选择了不同于当前状态的新状态时才触发
-  const handleStatusChange = () => {
-    if (statusDraft !== taskDetail.status) {
-      onStatusChange?.(taskDetail.code, statusDraft)
-    }
-  }
-
-  // 附件上传：过滤空文件列表并清空 input 值，避免重复上传同一文件
-  const handleAttachmentUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const fileList = event.target.files
-    if (!fileList || fileList.length === 0 || isReadonly) return
-    onUploadAttachments?.(taskDetail.code, Array.from(fileList))
-    event.target.value = ''
-  }
-
-  const formatFileSize = (kb: number) => {
-    if (kb >= 1024) return `${(kb / 1024).toFixed(1)} MB`
-    return `${kb} KB`
-  }
-
   const priority = PRIORITY_CONFIG[taskDetail.priority]
 
-  const statusActions = () => {
-    // 任务状态流转：根据当前状态显示对应的操作按钮
-    switch (taskDetail.status) {
-      case '待分配':
-        return null // 待分配状态无特定操作按钮
-      case '待执行':
-        return (
-          <>
-            <Button
-              variant="contained"
-              sx={{ bgcolor: COLORS.green }}
-              size="small"
-              onClick={onAcceptDispatch}
-              disabled={isReadonly}
-            >
-              接单
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={onRejectDispatch}
-              disabled={isReadonly}
-            >
-              拒单
-            </Button>
-          </>
-        )
-      case '执行中':
-      case '已暂停':
-        // 执行中/已暂停 → 标记完成
-        return (
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={onMarkSubmissionReady}
-            disabled={isReadonly}
-          >
-            标记完成
-          </Button>
-        )
-      case '待提交':
-        return (
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={onMarkSubmissionReady}
-            disabled={isReadonly}
-          >
-            提交验收
-          </Button>
-        )
-      case '待验收':
-        return (
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={onRejectWithRectification}
-            disabled={isReadonly}
-          >
-            驳回整改
-          </Button>
-        )
-      case '不通过':
-        return (
-          <Button variant="contained" size="small" onClick={onAdvance} disabled={isReadonly}>
-            重新执行
-          </Button>
-        )
-      default:
-        return null // 已完成/已关闭/草稿等状态无特定操作按钮
-    }
-  }
+  const progressColor: StatusTone =
+    taskDetail.progress >= 100
+      ? 'green'
+      : taskDetail.progress >= 60
+        ? 'blue'
+        : taskDetail.progress >= 30
+          ? 'orange'
+          : 'red'
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: COLORS.bg }}>
-      {/* ── Header ── */}
-      <Paper elevation={2} sx={{ p: 2, borderRadius: 0, flexShrink: 0 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 1,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {!isDrawer && (
-              <IconButton onClick={onBack} size="small">
-                <ArrowBack />
-              </IconButton>
-            )}
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              {taskDetail.name}
+      {/* ── 导航栏 ── */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          py: 0.5,
+          borderBottom: '1px solid',
+          borderColor: COLORS.borderLight,
+          flexShrink: 0,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton size="small" onClick={onPrev} sx={{ color: COLORS.text70 }}>
+            <NavigateBefore fontSize="small" />
+          </IconButton>
+          <IconButton size="small" onClick={onNext} sx={{ color: COLORS.text70 }}>
+            <NavigateNext fontSize="small" />
+          </IconButton>
+          {totalCount !== undefined && (
+            <Typography sx={{ fontSize: 11, color: COLORS.text40, ml: 1 }}>
+              {(currentIndex ?? 0) + 1} / {totalCount}
             </Typography>
-            <StatusChip
-              size="small"
-              label={taskDetail.status}
-              statustone={getStatusTone(taskDetail.status)}
-            />
-            {isReadonly && <Chip size="small" label="归档" variant="outlined" />}
-          </Box>
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-            <Chip
-              size="small"
-              label={priority.label}
-              sx={{
-                bgcolor: priority.bg,
-                color: priority.color,
-                fontWeight: 600,
-                fontSize: '0.7rem',
-                height: 24,
-              }}
-            />
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<Notifications />}
-              onClick={onRemind}
-              disabled={isReadonly}
-            >
-              催办
-            </Button>
-            {statusActions()}
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<PlayArrow />}
-              onClick={onAdvance}
-              disabled={isReadonly}
-            >
-              流转
-            </Button>
-            {isDrawer && (
-              <IconButton onClick={onBack} size="small">
-                <Close />
-              </IconButton>
-            )}
-          </Box>
+          )}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton size="small" onClick={onWatch} sx={{ color: COLORS.text70 }} title="关注">
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          <IconButton size="small" onClick={onFavorite} sx={{ color: COLORS.text70 }} title="收藏">
+            <StarBorder fontSize="small" />
+          </IconButton>
+          <IconButton size="small" onClick={onComment} sx={{ color: COLORS.text70 }} title="评论">
+            <ChatBubbleOutlineOutlined fontSize="small" />
+          </IconButton>
+          <IconButton size="small" sx={{ color: COLORS.text70 }} title="更多">
+            <MoreHoriz fontSize="small" />
+          </IconButton>
+          <Box sx={{ width: 1, height: 20, bgcolor: COLORS.borderLight, mx: 0.5 }} />
+          <IconButton size="small" onClick={onBack} sx={{ color: COLORS.text70 }} title="关闭">
+            <Close fontSize="small" />
+          </IconButton>
+        </Box>
+      </Box>
+
+      {/* ── 标题区 ── */}
+      <Box sx={{ px: 3, pt: 1.5, pb: 1, flexShrink: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+          <Typography sx={{ fontSize: 18, fontWeight: 600 }}>{taskDetail.name}</Typography>
+          <StatusChip
+            label={taskDetail.status}
+            tone={STATUS_TONE_MAP[taskDetail.status] ?? 'neutral'}
+          />
+          <Chip
+            size="small"
+            label={priority.label}
+            sx={{
+              bgcolor: priority.bg,
+              color: priority.color,
+              fontWeight: 600,
+              fontSize: '0.7rem',
+              height: 24,
+            }}
+          />
         </Box>
         <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ mt: 0.5, display: 'block', fontFamily: 'monospace' }}
+          sx={{ fontSize: 12, color: COLORS.text40, fontFamily: 'monospace', display: 'block' }}
         >
           {taskDetail.code} · {taskDetail.projectName} ·{' '}
           {NODE_TYPE_LABEL[taskDetail.nodeLevelType] ?? taskDetail.nodeLevelType}
         </Typography>
-      </Paper>
+      </Box>
 
-      {/* ── Body ── */}
-      <Box sx={{ flex: 1, overflow: 'auto', p: 3 }}>
-        <Stack spacing={2.5} sx={{ maxWidth: 720, mx: 'auto' }}>
-          {/* ── Tags ── */}
-          {taskDetail.tags.length > 0 && (
-            <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-              {taskDetail.tags.map(tag => (
-                <Chip
-                  key={tag}
-                  icon={<LocalOffer sx={{ fontSize: 14 }} />}
-                  label={tag}
-                  size="small"
-                  variant="outlined"
-                  sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
-                />
-              ))}
-            </Box>
-          )}
+      {/* ── Tabs ── */}
+      <Box
+        sx={{
+          bgcolor: 'rgba(255,255,255,0.02)',
+          borderBottom: '1px solid',
+          borderColor: COLORS.border,
+          borderRadius: '8px 8px 0 0',
+          flexShrink: 0,
+        }}
+      >
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          sx={{
+            minHeight: 40,
+            '& .MuiTab-root': {
+              minHeight: 40,
+              py: 0.5,
+              fontSize: 12,
+              fontWeight: 500,
+              color: COLORS.text40,
+              '&.Mui-selected': { color: '#fff' },
+            },
+          }}
+        >
+          <Tab label="基本信息" />
+          <Tab label="流程" />
+          <Tab label="资料" />
+          <Tab label="历史" />
+          <Tab label="关联" />
+        </Tabs>
+      </Box>
 
-          {/* ── Tree Context ── */}
-          <CardSection>
-            <SectionTitle>树形上下文</SectionTitle>
-            <Stack spacing={1}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <AccountTree sx={{ color: COLORS.blue, fontSize: 20 }} />
-                <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-                  项目：
-                  <strong style={{ color: COLORS.textWhite }}>{taskDetail.projectName}</strong>
-                </Typography>
-              </Box>
-              {taskDetail.parentTaskId && (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
-                  <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-                    父任务 ID：
-                    <strong style={{ color: COLORS.textWhite }}>{taskDetail.parentTaskId}</strong>
-                  </Typography>
+      {/* ── Tab Content ── */}
+      <Box sx={{ flex: 1, overflow: 'auto', p: 6 }}>
+        <Stack spacing={6} sx={{ maxWidth: 720, mx: 'auto' }}>
+          {/* ═══ Tab 1: 基本信息 ═══ */}
+          {activeTab === 0 && (
+            <>
+              {/* Tags */}
+              {taskDetail.tags.length > 0 && (
+                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                  {taskDetail.tags.map(tag => (
+                    <Chip
+                      key={tag}
+                      icon={<LocalOffer sx={{ fontSize: 14 }} />}
+                      label={tag}
+                      size="small"
+                      variant="outlined"
+                      sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
+                    />
+                  ))}
                 </Box>
               )}
-              <InfoRow
-                label="节点层级"
-                value={NODE_TYPE_LABEL[taskDetail.nodeLevelType] ?? taskDetail.nodeLevelType}
-              />
-              <InfoRow label="任务类型" value={taskDetail.taskType} />
-              <InfoRow
-                label="来源方式"
-                value={
-                  taskDetail.sourceType === 'manual'
-                    ? '手动创建'
-                    : taskDetail.sourceType === 'template'
-                      ? '模板生成'
-                      : taskDetail.sourceType === 'wbs'
-                        ? 'WBS 分解'
-                        : '标准派生'
-                }
-              />
-            </Stack>
-          </CardSection>
 
-          {/* ── 执行信息 ── */}
-          <CardSection>
-            <SectionTitle>执行信息</SectionTitle>
-            <Stack spacing={2}>
-              <FormControl fullWidth size="small">
-                <InputLabel>负责人</InputLabel>
-                <Select
-                  value={assigneeDraft}
-                  label="负责人"
-                  disabled={isReadonly}
-                  onChange={e => setAssigneeDraft(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>未分配</em>
-                  </MenuItem>
-                  {assigneeOptions.map(opt => (
-                    <MenuItem key={opt.id} value={opt.name} disabled={opt.disabled}>
-                      {opt.name} {opt.statusLabel && `(${opt.statusLabel})`}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormField
-                label="执行方"
-                value={taskDetail.assigneeType === 'internal' ? '内部团队' : '外部供应商'}
-              />
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <TextField
-                  label="计划开始"
-                  type="date"
-                  size="small"
-                  fullWidth
-                  value={plannedStartAt}
-                  disabled={isReadonly}
-                  onChange={e => setPlannedStartAt(e.target.value)}
-                  slotProps={{ inputLabel: { shrink: true } }}
-                />
-                <TextField
-                  label="计划结束"
-                  type="date"
-                  size="small"
-                  fullWidth
-                  value={plannedEndAt}
-                  disabled={isReadonly}
-                  onChange={e => setPlannedEndAt(e.target.value)}
-                  slotProps={{ inputLabel: { shrink: true } }}
-                />
-              </Box>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <FormField label="实际开始" value={taskDetail.actualStartAt ?? '--'} />
-                <FormField label="实际结束" value={taskDetail.actualEndAt ?? '--'} />
-              </Box>
-              <InfoRow label="优先级" value={priority.label} />
-              <InfoRow label="进度" value={`${taskDetail.progress}%`} />
-            </Stack>
-          </CardSection>
+              <CardSection>
+                <SectionTitle>基本信息</SectionTitle>
+                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 }}>
+                  <Field label="任务编号" value={taskDetail.code} />
+                  <Field label="所属项目" value={taskDetail.projectName} />
+                  <Field
+                    label="节点层级"
+                    value={NODE_TYPE_LABEL[taskDetail.nodeLevelType] ?? taskDetail.nodeLevelType}
+                  />
+                  <Field label="任务类型" value={taskDetail.taskType} />
+                  <Field
+                    label="来源方式"
+                    value={
+                      taskDetail.sourceType === 'manual'
+                        ? '手动创建'
+                        : taskDetail.sourceType === 'template'
+                          ? '模板生成'
+                          : taskDetail.sourceType === 'wbs'
+                            ? 'WBS 分解'
+                            : '标准派生'
+                    }
+                  />
+                  <Field label="优先级" value={priority.label} />
+                  {taskDetail.milestoneFlag && <Field label="里程碑节点" value="是" />}
+                  {taskDetail.isRectification && (
+                    <Field label="整改任务" value={taskDetail.rectificationReason ?? '是'} />
+                  )}
+                </Box>
+              </CardSection>
 
-          {/* ── 状态与风险 ── */}
-          <CardSection>
-            <SectionTitle>状态与风险</SectionTitle>
-            <Stack spacing={2}>
-              <FormControl fullWidth size="small">
-                <InputLabel>任务状态</InputLabel>
-                <Select
-                  value={statusDraft}
-                  label="任务状态"
-                  disabled={isReadonly}
-                  onChange={e => setStatusDraft(e.target.value as TaskStatus)}
-                >
-                  {resolveAvailableStatusOptions(taskDetail.status).map(s => (
-                    <MenuItem key={s} value={s}>
-                      {s}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              {statusDraft !== taskDetail.status && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={handleStatusChange}
-                  sx={{ alignSelf: 'flex-start' }}
-                >
-                  应用状态变更
-                </Button>
-              )}
-              <FormControl fullWidth size="small">
-                <InputLabel>风险等级</InputLabel>
-                <Select
-                  value={riskLevel}
-                  label="风险等级"
-                  disabled={isReadonly}
-                  onChange={e => setRiskLevel(e.target.value as TaskRiskLevel)}
-                >
-                  {['低风险', '中风险', '高风险'].map(r => (
-                    <MenuItem key={r} value={r}>
-                      {r}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <InfoRow label="SLA 状态" value={taskDetail.slaStatus} />
-              <InfoRow label="前置任务状态" value={taskDetail.predecessorStatus} />
-              <InfoRow label="催办次数" value={`${taskDetail.remindCount} 次`} />
-              {taskDetail.blockedReason && (
-                <TextField
-                  label="阻塞原因"
-                  value={taskDetail.blockedReason}
-                  fullWidth
-                  multiline
-                  rows={2}
-                  size="small"
-                  slotProps={{ input: { readOnly: true } }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-red-15)' },
-                    '& .MuiInputBase-input': { color: 'var(--pm-red)' },
-                  }}
-                />
-              )}
-            </Stack>
-          </CardSection>
+              <CardSection>
+                <SectionTitle>执行人 & 时间</SectionTitle>
+                <Stack spacing={4}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>负责人</InputLabel>
+                    <Select
+                      value={assigneeDraft}
+                      label="负责人"
+                      disabled={isReadonly}
+                      onChange={e => setAssigneeDraft(e.target.value)}
+                    >
+                      <MenuItem value="">
+                        <em>未分配</em>
+                      </MenuItem>
+                      {assigneeOptions.map(opt => (
+                        <MenuItem key={opt.id} value={opt.name} disabled={opt.disabled}>
+                          {opt.name} {opt.statusLabel && `(${opt.statusLabel})`}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormField
+                    label="执行方"
+                    value={taskDetail.assigneeType === 'internal' ? '内部团队' : '外部供应商'}
+                  />
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <TextField
+                      label="计划开始"
+                      type="date"
+                      size="small"
+                      fullWidth
+                      value={plannedStartAt}
+                      disabled={isReadonly}
+                      onChange={e => setPlannedStartAt(e.target.value)}
+                      slotProps={{ inputLabel: { shrink: true } }}
+                    />
+                    <TextField
+                      label="计划结束"
+                      type="date"
+                      size="small"
+                      fullWidth
+                      value={plannedEndAt}
+                      disabled={isReadonly}
+                      onChange={e => setPlannedEndAt(e.target.value)}
+                      slotProps={{ inputLabel: { shrink: true } }}
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <FormField label="实际开始" value={taskDetail.actualStartAt ?? '--'} />
+                    <FormField label="实际结束" value={taskDetail.actualEndAt ?? '--'} />
+                  </Box>
+                  {taskDetail.parentTaskId && (
+                    <FieldRow label="父任务 ID" value={taskDetail.parentTaskId} />
+                  )}
+                </Stack>
+              </CardSection>
+            </>
+          )}
 
-          {/* ── 标准与规范 ── */}
-          <CardSection>
-            <SectionTitle>标准与规范</SectionTitle>
-            <Stack spacing={2}>
-              <InfoRow label="标准绑定" value={taskDetail.standardBindingStatus} />
-              <InfoRow label="标准快照" value={taskDetail.snapshotStatus ?? '未生成'} />
-              {taskDetail.standardSnapshotId && (
-                <InfoRow label="快照 ID" value={taskDetail.standardSnapshotId} />
-              )}
-              <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
-                执行标准
-              </Typography>
-              <TextField
-                value={taskDetail.executionStandards.join('\n')}
-                multiline
-                rows={3}
-                fullWidth
-                slotProps={{ input: { readOnly: true } }}
+          {/* ═══ Tab 2: 流程 ═══ */}
+          {activeTab === 1 && (
+            <>
+              {/* 状态操作区 */}
+              <Paper
+                variant="outlined"
                 sx={{
-                  '& .MuiOutlinedInput-root': { backgroundColor: COLORS.inputBg },
-                  '& .MuiInputBase-input': { color: COLORS.textWhite, whiteSpace: 'pre-wrap' },
+                  p: 4,
+                  bgcolor: COLORS.card,
+                  borderColor: COLORS.border,
+                  borderRadius: 'var(--pm-radius-card)',
                 }}
-              />
-              <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
-                验收标准
-              </Typography>
-              <TextField
-                value={taskDetail.acceptanceStandards.join('\n')}
-                multiline
-                rows={3}
-                fullWidth
-                slotProps={{ input: { readOnly: true } }}
-                sx={{
-                  '& .MuiOutlinedInput-root': { backgroundColor: COLORS.inputBg },
-                  '& .MuiInputBase-input': { color: COLORS.textWhite, whiteSpace: 'pre-wrap' },
-                }}
-              />
-            </Stack>
-          </CardSection>
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Typography variant="body2" sx={{ color: COLORS.text70, fontWeight: 500 }}>
+                    状态
+                  </Typography>
+                  <StatusSelect
+                    value={taskDetail.status}
+                    options={resolveAvailableStatusOptions(taskDetail.status)}
+                    tones={STATUS_TONE_MAP}
+                    onChange={handleStatusSelect}
+                    disabled={isReadonly}
+                  />
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Notifications />}
+                    onClick={onRemind}
+                    disabled={isReadonly}
+                  >
+                    催办
+                  </Button>
+                </Box>
+              </Paper>
 
-          {/* ── 检查项 ── */}
-          <CardSection>
-            <SectionTitle>
-              检查项 ({taskDetail.checklist.filter(i => i.done).length}/
-              {taskDetail.checklist.length})
-            </SectionTitle>
-            <Stack spacing={1}>
-              {taskDetail.checklist.length > 0 ? (
-                taskDetail.checklist.map(item => (
-                  <Box key={item.id} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {item.done ? (
-                      <CheckCircle fontSize="small" sx={{ color: COLORS.green }} />
-                    ) : (
-                      <Cancel fontSize="small" sx={{ color: 'var(--pm-text-30)' }} />
-                    )}
-                    <Typography
-                      variant="body2"
+              <CardSection>
+                <SectionTitle>进度</SectionTitle>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Box sx={{ flex: 1 }}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={taskDetail.progress}
                       sx={{
-                        textDecoration: item.done ? 'line-through' : 'none',
-                        color: item.done ? 'text.secondary' : 'text.primary',
+                        height: 6,
+                        borderRadius: 999,
+                        '& .MuiLinearProgress-bar': {
+                          borderRadius: 999,
+                          bgcolor:
+                            progressColor === 'green'
+                              ? 'var(--pm-green)'
+                              : progressColor === 'orange'
+                                ? 'var(--pm-orange)'
+                                : progressColor === 'red'
+                                  ? 'var(--pm-red)'
+                                  : 'var(--pm-blue)',
+                        },
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: COLORS.textWhite }}>
+                    {taskDetail.progress}%
+                  </Typography>
+                </Box>
+              </CardSection>
+
+              <CardSection>
+                <SectionTitle>标准与规范</SectionTitle>
+                <Stack spacing={2}>
+                  <FieldRow label="标准绑定" value={taskDetail.standardBindingStatus} />
+                  <FieldRow label="标准快照" value={taskDetail.snapshotStatus ?? '未生成'} />
+                  {taskDetail.standardSnapshotId && (
+                    <FieldRow label="快照 ID" value={taskDetail.standardSnapshotId} />
+                  )}
+                  <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
+                    执行标准
+                  </Typography>
+                  <TextField
+                    value={taskDetail.executionStandards.join('\n')}
+                    multiline
+                    rows={2}
+                    fullWidth
+                    slotProps={{ input: { readOnly: true } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
+                      '& .MuiInputBase-input': { color: COLORS.textWhite },
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
+                    验收标准
+                  </Typography>
+                  <TextField
+                    value={taskDetail.acceptanceStandards.join('\n')}
+                    multiline
+                    rows={2}
+                    fullWidth
+                    slotProps={{ input: { readOnly: true } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
+                      '& .MuiInputBase-input': { color: COLORS.textWhite },
+                    }}
+                  />
+                </Stack>
+              </CardSection>
+
+              <CardSection>
+                <SectionTitle>
+                  检查项 ({taskDetail.checklist.filter(i => i.done).length}/
+                  {taskDetail.checklist.length})
+                </SectionTitle>
+                <Stack spacing={1}>
+                  {taskDetail.checklist.length > 0 ? (
+                    taskDetail.checklist.map(item => (
+                      <Box key={item.id} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {item.done ? (
+                          <CheckCircle fontSize="small" sx={{ color: COLORS.green }} />
+                        ) : (
+                          <Cancel fontSize="small" sx={{ color: 'var(--pm-text-30)' }} />
+                        )}
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            textDecoration: item.done ? 'line-through' : 'none',
+                            color: item.done ? 'text.secondary' : 'text.primary',
+                          }}
+                        >
+                          {item.label}
+                        </Typography>
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+                      暂无检查项
+                    </Typography>
+                  )}
+                </Stack>
+              </CardSection>
+
+              <CardSection>
+                <SectionTitle>风险与SLA</SectionTitle>
+                <Stack spacing={4}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>风险等级</InputLabel>
+                    <Select
+                      value={riskLevel}
+                      label="风险等级"
+                      disabled={isReadonly}
+                      onChange={e => setRiskLevel(e.target.value as TaskRiskLevel)}
+                    >
+                      {['低风险', '中风险', '高风险'].map(r => (
+                        <MenuItem key={r} value={r}>
+                          {r}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FieldRow label="SLA 状态" value={taskDetail.slaStatus} />
+                  <FieldRow label="催办次数" value={`${taskDetail.remindCount} 次`} />
+                  {taskDetail.blockedReason && (
+                    <Paper
+                      variant="outlined"
+                      sx={{
+                        p: 1.5,
+                        bgcolor: 'rgba(255,77,79,0.06)',
+                        borderColor: 'rgba(255,77,79,0.15)',
+                        borderRadius: '10px',
+                        display: 'flex',
+                        gap: 1,
                       }}
                     >
-                      {item.label}
-                    </Typography>
-                  </Box>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-                  暂无检查项
-                </Typography>
-              )}
-            </Stack>
-          </CardSection>
+                      <WarningAmber sx={{ color: COLORS.red, fontSize: 18, mt: 0.3 }} />
+                      <Box>
+                        <Typography
+                          variant="caption"
+                          sx={{ color: COLORS.red, fontWeight: 500, display: 'block' }}
+                        >
+                          阻塞原因
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: COLORS.textWhite }}>
+                          {taskDetail.blockedReason}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  )}
+                </Stack>
+              </CardSection>
+            </>
+          )}
 
-          {/* ── 附件 ── */}
-          <CardSection>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 1.5,
-              }}
-            >
-              <SectionTitle>附件 ({taskDetail.attachments.length})</SectionTitle>
-              <Button
-                component="label"
-                variant="outlined"
-                size="small"
-                startIcon={<CloudUpload />}
-                disabled={isReadonly}
-              >
-                上传附件
-                <input type="file" multiple hidden onChange={handleAttachmentUpload} />
-              </Button>
-            </Box>
-            <Stack spacing={1}>
-              {taskDetail.attachments.length > 0 ? (
-                taskDetail.attachments.map(att => (
-                  <Paper
-                    key={att.id}
-                    variant="outlined"
-                    sx={{
-                      p: 1.5,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1.5,
-                      bgcolor: COLORS.inputBg,
-                    }}
-                  >
-                    <InsertDriveFile fontSize="small" sx={{ color: COLORS.blue }} />
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography variant="body2" noWrap>
-                        {att.fileName}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {att.uploader} · {formatFileSize(att.fileSizeKb)}
-                      </Typography>
-                    </Box>
-                    <IconButton
-                      size="small"
-                      color="error"
-                      disabled={isReadonly}
-                      onClick={() => onRemoveAttachment?.(taskDetail.code, att.id)}
-                    >
-                      <Delete fontSize="small" />
-                    </IconButton>
-                  </Paper>
-                ))
-              ) : (
-                <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-                  暂无附件
-                </Typography>
-              )}
-            </Stack>
-          </CardSection>
-
-          {/* ── 关联任务 ── */}
-          {taskDetail.relations.length > 0 && (
-            <CardSection>
-              <SectionTitle>关联任务 ({taskDetail.relations.length})</SectionTitle>
-              <Stack spacing={0}>
-                {taskDetail.relations.map(rel => (
-                  <Box
-                    key={rel.id}
-                    sx={{
-                      p: 1.5,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      borderBottom: '1px solid var(--pm-border-light)',
-                      '&:last-child': { borderBottom: 'none' },
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="body2">
-                        {rel.toTaskName ?? rel.fromTaskName ?? rel.id}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ fontFamily: 'monospace' }}
+          {/* ═══ Tab 3: 资料 ═══ */}
+          {activeTab === 2 && (
+            <>
+              <CardSection>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mb: 1.5,
+                  }}
+                >
+                  <SectionTitle>提交记录</SectionTitle>
+                </Box>
+                {taskDetail.submissions?.length > 0 ? (
+                  <Stack spacing={1.5}>
+                    {taskDetail.submissions.map(sub => (
+                      <Paper
+                        key={sub.id}
+                        variant="outlined"
+                        sx={{ p: 1.5, bgcolor: 'var(--pm-input)' }}
                       >
-                        {rel.fromTaskId} → {rel.toTaskId}
-                      </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            {sub.submissionType === 'normal'
+                              ? '常规提交'
+                              : sub.submissionType === 'rectification'
+                                ? '整改提交'
+                                : '补充提交'}
+                          </Typography>
+                          <Chip
+                            size="small"
+                            label={
+                              sub.status === 'accepted'
+                                ? '已通过'
+                                : sub.status === 'rejected'
+                                  ? '已驳回'
+                                  : '待审核'
+                            }
+                            color={
+                              sub.status === 'accepted'
+                                ? 'success'
+                                : sub.status === 'rejected'
+                                  ? 'error'
+                                  : 'default'
+                            }
+                            variant="outlined"
+                          />
+                        </Box>
+                        {sub.description && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: 'block', mb: 0.5 }}
+                          >
+                            {sub.description}
+                          </Typography>
+                        )}
+                        <Typography variant="caption" color="text.secondary">
+                          {sub.submittedBy} · {sub.submittedAt}
+                        </Typography>
+                        {sub.reviewResult && (
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: 'block' }}
+                          >
+                            审核：{sub.reviewedBy} · {sub.reviewResult === 'pass' ? '通过' : '驳回'}
+                            {sub.reviewComment && ` (${sub.reviewComment})`}
+                          </Typography>
+                        )}
+                      </Paper>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+                    暂无提交记录
+                  </Typography>
+                )}
+                <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<CloudUpload />}
+                    disabled={isReadonly}
+                  >
+                    上传资料
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => setShowSubmitDialog(true)}
+                    disabled={isReadonly}
+                  >
+                    提交验收
+                  </Button>
+                </Box>
+              </CardSection>
+
+              <CardSection>
+                <SectionTitle>附件 ({taskDetail.attachments.length})</SectionTitle>
+                <AttachmentList
+                  attachments={taskDetail.attachments}
+                  readonly={isReadonly}
+                  onUpload={files => onUploadAttachments?.(taskDetail.code, files)}
+                  onDelete={id => onRemoveAttachment?.(taskDetail.code, id)}
+                />
+              </CardSection>
+            </>
+          )}
+
+          {/* ═══ Tab 4: 历史 ═══ */}
+          {activeTab === 3 && (
+            <CardSection>
+              <SectionTitle>操作日志 ({taskDetail.flowLogs.length})</SectionTitle>
+              <Stack spacing={0}>
+                {taskDetail.flowLogs.length > 0 ? (
+                  taskDetail.flowLogs.map((log, idx) => (
+                    <Box
+                      key={log.id}
+                      sx={{
+                        display: 'flex',
+                        gap: 1.5,
+                        py: 1.5,
+                        borderBottom:
+                          idx < taskDetail.flowLogs.length - 1
+                            ? '1px solid var(--pm-border-light)'
+                            : 'none',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          mt: 0.5,
+                          flexShrink: 0,
+                          bgcolor: idx === 0 ? 'var(--pm-blue)' : 'var(--pm-text-40)',
+                        }}
+                      />
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {log.action}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {log.operator} · {log.time}
+                          {log.detail ? ` · ${log.detail}` : ''}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Chip size="small" label={rel.relationType} variant="outlined" />
-                  </Box>
-                ))}
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+                    暂无操作日志
+                  </Typography>
+                )}
               </Stack>
             </CardSection>
           )}
 
-          {/* ── 流转日志 ── */}
-          {taskDetail.flowLogs.length > 0 && (
+          {/* ═══ Tab 5: 关联 ═══ */}
+          {activeTab === 4 && (
             <CardSection>
-              <SectionTitle>流转日志 ({taskDetail.flowLogs.length})</SectionTitle>
+              <SectionTitle>关联任务 ({taskDetail.relations.length})</SectionTitle>
               <Stack spacing={0}>
-                {taskDetail.flowLogs.map((log, idx) => (
-                  <Box
-                    key={log.id}
-                    sx={{
-                      p: 1.5,
-                      bgcolor: idx === 0 ? 'var(--pm-primary-15)' : 'transparent',
-                      borderBottom: '1px solid var(--pm-border-light)',
-                      '&:last-child': { borderBottom: 'none' },
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {log.action}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {log.time}
-                      </Typography>
+                {taskDetail.relations.length > 0 ? (
+                  taskDetail.relations.map(rel => (
+                    <Box
+                      key={rel.id}
+                      sx={{
+                        p: 1.5,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottom: '1px solid var(--pm-border-light)',
+                        '&:last-child': { borderBottom: 'none' },
+                      }}
+                    >
+                      <Box>
+                        <Typography variant="body2">
+                          {rel.toTaskName ?? rel.fromTaskName ?? rel.id}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ fontFamily: 'monospace' }}
+                        >
+                          {rel.fromTaskId} → {rel.toTaskId}
+                        </Typography>
+                      </Box>
+                      <Chip size="small" label={rel.relationType} variant="outlined" />
                     </Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {log.operator} · {log.detail}
-                    </Typography>
-                  </Box>
-                ))}
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+                    暂无关联任务
+                  </Typography>
+                )}
               </Stack>
             </CardSection>
           )}
@@ -832,6 +886,33 @@ const TaskDetailPage = ({
           )}
         </Stack>
       </Box>
+
+      {/* ── 提交验收 Dialog ── */}
+      <SubmitDialog
+        open={showSubmitDialog}
+        onClose={() => setShowSubmitDialog(false)}
+        onSubmit={description => {
+          onCreateSubmission?.(taskDetail.code, { description: description || undefined })
+          setShowSubmitDialog(false)
+        }}
+      />
+
+      {/* ── 审核 Dialog ── */}
+      <ReviewDialog
+        open={showReviewDialog}
+        onClose={() => setShowReviewDialog(false)}
+        onSubmit={(result, comment) => {
+          const subId = taskDetail.submissions?.[0]?.id
+          if (subId) {
+            onReviewSubmission?.(taskDetail.code, {
+              submissionId: subId,
+              result,
+              comment: comment.trim() || undefined,
+            })
+          }
+          setShowReviewDialog(false)
+        }}
+      />
     </Box>
   )
 }
