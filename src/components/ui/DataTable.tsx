@@ -14,7 +14,7 @@
  *     onRowClick={(row) => ...}
  *   />
  */
-import { useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Skeleton } from '@mui/material'
 
 export type Column<T> = {
@@ -24,6 +24,8 @@ export type Column<T> = {
   width?: string | number
   render?: (value: unknown, row: T) => React.ReactNode
 }
+
+type ColumnWidths = Record<string, number>
 
 type DataTableProps<T> = {
   columns: Column<T>[]
@@ -87,6 +89,61 @@ export default function DataTable<T = Record<string, unknown>>({
   const allSelected = rows.length > 0 && rows.every(r => selectedKeys.has(rowKey(r)))
   const someSelected = !allSelected && rows.some(r => selectedKeys.has(rowKey(r)))
 
+  // ─── 列宽调整 ─────────────────────────────────────────────
+  const [columnWidths, setColumnWidths] = useState<ColumnWidths>({})
+  const resizeRef = useRef<{
+    colKey: string
+    startX: number
+    startWidth: number
+    th: HTMLTableCellElement
+  } | null>(null)
+  const tableRef = useRef<HTMLTableElement>(null)
+
+  const getColWidth = (col: Column<T>): number | string | undefined =>
+    columnWidths[col.key] ?? col.width
+
+  const handleResizeStart = useCallback((e: React.MouseEvent, col: Column<T>) => {
+    e.preventDefault()
+    const th = (e.target as HTMLElement).closest('th')
+    if (!th) return
+    const startWidth = th.getBoundingClientRect().width
+    resizeRef.current = { colKey: col.key, startX: e.clientX, startWidth, th }
+
+    const onMove = (ev: MouseEvent) => {
+      const r = resizeRef.current
+      if (!r) return
+      const diff = ev.clientX - r.startX
+      const newWidth = Math.max(60, r.startWidth + diff)
+      r.th.style.width = `${newWidth}px`
+      // 同步 <colgroup> 中的 col
+      if (tableRef.current) {
+        const colEl = tableRef.current.querySelector<HTMLTableColElement>(
+          `col[data-key="${r.colKey}"]`
+        )
+        if (colEl) colEl.style.width = `${newWidth}px`
+      }
+    }
+
+    const onUp = (ev: MouseEvent) => {
+      const r = resizeRef.current
+      if (r) {
+        const diff = ev.clientX - r.startX
+        const finalWidth = Math.max(60, r.startWidth + diff)
+        setColumnWidths(prev => ({ ...prev, [r.colKey]: finalWidth }))
+        document.body.style.cursor = ''
+        document.body.style.userSelect = ''
+      }
+      resizeRef.current = null
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+    }
+
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }, [])
+
   const toggleAll = useCallback(() => {
     if (!onSelectionChange) return
     if (allSelected) {
@@ -110,12 +167,21 @@ export default function DataTable<T = Record<string, unknown>>({
   if (loading) {
     return (
       <div>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table
+          ref={tableRef}
+          style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}
+        >
+          <colgroup>
+            {selectable && <col style={{ width: 44 }} />}
+            {columns.map(col => (
+              <col key={col.key} data-key={col.key} style={{ width: getColWidth(col) }} />
+            ))}
+          </colgroup>
           <thead>
             <tr>
               {selectable && <th style={thStyle} />}
               {columns.map(col => (
-                <th key={col.key} style={{ ...thStyle, width: col.width }}>
+                <th key={col.key} style={{ ...thStyle, width: getColWidth(col) }}>
                   {col.label}
                 </th>
               ))}
@@ -150,7 +216,16 @@ export default function DataTable<T = Record<string, unknown>>({
 
   return (
     <div>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table
+        ref={tableRef}
+        style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}
+      >
+        <colgroup>
+          {selectable && <col style={{ width: 44 }} />}
+          {columns.map(col => (
+            <col key={col.key} data-key={col.key} style={{ width: getColWidth(col) }} />
+          ))}
+        </colgroup>
         <thead>
           <tr>
             {selectable && (
@@ -171,8 +246,9 @@ export default function DataTable<T = Record<string, unknown>>({
                 key={col.key}
                 style={{
                   ...thStyle,
-                  width: col.width,
+                  width: getColWidth(col),
                   cursor: col.sortable ? 'pointer' : 'default',
+                  position: 'relative',
                 }}
                 onClick={() => {
                   if (!col.sortable || !onSortChange) return
@@ -191,6 +267,35 @@ export default function DataTable<T = Record<string, unknown>>({
                   >
                     {sortKey === col.key ? (sortDir === 'asc' ? '▲' : '▼') : '▼'}
                   </span>
+                )}
+                {/* 拖拽调整列宽的手柄 */}
+                {columns.indexOf(col) < columns.length - 1 && (
+                  <div
+                    onMouseDown={e => handleResizeStart(e, col)}
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 0,
+                      width: 6,
+                      height: 'calc(100% - 8px)',
+                      cursor: 'col-resize',
+                      zIndex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: 1,
+                        height: '60%',
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: 1,
+                        transition: 'background 0.15s',
+                      }}
+                      className="resize-handle-line"
+                    />
+                  </div>
                 )}
               </th>
             ))}

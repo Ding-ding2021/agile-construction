@@ -13,10 +13,12 @@ type TaskToolbarProps = {
   onOpenExport?: () => void
 }
 
-const viewModes: Array<{ mode: TaskViewMode; label: string }> = [
-  { mode: 'list', label: '表格' },
-  { mode: 'kanban', label: '看板' },
-  { mode: 'calendar', label: '日历' },
+const VIEW_ASSETS = '/assets/CodeBubbyAssets/3848_19'
+
+const viewModes: Array<{ mode: TaskViewMode; label: string; icon: string }> = [
+  { mode: 'list', label: '表格', icon: '10.svg' },
+  { mode: 'kanban', label: '看板', icon: '11.svg' },
+  { mode: 'calendar', label: '日历', icon: '12.svg' },
 ]
 
 function MoreMenu({ onImport, onExport }: { onImport?: () => void; onExport?: () => void }) {
@@ -142,33 +144,17 @@ const TaskToolbar = ({
         flexWrap: 'wrap',
       }}
     >
-      {/* 视图切换 */}
-      <div
-        style={{
-          display: 'flex',
-          gap: 2,
-          background: 'rgba(255,255,255,0.04)',
-          borderRadius: 8,
-          padding: 2,
-        }}
-      >
+      {/* 视图切换 — 复用项目管理页面的 pm-view-toggle 样式 */}
+      <div className="pm-view-toggle" role="tablist" aria-label="视图切换">
         {viewModes.map(view => (
           <button
             key={view.mode}
             type="button"
+            className={`pm-view-btn ${viewMode === view.mode ? 'active' : ''}`}
             onClick={() => onViewModeChange(view.mode)}
-            style={{
-              padding: '5px 12px',
-              border: 'none',
-              borderRadius: 6,
-              background: viewMode === view.mode ? 'rgba(255,255,255,0.08)' : 'transparent',
-              color: viewMode === view.mode ? '#ffffff' : 'rgba(255,255,255,0.40)',
-              fontSize: 12,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
           >
-            {view.label}
+            <img src={`${VIEW_ASSETS}/${view.icon}`} alt="" />
+            <span>{view.label}</span>
           </button>
         ))}
       </div>
@@ -218,8 +204,6 @@ const TaskToolbar = ({
         <FilterButton label="排序" />
         <FilterButton label="分组" />
 
-        <MoreMenu onImport={onOpenImport} onExport={onOpenExport} />
-
         <button
           type="button"
           style={{
@@ -254,6 +238,8 @@ const TaskToolbar = ({
           </svg>
           新建
         </button>
+
+        <MoreMenu onImport={onOpenImport} onExport={onOpenExport} />
       </div>
     </div>
   )

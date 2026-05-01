@@ -1089,6 +1089,15 @@ body {
   min-width: 68px;
 }
 
+/* 任务管理工具栏：自适应按钮宽度 */
+.tm-table-section .pm-view-toggle {
+  min-width: auto;
+}
+.tm-table-section .pm-view-btn {
+  min-width: 0;
+  width: auto;
+}
+
 .pm-toolbar-right {
   gap: 8px;
 }
@@ -3890,7 +3899,7 @@ body {
   border: none;
 }
 .tm-calendar .rbc-month-row {
-  border-top: none;
+  border-top: none !important;
 }
 .tm-calendar .rbc-day-bg + .rbc-day-bg {
   border-left: none;
@@ -4014,4 +4023,10 @@ body {
 }
 .tm-calendar .rbc-agenda-time-cell {
   color: var(--cal-text-muted);
+}
+
+/* DataTable 列宽调整手柄悬停高亮 */
+th:hover .resize-handle-line {
+  background: rgba(255, 255, 255, 0.4) !important;
+  width: 2px !important;
 }
