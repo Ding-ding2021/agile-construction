@@ -1,0 +1,314 @@
+{
+  "labels": [
+    { "name": "type:feature", "color": "0E8A16", "description": "新功能开发" },
+    { "name": "type:bug", "color": "D73A4A", "description": "缺陷修复" },
+    { "name": "type:refactor", "color": "FBCA04", "description": "重构/技术债务清偿" },
+    { "name": "type:docs", "color": "5319E7", "description": "文档编写/更新" },
+    { "name": "type:test", "color": "006B75", "description": "测试编写" },
+    { "name": "type:infra", "color": "BFDADC", "description": "CI/构建/工具链" },
+    { "name": "type:release", "color": "1D76DB", "description": "发布管理" },
+    { "name": "phase:1-foundation", "color": "B60205", "description": "Phase 1: 底座搭建" },
+    { "name": "phase:1.5-base-finish", "color": "D93F0B", "description": "Phase 1.5: 底座收官" },
+    { "name": "phase:2-standards", "color": "FBCA04", "description": "Phase 2: 标准与项目" },
+    { "name": "phase:3-tasks", "color": "0E8A16", "description": "Phase 3: 任务中心完善" },
+    { "name": "phase:4-procurement", "color": "006B75", "description": "Phase 4: 采购/资源/资产" },
+    { "name": "phase:5-agent", "color": "1D76DB", "description": "Phase 5: Agent与工作台" },
+    { "name": "phase:6-e2e", "color": "5319E7", "description": "Phase 6: 联调与验证" },
+    { "name": "priority:P0", "color": "B60205", "description": "阻塞/紧急" },
+    { "name": "priority:P1", "color": "D93F0B", "description": "高优先级（当前迭代）" },
+    { "name": "priority:P2", "color": "FBCA04", "description": "中优先级（下次迭代）" },
+    { "name": "priority:P3", "color": "C0C0C0", "description": "低优先级（排期外）" },
+    { "name": "status:blocked", "color": "000000", "description": "被阻塞" },
+    { "name": "status:in-review", "color": "5319E7", "description": "待验收/Review" }
+  ],
+  "milestones": [
+    {
+      "title": "M1 - Phase 1 底座搭建",
+      "description": "7 tasks: 共享组件, CSS变量, 路由集中, Schema实体化, API适配器, 状态机联动, 8标签框架"
+    },
+    {
+      "title": "M1.5 - Phase 1.5 底座收官",
+      "description": "6 tasks: 壳层统一, Token治理, 卡片统一, 渐变迁移, 卡片提取, MUI组件化"
+    },
+    {
+      "title": "M2 - Phase 2 标准与项目",
+      "description": "9 tasks: 甘特图, 标准库CRUD, 条款结构化, 模板中心, 立项流程, 8标签填充, 地理信息, 日历, 地图"
+    },
+    {
+      "title": "M3 - Phase 3 任务中心完善",
+      "description": "7 tasks: 看板拖拽, 任务模型重构, 任务树视图, 标准联动, 任务关系, 守卫真实化, 整改派生"
+    },
+    {
+      "title": "M4 - Phase 4 采购/资源/资产",
+      "description": "5 tasks: 采购闭环, 验收流程, 工队管理, 资产归档, 结算建议"
+    },
+    {
+      "title": "M5 - Phase 5 Agent与工作台",
+      "description": "5 tasks: Agent框架, 品牌Agent, 项目经理Agent, 质检Agent, 工作台"
+    },
+    {
+      "title": "M6 - Phase 6 联调与验证",
+      "description": "4 tasks: 端到端联调, 结果对象验证, 闭环演示, 数据初始化治理"
+    }
+  ],
+  "issues": [
+    {
+      "title": "[P1-T1] 共享组件补齐与存量替换",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P0"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n补齐 AppSidebar/PageHeader/StatCard/TabNav 共享组件，替换全部业务模块中的独立实现。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T1\n\n## 执行要点\n1. 补齐 AppSidebar 收起/展开、嵌套菜单支持\n2. 补齐 PageHeader 面包屑、dark 变体\n3. 补齐 StatCard delta 趋势、点击筛选、active 状态\n4. 新增 TabNav 组件（项目详情 8 标签共用）\n5. 按「personnel → task → digital → procurement → project → 其他」顺序逐个替换\n\n## 验收标准\n- npm run build 零报错\n- npm run lint 零报错\n- 所有页面侧边栏、页头、统计卡片功能正常\n- 新增路由只需修改 src/config/routes.ts 一处"
+    },
+    {
+      "title": "[P1-T2] CSS 变量体系统一与硬编码清零",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P0"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n将 src/index.css 中已定义的 --pm-* 变量全面落地，各模块 CSS 硬编码色值清零。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T2\n\n## 执行要点\n1. 对照 design-specification.md 补齐缺失变量\n2. 从 digital-employee-page.css 开始替换\n3. 依次替换 procurement-management.css、project-detail.css\n4. 其余模块 CSS 逐个清理\n\n## 验收标准\n- 全局搜索 `#`、`rgba(`、`rgb(` 在 .css 文件中仅出现在 index.css 的变量定义区\n- 所有页面视觉回归通过"
+    },
+    {
+      "title": "[P1-T3] 路由配置集中化",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P1"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n将散落在各处的手动路由跳转统一到 navigation.ts 集中管理。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T3\n\n## 执行要点\n1. 统一所有 window.location.hash 赋值为 navigation.ts 的 goTo* 调用\n2. 删除各处重复的路由字符串常量\n3. 验证所有页面跳转正常\n\n## 验收标准\n- 全局 search `location.hash` 或 `window.location` 只出现在 navigation.ts\n- 所有路由跳转正常"
+    },
+    {
+      "title": "[P1-T4] Schema 实体化",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P0"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n完成 P0 数据层从 JSON 快照模式到实体表模式的迁移。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T4\n\n## 执行要点\n1. 建立 Prisma 实体表（Project, Task, Acceptance, etc.）\n2. 迁移 local-api 从 snapshot 模式到实体 CRUD\n3. 更新前端 adapter 层\n\n## 验收标准\n- 所有 CRUD 操作基于实体表\n- 后端接口返回结构化数据而非整体快照"
+    },
+    {
+      "title": "[P1-T5] 前端 API 适配器层",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P1"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n建立 services/ 适配器层，消除组件直接操作 localStorage 的现状。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T5\n\n## 执行要点\n1. 建立 Repository 抽象\n2. 实现 LocalStorageRepository 和 APIRepository\n3. 组件通过适配器访问数据\n\n## 验收标准\n- 全局搜索 localStorage.setItem 仅在 store 层出现\n- 组件通过 repository 接口访问数据"
+    },
+    {
+      "title": "[P1-T6] 状态机守卫真实化与联动",
+      "labels": ["type:feature", "phase:1-foundation", "priority:P1"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n将状态机守卫从 mock 实现替换为真实业务规则校验。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T6\n\n## 执行要点\n1. 实现真实 canTransition 守卫逻辑\n2. 状态变更时触发真实联动动作\n3. 补充状态变更的边界条件处理\n\n## 验收标准\n- canTransition 基于真实字段校验而非常量 true\n- 状态变更正确联动相关实体"
+    },
+    {
+      "title": "[P1-T7] 8 PMBOK 标签框架迁移",
+      "labels": ["type:refactor", "phase:1-foundation", "priority:P1"],
+      "milestone": "M1 - Phase 1 底座搭建",
+      "body": "## 任务\n将项目详情页从生命周期 6 标签重构为 PMBOK 8 领域标签。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1-T7\n\n## 执行要点\n1. 设计 8 标签布局（概览、范围、进度、成本、质量、资源、风险、设置）\n2. 替换现有 6 标签架构\n3. 各标签内容路由独立\n\n## 验收标准\n- 8 标签切换正常\n- 标签内容对应各自领域"
+    },
+    {
+      "title": "[P1.5-T1] 壳层布局统一",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P1"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\n统一所有业务模块的页面壳层布局。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T1"
+    },
+    {
+      "title": "[P1.5-T2] CSS Token 治理",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P1"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\nCSS Token 体系治理，压缩和规范化。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T2"
+    },
+    {
+      "title": "[P1.5-T3] StatCard 统一",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P1"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\n统一所有统计卡片组件。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T3"
+    },
+    {
+      "title": "[P1.5-T4] 渐变 Token 迁移",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P2"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\n将渐变色彩迁移到 Token 体系。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T4"
+    },
+    {
+      "title": "[P1.5-T5] EmptyState 组件提取",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P2"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\n提取统一的 EmptyState 空状态组件。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T5"
+    },
+    {
+      "title": "[P1.5-T6] MUI 组件化推进",
+      "labels": ["type:refactor", "phase:1.5-base-finish", "priority:P2"],
+      "milestone": "M1.5 - Phase 1.5 底座收官",
+      "body": "## 任务\n推进 MUI 组件化，提升 MUI 使用率。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P1.5-T6"
+    },
+    {
+      "title": "[P2-T1] 标准库数据模型与基础 CRUD",
+      "labels": ["type:feature", "phase:2-standards", "priority:P1"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n标准库数据模型设计与基础 CRUD 实现。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T1"
+    },
+    {
+      "title": "[P2-T2] 标准条款结构化",
+      "labels": ["type:feature", "phase:2-standards", "priority:P1"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n标准条款结构化设计与实现。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T2"
+    },
+    {
+      "title": "[P2-T3] 模板中心与模板实例化",
+      "labels": ["type:feature", "phase:2-standards", "priority:P1"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n模板中心功能与模板实例化流程。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T3"
+    },
+    {
+      "title": "[P2-T4] 立项流程",
+      "labels": ["type:feature", "phase:2-standards", "priority:P1"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n完整的立项流程实现。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T4"
+    },
+    {
+      "title": "[P2-T5] 8 标签内容填充",
+      "labels": ["type:feature", "phase:2-standards", "priority:P1"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n项目详情 8 标签页内容填充。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T5"
+    },
+    {
+      "title": "[P2-T6] 甘特图组件",
+      "labels": ["type:feature", "phase:2-standards", "priority:P2"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n甘特图组件开发。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T6"
+    },
+    {
+      "title": "[P2-T7] 地理信息与日历视图",
+      "labels": ["type:feature", "phase:2-standards", "priority:P2"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n地理信息展示与日历视图。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T7"
+    },
+    {
+      "title": "[P2-T8] 地图视图",
+      "labels": ["type:feature", "phase:2-standards", "priority:P2"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n项目地图视图。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T8"
+    },
+    {
+      "title": "[P2-T9] 项目列表高级功能",
+      "labels": ["type:feature", "phase:2-standards", "priority:P2"],
+      "milestone": "M2 - Phase 2 标准与项目",
+      "body": "## 任务\n项目列表高级功能（筛选、排序、导出）。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P2-T9"
+    },
+    {
+      "title": "[P3-T1] 看板拖拽支持",
+      "labels": ["type:feature", "phase:3-tasks", "priority:P1"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务看板视图的拖拽交互支持。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T1"
+    },
+    {
+      "title": "[P3-T2] 任务模型重构与类型扩展",
+      "labels": ["type:refactor", "phase:3-tasks", "priority:P1"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务模型重构与类型系统扩展。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T2"
+    },
+    {
+      "title": "[P3-T3] 任务树视图",
+      "labels": ["type:feature", "phase:3-tasks", "priority:P1"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务 WBS 树视图。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T3"
+    },
+    {
+      "title": "[P3-T4] 任务-标准联动",
+      "labels": ["type:feature", "phase:3-tasks", "priority:P1"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务与标准库的联动机制。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T4"
+    },
+    {
+      "title": "[P3-T5] 任务关系与依赖",
+      "labels": ["type:feature", "phase:3-tasks", "priority:P2"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务间依赖关系建立与管理。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T5"
+    },
+    {
+      "title": "[P3-T6] 状态机守卫真实化",
+      "labels": ["type:refactor", "phase:3-tasks", "priority:P2"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n任务状态机守卫逻辑真实化。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T6"
+    },
+    {
+      "title": "[P3-T7] 整改与派生任务",
+      "labels": ["type:feature", "phase:3-tasks", "priority:P2"],
+      "milestone": "M3 - Phase 3 任务中心完善",
+      "body": "## 任务\n整改任务与派生任务机制。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P3-T7"
+    },
+    {
+      "title": "[P4-T1] 采购闭环",
+      "labels": ["type:feature", "phase:4-procurement", "priority:P1"],
+      "milestone": "M4 - Phase 4 采购/资源/资产",
+      "body": "## 任务\n采购全流程闭环。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P4-T1"
+    },
+    {
+      "title": "[P4-T2] 验收流程",
+      "labels": ["type:feature", "phase:4-procurement", "priority:P1"],
+      "milestone": "M4 - Phase 4 采购/资源/资产",
+      "body": "## 任务\n采购验收流程。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P4-T2"
+    },
+    {
+      "title": "[P4-T3] 工队管理",
+      "labels": ["type:feature", "phase:4-procurement", "priority:P2"],
+      "milestone": "M4 - Phase 4 采购/资源/资产",
+      "body": "## 任务\n施工工队管理。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P4-T3"
+    },
+    {
+      "title": "[P4-T4] 资产归档",
+      "labels": ["type:feature", "phase:4-procurement", "priority:P2"],
+      "milestone": "M4 - Phase 4 采购/资源/资产",
+      "body": "## 任务\n资产归档管理。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P4-T4"
+    },
+    {
+      "title": "[P4-T5] 结算建议",
+      "labels": ["type:feature", "phase:4-procurement", "priority:P2"],
+      "milestone": "M4 - Phase 4 采购/资源/资产",
+      "body": "## 任务\n结算建议功能。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P4-T5"
+    },
+    {
+      "title": "[P5-T1] Agent 框架搭建",
+      "labels": ["type:feature", "phase:5-agent", "priority:P1"],
+      "milestone": "M5 - Phase 5 Agent与工作台",
+      "body": "## 任务\n多 Agent 框架搭建。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P5-T1"
+    },
+    {
+      "title": "[P5-T2] 品牌 Agent",
+      "labels": ["type:feature", "phase:5-agent", "priority:P1"],
+      "milestone": "M5 - Phase 5 Agent与工作台",
+      "body": "## 任务\n品牌标准 Agent。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P5-T2"
+    },
+    {
+      "title": "[P5-T3] 项目经理 Agent",
+      "labels": ["type:feature", "phase:5-agent", "priority:P1"],
+      "milestone": "M5 - Phase 5 Agent与工作台",
+      "body": "## 任务\n项目经理辅助 Agent。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P5-T3"
+    },
+    {
+      "title": "[P5-T4] 质检 Agent",
+      "labels": ["type:feature", "phase:5-agent", "priority:P2"],
+      "milestone": "M5 - Phase 5 Agent与工作台",
+      "body": "## 任务\n质量检查 Agent。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P5-T4"
+    },
+    {
+      "title": "[P5-T5] 工作台",
+      "labels": ["type:feature", "phase:5-agent", "priority:P1"],
+      "milestone": "M5 - Phase 5 Agent与工作台",
+      "body": "## 任务\n统一工作台。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P5-T5"
+    },
+    {
+      "title": "[P6-T1] 端到端联调",
+      "labels": ["type:feature", "phase:6-e2e", "priority:P1"],
+      "milestone": "M6 - Phase 6 联调与验证",
+      "body": "## 任务\n全链路端到端联调。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P6-T1"
+    },
+    {
+      "title": "[P6-T2] 结果对象与验证体系",
+      "labels": ["type:feature", "phase:6-e2e", "priority:P1"],
+      "milestone": "M6 - Phase 6 联调与验证",
+      "body": "## 任务\n结果对象标准化与验证体系。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P6-T2"
+    },
+    {
+      "title": "[P6-T3] 闭环演示",
+      "labels": ["type:feature", "phase:6-e2e", "priority:P2"],
+      "milestone": "M6 - Phase 6 联调与验证",
+      "body": "## 任务\n完整的闭环演示场景。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P6-T3"
+    },
+    {
+      "title": "[P6-T4] 数据初始化治理",
+      "labels": ["type:feature", "phase:6-e2e", "priority:P2"],
+      "milestone": "M6 - Phase 6 联调与验证",
+      "body": "## 任务\n数据初始化与种子数据治理。\n\n## 来源\n- 开发计划: `docs/03-engineering/development-plan-v1.2.md` → P6-T4"
+    }
+  ]
+}

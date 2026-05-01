@@ -71,6 +71,7 @@
 | 状态机设计           | `docs/02-architecture/state-machine-design.md`                            | 状态机规范      |
 | PRD                  | `docs/01-product/project-management-prd.md`                               | 项目管理需求    |
 | 代码质量方案         | `docs/00-governance/mvp-code-quality-plan-v2.md`                          | 质量门禁        |
+| **项目管理体系**     | `docs/00-governance/project-management-guide.md`                          | PM 流程 SSOT    |
 | 进度评估             | `docs/04-operations/phase4/development-progress-assessment-2026-04-23.md` | 当前代码基线    |
 | **P1-P1.5 评估报告** | `docs/04-operations/phase1/development-progress-assessment-2026-04-25.md` | 逐项评估+证据   |
 | **P1-P1.5 修复计划** | `docs/04-operations/phase1/p1-p1.5-fix-plan-2026-04-25.md`                | 修复执行指南    |
@@ -119,6 +120,29 @@
 - 发现 ~130 个预存无效引用（如 `--pm-surface`, `--pm-slate-*`, `--pm-azure-*` 等），这些 Token 从未在 `:root` 中定义，属于更早阶段遗留问题。
 - gantt.css 通过局部作用域变量（`--gantt-tone`, `--gantt-tone-soft`）自给自足，9 处本地 hex/rgba 是组件内部语义变量，保持不动。
 - Build 0 errors ✅ | Lint 0 errors / 21 warnings ✅
+
+## 2026-05-01 项目管理体系建设
+
+**决策**: 引入 GitHub Issues + Projects 作为任务状态追踪中枢，保留 WorkBuddy 日志系统。
+
+| 层次     | 工具                     | 职责                         |
+| -------- | ------------------------ | ---------------------------- |
+| 状态追踪 | GitHub Issues + Projects | 任务状态、里程碑进度、优先级 |
+| 执行记录 | `.workbuddy/memory/`     | 每日日志、决策过程、技术细节 |
+| 知识沉淀 | `docs/`                  | 架构决策、PRD、规范、复盘    |
+
+**关键配置**:
+
+- 20 个标签 (type×7, phase×7, priority×4, status×2)
+- 7 个里程碑 (M1-M6)
+- 1 个 GitHub Project "敏捷建店管理平台"（4 视图）
+- 3 个 Issue 模板 (feature/bug/task)
+- 3 个 Python 脚本 (gh-setup/gh-sync/gh-release)
+- 33 个 Issues 对应 development-plan-v1.2.md 全部任务
+- CLAUDE.md + AGENTS.md 已更新
+
+**新增文档**: `docs/00-governance/project-management-guide.md`（本体系 SSOT）
+**工作流**: Backlog → Ready → In Progress → AI Completed → In Review → Done
 
 ## 2026-04-29 全库访谈 — 关键架构决策
 
