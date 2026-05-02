@@ -177,10 +177,18 @@ export const taskRepository = {
     if (contextKey === '__all') {
       try {
         const remoteTasks = await serverAdapter.getAllTasks()
-        persistLocalTasks('__all', remoteTasks)
-        return remoteTasks
+        if (remoteTasks.length > 0) {
+          // API 有数据：更新本地缓存并返回
+          persistLocalTasks('__all', remoteTasks)
+          return remoteTasks
+        }
+        // API 返回空：本地有数据则保留本地，否则用 mock 种子
+        if (localTasks && localTasks.length > 0) {
+          return localTasks
+        }
+        persistLocalTasks('__all', allMockTaskNodes)
+        return allMockTaskNodes
       } catch {
-        // 后端不可用时：localStorage 有数据则用，否则 fallback 到 mock 作为初始种子
         if (localTasks && localTasks.length > 0) {
           return localTasks
         }
@@ -197,23 +205,34 @@ export const taskRepository = {
 
       // ── 自动迁移：后端为空但本地有数据时，推送本地任务到实体表 ──
       if (remoteTasks.length === 0 && localTasks && localTasks.length > 0) {
-        await Promise.allSettled(
-          localTasks.map(task =>
-            serverAdapter.createProjectTask(
+        const results = await Promise.allSettled(
+          localTasks.map(task => {
+            const { id: _id, parentTaskId, ...rest } = task
+            const payload = {
+              ...rest,
+              parentId: parentTaskId,
+            }
+            return serverAdapter.createProjectTask(
               projectCode,
-              task,
+              payload as TaskItem,
               createIdempotencyKey('migration-task', task.code)
             )
-          )
+          })
         )
-        remoteTasks = await serverAdapter.getProjectTasks(projectCode)
+        const succeeded = results.filter(r => r.status === 'fulfilled').length
+        if (succeeded > 0) {
+          remoteTasks = await serverAdapter.getProjectTasks(projectCode)
+          persistLocalTasks(contextKey, remoteTasks)
+          return remoteTasks
+        }
       }
 
-      // 双写：成功后同步到本地缓存，保证离线可用
-      persistLocalTasks(contextKey, remoteTasks)
-      return remoteTasks
+      if (remoteTasks.length > 0) {
+        persistLocalTasks(contextKey, remoteTasks)
+        return remoteTasks
+      }
+      return localTasks
     } catch {
-      // 网络异常或服务不可用时降级到本地缓存
       return localTasks
     }
   },

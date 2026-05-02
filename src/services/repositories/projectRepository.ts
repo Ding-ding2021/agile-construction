@@ -16,6 +16,7 @@ import { projects as initialProjects, type ProjectItem } from '../../data/projec
 import type { ProjectStatusLogEntry } from '../../domain/projectStatusMachine'
 import { createIdempotencyKey, serverAdapter } from '../api/serverAdapter'
 import { StructuredError, errorLogger } from '../errors/StructuredError'
+import type { ProjectCreatePayload } from '../api/serverAdapter'
 
 const PROJECTS_STORAGE_KEY = 'pm-projects-state-v1'
 const PROJECT_LOGS_STORAGE_KEY = 'pm-project-logs-v1'
@@ -84,24 +85,36 @@ export const projectRepository = {
 
       // ── 自动迁移：后端为空但本地有数据时，推送本地数据到实体表 ──
       if (remoteProjects.length === 0 && localState.projects.length > 0) {
-        await Promise.allSettled(
+        const results = await Promise.allSettled(
           localState.projects.map(project => {
-            const payload = { ...project } as Record<string, unknown>
-            delete payload.id
-            delete payload.createdAt
-            delete payload.updatedAt
+            // 过滤掉 API 不需要的数据字段（id/时间戳由 API 自动管理）
+            const filtered: Record<string, unknown> = {}
+            for (const [key, value] of Object.entries(project)) {
+              if (!['id', 'createdAt', 'updatedAt', '_persist'].includes(key)) {
+                filtered[key] = value
+              }
+            }
             return serverAdapter.createProject(
-              payload as unknown as ProjectItem,
+              filtered as unknown as ProjectCreatePayload,
               createIdempotencyKey('migration', project.code)
             )
           })
         )
-        remoteProjects = await serverAdapter.getProjects()
+        const succeeded = results.filter(r => r.status === 'fulfilled').length
+        if (succeeded > 0) {
+          remoteProjects = await serverAdapter.getProjects()
+        }
       }
 
-      // 日志保持从本地缓存读取（审计日志与状态日志结构不同，暂不混用）
+      // 合并远程与本地数据：远程优先，本地补充
+      const remoteCodes = new Set(remoteProjects.map(p => p.code))
+      const merged = [
+        ...remoteProjects,
+        ...localState.projects.filter(p => !remoteCodes.has(p.code)),
+      ]
+
       const nextState: ProjectState = {
-        projects: remoteProjects,
+        projects: merged,
         logs: localState.logs,
       }
       persistLocalState(nextState)

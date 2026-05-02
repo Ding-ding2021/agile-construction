@@ -81,6 +81,8 @@
 - `docs/04-operations/view-components-evaluation.md` — 视图组件评估
 - `docs/04-operations/visual-audit-report-2026-04-25.md` — 视觉审计报告
 
+- `docs/04-operations/development-issues-summary-2026-05-02.md` — 开发问题汇总
+
 **Phase 1：**
 
 - `docs/04-operations/phase1/development-progress-assessment-2026-04-25.md` — P1-P1.5 进度评估
