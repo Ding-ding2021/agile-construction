@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>页面布局规范 · 组件线框图</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --pm-bg: #051338; --pm-sidebar-bg: rgba(10,35,99,0.9); --pm-header-bg: rgba(5,19,56,0.8);
+  --pm-card: rgba(255,255,255,0.04); --pm-element: rgba(255,255,255,0.03);
+  --pm-element-hover: rgba(255,255,255,0.06); --pm-input-bg: rgba(255,255,255,0.05);
+  --pm-white: #ffffff; --pm-text-70: rgba(255,255,255,0.70); --pm-text-60: rgba(255,255,255,0.60);
+  --pm-text-50: rgba(255,255,255,0.50); --pm-text-40: rgba(255,255,255,0.40); --pm-text-30: rgba(255,255,255,0.30);
+  --pm-border: rgba(255,255,255,0.08); --pm-border-light: rgba(255,255,255,0.05);
+  --pm-primary: #154DD9; --pm-primary-light: #1a5ae8; --pm-primary-clicked: #103EB1; --pm-primary-disabled: #4689EA;
+  --pm-blue: #2B7FFF; --pm-blue-light: #51A2FF;
+  --pm-green: #5DBE6E; --pm-green-light: #00D492; --pm-success: #5DBE6E;
+  --pm-orange: #E6981D; --pm-warning: #E6981D; --pm-brand-gold: #FEC801;
+  --pm-red: #E22D36; --pm-danger: #E22D36;
+  --pm-purple: #8E51FF;
+  --pm-secondary-default: #E5E5E5; --pm-secondary-clicked: #D8D8D8; --pm-secondary-hover: #D0D0D0; --pm-secondary-disabled: #8C8C8C;
+  --pm-tertiary-default: #333333; --pm-tertiary-clicked: #6B6B6B; --pm-tertiary-hover: #454545; --pm-tertiary-disabled: #B9B9B9;
+  --pm-natural-default: #F5F5F5; --pm-natural-clicked: #D6D6D6; --pm-natural-hover: #C9C9C9; --pm-natural-disabled: #A0A0A0;
+  --pm-brand-complement-1: #16D924; --pm-brand-complement-2: #D9165E;
+  --pm-brand-analog-1: #168BD9; --pm-brand-analog-2: #394E84; --pm-brand-analog-3: #0A2363; --pm-brand-analog-4: #5C16D9;
+  --pm-brand-aux: #F5DAAC;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--pm-bg); color: var(--pm-white); min-height: 100vh; overflow-x: hidden; }
+
+/* ═══ 顶部栏 ═══ */
+.top-bar { position: sticky; top: 0; z-index: 100; background: rgba(5,19,56,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--pm-border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 52px; }
+.top-bar-left { display: flex; align-items: center; gap: 20px; }
+.top-bar-brand { font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
+.top-bar-brand span { color: var(--pm-blue-light); }
+.main-tabs { display: flex; gap: 2px; background: var(--pm-element); border: 1px solid var(--pm-border); border-radius: 10px; padding: 2px; }
+.main-tab { height: 30px; padding: 0 14px; border-radius: 8px; border: none; background: transparent; color: var(--pm-text-40); font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.main-tab:hover { color: var(--pm-text-70); }
+.main-tab.active { background: var(--pm-primary); color: #fff; box-shadow: 0 2px 6px rgba(21,77,217,0.3); }
+.toc-toggle { height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--pm-border); background: var(--pm-element); color: var(--pm-text-50); font-size: 11px; cursor: pointer; }
+
+/* ═══ 目录 ═══ */
+.toc-panel { position: fixed; left: 0; top: 52px; width: 220px; height: calc(100vh - 52px); background: rgba(5,19,56,0.95); border-right: 1px solid var(--pm-border); z-index: 90; padding: 20px 12px; overflow-y: auto; transition: transform 0.25s ease; }
+.toc-panel.closed { transform: translateX(-220px); }
+.toc-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--pm-text-40); margin-bottom: 12px; padding: 0 8px; }
+.toc-list { list-style: none; } .toc-list li { margin-bottom: 2px; }
+.toc-list a { display: block; padding: 6px 8px; border-radius: 6px; font-size: 12px; color: var(--pm-text-50); text-decoration: none; cursor: pointer; border-left: 2px solid transparent; }
+.toc-list a:hover { color: var(--pm-white); background: var(--pm-element-hover); }
+.toc-list a.active { color: var(--pm-blue-light); border-left-color: var(--pm-blue); background: rgba(43,127,255,0.08); }
+.toc-list a .d { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; }
+
+/* ═══ 主内容区 ═══ */
+.main-content { margin-top: 52px; margin-left: 220px; transition: margin-left 0.25s ease; }
+.main-content.closed { margin-left: 0; }
+.tp { display: none; } .tp.active { display: block; }
+
+/* ═══ 共用 ═══ */
+.phdr { text-align: center; padding: 40px 24px 24px; }
+.phdr h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+.phdr p { color: var(--pm-text-50); font-size: 14px; }
+.phdr .bdg { display: inline-block; background: var(--pm-primary); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 999px; margin-top: 6px; }
+.st { font-size: 14px; font-weight: 600; color: var(--pm-text-60); margin: 32px 48px 16px; display: flex; align-items: center; gap: 8px; }
+.st .bar { width: 3px; height: 16px; border-radius: 2px; display: inline-block; }
+.sh { margin: 0 48px 40px; background: var(--pm-card); border: 1px solid var(--pm-border); border-radius: 16px; padding: 32px; }
+.desc { font-size: 13px; color: var(--pm-text-50); margin-bottom: 24px; line-height: 1.6; }
+.desc code { font-family: 'SF Mono','Menlo',monospace; background: var(--pm-element); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--pm-blue-light); }
+
+/* ═══ 布局规范 — 渲染示例 ═══ */
+.dapp { display: flex; min-height: 420px; position: relative; overflow: hidden; margin: 0 48px 40px; border-radius: 20px; border: 1px solid var(--pm-border); background: var(--pm-bg); }
+.dgl { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+.dgl-l { width: 500px; height: 500px; left: -80px; top: -80px; background: rgba(21,77,217,0.1); filter: blur(120px); }
+.dgl-r { width: 400px; height: 400px; right: -40px; bottom: -40px; background: rgba(43,127,255,0.05); filter: blur(100px); }
+.dsb { width: 220px; flex-shrink: 0; background: var(--pm-sidebar-bg); border-right: 1px solid var(--pm-border); display: flex; flex-direction: column; z-index: 1; position: relative; }
+.dsb-hd { height: 60px; display: flex; align-items: center; gap: 8px; padding: 0 20px; border-bottom: 1px solid var(--pm-border-light); font-size: 13px; font-weight: 600; color: var(--pm-text-70); }
+.dsb-hd .dot { width: 8px; height: 8px; border-radius: 3px; background: var(--pm-primary); }
+.dnv { padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+.dnv a { height: 36px; border-radius: 8px; padding: 0 12px; display: flex; align-items: center; font-size: 12px; color: var(--pm-text-50); text-decoration: none; gap: 8px; }
+.dnv a:hover { background: var(--pm-element-hover); }
+.dnv a.act { background: var(--pm-primary); color: #fff; }
+.dnv a .nv { width: 16px; height: 16px; border-radius: 3px; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.dnv a.act .nv { background: rgba(255,255,255,0.15); }
+.dws { flex: 1; min-width: 0; display: flex; flex-direction: column; z-index: 1; position: relative; }
+.dhe { height: 52px; background: var(--pm-header-bg); border-bottom: 1px solid var(--pm-border); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+.dhe-l { display: flex; align-items: center; gap: 10px; }
+.dhe-l h3 { font-size: 14px; font-weight: 600; }
+.dhe-l span { font-size: 10px; color: var(--pm-text-40); }
+.dsrch { width: 160px; height: 28px; border-radius: 8px; border: 1px solid var(--pm-border); background: var(--pm-input-bg); padding: 0 8px; font-size: 11px; color: var(--pm-text-40); display: flex; align-items: center; gap: 4px; }
+.dsrch { display:flex; align-items:center; gap:4px; } .dsrch-icon { width:12px; height:12px; flex-shrink:0; }
+.dav { width: 26px; height: 26px; border-radius: 6px; background: var(--pm-primary); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+.dbd { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 20px; overflow: auto; }
+.dst { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.dst-c { height: 80px; border-radius: 12px; border: 1px solid var(--pm-border); background: var(--pm-card); padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; }
+.dst-t { display: flex; justify-content: space-between; align-items: flex-start; }
+.dst-ic { width: 24px; height: 24px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.dst-ic.bl { background: rgba(43,127,255,0.15); } .dst-ic.og { background: rgba(254,154,0,0.15); } .dst-ic.rd { background: rgba(251,44,54,0.15); }
+.dst-lb { font-size: 10px; color: var(--pm-text-50); }
+.dst-vl { font-size: 18px; font-weight: 700; line-height: 24px; }
+.dct { flex: 1; border-radius: 12px; border: 1px solid var(--pm-border); background: var(--pm-card); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.dtb { display: flex; justify-content: space-between; align-items: center; }
+.dtb .pl { height: 24px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--pm-border); color: var(--pm-text-40); font-size: 10px; display: flex; align-items: center; }
+.dtb .pl.ac { background: var(--pm-primary); color: #fff; border-color: transparent; }
+.dph { flex: 1; border-radius: 8px; background: var(--pm-element); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.dph .r { height: 28px; border-radius: 4px; background: rgba(255,255,255,0.02); display: flex; align-items: center; padding: 0 12px; gap: 10px; }
+.dph .c { height: 10px; border-radius: 3px; background: rgba(255,255,255,0.04); flex: 1; }
+.dph .c.c3 { flex: 0 0 50px; } .dph .c.c2 { flex: 0 0 36px; } .dph .c.ac { background: var(--pm-primary); opacity: 0.25; }
+.rl { position: absolute; font-size: 9px; font-weight: 600; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; opacity: 0.65; pointer-events: none; }
+.rl .d2 { width: 5px; height: 5px; border-radius: 50%; }
+.rl-a { top:3px; left:6px; color:var(--pm-text-40); } .rl-a .d2 { background:var(--pm-blue); }
+.rl-s { bottom:6px; left:50px; color:var(--pm-text-40); } .rl-s .d2 { background:var(--pm-purple); }
+.rl-w { top:6px; right:8px; color:var(--pm-text-40); } .rl-w .d2 { background:var(--pm-green); }
+.rl-h { top:2px; left:3px; color:var(--pm-text-40); } .rl-h .d2 { background:var(--pm-orange); }
+.rl-b { bottom:6px; right:6px; color:var(--pm-text-40); } .rl-b .d2 { background:var(--pm-blue); }
+
+/* ═══ 布局规范 — 命名表 + 代码 ═══ */
+.ds { margin: 0 48px 40px; }
+.ds h3 { font-size: 14px; font-weight: 600; color: var(--pm-text-60); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.ds h3 .bar { width: 3px; height: 14px; border-radius: 2px; display: inline-block; }
+.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dt th { text-align: left; padding: 10px 14px; color: var(--pm-text-40); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--pm-border); }
+.dt td { padding: 12px 14px; border-bottom: 1px solid var(--pm-border-light); color: var(--pm-text-70); }
+.dt td:first-child { font-weight: 600; color: var(--pm-white); font-family: 'SF Mono','Menlo',monospace; font-size: 12px; }
+.dt tr:hover td { background: var(--pm-element-hover); }
+.dc { background: rgba(0,0,0,0.3); border: 1px solid var(--pm-border); border-radius: 14px; padding: 20px; font-family: 'SF Mono','Fira Code','Menlo',monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; color: var(--pm-text-70); }
+.dc .kw { color: #569cd6; } .dc .fn { color: #dcdcaa; } .dc .str { color: #ce9178; } .dc .cm { color: #6a9955; } .dc .tg { color: #4fc1ff; } .dc .at { color: #9cdcfe; }
+
+/* ═══ 布局线框图 ═══ */
+.dia { margin: 0 48px 40px; border:1px solid var(--pm-border); border-radius:20px; overflow:hidden; }
+.dia pre { background:var(--pm-card); padding:24px; font-family:'SF Mono','Menlo',monospace; font-size:13px; line-height:1.7; overflow-x:auto; color:var(--pm-text-60); }
+.footer { text-align:center; padding:24px 24px 40px; color:var(--pm-text-30); font-size:12px; border-top:1px solid var(--pm-border); margin:0 48px; }
+
+/* ═══ 组件线框图 ═══ */
+.dgr { display: flex; flex-direction: column; gap: 20px; }
+.dr { display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.dc2 { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+.dc2 label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--pm-text-40); }
+/* UserSelect */
+.ps-t { width: 220px; height: 36px; background: var(--pm-input-bg); border: 1px solid var(--pm-border); border-radius: 14px; padding: 0 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.ps-av { width: 24px; height: 24px; border-radius: 50%; background: var(--pm-primary); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.ps-tx { flex: 1; font-size: 13px; color: var(--pm-white); }
+.ps-ar { color: var(--pm-text-40); font-size: 10px; }
+.ps-dd { width: 220px; margin-top: 4px; background: rgba(10,35,99,0.98); border: 1px solid var(--pm-border); border-radius: 10px; padding: 4px; display: none; }
+.ps-dd.s { display: block; }
+.ps-it { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.ps-it:hover { background: var(--pm-element-hover); }
+.ps-it.ac { background: rgba(21,77,217,0.2); }
+.ps-it .sub { font-size: 10px; color: var(--pm-text-40); margin-left: auto; }
+.ps-it.di { opacity: 0.4; cursor: not-allowed; }
+.ps-it .na { font-size: 10px; color: var(--pm-text-30); margin-left: auto; }
+.chip-multi { display:flex; gap:6px; flex-wrap:wrap; padding:8px 0; }
+.chip-multi .ch { display:inline-flex; align-items:center; gap:4px; height:26px; padding:0 8px; border-radius:8px; background:var(--pm-element); font-size:11px; }
+.chip-multi .ch .a { display:inline-block; width:18px; height:18px; border-radius:50%; background:var(--pm-primary); font-size:8px; text-align:center; line-height:18px; font-weight:700; }
+/* DatePicker */
+.dp-t { width: 200px; height: 36px; background: var(--pm-input-bg); border: 1px solid var(--pm-border); border-radius: 14px; padding: 0 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.dp-t .dp-ic { color: var(--pm-text-40); font-size: 14px; }
+.dp-t .dp-v { flex: 1; font-size: 13px; color: var(--pm-white); }
+.dp-cal { width: 280px; margin-top: 4px; background: rgba(10,35,99,0.98); border: 1px solid var(--pm-border); border-radius: 12px; padding: 16px; display: none; }
+.dp-cal.s { display: block; }
+.dp-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.dp-hd span { font-size: 13px; font-weight: 600; }
+.dp-nv { color: var(--pm-text-40); cursor: pointer; font-size: 14px; padding: 2px 6px; }
+.dp-wd { display: grid; grid-template-columns: repeat(7,1fr); text-align: center; font-size: 10px; color: var(--pm-text-40); margin-bottom: 4px; }
+.dp-dd { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.dp-dd .dd { height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; cursor: pointer; color: var(--pm-text-70); }
+.dp-dd .dd:hover { background: var(--pm-element-hover); }
+.dp-dd .dd.ac { background: var(--pm-primary); color: #fff; }
+.dp-dd .dd.mu { color: var(--pm-text-30); }
+/* ViewToggle */
+.vt { display: flex; height: 34px; background: var(--pm-element-hover); border: 1px solid var(--pm-border); border-radius: 14px; padding: 3px; gap: 2px; }
+.vt-b { height: 28px; padding: 0 14px; display: flex; align-items: center; gap: 6px; border-radius: 10px; border: none; background: transparent; color: var(--pm-text-40); font-size: 12px; font-weight: 500; cursor: pointer; }
+.vt-b:hover { color: var(--pm-text-70); }
+.vt-b.ac { background: var(--pm-primary); color: #fff; box-shadow: 0 1px 2px -1px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.1); }
+/* PmButton */
+.pbtn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-weight: 500; cursor: pointer; border: none; }
+.pbtn.pr { background: var(--pm-primary); color: #fff; border-radius: 14px; box-shadow: 0 2px 8px rgba(21,77,217,0.3); }
+.pbtn.pr:hover { background: var(--pm-primary-light); }
+.pbtn.gh { background: transparent; color: var(--pm-text-60); border: 1px solid var(--pm-border); border-radius: 14px; }
+.pbtn.gh:hover { background: var(--pm-element-hover); }
+.pbtn.da { background: rgba(251,44,54,0.14); color: #ff6b6b; border: 1px solid rgba(251,44,54,0.35); border-radius: 14px; }
+.pbtn.ic { background: transparent; color: var(--pm-text-60); border-radius: 10px; justify-content: center; }
+.pbtn.md { height: 32px; padding: 0 12px; font-size: 12px; }
+.pbtn.sm { height: 28px; padding: 0 10px; font-size: 11px; border-radius: 10px; }
+.pbtn.ic.md { width: 32px; padding: 0; } .pbtn.ic.sm { width: 28px; padding: 0; }
+/* PmTable */
+.tw { border: 1px solid var(--pm-border); border-radius: 16px; overflow: hidden; }
+.tw table { width: 100%; border-collapse: collapse; }
+.tw th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 500; color: var(--pm-text-40); border-bottom: 1px solid var(--pm-border); letter-spacing: 0.5px; }
+.tw td { padding: 12px 16px; font-size: 13px; color: var(--pm-text-70); border-bottom: 1px solid var(--pm-border-light); }
+.tw tr:hover td { background: var(--pm-element-hover); }
+.sb { display: inline-flex; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 500; align-items: center; }
+.sb.gr { background: rgba(0,188,125,0.15); color: var(--pm-green); border: 1px solid rgba(0,188,125,0.25); }
+.sb.bl { background: rgba(43,127,255,0.15); color: var(--pm-blue-light); border: 1px solid rgba(43,127,255,0.25); }
+.sb.og { background: rgba(254,154,0,0.15); color: var(--pm-orange); border: 1px solid rgba(254,154,0,0.25); }
+.sb.lo { background: rgba(255,255,255,0.08); color: var(--pm-text-50); border: 1px solid rgba(255,255,255,0.15); }
+.pag { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-top:1px solid var(--pm-border-light); }
+.pag .info { font-size:12px; color:var(--pm-text-40); }
+.pag .ctrls { display:flex; gap:4px; }
+.pag .ctrls button { width:28px; height:28px; border-radius:6px; border:none; background:transparent; color:var(--pm-text-60); cursor:pointer; font-size:12px; }
+.pag .ctrls button:hover { background:var(--pm-element-hover); }
+.pag .ctrls button.ac { background:var(--pm-primary); color:#fff; font-weight:600; }
+
+@media (max-width: 900px) {
+  .sh, .ds, .dia, .footer { margin-left: 16px; margin-right: 16px; }
+  .st { margin-left: 16px; margin-right: 16px; }
+  .dapp { margin-left: 16px; margin-right: 16px; }
+  .toc-panel { display: none; }
+  .main-content { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-bar">
+  <div class="top-bar-left">
+    <div class="top-bar-brand" style="display:flex;align-items:center;gap:10px"><span style="font-size:20px;font-weight:700;letter-spacing:-1px">81co</span><span style="font-size:11px;color:var(--pm-text-50);font-weight:500">数字营建</span></div>
+    <div class="main-tabs" role="tablist">
+      <button class="main-tab active" data-tab="spec" role="tab" aria-selected="true">▣ 布局规范</button>
+      <button class="main-tab" data-tab="wireframe" role="tab" aria-selected="false">◈ 组件线框图</button>
+      <button class="main-tab" data-tab="pmtable" role="tab" aria-selected="false">▦ PmTable 规范</button>
+      <button class="main-tab" data-tab="design" role="tab" aria-selected="false">◎ 设计系统</button>
+    </div>
+  </div>
+  <div class="top-bar-right">
+    <button class="toc-toggle" id="tocTBtn">☰ 目录</button>
+  </div>
+</nav>
+
+<aside class="toc-panel" id="tocP">
+  <div class="toc-title">页面目录</div>
+  <ul class="toc-list" id="tocL"></ul>
+</aside>
+
+<div class="main-content" id="mainC">
+
+<!-- ═══ TAB 1: 布局规范 ═══ -->
+<div class="tp active" id="tSpec">
+  <div class="phdr">
+    <h1>页面布局规范</h1>
+    <p>5 层嵌套结构 · 统一区域命名 · AppShell 组件</p>
+    <div class="bdg">v1.0 · DRAFT</div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-blue)"></span>AppShell 渲染效果</div>
+  <div class="dapp">
+    <div class="dgl dgl-l"></div>
+    <div class="dgl dgl-r"></div>
+    <div class="rl rl-a"><span class="d2"></span>.pm-app</div>
+    <div class="dsb">
+      <div class="rl rl-s" style="position:absolute"><span class="d2"></span>.pm-sidebar</div>
+      <div class="dsb-hd"><span class="dot"></span>StoreBuilder</div>
+      <div class="dnv">
+        <a class="act"><span class="nv"></span>项目管理</a>
+        <a><span class="nv"></span>任务中心</a>
+        <a><span class="nv"></span>人员管理</a>
+        <a><span class="nv"></span>采购管理</a>
+        <div style="height:1px;background:var(--pm-border);margin:6px 12px"></div>
+        <a><span class="nv"></span>系统设置</a>
+      </div>
+    </div>
+    <div class="dws">
+      <div class="rl rl-w"><span class="d2"></span>.pm-workspace</div>
+      <div class="dhe">
+        <div class="rl rl-h"><span class="d2"></span>.pm-header</div>
+        <div class="dhe-l"><h3>项目管理</h3><span>Projects</span></div>
+        <div class="demo-h-right" style="display:flex;align-items:center;gap:10px"><div class="dsrch"><svg width="12" height="12" class="dsrch-icon" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>搜索...</span></div><div class="dav">张</div></div>
+      </div>
+      <div class="dbd">
+        <div class="rl rl-b"><span class="d2"></span>.pm-body</div>
+        <div class="dst">
+          <div class="dst-c"><div class="dst-t"><span class="dst-lb">全部项目</span><div class="dst-ic bl"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" fill="currentColor" opacity="0.8"/></svg></div></div><div class="dst-vl">24</div></div>
+          <div class="dst-c"><div class="dst-t"><span class="dst-lb">执行中</span><div class="dst-ic bl"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" fill="currentColor" opacity="0.8"/></svg></div></div><div class="dst-vl">14</div></div>
+          <div class="dst-c"><div class="dst-t"><span class="dst-lb">待验收</span><div class="dst-ic og"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" fill="currentColor" opacity="0.8"/></svg></div></div><div class="dst-vl">7</div></div>
+          <div class="dst-c"><div class="dst-t"><span class="dst-lb">已逾期</span><div class="dst-ic rd"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" fill="currentColor" opacity="0.8"/></svg></div></div><div class="dst-vl">3</div></div>
+        </div>
+        <div class="dct">
+          <div class="dtb">
+            <div style="display:flex;gap:4px"><span class="pl ac">列表</span><span class="pl">网格</span></div>
+            <div style="display:flex;gap:4px"><span class="pl">筛选</span><span class="pl" style="background:var(--pm-primary);color:#fff;border-color:transparent">+ 新建</span></div>
+          </div>
+          <div class="dph">
+            <div class="r"><div class="c c3"></div><div class="c c2"></div><div class="c"></div><div class="c ac"></div></div>
+            <div class="r"><div class="c"></div><div class="c c3"></div><div class="c c2"></div><div class="c"></div></div>
+            <div class="r"><div class="c c2"></div><div class="c"></div><div class="c c3"></div><div class="c ac"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-green)"></span>结构线框图</div>
+  <div class="dia">
+<pre><span style="color:var(--pm-text-40)">┌──────────────────────────────────────────────────┐
+│</span> <span style="color:var(--pm-blue-light)">.pm-app</span>                                          <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">┌────────────</span><span style="color:var(--pm-orange)">┬──────────────────────────────────┐</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span>            <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">.pm-header</span>                         <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span>            <span style="color:var(--pm-orange)">│</span> ┌──────────────────────────────┐ <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">.pm-sidebar│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">PageHeader</span>                  <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span>            <span style="color:var(--pm-orange)">│</span> └──────────────────────────────┘ <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">AppSidebar│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-green)">.pm-body</span>                           <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> ┌────────┐<span style="color:var(--pm-orange)">│</span> ┌──────────────────────────────────┐ <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">│ nav  │</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-green)">.pm-stats-row</span>                     <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">│items │</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-green)">StatsCards</span>                        <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">│      │</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">├──────────────────────────────────┤</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">│      │</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-purple)">.pm-content</span>                        <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">│      │</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> 工具栏 / 表格 / 视图             <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">│</span> <span style="color:var(--pm-blue-light)">└────────┘</span><span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-orange)">└──────────────────────────────────┘</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span> <span style="color:var(--pm-purple)">└────────────</span><span style="color:var(--pm-orange)">┴──────────────────────────────────┘</span> <span style="color:var(--pm-orange)">│</span> <span style="color:var(--pm-text-40)">│
+│</span>  <span style="color:var(--pm-text-40)">装饰: .pm-glow（固定定位背景光效）</span>                    <span style="color:var(--pm-text-40)">│
+└──────────────────────────────────────────────────┘</span></pre>
+  </div>
+
+  <div class="ds">
+    <h3><span class="bar" style="background:var(--pm-orange)"></span>区域命名表</h3>
+    <table class="dt">
+      <thead><tr><th>CSS 类名</th><th>区域</th><th>职责</th><th>对应组件</th></tr></thead>
+      <tbody>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-blue);vertical-align:middle;margin-right:8px"></span>.pm-app</td><td>根容器</td><td>全页 flex 容器，min-height: 100vh</td><td>AppShell</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-purple);vertical-align:middle;margin-right:8px"></span>.pm-sidebar</td><td>侧边栏</td><td>256px 固定宽度导航</td><td>AppSidebar</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-orange);vertical-align:middle;margin-right:8px"></span>.pm-header</td><td>页头</td><td>64px 页面标题 + 搜索 + 用户信息</td><td>PageHeader</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-green);vertical-align:middle;margin-right:8px"></span>.pm-workspace</td><td>工作区</td><td>右侧弹性区域，flex: 1</td><td>AppShell</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-blue);vertical-align:middle;margin-right:8px"></span>.pm-body</td><td>主体</td><td>滚动容器，calc(100vh - header)，内边距 24px</td><td>页面自行管理</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-green);vertical-align:middle;margin-right:8px"></span>.pm-stats-row</td><td>统计行</td><td>统计卡片网格（7 列）</td><td>StatsCards</td></tr>
+        <tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pm-purple);vertical-align:middle;margin-right:8px"></span>.pm-content</td><td>内容区</td><td>表格/卡片/视图的具体内容</td><td>页面自行管理</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ds">
+    <h3><span class="bar" style="background:var(--pm-purple)"></span>AppShell 使用示例</h3>
+    <div class="dc">
+<span class="cm">// 标准用法 — 只需传入核心内容</span>
+<span class="kw">&lt;AppShell</span>
+  sidebar={<span class="tg">&lt;AppSidebar</span> <span class="at">currentHash</span>={currentHash} <span class="tg">/&gt;</span>}
+  header={<span class="tg">&lt;PageHeader</span> <span class="at">title</span>=<span class="str">"任务管理"</span> <span class="tg">/&gt;</span>}
+  stats={<span class="tg">&lt;StatsCards</span> <span class="at">items</span>={statsItems} <span class="tg">/&gt;</span>}
+<span class="kw">&gt;</span>
+  <span class="tg">&lt;TaskListView</span> <span class="at">tasks</span>={tasks} ... <span class="tg">/&gt;</span>
+<span class="kw">&lt;/AppShell&gt;</span>
+<span class="cm">// 无统计行</span>
+<span class="kw">&lt;AppShell</span>
+  sidebar={<span class="tg">&lt;AppSidebar</span> <span class="at">currentHash</span>={currentHash} <span class="tg">/&gt;</span>}
+  header={<span class="tg">&lt;PageHeader</span> <span class="at">title</span>=<span class="str">"设置"</span> <span class="tg">/&gt;</span>}
+<span class="kw">&gt;</span>
+  <span class="tg">&lt;SettingsContent</span> <span class="tg">/&gt;</span>
+<span class="kw">&lt;/AppShell&gt;</span>
+    </div>
+  </div>
+
+  <div class="footer">页面布局规范 v1.0 · Agile Construction Platform</div>
+</div>
+
+<!-- ═══ TAB 2: 组件线框图 ═══ -->
+<div class="tp" id="tWireframe">
+  <div class="phdr">
+    <h1>共享组件线框图</h1>
+    <p>PmUserSelect · PmDatePicker · PmDateTimePicker · ViewToggle · PmButton · PmTable</p>
+    <div class="bdg">forms + filters + mui</div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-blue)"></span>PmUserSelect — 带头像的人员选择框</div>
+  <div class="sh">
+    <div class="desc">基于 MUI <code>Autocomplete</code> + <code>Avatar</code>，支持单/多选、头像显示、搜索过滤、禁用状态。</div>
+    <div class="dgr">
+      <div class="dr">
+        <div class="dc2"><label>默认（单选）</label>
+          <div class="ps-t" onclick="document.getElementById('ps1').classList.toggle('s')">
+            <div class="ps-av">张</div><span class="ps-tx">张三</span><span class="ps-ar">▼</span>
+          </div>
+          <div class="ps-dd s" id="ps1">
+            <div class="ps-it ac"><div class="ps-av">张</div>张三<span class="sub">项目经理</span></div>
+            <div class="ps-it"><div class="ps-av" style="background:var(--pm-green)">李</div>李四<span class="sub">施工队长</span></div>
+            <div class="ps-it di"><div class="ps-av" style="background:var(--pm-text-30)">王</div>王五<span class="na">不可选</span></div>
+          </div>
+        </div>
+        <div class="dc2"><label>无头像（首字母）</label>
+          <div class="ps-t"><div class="ps-av">李</div><span class="ps-tx">李四</span><span class="ps-ar">▼</span></div>
+        </div>
+        <div class="dc2"><label>多选</label>
+          <div class="chip-multi">
+            <span class="ch"><span class="a">张</span>张三 ✕</span>
+            <span class="ch"><span class="a" style="background:var(--pm-green)">李</span>李四 ✕</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-orange)"></span>PmDatePicker — 日期选择器</div>
+  <div class="sh">
+    <div class="desc">基于 MUI X <code>DatePicker</code>，预设暗色玻璃态样式。替换 <code>&lt;input type="date"&gt;</code>。</div>
+    <div class="dr">
+      <div class="dc2"><label>默认</label>
+        <div class="dp-t" onclick="document.getElementById('cal1').classList.toggle('s')">
+          <span class="dp-ic" style="display:inline-flex;align-items:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="dp-v">2026-05-01</span><span class="ps-ar">▼</span>
+        </div>
+      </div>
+      <div class="dc2"><label>空值</label>
+        <div class="dp-t"><span class="dp-ic" style="display:inline-flex;align-items:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="dp-v" style="color:var(--pm-text-30)">选择日期</span><span class="ps-ar">▼</span></div>
+      </div>
+      <div class="dc2"><label>禁用</label>
+        <div class="dp-t" style="opacity:0.6"><span class="dp-ic" style="display:inline-flex;align-items:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="dp-v" style="color:var(--pm-text-30)">2026-05-01</span><span class="ps-ar">▼</span></div>
+      </div>
+    </div>
+    <div class="dp-cal s" id="cal1" style="margin-top:16px">
+      <div class="dp-hd"><span class="dp-nv">◀</span><span>2026 年 5 月</span><span class="dp-nv">▶</span></div>
+      <div class="dp-wd"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+      <div class="dp-dd">
+        <span class="dd mu">27</span><span class="dd mu">28</span><span class="dd mu">29</span><span class="dd mu">30</span>
+        <span class="dd">1</span><span class="dd">2</span><span class="dd">3</span>
+        <span class="dd">4</span><span class="dd">5</span><span class="dd ac">6</span><span class="dd">7</span><span class="dd">8</span><span class="dd">9</span><span class="dd">10</span>
+        <span class="dd">11</span><span class="dd">12</span><span class="dd">13</span><span class="dd">14</span><span class="dd">15</span><span class="dd">16</span><span class="dd">17</span>
+        <span class="dd">18</span><span class="dd">19</span><span class="dd">20</span><span class="dd">21</span><span class="dd">22</span><span class="dd">23</span><span class="dd">24</span>
+        <span class="dd">25</span><span class="dd">26</span><span class="dd">27</span><span class="dd">28</span><span class="dd">29</span><span class="dd">30</span><span class="dd">31</span>
+        <span class="dd mu">1</span><span class="dd mu">2</span><span class="dd mu">3</span><span class="dd mu">4</span><span class="dd mu">5</span><span class="dd mu">6</span><span class="dd mu">7</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-orange)"></span>PmDateTimePicker — 日期时间选择器</div>
+  <div class="sh">
+    <div class="desc">与 <code>PmDatePicker</code> 同族，增加时间选择。基于 MUI X <code>DateTimePicker</code>。</div>
+    <div class="dr">
+      <div class="dc2"><label>日期+时间</label>
+        <div class="dp-t"><span class="dp-ic" style="display:inline-flex;align-items:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="dp-v">2026-05-01 14:30</span><span class="ps-ar">▼</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-purple)"></span>ViewToggle — 视图切换分段控件</div>
+  <div class="sh">
+    <div class="desc">替换各页面独立的 <code>pm-view-toggle</code> / <code>tm-view-toggle</code> / <code>fm-view-toggle</code> 实现。</div>
+    <div class="dr" style="flex-direction:column;gap:16px">
+      <div class="dc2"><label>4 项</label><div class="vt"><button class="vt-b">网格</button><button class="vt-b ac">列表</button><button class="vt-b">看板</button><button class="vt-b">日历</button></div></div>
+      <div class="dc2"><label>2 项</label><div class="vt"><button class="vt-b ac">列表</button><button class="vt-b">网格</button></div></div>
+      <div class="dc2"><label>5 项</label><div class="vt"><button class="vt-b">列表</button><button class="vt-b ac">网格</button><button class="vt-b">看板</button><button class="vt-b">日历</button><button class="vt-b">地图</button></div></div>
+    </div>
+  </div>
+
+  <div class="st"><span class="bar" style="background:var(--pm-green)"></span>PmButton — 统一按钮</div>
+  <div class="sh">
+    <div class="desc">封装 MUI <code>Button</code>，5 种变体 × 2 种尺寸。</div>
+    <div class="dr" style="flex-direction:column;gap:16px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="pbtn pr md">主要按钮</button>
+        <button class="pbtn gh md">次要按钮</button>
+        <button class="pbtn da md">危险按钮</button>
+        <button class="pbtn ic md">⚙</button>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:11px;color:var(--pm-text-40)">sm:</span>
+        <button class="pbtn pr sm">新建</button>
+        <button class="pbtn gh sm">筛选</button>
+        <button class="pbtn da sm">删除</button>
+        <button class="pbtn ic sm">⚙</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="st" id="wf-inputs"><span class="bar" style="background:var(--pm-blue)"></span>Inputs — 输入组件</div>
+  <div class="sh">
+    <div class="desc">基于 MUI v9，暗色玻璃态。已封装 <code>PmInput</code>（clearable）+ <code>PmUserSelect</code> + <code>PmDatePicker</code>。</div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <\!-- 文本输入 -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">文本输入 · PmInput</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">标准</div>
+            <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center"><span style="font-size:13px;color:var(--pm-text-70)">请输入</span></div>
+          </div>
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">带标签</div>
+            <div><div style="font-size:11px;color:var(--pm-text-40);margin-bottom:2px">项目名称</div>
+            <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center"><span style="font-size:13px;color:var(--pm-text-70)">上海南京路旗舰店</span></div></div>
+          </div>
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">可清除</div>
+            <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:8px"><span style="flex:1;font-size:13px;color:var(--pm-text-70)">文本内容</span><span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--pm-text-40);cursor:pointer;font-size:11px">&#x2715;</span></div>
+          </div>
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">错误态</div>
+            <div style="height:36px;border-radius:14px;border:1px solid #ff4d4f;background:var(--pm-element);padding:0 12px;display:flex;align-items:center"><span style="font-size:13px;color:var(--pm-text-70)">错误内容</span></div>
+            <div style="font-size:10px;color:#ff4d4f;margin-top:2px">此字段为必填项</div>
+          </div>
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">禁用</div>
+            <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;opacity:0.5"><span style="font-size:13px;color:var(--pm-text-40)">已禁用</span></div>
+          </div>
+          <div style="width:200px">
+            <div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">多行文本</div>
+            <div style="height:72px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:8px 12px"><div style="font-size:13px;color:var(--pm-text-70);line-height:1.4">多行文本内容展示</div></div>
+          </div>
+        </div>
+      </div>
+      <\!-- 下拉选择 -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">下拉选择 · Select / PmUserSelect / Autocomplete</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="width:200px"><div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">Select</div>
+          <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:8px;cursor:pointer"><span style="flex:1;font-size:13px;color:var(--pm-text-70)">请选择阶段</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5L6 8L9 5" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div style="width:200px"><div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">PmUserSelect</div>
+          <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:22px;height:22px;border-radius:50%;background:var(--pm-primary);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">张</span><span style="flex:1;font-size:13px;color:var(--pm-white)">张三</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5L6 8L9 5" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div style="width:200px"><div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">Autocomplete</div>
+          <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><path d="M11 11L15 15" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg><span style="flex:1;font-size:13px;color:var(--pm-text-30)">搜索...</span></div></div>
+        </div>
+      </div>
+      <\!-- 日期选择 -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">日期选择 · PmDatePicker</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div style="width:200px"><div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">日期</div>
+          <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:8px;cursor:pointer"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span style="flex:1;font-size:13px;color:var(--pm-text-70)">2026-05-01</span></div></div>
+          <div style="width:200px"><div style="font-size:10px;color:var(--pm-text-40);margin-bottom:4px">日期+时间</div>
+          <div style="height:36px;border-radius:14px;border:1px solid var(--pm-border);background:var(--pm-element);padding:0 12px;display:flex;align-items:center;gap:8px;cursor:pointer"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7H14" stroke="currentColor" stroke-width="1.5"/><path d="M5 1V4M11 1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span style="flex:1;font-size:13px;color:var(--pm-text-70)">2026-05-01 14:30</span></div></div>
+        </div>
+      </div>
+      <\!-- 选择控件 -->
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">选择控件 · Checkbox / Switch / Radio / Rating</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+          <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:#154DD9;border:2px solid #154DD9;color:#fff;font-size:10px;font-weight:700">&#x2713;</span><span style="font-size:12px;color:var(--pm-text-70)">已选</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.3)"></span><span style="font-size:12px;color:var(--pm-text-70)">未选</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:36px;height:20px;border-radius:10px;background:var(--pm-primary);display:flex;align-items:center;padding:2px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;margin-left:18px"></span></span><span style="font-size:12px;color:var(--pm-text-70)">Switch</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;border:2px solid var(--pm-primary)"><span style="width:8px;height:8px;border-radius:50%;background:var(--pm-primary)"></span></span><span style="font-size:12px;color:var(--pm-text-70)">Radio</span></div>
+          <div style="display:flex;gap:2px"><span style="font-size:16px;color:#FFB900">&#x2605;</span><span style="font-size:16px;color:#FFB900">&#x2605;</span><span style="font-size:16px;color:#FFB900">&#x2605;</span><span style="font-size:16px;color:#FFB900">&#x2605;</span><span style="font-size:16px;color:var(--pm-text-30)">&#x2605;</span><span style="font-size:11px;color:var(--pm-text-40);margin-left:4px">Rating</span></div>
+        </div>
+      </div>
+      <\!-- 全量清单 -->
+      <div style="font-size:11px;color:var(--pm-text-40);background:var(--pm-element);padding:12px 16px;border-radius:8px;line-height:1.6">
+        <strong style="color:var(--pm-text-60)">4 个 Tier · 18+ 组件</strong><br/>
+        Tier 1 已封装: PmInput · PmUserSelect · PmDatePicker · PmDateTimePicker<br/>
+        Tier 2 可 import: Select · Checkbox · Switch · Radio · Slider · Autocomplete · Rating · ToggleButton<br/>
+        Tier 3 待提取: PmSearchInput · PmNumberInput · PmPasswordInput · PmMultiSelect · PmPhoneInput<br/>
+        <span style="color:var(--pm-text-30)">详见 docs/00-governance/comp-inputs.md</span>
+      </div>
+    </div>
+  </div>
+
+    <div class="st" id="wf-drawer"><span class="bar" style="background:var(--pm-purple)"></span>DetailDrawer — 详情侧拉窗</div>
+  <div class="sh">
+    <div class="desc">从右侧滑入的面板，用于展示详情或编辑表单。基于 MUI <code>Drawer</code>，宽度 680px，三段式结构。</div>
+    <div style="display:flex;gap:24px;min-height:460px;position:relative;border-radius:12px;overflow:hidden;background:var(--pm-bg);border:1px solid var(--pm-border)">
+      <\!-- 模拟列表 -->
+      <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0">
+        <div style="font-size:11px;font-weight:600;color:var(--pm-text-40);margin-bottom:4px">列表视图（点击行触发 → 右侧滑入）</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;background:rgba(21,77,217,0.08);border:1px solid rgba(21,77,217,0.15);cursor:pointer">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:#154DD9;border:2px solid #154DD9;color:#fff;font-size:10px;font-weight:700">✓</span>
+          <span style="flex:1;font-size:12px;color:var(--pm-white);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">施工围挡与临时动线审批</span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(254,154,0,0.15);color:#FFB900;border:1px solid rgba(254,154,0,0.25);flex-shrink:0">待分配</span>
+          <span style="font-size:10px;padding:2px 6px;border-radius:4px;border:1px solid rgba(43,127,255,0.25);background:rgba(43,127,255,0.15);color:#51A2FF;flex-shrink:0">中风险</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;opacity:0.7">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.3)">&nbsp;</span>
+          <span style="flex:1;font-size:12px;color:var(--pm-text-60);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">强弱电综合布线实施</span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(43,127,255,0.15);color:#51A2FF;border:1px solid rgba(43,127,255,0.25);flex-shrink:0">执行中</span>
+          <span style="font-size:10px;padding:2px 6px;border-radius:4px;border:1px solid rgba(254,154,0,0.25);background:rgba(254,154,0,0.15);color:#FFB900;flex-shrink:0">高风险</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;opacity:0.7">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;border:2px solid rgba(255,255,255,0.3)">&nbsp;</span>
+          <span style="flex:1;font-size:12px;color:var(--pm-text-60);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">给排水管道安装</span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(0,188,125,0.15);color:#00D492;border:1px solid rgba(0,188,125,0.25);flex-shrink:0">已完成</span>
+          <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.50);border:1px solid rgba(255,255,255,0.15);flex-shrink:0">低风险</span>
+        </div>
+      </div>
+      <\!-- 模拟抽屉（对齐 TaskDetailPage drawer mode） -->
+      <div style="width:380px;background:#051338;border-left:1px solid var(--pm-border);display:flex;flex-direction:column;flex-shrink:0">
+        <\!-- 导航栏：上/下条 + 计数 + 关注/收藏/评论/更多/关闭 -->
+        <div style="display:flex;align-items:center;justify-content:space-between;px:1;border-bottom:1px solid var(--pm-border-light);flex-shrink:0;padding:4px 12px">
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>
+            <span style="font-size:11px;color:var(--pm-text-40);margin-left:4px">1 / 10</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:2px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></span>
+            <span style="width:1px;height:20px;background:var(--pm-border-light);margin:0 4px"></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;cursor:pointer;color:var(--pm-text-70)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+          </div>
+        </div>
+        <\!-- 标题区 -->
+        <div style="padding:12px 24px 8px;flex-shrink:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:18px;font-weight:600;color:var(--pm-white)">施工围挡审批</span>
+            <span style="display:inline-flex;height:22px;padding:0 10px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(43,127,255,0.15);color:#51A2FF;border:1px solid rgba(43,127,255,0.25)">执行中</span>
+            <span style="display:inline-flex;height:22px;padding:0 8px;border-radius:4px;font-size:10px;font-weight:600;align-items:center;background:rgba(254,154,0,0.15);color:#FFB900;border:1px solid rgba(254,154,0,0.25)">高</span>
+          </div>
+          <span style="font-size:12px;color:var(--pm-text-40);font-family:monospace">PRJ-001-T-001 · 上海南京路旗舰店 · 任务</span>
+        </div>
+        <\!-- Tabs -->
+        <div style="background:rgba(255,255,255,0.02);border-bottom:1px solid var(--pm-border);border-radius:8px 8px 0 0;flex-shrink:0;display:flex;padding:0 4px">
+          <span style="height:36px;padding:0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;color:#fff;border-bottom:2px solid var(--pm-primary);cursor:pointer">基本信息</span>
+          <span style="height:36px;padding:0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;color:var(--pm-text-40);cursor:pointer">流程</span>
+          <span style="height:36px;padding:0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;color:var(--pm-text-40);cursor:pointer">资料</span>
+          <span style="height:36px;padding:0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;color:var(--pm-text-40);cursor:pointer">历史</span>
+          <span style="height:36px;padding:0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;color:var(--pm-text-40);cursor:pointer">关联</span>
+        </div>
+        <\!-- Tab 内容 -->
+        <div style="flex:1;overflow:auto;padding:16px 24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">任务编号</span><span style="font-size:13px;color:var(--pm-text-70);font-family:monospace">PRJ-001-T-001</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">所属项目</span><span style="font-size:13px;color:var(--pm-white)">上海南京路旗舰店</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">负责人</span><span style="font-size:13px;color:var(--pm-white)">张伟</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">节点层级</span><span style="font-size:13px;color:var(--pm-text-70)">任务</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">任务类型</span><span style="font-size:13px;color:var(--pm-text-70)">标准任务</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:var(--pm-text-40)">计划时间</span><span style="font-size:13px;color:var(--pm-text-70)">2026-04-06 ~ 04-08</span></div>
+          </div>
+          <div style="margin-top:16px;padding:12px 16px;border-radius:12px;border:1px solid var(--pm-border);background:var(--pm-card)">
+            <div style="font-size:11px;font-weight:600;color:#2B7FFF;margin-bottom:8px">执行标准</div>
+            <div style="font-size:12px;color:var(--pm-text-60);line-height:1.6">1. 按门店施工标准执行并拍照留档。<br/>2. 关键节点需在当日 18:00 前更新进度。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:11px;color:var(--pm-text-40);background:var(--pm-element);padding:12px 16px;border-radius:8px;line-height:1.6">
+      <strong style="color:var(--pm-text-60)">结构:</strong> header (标题+关闭) → body (字段展示, 可滚动) → footer (操作按钮)<br/>
+      <strong style="color:var(--pm-text-60)">宽度:</strong> 680px · <strong style="color:var(--pm-text-60)">触发:</strong> 点击列表行 · <strong style="color:var(--pm-text-60)">关闭:</strong> 点击遮罩 / ESC / ✕ 按钮
+    </div>
+  </div>
+
+  <div class="footer">共享组件线框图 · Agile Construction Platform</div>
+</div>
+
+<!-- ═══ TAB 3: PmTable 规范 ═══ -->
+<div class="tp" id="tPmtable">
+  <div class="phdr">
+    <h1>PmTable 表格组件规范</h1>
+    <p>基于 MUI Table · 暗色玻璃态 · 任务列表样式为基准</p>
+    <div class="bdg">v1.0 · DRAFT</div>
+  </div>
+
+  <div class="st" id="pt-line"><span class="bar" style="background:var(--pm-blue)"></span>线框图</div>
+  <div class="sh">
+    <pre style="background:var(--pm-element);padding:20px;border-radius:12px;font-family:'SF Mono','Menlo',monospace;font-size:12px;line-height:1.6;overflow-x:auto;color:var(--pm-text-60)">┌─────────────────────────────────────────────────────────────┐
+│  任务名称          │ 负责人 │ 状态   │ SLA    │ 操作        │
+├─────────────────────┼────────┼────────┼────────┼────────────┤
+│  施工围挡审批      │ 张伟   │ ◉待分配│ ◉正常  │ ⋮          │
+│  强弱电布线        │ 李强   │ ◉执行中│ ◉超时  │ ⋮          │
+│  给排水管道安装    │ 王明   │ ◉已完成│ ◉正常  │ ⋮          │
+│  暖通空调调试      │ 赵敏   │ ◉待提交│ ◉超时  │ ⋮          │
+├─────────────────────┴────────┴────────┴────────┴────────────┤
+│  共 24 条记录 │ 第 1/3 页   [‹][1][2][3][›]                │
+└─────────────────────────────────────────────────────────────┘</pre>
+  </div>
+
+  <div class="st" id="pt-preview"><span class="bar" style="background:var(--pm-green)"></span>渲染效果（任务列表样式基准）</div>
+  <div class="sh">
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="width:40px;text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.70);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);white-space:nowrap;user-select:none">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;cursor:pointer;border:2px solid rgba(255,255,255,0.3);font-size:11px;font-weight:700;transition:all 0.15s;line-height:1">&nbsp;</span>
+            </th>
+            <th style="text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.70);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);white-space:nowrap;user-select:none">任务名称</th>
+            <th style="text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.70);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);white-space:nowrap;user-select:none">负责人</th>
+            <th style="text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.70);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);white-space:nowrap;user-select:none">状态</th>
+            <th style="text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.70);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);white-space:nowrap;user-select:none">风险</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor:pointer;transition:background 0.15s"
+              onmouseenter="this.style.background='rgba(255,255,255,0.06)'"
+              onmouseleave="this.style.background='transparent'">
+            <td style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;cursor:pointer;border:2px solid rgba(255,255,255,0.3);font-size:11px;font-weight:700;line-height:1">&nbsp;</span>
+            </td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:600;color:#fff">施工围挡与临时动线审批</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff">张伟</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(254,154,0,0.15);color:#FFB900;border:1px solid rgba(254,154,0,0.25)">待分配</span></td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(43,127,255,0.15);color:#51A2FF;border:1px solid rgba(43,127,255,0.25)">中风险</span></td>
+          </tr>
+          <tr style="cursor:pointer;background:rgba(21,77,217,0.04);transition:background 0.15s"
+              onmouseenter="this.style.background='rgba(21,77,217,0.06)'"
+              onmouseleave="this.style.background='rgba(21,77,217,0.04)'">
+            <td style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;cursor:pointer;background:#154DD9;border:2px solid #154DD9;color:#fff;font-size:11px;font-weight:700;line-height:1">&#x2713;</span>
+            </td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:600;color:#fff">强弱电综合布线实施</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff">李强</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(43,127,255,0.15);color:#51A2FF;border:1px solid rgba(43,127,255,0.25)">执行中</span></td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(254,154,0,0.15);color:#FFB900;border:1px solid rgba(254,154,0,0.25)">高风险</span></td>
+          </tr>
+          <tr style="cursor:pointer;transition:background 0.15s"
+              onmouseenter="this.style.background='rgba(255,255,255,0.06)'"
+              onmouseleave="this.style.background='transparent'">
+            <td style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;cursor:pointer;border:2px solid rgba(255,255,255,0.3);font-size:11px;font-weight:700;line-height:1">&nbsp;</span>
+            </td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:600;color:#fff">给排水管道安装</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff">王明</td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(0,188,125,0.15);color:#00D492;border:1px solid rgba(0,188,125,0.25)">已完成</span></td>
+            <td style="padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="display:inline-flex;height:20px;padding:0 8px;border-radius:999px;font-size:10px;font-weight:500;align-items:center;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.50);border:1px solid rgba(255,255,255,0.15)">低风险</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pag"><span class="info">共 24 条，第 1/3 页</span><div class="ctrls"><button>‹</button><button class="ac">1</button><button>2</button><button>3</button><button>›</button></div></div>
+    </div>
+  </div>
+
+  <div class="st" id="pt-style"><span class="bar" style="background:var(--pm-orange)"></span>样式规范映射表</div>
+  <div class="sh">
+    <table class="dt">
+      <thead><tr><th>样式项</th><th>基准值（DataTable）</th><th>PmTable 实现</th></tr></thead>
+      <tbody>
+        <tr><td>容器背景</td><td>rgba(255,255,255,0.04)</td><td>bgcolor: transparent + border</td></tr>
+        <tr><td>容器边框</td><td>1px solid rgba(255,255,255,0.08)</td><td>border: 1px solid var(--pm-border)</td></tr>
+        <tr><td>容器圆角</td><td>16px</td><td>borderRadius: 16px</td></tr>
+        <tr><td>表头字号/字重</td><td>11px / 500</td><td>fontSize: 11, fontWeight: 500</td></tr>
+        <tr><td>表头颜色</td><td>rgba(255,255,255,0.4)</td><td>color: var(--pm-text-40)</td></tr>
+        <tr><td>表头下边框</td><td>1px solid rgba(255,255,255,0.08)</td><td>borderBottom: 1px solid var(--pm-border)</td></tr>
+        <tr><td>表头高度</td><td>64px</td><td>padding: '0 20px', height: 64</td></tr>
+        <tr><td>行高</td><td>70px</td><td>td padding: '0 20px', height: 70</td></tr>
+        <tr><td>行下边框</td><td>1px solid rgba(255,255,255,0.05)</td><td>borderBottom: 1px solid var(--pm-border-light)</td></tr>
+        <tr><td>行悬停色</td><td>rgba(255,255,255,0.02)</td><td>hover bgcolor: var(--pm-element)</td></tr>
+        <tr><td>文字颜色</td><td>rgba(255,255,255,0.6)</td><td>color: var(--pm-text-60)</td></tr>
+        <tr><td>文字字号</td><td>12px</td><td>fontSize: 12</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="st" id="pt-badge"><span class="bar" style="background:var(--pm-green)"></span>状态徽章色值</div>
+  <div class="sh">
+    <table class="dt">
+      <thead><tr><th>状态</th><th>文字色</th><th>背景色</th><th>边框色</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sb bl" style="display:inline-flex;height:22px;padding:0 10px;font-size:10px">blue</span></td><td>var(--pm-blue-light)</td><td>rgba(43,127,255,0.15)</td><td>rgba(43,127,255,0.25)</td></tr>
+        <tr><td><span class="sb gr" style="display:inline-flex;height:22px;padding:0 10px;font-size:10px">green</span></td><td>var(--pm-green)</td><td>rgba(0,188,125,0.15)</td><td>rgba(0,188,125,0.25)</td></tr>
+        <tr><td><span class="sb og" style="display:inline-flex;height:22px;padding:0 10px;font-size:10px">orange</span></td><td>var(--pm-orange)</td><td>rgba(254,154,0,0.15)</td><td>rgba(254,154,0,0.25)</td></tr>
+        <tr><td><span class="sb" style="display:inline-flex;height:22px;padding:0 10px;font-size:10px;background:rgba(251,44,54,0.15);color:var(--pm-red);border:1px solid rgba(251,44,54,0.25);border-radius:999px">red</span></td><td>var(--pm-red)</td><td>rgba(251,44,54,0.15)</td><td>rgba(251,44,54,0.25)</td></tr>
+        <tr><td><span class="sb" style="display:inline-flex;height:22px;padding:0 10px;font-size:10px;background:rgba(255,255,255,0.08);color:var(--pm-text-50);border:1px solid rgba(255,255,255,0.15);border-radius:999px">neutral</span></td><td>var(--pm-text-50)</td><td>rgba(255,255,255,0.08)</td><td>rgba(255,255,255,0.15)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="st" id="pt-api"><span class="bar" style="background:var(--pm-purple)"></span>接口定义</div>
+  <div class="sh">
+    <div class="dc">
+<span class="cm">// 列配置</span>
+interface <span class="fn">PmTableColumn</span>&lt;T&gt; {
+  key: keyof T
+  header: <span class="kw">string</span>
+  render?: <span class="kw">(item: T) =&gt; ReactNode</span>
+  width?: <span class="kw">string | number</span>
+  align?: <span class="str">'left' | 'center' | 'right'</span>
+}
+
+<span class="cm">// 组件 Props</span>
+interface <span class="fn">PmTableProps</span>&lt;T&gt; {
+  columns: PmTableColumn&lt;T&gt;[]
+  data: T[]
+  loading?: <span class="kw">boolean</span>
+  emptyText?: <span class="kw">string</span>
+  page?: <span class="kw">number</span>
+  total?: <span class="kw">number</span>
+  rowsPerPage?: <span class="kw">number</span>
+  onPageChange?: <span class="kw">(page: number) =&gt; void</span>
+  onRowsPerPageChange?: <span class="kw">(rowsPerPage: number) =&gt; void</span>
+}
+    </div>
+  </div>
+
+  <div class="st" id="pt-usage"><span class="bar" style="background:var(--pm-blue)"></span>使用示例</div>
+  <div class="sh">
+    <div class="dc">
+<span class="cm">// 标准用法</span>
+<span class="kw">&lt;PmTable</span>
+  columns={columns}
+  data={tasks}
+  loading={isLoading}
+  page={page}
+  total={total}
+  onPageChange={setPage}
+<span class="kw">/&gt;</span>
+
+<span class="cm">// 无分页</span>
+<span class="kw">&lt;PmTable</span> columns={columns} data={items} <span class="kw">/&gt;</span>
+    </div>
+  </div>
+
+  <div class="st" id="pt-migration"><span class="bar" style="background:var(--pm-orange)"></span>迁移路线</div>
+  <div class="sh">
+    <table class="dt">
+      <thead><tr><th>阶段</th><th>内容</th><th>目标</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 1</td><td>PmTable 增加 selectable + batchActions + onRowClick</td><td>src/components/shared/mui/PmTable.tsx</td></tr>
+        <tr><td>Phase 2</td><td>任务模块 DataTable 迁移到 PmTable</td><td>src/components/task/TaskListView.tsx</td></tr>
+        <tr><td>Phase 3</td><td>全项目其他列表页迁移到 PmTable</td><td>各模块列表页</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">PmTable 表格组件规范 v1.0 · Agile Construction Platform</div>
+</div>
+
+<\!-- ═══ TAB 4: 设计系统 ═══ -->
+<div class="tp" id="tDesign">
+  <div class="phdr">
+    <h1>设计系统</h1>
+    <p>Design Tokens · 色彩 · 字体 · 间距 · 圆角 · 阴影</p>
+    <div class="bdg">v2.0 · UPDATED</div>
+  </div>
+
+  <\!-- 品牌 -->
+  <div class="st" id="ds-brand"><span class="bar" style="background:var(--pm-primary)"></span>品牌标识</div>
+  <div class="sh">
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <div style="width:120px;height:120px;border-radius:16px;background:var(--pm-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="font-size:42px;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1">81<span style="color:var(--pm-orange)">co</span></div>
+      </div>
+      <div>
+        <div style="font-size:22px;font-weight:700;color:var(--pm-white);margin-bottom:4px">数字营建</div>
+        <div style="font-size:13px;color:var(--pm-text-50);margin-bottom:8px;font-family:monospace">Digital Construction · 81co</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--pm-text-60)">
+          <span style="color:var(--pm-orange)">⚠ 待补充: 81co 图形标识源文件（SVG/PNG）</span>
+          <span>当前占位: /assets/CodeBubbyAssets/3990_3/56.png（与规范不符）</span>
+          <span>建议尺寸: 87px × 84px · 容器: 128px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <\!-- 色彩 -->
+  <div class="st" id="ds-colors"><span class="bar" style="background:var(--pm-blue)"></span>色彩系统</div>
+  <div class="sh">
+    <div style="display:flex;gap:8px;margin-bottom:20px;align-items:center">
+      <span style="font-size:12px;font-weight:600;color:var(--pm-text-60)">当前主题:</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:8px;background:var(--pm-element-hover);font-size:11px;cursor:pointer" onclick="toggleTheme()" id="themeToggleBtn">🌙 深色</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px" id="colorPalette">
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">主色调 · PRIMARY</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:80px;border-radius:12px;background:#154DD9;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Primary</span><span style="font-size:9px;opacity:0.7">#154DD9</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#1a5ae8;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Light</span><span style="font-size:9px;opacity:0.7">#1a5ae8</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#1248c5;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Dark</span><span style="font-size:9px;opacity:0.7">#1248c5</span></div>
+        </div>
+      </div>
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">功能色 · SEMANTIC <span style="font-weight:400;color:var(--pm-text-40);font-size:11px">（双主题共用）</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:80px;border-radius:12px;background:#2b7fff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Blue</span><span style="font-size:9px;opacity:0.7">#2b7fff</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#00bc7d;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Green</span><span style="font-size:9px;opacity:0.7">#00bc7d</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#fe9a00;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Orange</span><span style="font-size:9px;opacity:0.7">#fe9a00</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#ff4d4f;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Red</span><span style="font-size:9px;opacity:0.7">#ff4d4f</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#8e51ff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Purple</span><span style="font-size:9px;opacity:0.7">#8e51ff</span></div>
+        </div>
+      </div>
+      <div id="darkThemeSection">
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">背景色 · DARK <span style="font-weight:400;color:var(--pm-text-40);font-size:11px">（深色主题）</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:120px;height:60px;border-radius:12px;background:#051338;border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Bg</span><span style="font-size:9px;opacity:0.6">#051338</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Card</span><span style="font-size:9px;opacity:0.6">rgba(..,0.04)</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Element</span><span style="font-size:9px;opacity:0.6">rgba(..,0.03)</span></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+          <div style="width:120px;height:40px;border-radius:8px;background:rgba(255,255,255,0.08);padding:8px 10px;display:flex;align-items:center"><span style="font-size:10px">Border — 0.08</span></div>
+          <div style="width:120px;height:40px;border-radius:8px;background:rgba(255,255,255,0.05);padding:8px 10px;display:flex;align-items:center"><span style="font-size:10px">Border Light — 0.05</span></div>
+        </div>
+      </div>
+      <div id="lightThemeSection" style="display:none">
+        <div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">背景色 · LIGHT <span style="font-weight:400;color:var(--pm-text-40);font-size:11px">（浅色主题）</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:120px;height:60px;border-radius:12px;background:#f0f2f5;border:1px solid rgba(0,0,0,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;color:#1a1a2e;font-weight:600">Bg</span><span style="font-size:9px;color:#1a1a2e;opacity:0.6">#f0f2f5</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;color:#1a1a2e;font-weight:600">Card</span><span style="font-size:9px;color:#1a1a2e;opacity:0.6">rgba(..,0.85)</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;color:#1a1a2e;font-weight:600">Element</span><span style="font-size:9px;color:#1a1a2e;opacity:0.6">rgba(..,0.03)</span></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+          <div style="width:120px;height:40px;border-radius:8px;background:rgba(0,0,0,0.08);padding:8px 10px;display:flex;align-items:center"><span style="font-size:10px;color:#1a1a2e">Border — 0.08</span></div>
+          <div style="width:120px;height:40px;border-radius:8px;background:rgba(0,0,0,0.05);padding:8px 10px;display:flex;align-items:center"><span style="font-size:10px;color:#1a1a2e">Border Light — 0.05</span></div>
+        </div>
+      </div>
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">文字色 · TEXT <span style="font-weight:400;color:var(--pm-text-40);font-size:11px">深色 / 浅色</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:60px;border-radius:12px;background:#fff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">100%</span><span style="font-size:9px;opacity:0.6">Dark: #ffffff</span><span style="font-size:8px;opacity:0.5">Light: #1a1a2e</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.70);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">70%</span><span style="font-size:9px;opacity:0.6">Dark: rgba(..,0.70)</span><span style="font-size:8px;opacity:0.5">Light: rgba(0,0,0,0.70)</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.40);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">40%</span><span style="font-size:9px;opacity:0.6">Dark: rgba(..,0.40)</span><span style="font-size:8px;opacity:0.5">Light: rgba(0,0,0,0.40)</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.30);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">30%</span><span style="font-size:9px;opacity:0.6">Dark: rgba(..,0.30)</span><span style="font-size:8px;opacity:0.5">Light: rgba(0,0,0,0.30)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sh">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">主色调 · PRIMARY</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:80px;border-radius:12px;background:#154DD9;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Primary</span><span style="font-size:9px;opacity:0.7">#154DD9</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#1a5ae8;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Light</span><span style="font-size:9px;opacity:0.7">#1a5ae8</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#1248c5;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Dark</span><span style="font-size:9px;opacity:0.7">#1248c5</span></div>
+        </div>
+      </div>
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">功能色 · SEMANTIC</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:80px;border-radius:12px;background:#2b7fff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Blue</span><span style="font-size:9px;opacity:0.7">#2b7fff</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#00bc7d;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Green</span><span style="font-size:9px;opacity:0.7">#00bc7d</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#fe9a00;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Orange</span><span style="font-size:9px;opacity:0.7">#fe9a00</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#ff4d4f;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Red</span><span style="font-size:9px;opacity:0.7">#ff4d4f</span></div>
+          <div style="width:100px;height:80px;border-radius:12px;background:#8e51ff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Purple</span><span style="font-size:9px;opacity:0.7">#8e51ff</span></div>
+        </div>
+      </div>
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">文字色 · TEXT</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:100px;height:60px;border-radius:12px;background:#fff;padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">White</span><span style="font-size:9px;opacity:0.6">#ffffff</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.70);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">70%</span><span style="font-size:9px;opacity:0.6">rgba(..,0.70)</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.40);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">40%</span><span style="font-size:9px;opacity:0.6">rgba(..,0.40)</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.30);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">30%</span><span style="font-size:9px;opacity:0.6">rgba(..,0.30)</span></div>
+          <div style="width:100px;height:60px;border-radius:12px;background:rgba(255,255,255,0.25);padding:10px;display:flex;flex-direction:column;justify-content:flex-end;color:#000"><span style="font-size:11px;font-weight:600">25%</span><span style="font-size:9px;opacity:0.6">rgba(..,0.25)</span></div>
+        </div>
+      </div>
+      <div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:8px">背景色 · BACKGROUND</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:120px;height:60px;border-radius:12px;background:#051338;border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Default</span><span style="font-size:9px;opacity:0.6">#051338</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Card</span><span style="font-size:9px;opacity:0.6">rgba(..,0.04)</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Element</span><span style="font-size:9px;opacity:0.6">rgba(..,0.03)</span></div>
+          <div style="width:120px;height:60px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;flex-direction:column;justify-content:flex-end"><span style="font-size:11px;font-weight:600">Input</span><span style="font-size:9px;opacity:0.6">rgba(..,0.05)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <\!-- 字体 -->
+  <div class="st" id="ds-typo"><span class="bar" style="background:var(--pm-green)"></span>字体系统</div>
+  <div class="sh">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">h5 / 24px</span>
+        <span style="font-size:24px;font-weight:600;line-height:1">页面主标题</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">h6 / 20px</span>
+        <span style="font-size:20px;font-weight:600;line-height:1">区块标题</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">sub1 / 18px</span>
+        <span style="font-size:18px;font-weight:600;line-height:1">导航文字 / 卡片标题</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">body / 14px</span>
+        <span style="font-size:14px;font-weight:400">正文字体</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">表格 / 13px</span>
+        <span style="font-size:13px;font-weight:600;color:var(--pm-white)">任务名称 13px/600</span>
+        <span style="font-size:13px;color:var(--pm-text-70);margin-left:8px">普通文字 13px</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">表头 / 12px</span>
+        <span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.70)">表头文字 12px/600</span>
+        <span style="font-size:12px;color:var(--pm-text-60);margin-left:8px">按钮文字 12px/500</span>
+        <span style="font-size:12px;color:var(--pm-text-40);margin-left:8px">辅助文字 12px</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">编号 / 12px</span>
+        <span style="font-size:12px;color:var(--pm-text-40);font-family:monospace">PRJ-001-TASK-001 monospace</span>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;padding:10px 0">
+        <span style="font-size:10px;color:var(--pm-text-40);width:60px">caption / 10px</span>
+        <span style="font-size:10px;color:var(--pm-text-50)">状态徽章 / 标签文字 10px</span>
+      </div>
+    </div>
+  </div>
+
+  <\!-- 圆角 -->
+  <div class="st" id="ds-radius"><span class="bar" style="background:var(--pm-purple)"></span>圆角系统</div>
+  <div class="sh">
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="width:100px;height:60px;background:var(--pm-card);border:1px solid var(--pm-border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--pm-text-60)">8px<br/><span style="font-size:9px">按钮/输入框</span></div>
+      <div style="width:100px;height:60px;background:var(--pm-card);border:1px solid var(--pm-border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--pm-text-60)">10px<br/><span style="font-size:9px">标签/子元素</span></div>
+      <div style="width:100px;height:60px;background:var(--pm-card);border:1px solid var(--pm-border);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--pm-text-60)">14px<br/><span style="font-size:9px">标准按钮/导航</span></div>
+      <div style="width:100px;height:60px;background:var(--pm-card);border:1px solid var(--pm-border);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--pm-text-60)">16px<br/><span style="font-size:9px">卡片/弹窗</span></div>
+      <div style="width:100px;height:60px;background:var(--pm-primary);border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">999px<br/><span style="font-size:9px">全圆角</span></div>
+    </div>
+  </div>
+
+  <\!-- 间距 -->
+  <div class="st" id="ds-spacing"><span class="bar" style="background:var(--pm-orange)"></span>间距系统</div>
+  <div class="sh">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">XXS</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">2px</span>
+        <div style="display:flex;gap:2px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">极紧凑（分割线、边框内缩）</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">XS</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">4px</span>
+        <div style="display:flex;gap:4px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">导航项间距、标签 gap</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">S</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">8px</span>
+        <div style="display:flex;gap:8px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">工具栏元素间距</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">M</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">16px</span>
+        <div style="display:flex;gap:16px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">卡片内间距</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">L</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">24px</span>
+        <div style="display:flex;gap:24px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">主体 padding</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--pm-border-light)">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">XL</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">40px</span>
+        <div style="display:flex;gap:40px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">区块间距</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0">
+        <span style="font-size:11px;color:var(--pm-text-50);width:80px">XXL</span><span style="font-size:11px;color:var(--pm-text-40);width:60px">80px</span>
+        <div style="display:flex;gap:80px"><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div><div style="width:8px;height:16px;border-radius:4px;background:var(--pm-primary)"></div></div>
+        <span style="font-size:11px;color:var(--pm-text-60)">页面级间距</span>
+      </div>
+    </div>
+  </div>
+
+    <\!-- 图标 -->
+  <div class="st" id="ds-icons"><span class="bar" style="background:var(--pm-blue)"></span>图标系统</div>
+  <div class="sh">
+<div style="display:flex;flex-direction:column;gap:20px"><div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">导航图标 · 14 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/42.svg" alt="dashboard" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">dashboard</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/43.svg" alt="data-center" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">data-center</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/44.svg" alt="projects" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">projects</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/45.svg" alt="tasks" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">tasks</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/46.svg" alt="customers" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">customers</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/47.svg" alt="contracts" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">contracts</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/48.svg" alt="procurement" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">procurement</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/49.svg" alt="orders" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">orders</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/50.svg" alt="facility" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">facility</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/51.svg" alt="resources" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">resources</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/51.svg" alt="standards" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">standards</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/52.svg" alt="personnel" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">personnel</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/53.svg" alt="digital-employee" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">digital-employee</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/54.svg" alt="settings" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">settings</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">页头操作 · 7 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/41.svg" alt="search" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">search</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/37.svg" alt="notification" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">notification</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/38.svg" alt="ai-assistant" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">ai-assistant</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/39.svg" alt="user-avatar" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">user-avatar</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/40.svg" alt="dropdown" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">dropdown</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/55.svg" alt="collapse" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">collapse</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/56.png" alt="logo" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">logo</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">通用操作 · 11 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/1.svg" alt="add" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">add</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/2.svg" alt="edit" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">edit</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/3.svg" alt="delete" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">delete</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/4.svg" alt="save" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">save</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/5.svg" alt="cancel" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">cancel</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/6.svg" alt="close" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">close</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/7.svg" alt="refresh" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">refresh</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/8.svg" alt="filter" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">filter</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/9.svg" alt="sort" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">sort</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/10.svg" alt="more" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">more</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/11.svg" alt="menu" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">menu</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">状态 · 5 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/12.svg" alt="success" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">success</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/13.svg" alt="error" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">error</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/14.svg" alt="warning" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">warning</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/15.svg" alt="info" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">info</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/16.svg" alt="loading" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">loading</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">方向 · 8 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/17.svg" alt="arrow-up" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">arrow-up</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/18.svg" alt="arrow-down" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">arrow-down</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/19.svg" alt="arrow-left" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">arrow-left</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/20.svg" alt="arrow-right" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">arrow-right</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/21.svg" alt="chevron-up" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">chevron-up</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/22.svg" alt="chevron-down" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">chevron-down</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/23.svg" alt="chevron-left" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">chevron-left</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/24.svg" alt="chevron-right" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">chevron-right</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">文件 · 5 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/25.svg" alt="file" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">file</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/26.svg" alt="folder" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">folder</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/27.svg" alt="upload" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">upload</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/28.svg" alt="download" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">download</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/29.svg" alt="attachment" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">attachment</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">沟通 · 5 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/30.svg" alt="message" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">message</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/31.svg" alt="comment" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">comment</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/32.svg" alt="share" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">share</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/33.svg" alt="link" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">link</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/34.svg" alt="calendar" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">calendar</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">项目相关 · 6 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/35.svg" alt="milestone" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">milestone</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/36.svg" alt="phase" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">phase</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/37.svg" alt="task" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">task</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/38.svg" alt="risk" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">risk</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/39.svg" alt="member" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">member</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/40.svg" alt="activity" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">activity</span></div></div></div>
+<div><div style="font-size:12px;font-weight:600;color:var(--pm-text-50);margin-bottom:10px">数字员工 · 4 个</div><div style="display:flex;gap:10px;flex-wrap:wrap"><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/53.svg" alt="agent" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">agent</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/53.svg" alt="bot" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">bot</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/38.svg" alt="ai" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">ai</span></div><div class="ic-item" style="display:flex;flex-direction:column;align-items:center;gap:5px;width:68px;padding:10px 4px 8px;border-radius:10px;background:var(--pm-element);cursor:default" onmouseenter="this.style.background='var(--pm-element-hover)'" onmouseleave="this.style.background='var(--pm-element)'"><img src="/assets/CodeBubbyAssets/3990_3/38.svg" alt="sparkles" style="width:20px;height:20px;object-fit:contain" /><span style="font-size:9px;color:var(--pm-text-40);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:64px;white-space:nowrap">sparkles</span></div></div></div><div style="font-size:11px;color:var(--pm-text-40);background:var(--pm-element);padding:12px 16px;border-radius:8px;line-height:1.6;margin-top:8px"><strong style="color:var(--pm-text-60)">资产目录:</strong> ../assets/CodeBubbyAssets/3990_3/ · 共 65 个图标文件<br/><strong style="color:var(--pm-text-60)">使用方式:</strong> &lt;Icon name="tasks" size="md" /&gt;<br/><strong style="color:var(--pm-text-60)">尺寸预设:</strong> xs(12) sm(16) md(20) lg(24) xl(32) 或任意数值</div></div>
+  </div>
+
+  <div class="footer">设计系统 v2.0 · Agile Construction Platform</div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.main-tab').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.main-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+    this.classList.add('active'); this.setAttribute('aria-selected','true');
+    document.getElementById('t' + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1)).classList.add('active');
+    buildTOC();
+  });
+});
+
+let tocOpen = true;
+document.getElementById('tocTBtn').addEventListener('click', function() {
+  tocOpen = !tocOpen;
+  document.getElementById('tocP').classList.toggle('closed', !tocOpen);
+  document.getElementById('mainC').classList.toggle('closed', !tocOpen);
+  this.textContent = tocOpen ? '☰ 目录' : '☰';
+});
+
+function buildTOC() {
+  const activePane = document.querySelector('.tp.active');
+  if (!activePane) return;
+  const id = activePane.id;
+  let html = '';
+  if (id === 'tSpec') {
+    html = `<li><a href="#" onclick="sc('dapp');return false"><span class="d" style="background:var(--pm-blue)"></span>渲染示例</a></li>
+<li><a href="#" onclick="sc('dia');return false"><span class="d" style="background:var(--pm-green)"></span>结构线框图</a></li>
+<li><a href="#" onclick="sc('ds0');return false"><span class="d" style="background:var(--pm-orange)"></span>区域命名表</a></li>
+<li><a href="#" onclick="sc('ds1');return false"><span class="d" style="background:var(--pm-purple)"></span>AppShell 代码</a></li>`;
+  } else if (id === 'tPmtable') {
+    html = `<li><a href="#" onclick="sc('pt-line');return false"><span class="d" style="background:var(--pm-blue)"></span>线框图</a></li>
+<li><a href="#" onclick="sc('pt-preview');return false"><span class="d" style="background:var(--pm-green)"></span>渲染效果</a></li>
+<li><a href="#" onclick="sc('pt-style');return false"><span class="d" style="background:var(--pm-orange)"></span>样式规范</a></li>
+<li><a href="#" onclick="sc('pt-badge');return false"><span class="d" style="background:var(--pm-green)"></span>状态徽章</a></li>
+<li><a href="#" onclick="sc('pt-api');return false"><span class="d" style="background:var(--pm-purple)"></span>接口定义</a></li>
+<li><a href="#" onclick="sc('pt-usage');return false"><span class="d" style="background:var(--pm-blue)"></span>使用示例</a></li>
+<li><a href="#" onclick="sc('pt-migration');return false"><span class="d" style="background:var(--pm-orange)"></span>迁移路线</a></li>`;
+  } else if (id === 'tDesign') {
+    html = `<li><a href="#" onclick="sc('ds-brand');return false"><span class="d" style="background:var(--pm-primary)"></span>品牌标识</a></li>
+<li><a href="#" onclick="sc('ds-colors');return false"><span class="d" style="background:var(--pm-blue)"></span>色彩系统</a></li>
+<li><a href="#" onclick="sc('ds-typo');return false"><span class="d" style="background:var(--pm-green)"></span>字体系统</a></li>
+<li><a href="#" onclick="sc('ds-radius');return false"><span class="d" style="background:var(--pm-purple)"></span>圆角系统</a></li>
+<li><a href="#" onclick="sc('ds-spacing');return false"><span class="d" style="background:var(--pm-orange)"></span>间距系统</a></li>`;
+  } else {
+    html = `<li><a href="#" onclick="sc('wf-us');return false"><span class="d" style="background:var(--pm-blue)"></span>PmUserSelect</a></li>
+<li><a href="#" onclick="sc('wf-dp');return false"><span class="d" style="background:var(--pm-orange)"></span>PmDatePicker</a></li>
+<li><a href="#" onclick="sc('wf-dtp');return false"><span class="d" style="background:var(--pm-orange)"></span>PmDateTimePicker</a></li>
+<li><a href="#" onclick="sc('wf-vt');return false"><span class="d" style="background:var(--pm-purple)"></span>ViewToggle</a></li>
+<li><a href="#" onclick="sc('wf-btn');return false"><span class="d" style="background:var(--pm-green)"></span>PmButton</a></li>
+<li><a href="#" onclick="sc('wf-inputs');return false"><span class="d" style="background:var(--pm-blue)"></span>Inputs</a></li>
+<li><a href="#" onclick="sc('wf-inputs');return false"><span class="d" style="background:var(--pm-blue)"></span>Inputs</a></li>
+<li><a href="#" onclick="sc('wf-drawer');return false"><span class="d" style="background:var(--pm-purple)"></span>DetailDrawer</a></li>
+<li><a href="#" onclick="sc('wf-tbl');return false"><span class="d" style="background:var(--pm-blue)"></span>PmTable</a></li>`;
+  }
+  document.getElementById('tocL').innerHTML = html;
+}
+function sc(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+buildTOC();
+</script>
+<script>
+let isDark = true;
+function toggleTheme() {
+  isDark = \!isDark;
+  const btn = document.getElementById('themeToggleBtn');
+  btn.textContent = isDark ? '🌙 深色' : '☀️ 浅色';
+  document.getElementById('darkThemeSection').style.display = isDark ? '' : 'none';
+  document.getElementById('lightThemeSection').style.display = isDark ? 'none' : '';
+}
+</script>
+</body>
+</html>
