@@ -89,14 +89,14 @@
 
   /* Radius */
   --pm-radius-sm: 8px;
-  --pm-radius-md: 12px;
-  --pm-radius-lg: 16px;
-  --pm-radius-xl: 20px;
+  --pm-radius-md: 10px;
+  --pm-radius-lg: 14px;
+  --pm-radius-xl: 16px;
   --pm-radius-full: 9999px;
-  /* 按用途命名（线框图规范） */
+  /* 按用途命名（规范对齐） */
   --pm-radius-card: 16px;
-  --pm-radius-btn: 14px;
-  --pm-radius-input: 10px;
+  --pm-radius-btn: 10px;
+  --pm-radius-input: 8px;
 
   /* Shadows */
   --pm-shadow-10: rgba(0, 0, 0, 0.1);
