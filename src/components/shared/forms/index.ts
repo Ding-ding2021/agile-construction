@@ -6,3 +6,6 @@ export type { PmDatePickerProps } from './PmDatePicker'
 
 export { PmDateTimePicker } from './PmDateTimePicker'
 export type { PmDateTimePickerProps } from './PmDateTimePicker'
+
+export { PmTagSelect } from './PmTagSelect'
+export type { PmTagOption, PmTagSelectProps } from './PmTagSelect'

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import DataTable, { type Column } from '../ui/DataTable'
+import { PmTable } from '../shared/mui'
+import type { PmTableColumn } from '../shared/mui'
 import StatusChip from '../ui/StatusChip'
 import type { PaginationState, TaskItem } from './taskManagement.types'
 import { STATUS_TONE_MAP } from './taskManagement.types'
-import Pagination from '../shared/data-display/Pagination'
 
 type TaskListViewProps = {
   tasks: TaskItem[]
@@ -112,26 +112,14 @@ function ActionCell() {
   )
 }
 
-const columns: Column<TaskItem>[] = [
-  { key: 'code', label: '编号', width: 130, render: v => <CodeCell value={v as string} /> },
-  { key: 'name', label: '任务名称', render: (_, row) => <TaskNameCell row={row} /> },
-  {
-    key: 'status',
-    label: '状态',
-    width: 100,
-    render: (_, row) => (
-      <StatusChip label={row.status} tone={STATUS_TONE_MAP[row.status] ?? 'neutral'} />
-    ),
-  },
-  { key: 'owner', label: '负责人', width: 90, render: v => <OwnerCell value={v as string} /> },
-  {
-    key: 'plannedEndAt',
-    label: '计划结束',
-    width: 110,
-    render: v => <DateCell value={v as string} />,
-  },
-  { key: 'slaStatus', label: 'SLA', width: 90, render: v => <SlaBadge value={v as string} /> },
-  { key: 'actions', label: '', width: 50, render: () => <ActionCell /> },
+const columns: PmTableColumn<TaskItem>[] = [
+  { key: 'code' as keyof TaskItem, header: '编号', width: 130, render: item => <CodeCell value={item.code} /> },
+  { key: 'name' as keyof TaskItem, header: '任务名称', render: item => <TaskNameCell row={item} /> },
+  { key: 'status' as keyof TaskItem, header: '状态', width: 100, render: item => <StatusChip label={item.status} tone={STATUS_TONE_MAP[item.status] ?? 'neutral'} /> },
+  { key: 'owner' as keyof TaskItem, header: '负责人', width: 90, render: item => <OwnerCell value={item.owner} /> },
+  { key: 'plannedEndAt' as keyof TaskItem, header: '计划结束', width: 110, render: item => <DateCell value={item.plannedEndAt} /> },
+  { key: 'slaStatus' as keyof TaskItem, header: 'SLA', width: 90, render: item => <SlaBadge value={item.slaStatus} /> },
+  { key: 'code' as keyof TaskItem, header: '', width: 50, render: () => <ActionCell /> },
 ]
 
 const TaskListView = ({
@@ -163,50 +151,26 @@ const TaskListView = ({
   }
 
   return (
-    <div>
-      <DataTable
-        columns={columns}
-        rows={tasks}
-        rowKey={r => r.code}
-        onRowClick={row => onOpenTaskDetail?.(row.code)}
-        selectable
-        selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
-        batchActions={
-          <>
-            <button
-              type="button"
-              style={batchBtnStyle}
-              onClick={() => onBatchAssign?.(Array.from(selectedKeys).map(String))}
-            >
-              批量分配
-            </button>
-            <button
-              type="button"
-              style={batchBtnStyle}
-              onClick={() => onBatchUrge?.(Array.from(selectedKeys).map(String))}
-            >
-              批量催办
-            </button>
-            <button
-              type="button"
-              style={batchBtnStyle}
-              onClick={() => onBatchExport?.(Array.from(selectedKeys).map(String))}
-            >
-              导出选中
-            </button>
-          </>
-        }
-      />
-
-      <Pagination
-        total={pagination.total}
-        currentPage={pagination.currentPage}
-        pageSize={pagination.pageSize}
-        onPageChange={onPageChange}
-        classNamePrefix="tm"
-      />
-    </div>
+    <PmTable
+      columns={columns}
+      data={tasks}
+      rowKey={r => r.code}
+      selectable
+      selectedKeys={selectedKeys}
+      onSelectionChange={setSelectedKeys}
+      onRowClick={row => onOpenTaskDetail?.(row.code)}
+      batchActions={
+        <>
+          <button type="button" style={batchBtnStyle} onClick={() => onBatchAssign?.(Array.from(selectedKeys).map(String))}>批量分配</button>
+          <button type="button" style={batchBtnStyle} onClick={() => onBatchUrge?.(Array.from(selectedKeys).map(String))}>批量催办</button>
+          <button type="button" style={batchBtnStyle} onClick={() => onBatchExport?.(Array.from(selectedKeys).map(String))}>导出选中</button>
+        </>
+      }
+      page={pagination.currentPage - 1}
+      total={pagination.total}
+      rowsPerPage={pagination.pageSize}
+      onPageChange={page => onPageChange(page + 1)}
+    />
   )
 }
 

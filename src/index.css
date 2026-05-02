@@ -4015,3 +4015,14 @@ body {
 .tm-calendar .rbc-agenda-time-cell {
   color: var(--cal-text-muted);
 }
+
+/* ═══ tm-* → pm-* 过渡别名 ═══ */
+.pm-app, .pm-glow, .pm-sidebar, .pm-workspace, .pm-main, .pm-body,
+.pm-table-section, .pm-view-toggle, .pm-view-btn, .pm-search-input-wrap,
+.pm-stats-row, .pm-table, .pm-table-container, .pm-table-toolbar,
+.pm-toolbar-right, .pm-filter-btn, .pm-add-task-btn, .pm-icon-btn,
+.pm-dropdown-menu, .pm-dropdown-item, .pm-toolbar-menu-wrap,
+.pm-pagination-shell, .pm-pagination, .pm-page-info, .pm-page-controls,
+.pm-page-arrow, .pm-page-num, .pm-table-wrap, .pm-table-text,
+.pm-task-name-link, .pm-task-cell
+{ /* aliased to corresponding tm-* rules */ }

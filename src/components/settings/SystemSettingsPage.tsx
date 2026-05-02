@@ -212,10 +212,6 @@ const SystemSettingsPage = () => {
 
   return (
     <AppShell
-      rootClassName="pm-app"
-      glowClassPrefix="pm-glow"
-      workspaceClassName="pm-workspace"
-      mainClassName="pm-main"
       sidebar={<AppSidebar currentHash={currentHash} />}
       header={
         <PageHeader

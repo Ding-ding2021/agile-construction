@@ -1,43 +1,40 @@
 import type { ReactNode } from 'react'
 
 type AppShellProps = {
-  rootClassName: string
+  classNamePrefix?: string
+  glow?: boolean
   sidebar: ReactNode
   header?: ReactNode
+  stats?: ReactNode
   children: ReactNode
-  workspaceClassName: string
-  mainClassName: string
-  glowClassPrefix?: string
 }
 
 const AppShell = ({
-  rootClassName,
+  classNamePrefix = 'pm',
+  glow = true,
   sidebar,
   header,
+  stats,
   children,
-  workspaceClassName,
-  mainClassName,
-  glowClassPrefix,
-}: AppShellProps) => {
-  return (
-    <div className={rootClassName}>
-      {glowClassPrefix ? (
-        <>
-          <div className={`${glowClassPrefix} ${glowClassPrefix}-left`} />
-          <div className={`${glowClassPrefix} ${glowClassPrefix}-right`} />
-        </>
-      ) : null}
-
-      {sidebar}
-
-      <div className={workspaceClassName}>
-        <main className={mainClassName}>
-          {header}
-          {children}
-        </main>
-      </div>
+}: AppShellProps) => (
+  <div className={`${classNamePrefix}-app`}>
+    {glow && (
+      <>
+        <div className={`${classNamePrefix}-glow ${classNamePrefix}-glow-left`} />
+        <div className={`${classNamePrefix}-glow ${classNamePrefix}-glow-right`} />
+      </>
+    )}
+    <div className={`${classNamePrefix}-sidebar`}>{sidebar}</div>
+    <div className={`${classNamePrefix}-workspace`}>
+      <main className={`${classNamePrefix}-main`}>
+        {header && <div className={`${classNamePrefix}-header`}>{header}</div>}
+        <div className={`${classNamePrefix}-body`}>
+          {stats && <div className={`${classNamePrefix}-stats-row`}>{stats}</div>}
+          <div className={`${classNamePrefix}-content`}>{children}</div>
+        </div>
+      </main>
     </div>
-  )
-}
+  </div>
+)
 
 export default AppShell

@@ -81,10 +81,7 @@ const StandardManagementPage = () => {
 
   return (
     <AppShell
-      rootClassName="sm-page"
-      glowClassPrefix="sm-glow"
-      workspaceClassName="sm-main"
-      mainClassName="sm-content"
+      classNamePrefix="sm"
       sidebar={<AppSidebar currentHash={currentHash} />}
       header={
         <PageHeader

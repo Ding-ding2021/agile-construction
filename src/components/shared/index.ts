@@ -40,12 +40,14 @@ export type { EmptyStateProps } from './feedback/EmptyState'
 // import { Save, Delete } from '@mui/icons-material';
 
 // Form components
-export { PmUserSelect, PmDatePicker, PmDateTimePicker } from './forms'
+export { PmUserSelect, PmDatePicker, PmDateTimePicker, PmTagSelect } from './forms'
 export type {
   UserSelectOption,
   PmUserSelectProps,
   PmDatePickerProps,
   PmDateTimePickerProps,
+  PmTagOption,
+  PmTagSelectProps,
 } from './forms'
 
 // Icon components

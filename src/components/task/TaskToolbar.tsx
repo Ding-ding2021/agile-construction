@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { type TaskFilters, type TaskViewMode } from './taskManagement.types'
+import { ViewToggle } from '../shared'
+import type { ViewToggleItem } from '../shared'
+import { PmButton } from '../shared/mui'
 
 type TaskToolbarProps = {
   viewMode: TaskViewMode
@@ -13,10 +16,10 @@ type TaskToolbarProps = {
   onOpenExport?: () => void
 }
 
-const viewModes: Array<{ mode: TaskViewMode; label: string }> = [
-  { mode: 'list', label: '表格' },
-  { mode: 'kanban', label: '看板' },
-  { mode: 'calendar', label: '日历' },
+const viewModes: ViewToggleItem[] = [
+  { key: 'list', label: '表格' },
+  { key: 'kanban', label: '看板' },
+  { key: 'calendar', label: '日历' },
 ]
 
 function MoreMenu({ onImport, onExport }: { onImport?: () => void; onExport?: () => void }) {
@@ -128,6 +131,7 @@ const TaskToolbar = ({
   onViewModeChange,
   searchQuery,
   onSearchChange,
+  onCreateTask,
   onOpenImport,
   onOpenExport,
 }: TaskToolbarProps) => {
@@ -142,77 +146,30 @@ const TaskToolbar = ({
         flexWrap: 'wrap',
       }}
     >
-      {/* 视图切换 */}
-      <div
-        style={{
-          display: 'flex',
-          gap: 2,
-          background: 'rgba(255,255,255,0.04)',
-          borderRadius: 8,
-          padding: 2,
-        }}
-      >
-        {viewModes.map(view => (
-          <button
-            key={view.mode}
-            type="button"
-            onClick={() => onViewModeChange(view.mode)}
-            style={{
-              padding: '5px 12px',
-              border: 'none',
-              borderRadius: 6,
-              background: viewMode === view.mode ? 'rgba(255,255,255,0.08)' : 'transparent',
-              color: viewMode === view.mode ? '#ffffff' : 'rgba(255,255,255,0.40)',
-              fontSize: 12,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-          >
-            {view.label}
-          </button>
-        ))}
-      </div>
+      <ViewToggle
+        items={viewModes}
+        value={viewMode}
+        onChange={key => onViewModeChange(key as TaskViewMode)}
+      />
 
       {/* 右侧操作 */}
       <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ position: 'relative' }}>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="rgba(255,255,255,0.40)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
-              position: 'absolute',
-              left: 10,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              pointerEvents: 'none',
-            }}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input
-            placeholder="搜索"
-            value={searchQuery}
-            onChange={e => onSearchChange(e.target.value)}
-            style={{
-              padding: '6px 12px 6px 32px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 10,
-              background: 'rgba(255,255,255,0.05)',
-              color: '#fff',
-              fontSize: 12,
-              width: 180,
-              outline: 'none',
-              fontFamily: 'inherit',
-            }}
-          />
-        </div>
+        <input
+          placeholder="搜索"
+          value={searchQuery}
+          onChange={e => onSearchChange(e.target.value)}
+          style={{
+            padding: '6px 12px',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 10,
+            background: 'rgba(255,255,255,0.05)',
+            color: '#fff',
+            fontSize: 12,
+            width: 160,
+            outline: 'none',
+            fontFamily: 'inherit',
+          }}
+        />
 
         <FilterButton label="筛选" />
         <FilterButton label="排序" />
@@ -220,40 +177,9 @@ const TaskToolbar = ({
 
         <MoreMenu onImport={onOpenImport} onExport={onOpenExport} />
 
-        <button
-          type="button"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 4,
-            padding: '6px 14px',
-            background: '#154DD9',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 14,
-            fontSize: 12,
-            fontWeight: 500,
-            cursor: 'pointer',
-            fontFamily: 'inherit',
-            boxShadow:
-              '0px 4px 6px -4px rgba(28,57,142,0.5), 0px 10px 15px -3px rgba(28,57,142,0.5)',
-          }}
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+        <PmButton variant="primary" size="sm" onClick={onCreateTask}>
           新建
-        </button>
+        </PmButton>
       </div>
     </div>
   )
