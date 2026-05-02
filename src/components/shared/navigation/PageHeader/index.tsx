@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { navigateByHash } from '../nav.utils'
+import { navigateByHash } from '../../../../config/navigation'
 import Icon from '../../icons/Icon'
 
 type BreadcrumbItem = {

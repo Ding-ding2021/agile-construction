@@ -1,4 +1,4 @@
-export type TaskViewMode = 'grid' | 'list' | 'kanban' | 'calendar'
+export type TaskViewMode = 'list' | 'kanban' | 'calendar'
 
 export type TaskStatus =
   | '草稿'
@@ -238,6 +238,7 @@ export interface TaskStats {
   pendingAcceptance: number
   slaWarningOrOverdue: number
   blocked: number
+  rectification: number
 }
 
 export interface TaskFilters {
@@ -249,6 +250,7 @@ export interface TaskFilters {
     | 'pendingAcceptance'
     | 'slaRisk'
     | 'blocked'
+    | 'rectification'
   searchQuery: string
   groupBy: 'none' | 'project' | 'status' | 'owner'
   sortBy: 'default' | 'planned-end-asc' | 'risk-desc' | 'remind-desc'

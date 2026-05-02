@@ -16,6 +16,7 @@ export function calculateTaskStats(tasks: TaskItem[]): TaskStats {
       item => item.slaStatus === '即将超时' || item.slaStatus === '超时'
     ).length,
     blocked: tasks.filter(item => item.isBlocked).length,
+    rectification: tasks.filter(item => item.isRectification).length,
   }
 }
 
@@ -37,6 +38,8 @@ export function filterByStatKey(tasks: TaskItem[], statKey: TaskFilters['statKey
       return tasks.filter(item => item.slaStatus === '即将超时' || item.slaStatus === '超时')
     case 'blocked':
       return tasks.filter(item => item.isBlocked)
+    case 'rectification':
+      return tasks.filter(item => item.isRectification)
     case 'all':
     default:
       return tasks

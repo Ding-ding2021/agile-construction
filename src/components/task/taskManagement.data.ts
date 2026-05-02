@@ -2,6 +2,7 @@ import type {
   TaskAssigneeType,
   TaskDetail,
   TaskItem,
+  TaskRelation,
   TaskRiskLevel,
   TaskSlaStatus,
   TaskStatus,
@@ -48,6 +49,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['施工', '审批'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -79,6 +84,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['电气', '施工'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -110,6 +119,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['消防', '调试'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -141,6 +154,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'manual',
     tags: ['验收', '整改'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '李娜',
     createdAt: '2026-03-25T10:00:00Z',
   },
@@ -175,6 +192,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['外立面', '验收'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -206,6 +227,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['机电', '安装'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -237,6 +262,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['电气', '测试'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -271,6 +300,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['家具', '安装'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-28T08:00:00Z',
   },
@@ -302,6 +335,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'manual',
     tags: ['VI', '复核'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '李娜',
     createdAt: '2026-03-25T09:00:00Z',
   },
@@ -333,6 +370,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['安全', '巡检'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -367,6 +408,10 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'manual',
     tags: ['消防', '审批', '证照'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '赵敏',
     createdAt: '2026-03-28T14:00:00Z',
   },
@@ -398,8 +443,53 @@ export const mockTasks: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['培训', '考核'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-25T08:00:00Z',
+  },
+]
+
+// ─── 整改任务 ────────────────────────────────────────────
+export const mockRectificationTasks: TaskItem[] = [
+  {
+    id: 'rect-sh-fire-001',
+    code: 'RECT-PRJ-001-FIRE-001',
+    name: '消防喷淋系统验收整改',
+    projectId: PROJECT_SHANGHAI,
+    projectName: '上海南京路旗舰店',
+    parentTaskId: null,
+    status: '执行中',
+    statusTone: 'red',
+    owner: '赵敏',
+    assigneeId: 'user-zhaomin',
+    assigneeName: '赵敏',
+    nodeLevelType: 'task',
+    priority: 'urgent',
+    plannedStartAt: '2026-04-08',
+    plannedEndAt: '2026-04-15',
+    slaStatus: '即将超时',
+    slaTone: 'orange',
+    riskLevel: '高风险',
+    riskTone: 'red',
+    predecessorStatus: '前置已完成',
+    remindCount: 3,
+    standardBindingStatus: '已绑定',
+    isBlocked: false,
+    progress: 40,
+    taskType: '关键任务',
+    sourceType: 'manual',
+    tags: ['消防', '整改'],
+    requiredFlag: true,
+    milestoneFlag: false,
+    isRectification: true,
+    derivedFromTaskId: 'PRJ-001-T-003',
+    rectificationReason: '消防喷淋系统联调未通过验收，需整改后重新提报',
+    reopenCount: 1,
+    createdBy: '系统',
+    createdAt: '2026-04-08T10:00:00Z',
   },
 ]
 
@@ -433,6 +523,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['施工准备'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -464,6 +558,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['水电'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -495,6 +593,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['消防'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -526,6 +628,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['验收'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-20T08:00:00Z',
   },
@@ -557,6 +663,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['外立面'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -588,6 +698,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['机电'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -619,6 +733,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['电气'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-22T08:00:00Z',
   },
@@ -650,6 +768,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'template',
     tags: ['家具'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-28T08:00:00Z',
   },
@@ -681,6 +803,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '标准任务',
     sourceType: 'manual',
     tags: ['品牌'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-25T08:00:00Z',
   },
@@ -712,6 +838,10 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '关键任务',
     sourceType: 'template',
     tags: ['证照'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-25T08:00:00Z',
   },
@@ -743,13 +873,156 @@ export const mockWorkPackages: TaskItem[] = [
     taskType: '里程碑',
     sourceType: 'template',
     tags: ['培训'],
+    requiredFlag: false,
+    milestoneFlag: false,
+    isRectification: false,
+    reopenCount: 0,
     createdBy: '系统',
     createdAt: '2026-03-25T08:00:00Z',
   },
 ]
 
 // ─── 合并所有节点 ──
-export const allMockTaskNodes: TaskItem[] = [...mockTasks, ...mockWorkPackages]
+export const allMockTaskNodes: TaskItem[] = [
+  ...mockTasks,
+  ...mockWorkPackages,
+  ...mockRectificationTasks,
+]
+
+// ─── 标准文档映射（标准 ID → 显示文本） ──────────────────────
+// 对应 template-contract.types.ts 中 StandardBinding 引用的 ID
+
+export const standardDocumentMap: Record<string, { name: string; description: string }> = {
+  'std-site-check-001': {
+    name: '选址现场勘查清单',
+    description: '门店选址阶段的现场勘查标准，包含周边环境、交通动线、客流结构评估标准。',
+  },
+  'std-site-check-002': {
+    name: '建筑条件核查表',
+    description: '建筑结构、层高、柱距、承重、消防通道等基础条件核查标准。',
+  },
+  'std-site-accept-001': {
+    name: '选址评估验收标准',
+    description: '选址报告的完整性、合规性、商业价值评估的验收标准。',
+  },
+  'std-lease-exec-001': {
+    name: '租赁合同谈判执行规范',
+    description: '租赁条款谈判的标准化流程，含租金、租期、免租期、违约条款等要点。',
+  },
+  'std-lease-accept-001': {
+    name: '租赁合同审核验收标准',
+    description: '法务审核要点、商务条件比对、风险条款标注等验收标准。',
+  },
+  'std-design-exec-001': {
+    name: '设计方案评审执行规范',
+    description: '方案设计、深化设计各阶段评审流程与交付物标准。',
+  },
+  'std-design-accept-001': {
+    name: '施工图设计验收标准',
+    description: '施工图完整性、规范符合性、碰撞检查等验收标准。',
+  },
+  'std-design-accept-002': {
+    name: '设计变更管理标准',
+    description: '设计变更的发起、评审、批准、跟踪闭环的管理标准。',
+  },
+  'std-construction-exec-001': {
+    name: '门店施工执行规范',
+    description: '施工现场管理、安全文明施工、材料进场验收、隐蔽工程验收等标准。',
+  },
+  'std-construction-accept-001': {
+    name: '工程竣工验收标准',
+    description: '竣工验收的检查项、测试要求、资料归档标准。',
+  },
+}
+
+/**
+ * 将标准 ID 数组解析为显示文本列表
+ */
+export const resolveStandardNames = (standardIds: string[]): string[] =>
+  standardIds.map(id => standardDocumentMap[id]?.name ?? id)
+
+/**
+ * 将标准 ID 数组解析为完整描述列表
+ */
+export const resolveStandardDescriptions = (standardIds: string[]): string[] =>
+  standardIds.map(id => {
+    const doc = standardDocumentMap[id]
+    return doc ? `${doc.name}：${doc.description}` : id
+  })
+
+// ─── Mock 任务依赖关系 ────────────────────────────────────────
+// 必须在 buildTaskDetailFromItem 之前定义
+
+export const mockTaskRelations: TaskRelation[] = [
+  // 上海项目：消防喷淋联调依赖强弱电布线完成
+  {
+    id: 'rel-sh-electrical-fire',
+    fromTaskId: 'PRJ-001-T-002',
+    toTaskId: 'PRJ-001-T-003',
+    relationType: 'finish_start',
+    fromTaskName: '强弱电综合布线实施',
+    toTaskName: '消防喷淋系统联调并提交报告',
+  },
+  // 上海项目：整改复检依赖消防喷淋联调完成
+  {
+    id: 'rel-sh-fire-recheck',
+    fromTaskId: 'PRJ-001-T-003',
+    toTaskId: 'PRJ-001-T-004',
+    relationType: 'finish_start',
+    fromTaskName: '消防喷淋系统联调并提交报告',
+    toTaskName: '样板区验收问题整改复检',
+  },
+  // 杭州项目：水电改造完成后才能开始泥瓦施工
+  {
+    id: 'rel-hz-plumbing-tile',
+    fromTaskId: 'PRJ-002-T-001',
+    toTaskId: 'PRJ-002-T-002',
+    relationType: 'finish_start',
+    fromTaskName: '水电改造施工',
+    toTaskName: '泥瓦工程',
+  },
+  // 杭州项目：泥瓦施工完成后才能进行油漆工程
+  {
+    id: 'rel-hz-tile-paint',
+    fromTaskId: 'PRJ-002-T-002',
+    toTaskId: 'PRJ-002-T-003',
+    relationType: 'finish_start',
+    fromTaskName: '泥瓦工程',
+    toTaskName: '油漆工程',
+  },
+]
+
+/**
+ * 获取任务的所有前置依赖（包含 WBS parent-child 和 peer 依赖）
+ */
+export const getTaskRelationsForTask = (taskCode: string): TaskRelation[] => {
+  const allTasks = [...mockTasks, ...mockWorkPackages]
+  const task = allTasks.find(t => t.code === taskCode)
+  if (!task) return []
+
+  const relations: TaskRelation[] = []
+
+  // 1. WBS 树结构 -> parent-child 依赖
+  if (task.parentTaskId) {
+    const parent = allTasks.find(t => t.id === task.parentTaskId)
+    if (parent) {
+      relations.push({
+        id: `${task.code}-rel-wbs`,
+        fromTaskId: parent.code,
+        toTaskId: task.code,
+        relationType: 'finish_start',
+        fromTaskName: parent.name,
+        toTaskName: task.name,
+      })
+    }
+  }
+
+  // 2. peer 级前置依赖
+  const peerRels = mockTaskRelations.filter(r => r.toTaskId === taskCode)
+  relations.push(...peerRels)
+
+  return relations
+}
 
 export const groupOptions = [
   { value: 'none', label: '不分组' },
@@ -784,11 +1057,36 @@ export const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
   const isDone = task.status === '已完成' || task.status === '已关闭'
   const ownerName = task.owner === '待分配' ? '' : task.owner
 
+  // 如果有标准快照，从 localStorage 加载快照详情
+  let snapshotExecution: string[] = []
+  let snapshotAcceptance: string[] = []
+  if (task.standardSnapshotId && typeof window !== 'undefined') {
+    try {
+      const raw = window.localStorage.getItem(`pm-standard-snapshot-${task.standardSnapshotId}`)
+      if (raw) {
+        const data = JSON.parse(raw) as {
+          executionStandards: string[]
+          acceptanceStandards: string[]
+        }
+        snapshotExecution = data.executionStandards ?? []
+        snapshotAcceptance = data.acceptanceStandards ?? []
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   return {
     ...task,
     assigneeType: (ownerName ? 'internal' : 'external') as TaskAssigneeType,
-    executionStandards: ['按门店施工标准执行并拍照留档。', '关键节点需在当日 18:00 前更新进度。'],
-    acceptanceStandards: ['验收资料齐全（照片/记录/签字）。', '不符合项需闭环后方可通过。'],
+    executionStandards:
+      snapshotExecution.length > 0
+        ? snapshotExecution
+        : ['按门店施工标准执行并拍照留档。', '关键节点需在当日 18:00 前更新进度。'],
+    acceptanceStandards:
+      snapshotAcceptance.length > 0
+        ? snapshotAcceptance
+        : ['验收资料齐全（照片/记录/签字）。', '不符合项需闭环后方可通过。'],
     checklist: [
       { id: `${task.code}-ck-1`, label: '任务范围确认', done: true },
       { id: `${task.code}-ck-2`, label: '现场执行记录上传', done: task.progress >= 50 },
@@ -802,16 +1100,8 @@ export const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
         uploader: ownerName || '系统',
       },
     ],
-    relations: [
-      {
-        id: `${task.code}-rel-1`,
-        fromTaskId: task.parentTaskId ?? task.code,
-        toTaskId: task.code,
-        relationType: 'finish_start',
-        fromTaskName: task.parentTaskId ? undefined : task.name,
-        toTaskName: task.name,
-      },
-    ],
+    submissions: [],
+    relations: getTaskRelationsForTask(task.code),
     flowLogs: [
       {
         id: `${task.code}-log-1`,
@@ -826,6 +1116,27 @@ export const buildTaskDetailFromItem = (task: TaskItem): TaskDetail => {
         operator: ownerName || '系统',
         detail: '任务状态按最新进度自动同步。',
         time: `${task.plannedEndAt} 16:30`,
+      },
+    ],
+    eventLogs: [
+      {
+        id: `${task.code}-evt-1`,
+        taskId: task.id,
+        eventType: 'status_change',
+        eventAction: '创建任务',
+        operatorId: task.createdBy,
+        operatorSource: 'system',
+        createdAt: task.createdAt,
+      },
+      {
+        id: `${task.code}-evt-2`,
+        taskId: task.id,
+        eventType: 'field_change',
+        eventAction: '更新状态',
+        afterValue: task.status,
+        operatorId: task.assigneeId || task.createdBy,
+        operatorSource: 'user',
+        createdAt: task.updatedAt || task.createdAt,
       },
     ],
   }

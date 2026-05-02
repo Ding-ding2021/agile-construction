@@ -2,10 +2,19 @@ import type {
   TaskFlowLog,
   TaskItem,
   TaskDetail,
+  TaskRelation,
   TaskAssigneeType,
 } from '../../components/task/taskManagement.types'
-import type { TemplateAuditEvent } from '../../components/standard/template-contract.types'
-import { allMockTaskNodes } from '../../components/task/taskManagement.data'
+import type {
+  TemplateAuditEvent,
+  StandardBinding,
+} from '../../components/standard/template-contract.types'
+import {
+  allMockTaskNodes,
+  resolveStandardNames,
+  resolveStandardDescriptions,
+} from '../../components/task/taskManagement.data'
+import { getStandardTemplatesByKind } from '../../components/standard/standard-template.data'
 import { createIdempotencyKey, serverAdapter } from '../api/serverAdapter'
 
 export type AcceptanceRectificationPayload = {
@@ -20,6 +29,7 @@ export type AcceptanceRectificationPayload = {
 const TASK_STATE_STORAGE_PREFIX = 'pm-task-state-v1'
 const TASK_OPERATION_LOG_PREFIX = 'pm-task-operation-logs-v1'
 const TEMPLATE_AUDIT_STORAGE_KEY = 'pm-template-audit-v1'
+const TASK_RELATION_STORAGE_KEY = 'pm-task-relations-v1'
 const TASK_SCHEMA_VERSION = 2
 
 const keyOf = (contextKey: string) => `${TASK_STATE_STORAGE_PREFIX}:${contextKey}`
@@ -148,6 +158,12 @@ const createFallbackRectificationTask = (payload: AcceptanceRectificationPayload
   isBlocked: false,
   progress: 5,
   tags: [],
+  requiredFlag: true,
+  milestoneFlag: false,
+  isRectification: true,
+  derivedFromTaskId: `acceptance-${payload.nodeCode}`,
+  rectificationReason: `由验收节点「${payload.nodeName}」触发的整改任务`,
+  reopenCount: 0,
   createdBy: '系统',
   createdAt: new Date().toISOString(),
 })
@@ -444,6 +460,10 @@ export const taskRepository = {
           standardSnapshotId: referenceTask.standardSnapshotId ?? `snapshot-${nextTaskCode}`,
           isBlocked: false,
           progress: 5,
+          isRectification: true,
+          derivedFromTaskId: referenceTask.code,
+          rectificationReason: `由验收节点「${payload.nodeName}」触发的整改任务`,
+          reopenCount: 0,
         }
       : {
           ...createFallbackRectificationTask(payload),
@@ -532,5 +552,113 @@ export const taskRepository = {
     })
 
     void Promise.allSettled(auditPromises)
+  },
+
+  // ── 任务依赖关系 CRUD ────────────────────────────────────────
+
+  getRelations(): TaskRelation[] {
+    try {
+      const raw = window.localStorage.getItem(TASK_RELATION_STORAGE_KEY)
+      return raw ? (JSON.parse(raw) as TaskRelation[]) : []
+    } catch {
+      return []
+    }
+  },
+
+  addRelation(relation: Omit<TaskRelation, 'id'>): TaskRelation {
+    const relations = taskRepository.getRelations()
+    const newRelation: TaskRelation = {
+      ...relation,
+      id: `rel-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    }
+    relations.push(newRelation)
+    try {
+      window.localStorage.setItem(TASK_RELATION_STORAGE_KEY, JSON.stringify(relations))
+    } catch {
+      // ignore storage errors
+    }
+    return newRelation
+  },
+
+  removeRelation(relationId: string): void {
+    const relations = taskRepository.getRelations().filter(r => r.id !== relationId)
+    try {
+      window.localStorage.setItem(TASK_RELATION_STORAGE_KEY, JSON.stringify(relations))
+    } catch {
+      // ignore storage errors
+    }
+  },
+
+  // ── 标准绑定 ─────────────────────────────────────────────────
+
+  /**
+   * 为任务绑定标准模板并生成快照
+   * @param taskCode 任务编码
+   * @param catalogItemId 模板目录条目 ID（如 'tt-site-survey-v1'）
+   * @returns 更新后的 TaskItem，或 null 如果任务/模板未找到
+   */
+  bindStandard(taskCode: string, catalogItemId: string): TaskItem | null {
+    // 1. 查找任务模板
+    const catalogItems = getStandardTemplatesByKind('task')
+    const catalogItem = catalogItems.find(item => item.id === catalogItemId)
+    const taskTemplate = catalogItem?.taskTemplate
+    if (!taskTemplate) return null
+
+    const binding: StandardBinding = taskTemplate.standardBinding
+
+    // 2. 在 localStorage 中查找并更新任务
+    const contextKey = '__all'
+    const tasks = readLocalTasks(contextKey) ?? []
+    const taskIndex = tasks.findIndex(t => t.code === taskCode)
+    if (taskIndex === -1) return null
+
+    const snapshotId = `snap-${taskCode}-${Date.now()}`
+    const updatedTask: TaskItem = {
+      ...tasks[taskIndex],
+      standardBindingStatus: '已绑定',
+      standardSnapshotId: snapshotId,
+      snapshotStatus: '已生成',
+    }
+
+    tasks[taskIndex] = updatedTask
+    persistLocalTasks(contextKey, tasks)
+
+    // 3. 同时存储标准快照详情，供 TaskDetail 使用
+    const snapshotKey = `pm-standard-snapshot-${snapshotId}`
+    const snapshotData = {
+      templateName: taskTemplate.taskTemplateName,
+      executionStandards: resolveStandardNames(binding.defaultExecutionStandardIds),
+      acceptanceStandards: resolveStandardNames(binding.defaultAcceptanceStandardIds),
+      executionDetails: resolveStandardDescriptions(binding.defaultExecutionStandardIds),
+      acceptanceDetails: resolveStandardDescriptions(binding.defaultAcceptanceStandardIds),
+      boundAt: new Date().toISOString(),
+    }
+    try {
+      window.localStorage.setItem(snapshotKey, JSON.stringify(snapshotData))
+    } catch {
+      // ignore storage errors
+    }
+
+    return updatedTask
+  },
+
+  /**
+   * 获取可绑定到任务的标准模板列表
+   */
+  getBindableTaskTemplates(): {
+    id: string
+    name: string
+    executionCount: number
+    acceptanceCount: number
+  }[] {
+    return getStandardTemplatesByKind('task')
+      .filter(item => item.taskTemplate?.status === 'active')
+      .map(item => ({
+        id: item.id,
+        name: item.name,
+        executionCount: item.taskTemplate?.standardBinding.defaultExecutionStandardIds.length ?? 0,
+        acceptanceCount:
+          item.taskTemplate?.standardBinding.defaultAcceptanceStandardIds.length ?? 0,
+      }))
   },
 }

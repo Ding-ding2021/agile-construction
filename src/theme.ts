@@ -1,14 +1,25 @@
 import { createTheme, type ThemeOptions } from '@mui/material/styles'
 
-// 设计规范颜色系统
+/**
+ * 数字营建 — 品牌设计系统
+ * 设计来源：Pixso 品牌设计规范
+ * 品牌色板：
+ *   品牌蓝 #154DD9 | 暖金 #F5DAAC
+ *   品牌紫 #5C16D9 | 深蓝 #0A2363 | 钢蓝 #394E84 | 亮蓝 #168BD9
+ *   品牌玫红 #D9165E | 品牌绿 #16D924
+ */
+
+// 设计规范色彩系统
 const designTokens = {
-  // 主色调
+  // 品牌主色
   primary: {
     main: '#154DD9',
     light: '#1a5ae8',
     dark: '#1248c5',
     contrastText: '#ffffff',
   },
+  // 品牌暖金
+  brandGold: '#F5DAAC',
   // 背景色
   background: {
     default: '#051338',
@@ -26,15 +37,15 @@ const designTokens = {
     disabled: 'rgba(255, 255, 255, 0.40)',
     hint: 'rgba(255, 255, 255, 0.50)',
   },
-  // 功能色
+  // 功能色（已对齐品牌色板）
   info: {
-    main: '#2B7FFF',
-    light: '#51A2FF',
+    main: '#168BD9', // 品牌亮蓝
+    light: '#45A9E8',
     contrastText: '#ffffff',
   },
   success: {
-    main: '#00BC7D',
-    light: '#00D492',
+    main: '#16D924', // 品牌绿
+    light: '#3EE84A',
     contrastText: '#ffffff',
   },
   warning: {
@@ -43,8 +54,8 @@ const designTokens = {
     contrastText: '#ffffff',
   },
   error: {
-    main: '#FF4D4F',
-    light: '#FF7875',
+    main: '#D9165E', // 品牌玫红
+    light: '#E84D7A',
     contrastText: '#ffffff',
   },
   // 边框
@@ -54,8 +65,8 @@ const designTokens = {
   },
   // 特殊色
   purple: {
-    main: '#8E51FF',
-    light: '#A684FF',
+    main: '#5C16D9', // 品牌紫
+    light: '#7A3EE6',
   },
 }
 
@@ -480,7 +491,7 @@ export const themeOptions: ThemeOptions = {
           fontSize: '14px',
           fontWeight: 600,
           backgroundColor: 'rgba(21, 77, 217, 0.2)',
-          color: '#2B7FFF',
+          color: '#168BD9', // 品牌亮蓝
         },
       },
     },
