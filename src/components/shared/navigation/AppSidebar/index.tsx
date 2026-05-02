@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Icon from '../../icons/Icon'
 import { navIconMap, type IconName } from '../../icons'
 import { defaultNavItems, type SharedNavItem } from '../nav.config'
-import { isHashRouteActive, navigateByHash } from '../nav.utils'
+import { isHashRouteActive, navigateByHash } from '../../../../config/navigation'
 import { useSidebarCollapsed } from '../useSidebarCollapsed'
 
 type AppSidebarProps = {

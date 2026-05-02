@@ -22,6 +22,7 @@ import type {
   TaskStatus,
 } from './taskManagement.types'
 import { STATUS_TONE_MAP } from './taskManagement.types'
+import { validateStatusTransition } from './taskStateMachine.guards'
 import TaskKanbanView from './TaskKanbanView'
 import TaskCalendarView from './TaskCalendarView'
 import { taskRepository } from '../../services/repositories/taskRepository'
@@ -32,6 +33,7 @@ import PlayCircle from '@mui/icons-material/PlayCircle'
 import Send from '@mui/icons-material/Send'
 import HowToVote from '@mui/icons-material/HowToVote'
 import Warning from '@mui/icons-material/Warning'
+import WarningAmber from '@mui/icons-material/WarningAmber'
 import Error from '@mui/icons-material/Error'
 
 const TaskManagementPage = () => {
@@ -124,11 +126,19 @@ const TaskManagementPage = () => {
     })
   }, [])
 
-  // 通用状态流转：更新状态 + 持久化（带防重复提交）
+  // 通用状态流转：守卫校验 → 更新状态 + 持久化（带防重复提交）
   const transitionTaskStatus = useCallback(
     async (taskCode: string, nextStatus: TaskStatus, successMsg: string) => {
       const task = tasks.find(t => t.code === taskCode)
       if (!task || transitioningRef.current.has(taskCode)) return
+
+      // 守卫校验：只有定义了守卫的状态才需要检查
+      const guardResult = validateStatusTransition(task, nextStatus, tasks)
+      if (!guardResult.passed) {
+        setFeedback({ tone: 'error', text: guardResult.blockedReason ?? '状态流转条件不满足' })
+        return
+      }
+
       transitioningRef.current.add(taskCode)
       try {
         await taskRepository.updateTask(task.projectId, taskCode, { status: nextStatus })
@@ -218,6 +228,8 @@ const TaskManagementPage = () => {
     },
     [updateFilters]
   )
+
+  const bindableTemplates = useMemo(() => taskRepository.getBindableTaskTemplates(), [])
 
   return (
     <div className="tm-app">
@@ -317,6 +329,13 @@ const TaskManagementPage = () => {
                       label: '阻塞任务数',
                       value: stats.blocked,
                       tone: 'red',
+                    },
+                    {
+                      key: 'rectification',
+                      iconComponent: WarningAmber,
+                      label: '整改任务数',
+                      value: stats.rectification,
+                      tone: 'orange',
                     },
                   ]}
                   activeKey={filters.statKey}
@@ -475,6 +494,45 @@ const TaskManagementPage = () => {
               }}
               onRemoveAttachment={(_taskCode, _attachmentId) => {
                 setFeedback({ tone: 'success', text: '附件已删除' })
+              }}
+              onAddRelation={(taskCode, relation) => {
+                const created = taskRepository.addRelation(relation)
+                setSelectedTaskDetail(prev => {
+                  if (!prev || prev.code !== taskCode) return prev
+                  return { ...prev, relations: [...prev.relations, created] }
+                })
+                setFeedback({ tone: 'success', text: '前置任务已添加' })
+              }}
+              onRemoveRelation={(taskCode, relationId) => {
+                taskRepository.removeRelation(relationId)
+                setSelectedTaskDetail(prev => {
+                  if (!prev || prev.code !== taskCode) return prev
+                  return {
+                    ...prev,
+                    relations: prev.relations.filter(r => r.id !== relationId),
+                  }
+                })
+                setFeedback({ tone: 'success', text: '前置依赖已删除' })
+              }}
+              onBindStandard={(taskCode, catalogItemId) => {
+                const updated = taskRepository.bindStandard(taskCode, catalogItemId)
+                if (updated) {
+                  const refreshed = resolveTaskDetail(taskCode)
+                  if (refreshed) setSelectedTaskDetail(refreshed)
+                  setFeedback({ tone: 'success', text: '标准绑定成功，快照已生成' })
+                } else {
+                  setFeedback({ tone: 'error', text: '标准绑定失败，未找到模板' })
+                }
+              }}
+              bindableTemplates={bindableTemplates}
+              allTasks={tasks}
+              onTagsChange={(taskCode, tags) => {
+                updateTaskInState(taskCode, { tags })
+                setSelectedTaskDetail(prev => {
+                  if (!prev || prev.code !== taskCode) return prev
+                  return { ...prev, tags }
+                })
+                setFeedback({ tone: 'success', text: '标签已更新' })
               }}
             />
           )}

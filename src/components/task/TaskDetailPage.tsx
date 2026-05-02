@@ -6,12 +6,16 @@
  * 状态流转、附件管理、检查项追踪、流转日志查看。
  */
 import { useState, type SyntheticEvent } from 'react'
-import type { TaskDetail, TaskPriority, TaskRiskLevel, TaskStatus } from './taskManagement.types'
-import {
-  resolveAvailableStatusOptions,
-  isTaskReadonlyStatus,
-  STATUS_TONE_MAP,
+import type {
+  TaskDetail,
+  TaskPriority,
+  TaskRelation,
+  TaskRiskLevel,
+  TaskStatus,
 } from './taskManagement.types'
+import { isTaskReadonlyStatus, STATUS_TONE_MAP } from './taskManagement.types'
+import { getAvailableNextStatuses } from './taskStateMachine.guards'
+import type { TaskItem } from './taskManagement.types'
 import {
   StatusChip,
   CardSection,
@@ -41,6 +45,11 @@ import {
   Tabs,
   Tab,
   LinearProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Tooltip,
 } from '@mui/material'
 
 // MUI Icons
@@ -59,6 +68,8 @@ import {
   ChatBubbleOutlineOutlined,
   MoreHoriz,
   WarningAmber,
+  Add,
+  Delete,
 } from '@mui/icons-material'
 
 export type TaskAssigneeOption = {
@@ -100,6 +111,25 @@ type TaskDetailPageProps = {
   onUploadAttachments?: (taskCode: string, files: File[]) => void
   onRemoveAttachment?: (taskCode: string, attachmentId: string) => void
   onCreateSubmission?: (taskCode: string, payload: { description?: string }) => void
+  onAddRelation?: (
+    taskCode: string,
+    relation: {
+      fromTaskId: string
+      toTaskId: string
+      relationType: 'finish_start' | 'start_start' | 'finish_finish' | 'start_finish'
+    }
+  ) => void
+  onRemoveRelation?: (taskCode: string, relationId: string) => void
+  onBindStandard?: (taskCode: string, catalogItemId: string) => void
+  bindableTemplates?: {
+    id: string
+    name: string
+    executionCount: number
+    acceptanceCount: number
+  }[]
+  /** 全量任务列表，用于状态守卫的前置任务校验 */
+  allTasks?: TaskItem[]
+  onTagsChange?: (taskCode: string, tags: string[]) => void
   onReviewSubmission?: (
     taskCode: string,
     payload: {
@@ -140,6 +170,20 @@ const PRIORITY_CONFIG: Record<TaskPriority, { label: string; color: string; bg: 
   medium: { label: '中', color: COLORS.priorityMedium, bg: 'var(--pm-blue-15)' },
   low: { label: '低', color: COLORS.priorityLow, bg: 'var(--pm-text-14)' },
 }
+
+const RELATION_TYPE_LABELS: Record<string, string> = {
+  finish_start: ' finish→start ',
+  start_start: ' start→start ',
+  finish_finish: ' finish→finish ',
+  start_finish: ' start→finish ',
+}
+
+const RELATION_TYPE_OPTIONS: { value: TaskRelation['relationType']; label: string }[] = [
+  { value: 'finish_start', label: '完成-开始 (FS)' },
+  { value: 'start_start', label: '开始-开始 (SS)' },
+  { value: 'finish_finish', label: '完成-完成 (FF)' },
+  { value: 'start_finish', label: '开始-完成 (SF)' },
+]
 
 const NODE_TYPE_LABEL: Record<string, string> = {
   project_root: '项目根节点',
@@ -196,6 +240,12 @@ const TaskDetailPage = ({
   onRemoveAttachment,
   onCreateSubmission,
   onReviewSubmission,
+  onAddRelation,
+  onRemoveRelation,
+  onBindStandard,
+  bindableTemplates = [],
+  allTasks = [],
+  onTagsChange,
 }: TaskDetailPageProps) => {
   const isReadonly = isTaskReadonlyStatus(taskDetail.status)
 
@@ -209,6 +259,11 @@ const TaskDetailPage = ({
   // Dialog 状态
   const [showSubmitDialog, setShowSubmitDialog] = useState(false)
   const [showReviewDialog, setShowReviewDialog] = useState(false)
+  const [showAddRelation, setShowAddRelation] = useState(false)
+  const [relationSearch, setRelationSearch] = useState('')
+  const [relationType, setRelationType] = useState<TaskRelation['relationType']>('finish_start')
+  const [showBindStandard, setShowBindStandard] = useState(false)
+  const [tagInput, setTagInput] = useState('')
 
   const handleTabChange = (_e: SyntheticEvent, v: number) => setActiveTab(v)
 
@@ -367,24 +422,75 @@ const TaskDetailPage = ({
           {/* ═══ Tab 1: 基本信息 ═══ */}
           {activeTab === 0 && (
             <>
-              {/* Tags */}
-              {taskDetail.tags.length > 0 && (
-                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                  {taskDetail.tags.map(tag => (
-                    <Chip
-                      key={tag}
-                      icon={<LocalOffer sx={{ fontSize: 14 }} />}
-                      label={tag}
-                      size="small"
-                      variant="outlined"
-                      sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
-                    />
-                  ))}
-                </Box>
-              )}
-
               <CardSection>
                 <SectionTitle>基本信息</SectionTitle>
+                {/* Tags */}
+                <Box sx={{ mb: 1.5 }}>
+                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 0.5 }}>
+                    {taskDetail.tags.map(tag => (
+                      <Chip
+                        key={tag}
+                        icon={<LocalOffer sx={{ fontSize: 14 }} />}
+                        label={tag}
+                        size="small"
+                        variant="outlined"
+                        onDelete={
+                          isReadonly
+                            ? undefined
+                            : () => {
+                                const next = taskDetail.tags.filter(t => t !== tag)
+                                onTagsChange?.(taskDetail.code, next)
+                              }
+                        }
+                        sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
+                      />
+                    ))}
+                  </Box>
+                  {!isReadonly && (
+                    <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                      <TextField
+                        size="small"
+                        placeholder="添加标签..."
+                        value={tagInput}
+                        onChange={e => setTagInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' && tagInput.trim()) {
+                            e.preventDefault()
+                            const value = tagInput.trim()
+                            if (!taskDetail.tags.includes(value)) {
+                              onTagsChange?.(taskDetail.code, [...taskDetail.tags, value])
+                            }
+                            setTagInput('')
+                          }
+                        }}
+                        sx={{
+                          minWidth: 120,
+                          '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
+                          '& .MuiInputBase-input': {
+                            color: COLORS.textWhite,
+                            fontSize: 12,
+                            py: 0.8,
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': { borderColor: COLORS.border },
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        disabled={!tagInput.trim()}
+                        onClick={() => {
+                          const value = tagInput.trim()
+                          if (value && !taskDetail.tags.includes(value)) {
+                            onTagsChange?.(taskDetail.code, [...taskDetail.tags, value])
+                          }
+                          setTagInput('')
+                        }}
+                        sx={{ color: COLORS.blue, '&.Mui-disabled': { color: COLORS.text40 } }}
+                      >
+                        <Add fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  )}
+                </Box>
                 <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 }}>
                   <Field label="任务编号" value={taskDetail.code} />
                   <Field label="所属项目" value={taskDetail.projectName} />
@@ -408,10 +514,41 @@ const TaskDetailPage = ({
                   <Field label="优先级" value={priority.label} />
                   {taskDetail.milestoneFlag && <Field label="里程碑节点" value="是" />}
                   {taskDetail.isRectification && (
-                    <Field label="整改任务" value={taskDetail.rectificationReason ?? '是'} />
+                    <>
+                      <Field label="整改任务" value="是" />
+                      {taskDetail.rectificationReason && (
+                        <Field label="整改原因" value={taskDetail.rectificationReason} />
+                      )}
+                      {taskDetail.reopenCount > 0 && (
+                        <Field label="重开次数" value={`${taskDetail.reopenCount} 次`} />
+                      )}
+                    </>
                   )}
                 </Box>
               </CardSection>
+
+              {taskDetail.derivedFromTaskId && (
+                <CardSection>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      color: COLORS.blue,
+                      cursor: 'pointer',
+                      '&:hover': { color: COLORS.blueLight },
+                    }}
+                    onClick={onBack}
+                  >
+                    <Typography variant="body2" sx={{ color: COLORS.text40, fontSize: 12 }}>
+                      派生来源：
+                    </Typography>
+                    <Typography variant="body2" sx={{ textDecoration: 'underline', fontSize: 12 }}>
+                      {taskDetail.derivedFromTaskId}
+                    </Typography>
+                  </Box>
+                </CardSection>
+              )}
 
               <CardSection>
                 <SectionTitle>执行人 & 时间</SectionTitle>
@@ -491,11 +628,34 @@ const TaskDetailPage = ({
                   </Typography>
                   <StatusSelect
                     value={taskDetail.status}
-                    options={resolveAvailableStatusOptions(taskDetail.status)}
+                    options={(() => {
+                      const nextStatuses = getAvailableNextStatuses(taskDetail, allTasks)
+                      return nextStatuses.filter(s => s.allowed).map(s => s.status)
+                    })()}
                     tones={STATUS_TONE_MAP}
                     onChange={handleStatusSelect}
                     disabled={isReadonly}
                   />
+                  {(() => {
+                    const blockedStatuses = getAvailableNextStatuses(taskDetail, allTasks).filter(
+                      s => !s.allowed
+                    )
+                    return (
+                      blockedStatuses.length > 0 && (
+                        <Box sx={{ mt: 1 }}>
+                          {blockedStatuses.map(s => (
+                            <Typography
+                              key={s.status}
+                              variant="caption"
+                              sx={{ color: COLORS.orange, display: 'block', fontSize: 11 }}
+                            >
+                              ⚠ {s.status}：{s.reason}
+                            </Typography>
+                          ))}
+                        </Box>
+                      )
+                    )
+                  })()}
                   <Button
                     variant="outlined"
                     size="small"
@@ -539,7 +699,24 @@ const TaskDetailPage = ({
               </CardSection>
 
               <CardSection>
-                <SectionTitle>标准与规范</SectionTitle>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                >
+                  <SectionTitle>标准与规范</SectionTitle>
+                  {taskDetail.standardBindingStatus === '未绑定' &&
+                    !isReadonly &&
+                    bindableTemplates &&
+                    bindableTemplates.length > 0 && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => setShowBindStandard(true)}
+                        sx={{ borderRadius: 10, fontSize: 12 }}
+                      >
+                        绑定标准
+                      </Button>
+                    )}
+                </Box>
                 <Stack spacing={2}>
                   <FieldRow label="标准绑定" value={taskDetail.standardBindingStatus} />
                   <FieldRow label="标准快照" value={taskDetail.snapshotStatus ?? '未生成'} />
@@ -824,7 +1001,20 @@ const TaskDetailPage = ({
           {/* ═══ Tab 5: 关联 ═══ */}
           {activeTab === 4 && (
             <CardSection>
-              <SectionTitle>关联任务 ({taskDetail.relations.length})</SectionTitle>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <SectionTitle>前置任务 ({taskDetail.relations.length})</SectionTitle>
+                {!isReadonly && (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<Add />}
+                    onClick={() => setShowAddRelation(true)}
+                    sx={{ borderRadius: 10, fontSize: 12 }}
+                  >
+                    添加前置
+                  </Button>
+                )}
+              </Box>
               <Stack spacing={0}>
                 {taskDetail.relations.length > 0 ? (
                   taskDetail.relations.map(rel => (
@@ -841,22 +1031,53 @@ const TaskDetailPage = ({
                     >
                       <Box>
                         <Typography variant="body2">
-                          {rel.toTaskName ?? rel.fromTaskName ?? rel.id}
+                          {rel.fromTaskName ?? rel.fromTaskId}
                         </Typography>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontFamily: 'monospace' }}
+                          sx={{ fontFamily: 'monospace', fontSize: 11 }}
                         >
-                          {rel.fromTaskId} → {rel.toTaskId}
+                          {rel.fromTaskId}
                         </Typography>
+                        <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5 }}>
+                          <Chip
+                            size="small"
+                            label={RELATION_TYPE_LABELS[rel.relationType] ?? rel.relationType}
+                            variant="outlined"
+                            sx={{ fontSize: 10 }}
+                          />
+                          <Chip
+                            size="small"
+                            label={`→ ${rel.toTaskName ?? rel.toTaskId}`}
+                            variant="outlined"
+                            sx={{
+                              fontSize: 10,
+                              borderColor: 'var(--pm-blue-15)',
+                              color: 'var(--pm-blue)',
+                            }}
+                          />
+                        </Box>
                       </Box>
-                      <Chip size="small" label={rel.relationType} variant="outlined" />
+                      {!isReadonly && (
+                        <Tooltip title="删除依赖">
+                          <IconButton
+                            size="small"
+                            onClick={() => onRemoveRelation?.(taskDetail.code, rel.id)}
+                            sx={{ color: COLORS.text40, '&:hover': { color: COLORS.red } }}
+                          >
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </Box>
                   ))
                 ) : (
-                  <Typography variant="body2" sx={{ color: COLORS.text70 }}>
-                    暂无关联任务
+                  <Typography
+                    variant="body2"
+                    sx={{ color: COLORS.text70, py: 2, textAlign: 'center' }}
+                  >
+                    暂无前置任务
                   </Typography>
                 )}
               </Stack>
@@ -886,6 +1107,136 @@ const TaskDetailPage = ({
           )}
         </Stack>
       </Box>
+
+      {/* ── 绑定标准 Dialog ── */}
+      <Dialog
+        open={showBindStandard}
+        onClose={() => setShowBindStandard(false)}
+        maxWidth="sm"
+        fullWidth
+        slotProps={{ paper: { sx: { bgcolor: COLORS.card, borderRadius: 3 } } }}
+      >
+        <DialogTitle sx={{ color: COLORS.textWhite, fontSize: 16, fontWeight: 600 }}>
+          选择标准模板
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={1.5} sx={{ mt: 1 }}>
+            <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+              选择一个任务模板，将其执行标准和验收标准绑定到当前任务。绑定后将生成标准快照。
+            </Typography>
+            {bindableTemplates.map(tpl => (
+              <Paper
+                key={tpl.id}
+                variant="outlined"
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  borderColor: 'var(--pm-border)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                  '&:hover': { borderColor: 'var(--pm-primary)', bgcolor: 'var(--pm-primary-15)' },
+                }}
+                onClick={() => {
+                  onBindStandard?.(taskDetail.code, tpl.id)
+                  setShowBindStandard(false)
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ color: COLORS.textWhite, fontWeight: 600, mb: 0.5 }}
+                >
+                  {tpl.name}
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Typography variant="caption" sx={{ color: COLORS.text70 }}>
+                    执行标准：{tpl.executionCount} 项
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: COLORS.text70 }}>
+                    验收标准：{tpl.acceptanceCount} 项
+                  </Typography>
+                </Box>
+              </Paper>
+            ))}
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, pt: 0 }}>
+          <Button onClick={() => setShowBindStandard(false)} sx={{ color: COLORS.text70 }}>
+            取消
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── 添加前置任务 Dialog ── */}
+      <Dialog
+        open={showAddRelation}
+        onClose={() => setShowAddRelation(false)}
+        maxWidth="sm"
+        fullWidth
+        slotProps={{ paper: { sx: { bgcolor: COLORS.card, borderRadius: 3 } } }}
+      >
+        <DialogTitle sx={{ color: COLORS.textWhite, fontSize: 16, fontWeight: 600 }}>
+          添加前置任务
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <Typography variant="body2" sx={{ color: COLORS.text70 }}>
+              选择当前任务的依赖关系。前置任务需要先完成后，当前任务才能开始。
+            </Typography>
+            <TextField
+              label="前置任务编码"
+              placeholder="例如 PRJ-001-T-001"
+              value={relationSearch}
+              onChange={e => setRelationSearch(e.target.value)}
+              fullWidth
+              size="small"
+              sx={{
+                '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
+                '& .MuiInputBase-input': { color: COLORS.textWhite },
+                '& .MuiInputLabel-root': { color: COLORS.text40 },
+              }}
+            />
+            <FormControl fullWidth size="small">
+              <InputLabel sx={{ color: COLORS.text40 }}>依赖类型</InputLabel>
+              <Select
+                value={relationType}
+                label="依赖类型"
+                onChange={e => setRelationType(e.target.value as TaskRelation['relationType'])}
+                sx={{
+                  color: COLORS.textWhite,
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: COLORS.border },
+                }}
+              >
+                {RELATION_TYPE_OPTIONS.map(opt => (
+                  <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, pt: 0 }}>
+          <Button onClick={() => setShowAddRelation(false)} sx={{ color: COLORS.text70 }}>
+            取消
+          </Button>
+          <Button
+            variant="contained"
+            disabled={!relationSearch.trim()}
+            onClick={() => {
+              onAddRelation?.(taskDetail.code, {
+                fromTaskId: relationSearch.trim(),
+                toTaskId: taskDetail.code,
+                relationType: relationType,
+              })
+              setShowAddRelation(false)
+              setRelationSearch('')
+              setRelationType('finish_start')
+            }}
+          >
+            添加
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* ── 提交验收 Dialog ── */}
       <SubmitDialog

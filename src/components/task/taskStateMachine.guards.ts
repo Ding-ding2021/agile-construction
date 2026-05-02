@@ -2,6 +2,7 @@ import {
   TASK_STATUS_TRANSITION_MAP,
   isTaskReadonlyStatus,
   type TaskItem,
+  type TaskRelation,
   type TaskStatus,
 } from './taskManagement.types'
 
@@ -278,17 +279,33 @@ function validateTransitionToCompleted(
 
 /**
  * 辅助函数：获取前置任务
+ *
+ * 优先使用 TaskRelation 查找前置依赖，退化时使用 parentPath 推断。
+ *
+ * @param taskCode 当前任务编码
+ * @param allTasks 所有任务列表
+ * @param relations 可选的前置依赖关系列表
  */
-function getPredecessorTasks(taskCode: string, allTasks: TaskItem[]): TaskItem[] {
-  // 当前实现基于parentPath推断，实际应该使用task_relation表
-  // 这里简化处理，返回同parentPath下的前序任务
+function getPredecessorTasks(
+  taskCode: string,
+  allTasks: TaskItem[],
+  relations: TaskRelation[] = []
+): TaskItem[] {
   const currentTask = allTasks.find(t => t.code === taskCode)
   if (!currentTask) return []
 
+  // 1. 如果有 relations 数据，基于 TaskRelation 查询
+  if (relations.length > 0) {
+    const predecessorCodes = relations.filter(r => r.toTaskId === taskCode).map(r => r.fromTaskId)
+    if (predecessorCodes.length > 0) {
+      return allTasks.filter(t => predecessorCodes.includes(t.code))
+    }
+  }
+
+  // 2. 退化：基于 parentPath 推断（仅用于无 relations 数据的降级场景）
   const taskIndex = allTasks.findIndex(t => t.code === taskCode)
   const predecessorPath = currentTask.parentPath
 
-  // 简化逻辑：返回同路径下索引在当前任务之前的任务
   return allTasks
     .slice(0, taskIndex)
     .filter(t => t.parentPath === predecessorPath && t.code !== taskCode)

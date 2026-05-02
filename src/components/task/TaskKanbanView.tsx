@@ -1,21 +1,30 @@
 /**
- * TaskKanbanView — 看板视图（支持拖拽）
+ * TaskKanbanView — 看板视图（拖拽 + 排序 + 状态流转）
  *
- * 按任务状态分组展示，每个状态一列，任务卡片可拖拽到其他状态列。
+ * 按任务状态分组展示，每个状态一列。支持：
+ * - 跨列拖拽变更任务状态
+ * - 列内拖拽排序（持久化顺序）
+ * - 仅允许拖入合法的状态流转目标
  */
 import { useState, useMemo, useCallback } from 'react'
 import { Box, Paper, Typography } from '@mui/material'
 import {
   DndContext,
   DragOverlay,
-  useDraggable,
-  useDroppable,
   pointerWithin,
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import type { TaskItem, TaskStatus } from './taskManagement.types'
-import { STATUS_TONE_MAP } from './taskManagement.types'
+import { STATUS_TONE_MAP, resolveAvailableStatusOptions } from './taskManagement.types'
+import { validateStatusTransition } from './taskStateMachine.guards'
 import StatusChip from '../ui/StatusChip'
 
 const STATUS_ORDER: TaskStatus[] = [
@@ -34,11 +43,13 @@ type TaskKanbanViewProps = {
   tasks: TaskItem[]
   onOpenTaskDetail?: (taskCode: string) => void
   onStatusChange?: (taskCode: string, nextStatus: TaskStatus) => void
+  /** 列内排序变化回调 */
+  onSortChange?: (columnStatus: TaskStatus, orderedCodes: string[]) => void
 }
 
-/** 可拖拽的任务卡片 */
-function DraggableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: string) => void }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+/** 可拖拽排序的任务卡片 */
+function SortableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: string) => void }) {
+  const { attributes, listeners, setNodeRef, isDragging, transform, transition } = useSortable({
     id: task.code,
     data: task,
   })
@@ -49,6 +60,10 @@ function DraggableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: strin
       variant="outlined"
       {...attributes}
       onClick={() => onOpen?.(task.code)}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
       sx={{
         p: 1.5,
         borderRadius: 'var(--pm-radius-md)',
@@ -58,12 +73,15 @@ function DraggableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: strin
         transition: 'all 0.15s',
         cursor: 'pointer',
         '&:hover': { bgcolor: 'var(--pm-element-hover)', borderColor: 'var(--pm-primary-15)' },
+        touchAction: 'none',
       }}
     >
       {/* 拖拽手柄 — 卡片右上角 */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 0.5, mt: -0.5, mr: -0.5 }}>
         <Box
           {...listeners}
+          role="button"
+          tabIndex={0}
           sx={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -132,17 +150,32 @@ function DraggableCard({ task, onOpen }: { task: TaskItem; onOpen?: (code: strin
   )
 }
 
-/** 可拖放的状态列 */
+/** 可拖放的状态列（含 SortableContext） */
 function DroppableColumn({
   status,
   tasks,
   onOpen,
+  isValidDrop,
 }: {
   status: TaskStatus
   tasks: TaskItem[]
   onOpen?: (code: string) => void
+  isValidDrop: boolean
 }) {
-  const { setNodeRef, isOver } = useDroppable({ id: status })
+  const { setNodeRef, isOver } = useSortable({
+    id: `column-${status}`,
+    data: { type: 'column', status },
+    disabled: true,
+  })
+
+  const taskIds = useMemo(() => tasks.map(t => t.code), [tasks])
+
+  const overStyle = isOver
+    ? {
+        bgcolor: isValidDrop ? 'var(--pm-primary-15)' : 'rgba(255,80,80,0.08)',
+        borderColor: isValidDrop ? 'var(--pm-primary)' : 'rgba(255,80,80,0.4)',
+      }
+    : {}
 
   return (
     <Paper
@@ -152,10 +185,11 @@ function DroppableColumn({
         minWidth: 240,
         maxWidth: 280,
         flexShrink: 0,
-        bgcolor: isOver ? 'var(--pm-primary-15)' : 'var(--pm-element)',
-        borderColor: isOver ? 'var(--pm-primary)' : 'var(--pm-border)',
+        bgcolor: isOver ? overStyle.bgcolor : 'var(--pm-element)',
+        borderColor: isOver ? overStyle.borderColor : 'var(--pm-border)',
         borderRadius: 'var(--pm-radius-card)',
         transition: 'all 0.15s',
+        position: 'relative',
       }}
     >
       <Box sx={{ p: 2, pb: 1.5, borderBottom: '1px solid var(--pm-border-light)' }}>
@@ -164,11 +198,20 @@ function DroppableColumn({
           <Typography sx={{ fontSize: 12, color: 'var(--pm-text-40)' }}>{tasks.length}</Typography>
         </Box>
       </Box>
-      <Box sx={{ p: 1.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-        {tasks.map(task => (
-          <DraggableCard key={task.code} task={task} onOpen={onOpen} />
-        ))}
-      </Box>
+      <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
+        <Box sx={{ p: 1.5, display: 'flex', flexDirection: 'column', gap: 1.5, minHeight: 60 }}>
+          {tasks.map(task => (
+            <SortableCard key={task.code} task={task} onOpen={onOpen} />
+          ))}
+          {tasks.length === 0 && (
+            <Typography
+              sx={{ fontSize: 12, color: 'var(--pm-text-30)', textAlign: 'center', py: 2 }}
+            >
+              拖拽任务到此处
+            </Typography>
+          )}
+        </Box>
+      </SortableContext>
     </Paper>
   )
 }
@@ -203,6 +246,7 @@ export default function TaskKanbanView({
   tasks,
   onOpenTaskDetail,
   onStatusChange,
+  onSortChange,
 }: TaskKanbanViewProps) {
   const [activeTask, setActiveTask] = useState<TaskItem | null>(null)
 
@@ -213,10 +257,26 @@ export default function TaskKanbanView({
       if (groups[t.status]) groups[t.status].push(t)
     }
     return STATUS_ORDER.filter(s => groups[s].length > 0).map(status => ({
-      status,
+      status: status as TaskStatus,
       items: groups[status],
     }))
   }, [tasks])
+
+  /** 判断目标状态是否为合法流转目标（静态映射 + 守卫校验） */
+  const isAllowedTransition = useCallback(
+    (taskCode: string, targetStatus: TaskStatus): boolean => {
+      const task = tasks.find(t => t.code === taskCode)
+      if (!task) return false
+      if (targetStatus === task.status) return true // 同一列 = 排序
+      // 1. 静态映射检查
+      const allowed = resolveAvailableStatusOptions(task.status)
+      if (!allowed.includes(targetStatus)) return false
+      // 2. 守卫检查
+      const guardResult = validateStatusTransition(task, targetStatus, tasks)
+      return guardResult.passed
+    },
+    [tasks]
+  )
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const task = event.active.data.current as TaskItem | undefined
@@ -226,16 +286,49 @@ export default function TaskKanbanView({
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       setActiveTask(null)
+
       const { active, over } = event
       if (!over || !active) return
+
       const taskCode = String(active.id)
-      const targetStatus = over.id as TaskStatus
-      const task = tasks.find(t => t.code === taskCode)
-      if (task && targetStatus !== task.status) {
-        onStatusChange?.(taskCode, targetStatus)
+      const overId = String(over.id)
+
+      // 解析目标状态：列容器 ID 或卡片所在列
+      let targetStatus: TaskStatus | null = null
+      if (overId.startsWith('column-')) {
+        targetStatus = overId.replace('column-', '') as TaskStatus
+      } else {
+        const overTask = over.data.current as TaskItem | undefined
+        if (overTask?.status) targetStatus = overTask.status
       }
+      if (!targetStatus) return
+
+      const task = tasks.find(t => t.code === taskCode)
+      if (!task) return
+
+      // 同一列内排序
+      if (targetStatus === task.status) {
+        const columnTasks = columns.find(c => c.status === targetStatus)?.items
+        if (!columnTasks || columnTasks.length <= 1) return
+
+        const oldIndex = columnTasks.findIndex(t => t.code === taskCode)
+        const overIndex = columnTasks.findIndex(t => t.code === overId)
+        if (oldIndex === -1 || overIndex === -1 || oldIndex === overIndex) return
+
+        const reordered = arrayMove(columnTasks, oldIndex, overIndex)
+        onSortChange?.(
+          targetStatus,
+          reordered.map(t => t.code)
+        )
+        return
+      }
+
+      // 跨列状态变更 — 仅允许合法流转
+      if (!isAllowedTransition(taskCode, targetStatus)) return
+
+      onStatusChange?.(taskCode, targetStatus)
     },
-    [tasks, onStatusChange]
+    [tasks, columns, onStatusChange, onSortChange, isAllowedTransition]
   )
 
   if (tasks.length === 0) {
@@ -265,9 +358,10 @@ export default function TaskKanbanView({
         {columns.map(col => (
           <DroppableColumn
             key={col.status}
-            status={col.status as TaskStatus}
+            status={col.status}
             tasks={col.items}
             onOpen={onOpenTaskDetail}
+            isValidDrop={!activeTask ? false : isAllowedTransition(activeTask.code, col.status)}
           />
         ))}
       </Box>

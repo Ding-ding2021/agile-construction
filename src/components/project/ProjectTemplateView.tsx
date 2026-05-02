@@ -9,18 +9,10 @@ import {
   mockTasks,
 } from '../task/taskManagement.data'
 import type { TaskItem } from '../task/taskManagement.types'
-import { personnelRepository } from '../../services/repositories/personnelRepository'
 
 type ProjectTemplateViewProps = {
   project: ProjectItem
 }
-
-const personStatusLabelMap = {
-  onduty: '在岗',
-  leave: '请假',
-  offboard: '离岗',
-  disabled: '禁用',
-} as const
 
 const buildTasksByProject = (project: ProjectItem): TaskItem[] => {
   if (project.templateId) {
@@ -42,39 +34,7 @@ const ProjectTemplateView = ({ project }: ProjectTemplateViewProps) => {
     setTasks(buildTasksByProject(project))
   }, [project])
 
-  const assigneeOptions = personnelRepository.loadUsers().map(user => ({
-    id: user.id,
-    name: user.name,
-    disabled: user.personStatus === 'disabled',
-    statusLabel: personStatusLabelMap[user.personStatus],
-  }))
-
   const model = useMemo(() => buildTaskTreeViewModel(tasks), [tasks])
-
-  const handleAssignTask = (taskCode: string, assigneeName: string) => {
-    setTasks(prev =>
-      prev.map(task => {
-        if (task.code !== taskCode) {
-          return task
-        }
-
-        const nextStatus = task.status === '待分配' ? '待执行' : task.status
-
-        return {
-          ...task,
-          owner: assigneeName,
-          status: nextStatus,
-          statusTone:
-            nextStatus === '执行中'
-              ? 'blue'
-              : nextStatus === '待提交' || nextStatus === '待验收'
-                ? 'orange'
-                : 'neutral',
-          progress: nextStatus === '待执行' ? Math.max(task.progress, 15) : task.progress,
-        }
-      })
-    )
-  }
 
   if (!tasks.length) {
     return (
@@ -105,8 +65,6 @@ const ProjectTemplateView = ({ project }: ProjectTemplateViewProps) => {
 
       <TaskTreeView
         model={model}
-        assigneeOptions={assigneeOptions}
-        onAssignTask={handleAssignTask}
         onOpenTask={taskCode => {
           const params = new URLSearchParams()
           if (project.templateId) {

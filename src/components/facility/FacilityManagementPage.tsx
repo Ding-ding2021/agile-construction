@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
-import { navigateByHash } from '../shared/navigation/nav.utils'
+import { navigateByHash } from '../../config/navigation'
 import './facility-management.css'
 
 type FacilityStatus = '运行正常' | '维护中' | '故障' | '离线'

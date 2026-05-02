@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AppSidebar, PageHeader, StatsCards } from '../shared'
-import { navigateByHash } from '../shared/navigation/nav.utils'
+import { navigateByHash } from '../../config/navigation'
 import './digital-employee-page.css'
 
 type StatCard = {

@@ -1,32 +1,22 @@
+/**
+ * TaskTreeView — WBS 表格风格的任务树视图
+ *
+ * 使用 MUI X TreeView (SimpleTreeView + TreeItem)，
+ * 每个节点渲染为 WBS 表格行（编码 / 名称 / 负责人 / 状态 / 进度）。
+ * 纯表格视图，点击行打开任务详情。
+ */
 import { useMemo, useState } from 'react'
+import { Box, Chip, Typography, LinearProgress, Button } from '@mui/material'
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView'
+import { TreeItem } from '@mui/x-tree-view/TreeItem'
 import type { TaskTreeNode, TaskTreeNodeStatus, TaskTreeViewModel } from './taskManagement.data'
-
-type TaskAssigneeOption = {
-  id: string
-  name: string
-  disabled: boolean
-  statusLabel?: string
-}
 
 type TaskTreeViewProps = {
   model: TaskTreeViewModel
   onOpenTask: (taskCode: string) => void
-  assigneeOptions?: TaskAssigneeOption[]
-  onAssignTask?: (taskCode: string, assigneeName: string) => void
-}
-
-type VisibleRow = {
-  node: TaskTreeNode
-  depth: number
 }
 
 type TreeStatusFilter = 'all' | TaskTreeNodeStatus
-
-const TYPE_LABELS: Record<TaskTreeNode['type'], string> = {
-  project: '项目',
-  work_package: '工作包',
-  task: '任务',
-}
 
 const STATUS_LABELS: Record<TreeStatusFilter, string> = {
   all: '全部',
@@ -36,63 +26,24 @@ const STATUS_LABELS: Record<TreeStatusFilter, string> = {
   planned: '待开始',
 }
 
-const buildVisibleRows = (
-  nodes: TaskTreeNode[],
-  expandedIds: Set<string>,
-  depth = 0
-): VisibleRow[] =>
-  nodes.flatMap(node => {
-    const current: VisibleRow = { node, depth }
-    if (!node.children.length || !expandedIds.has(node.id)) {
-      return [current]
-    }
-    return [current, ...buildVisibleRows(node.children, expandedIds, depth + 1)]
-  })
-
-const collectDefaultExpandedIds = (nodes: TaskTreeNode[]) => {
-  const ids: string[] = []
-  const walk = (list: TaskTreeNode[]) => {
-    list.forEach(node => {
-      if (node.type !== 'task') {
-        ids.push(node.id)
-      }
-      if (node.children.length > 0) {
-        walk(node.children)
-      }
-    })
-  }
-  walk(nodes)
-  return ids
+const TYPE_LABELS: Record<string, string> = {
+  project: '项目',
+  work_package: '工作包',
+  task: '任务',
 }
 
-const collectNodeMap = (nodes: TaskTreeNode[]) => {
-  const nodeMap = new Map<string, TaskTreeNode>()
-  const walk = (list: TaskTreeNode[]) => {
-    list.forEach(node => {
-      nodeMap.set(node.id, node)
-      if (node.children.length > 0) {
-        walk(node.children)
-      }
-    })
-  }
-  walk(nodes)
-  return nodeMap
+const STATUS_TONE: Record<string, 'success' | 'info' | 'warning' | 'error' | 'default'> = {
+  completed: 'success',
+  'in-progress': 'info',
+  delayed: 'error',
+  planned: 'default',
 }
 
-const collectParentMap = (nodes: TaskTreeNode[]) => {
-  const parentMap = new Map<string, string>()
-  const walk = (list: TaskTreeNode[], parentId?: string) => {
-    list.forEach(node => {
-      if (parentId) {
-        parentMap.set(node.id, parentId)
-      }
-      if (node.children.length > 0) {
-        walk(node.children, node.id)
-      }
-    })
-  }
-  walk(nodes)
-  return parentMap
+const PROGRESS_COLOR: Record<string, 'success' | 'info' | 'warning' | 'error'> = {
+  completed: 'success',
+  'in-progress': 'info',
+  delayed: 'error',
+  planned: 'info',
 }
 
 const flattenNodes = (nodes: TaskTreeNode[]): TaskTreeNode[] =>
@@ -102,373 +53,322 @@ const filterNodesByStatus = (
   nodes: TaskTreeNode[],
   statusFilter: TreeStatusFilter
 ): TaskTreeNode[] => {
-  if (statusFilter === 'all') {
-    return nodes
-  }
+  if (statusFilter === 'all') return nodes
 
   const pick = (list: TaskTreeNode[]): TaskTreeNode[] =>
     list
       .map(node => {
         const children = pick(node.children)
         const matched = node.status === statusFilter
-        if (!matched && children.length === 0) {
-          return null
-        }
-        return {
-          ...node,
-          children,
-        }
+        if (!matched && children.length === 0) return null
+        return { ...node, children }
       })
       .filter((node): node is TaskTreeNode => node !== null)
 
   return pick(nodes)
 }
 
-const TaskTreeView = ({
-  model,
-  onOpenTask,
-  assigneeOptions = [],
-  onAssignTask,
-}: TaskTreeViewProps) => {
+/** 将 TaskTreeNode 树递归渲染为 TreeItem 列表 */
+function renderTreeItems(
+  nodes: TaskTreeNode[],
+  onOpenTask: (code: string) => void
+): React.ReactNode[] {
+  return nodes.map(node => {
+    const progColor = PROGRESS_COLOR[node.status] ?? 'info'
+    const hasChildren = node.children.length > 0
+
+    return (
+      <TreeItem
+        key={node.id}
+        itemId={node.id}
+        label={
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 140px 100px 100px',
+              alignItems: 'center',
+              gap: 1,
+              py: 0.5,
+              width: '100%',
+            }}
+          >
+            {/* 编码 / 名称 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+              <Typography
+                variant="caption"
+                sx={{
+                  fontFamily: 'monospace',
+                  color: 'var(--pm-text-40)',
+                  fontSize: 11,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {node.code}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--pm-text-white)',
+                  fontWeight: 500,
+                  fontSize: 13,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {node.name}
+              </Typography>
+              <Chip
+                label={TYPE_LABELS[node.type] ?? node.type}
+                size="small"
+                variant="outlined"
+                sx={{ height: 18, fontSize: 10, flexShrink: 0, borderColor: 'var(--pm-border)' }}
+              />
+            </Box>
+
+            {/* 负责人 */}
+            <Typography
+              variant="caption"
+              sx={{ color: 'var(--pm-text-70)', fontSize: 12, textAlign: 'center' }}
+            >
+              {node.owner || '—'}
+            </Typography>
+
+            {/* 状态 */}
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Chip
+                label={node.statusLabel}
+                size="small"
+                color={STATUS_TONE[node.status] ?? 'default'}
+                variant="outlined"
+                sx={{ height: 20, fontSize: 10, minWidth: 48 }}
+              />
+            </Box>
+
+            {/* 进度 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <LinearProgress
+                variant="determinate"
+                value={node.progress}
+                color={progColor}
+                sx={{
+                  flex: 1,
+                  height: 4,
+                  borderRadius: 2,
+                  bgcolor: 'var(--pm-border)',
+                  '& .MuiLinearProgress-bar': { borderRadius: 2 },
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'var(--pm-text-40)',
+                  fontSize: 11,
+                  minWidth: 30,
+                  textAlign: 'right',
+                }}
+              >
+                {node.progress}%
+              </Typography>
+            </Box>
+          </Box>
+        }
+        onClick={() => {
+          if (node.taskCode) onOpenTask(node.taskCode)
+        }}
+      >
+        {hasChildren ? renderTreeItems(node.children, onOpenTask) : undefined}
+      </TreeItem>
+    )
+  })
+}
+
+const TaskTreeView = ({ model, onOpenTask }: TaskTreeViewProps) => {
   const [statusFilter, setStatusFilter] = useState<TreeStatusFilter>('all')
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(
-    () => new Set(collectDefaultExpandedIds(model.nodes))
-  )
-  const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(
-    model.focusNodeId ?? model.nodes[0]?.id
-  )
-  const [assigneeDraftByNodeId, setAssigneeDraftByNodeId] = useState<Record<string, string>>({})
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
+    // 默认展开所有非 task 级别节点
+    const ids = new Set<string>()
+    const walk = (list: TaskTreeNode[]) => {
+      list.forEach(n => {
+        if (n.type !== 'task') ids.add(n.id)
+        if (n.children.length > 0) walk(n.children)
+      })
+    }
+    walk(model.nodes)
+    return ids
+  })
 
   const allNodes = useMemo(() => flattenNodes(model.nodes), [model.nodes])
-  const parentMap = useMemo(() => collectParentMap(model.nodes), [model.nodes])
-
   const filteredNodes = useMemo(
     () => filterNodesByStatus(model.nodes, statusFilter),
     [model.nodes, statusFilter]
   )
-  const visibleRows = useMemo(
-    () => buildVisibleRows(filteredNodes, expandedIds),
-    [filteredNodes, expandedIds]
-  )
-
-  const nodeMap = useMemo(() => collectNodeMap(filteredNodes), [filteredNodes])
-  const selectedNode =
-    selectedNodeId && nodeMap.has(selectedNodeId)
-      ? (nodeMap.get(selectedNodeId) ?? null)
-      : (visibleRows[0]?.node ?? null)
-
-  const disabledAssigneeNames = useMemo(
-    () => new Set(assigneeOptions.filter(option => option.disabled).map(option => option.name)),
-    [assigneeOptions]
-  )
-
-  const selectedNodeAssigneeDisabled = selectedNode
-    ? disabledAssigneeNames.has(selectedNode.owner)
-    : false
-
-  const assigneeDraft = selectedNode
-    ? (assigneeDraftByNodeId[selectedNode.id] ??
-      (selectedNode.owner === '待分配' ? '' : selectedNode.owner))
-    : ''
 
   const statusCounter = useMemo(
     () => ({
       all: allNodes.length,
-      completed: allNodes.filter(node => node.status === 'completed').length,
-      'in-progress': allNodes.filter(node => node.status === 'in-progress').length,
-      delayed: allNodes.filter(node => node.status === 'delayed').length,
-      planned: allNodes.filter(node => node.status === 'planned').length,
+      completed: allNodes.filter(n => n.status === 'completed').length,
+      'in-progress': allNodes.filter(n => n.status === 'in-progress').length,
+      delayed: allNodes.filter(n => n.status === 'delayed').length,
+      planned: allNodes.filter(n => n.status === 'planned').length,
     }),
     [allNodes]
   )
 
-  const toggleNode = (nodeId: string) => {
-    setExpandedIds(prev => {
-      const next = new Set(prev)
-      if (next.has(nodeId)) {
-        next.delete(nodeId)
-      } else {
-        next.add(nodeId)
-      }
-      return next
-    })
-  }
-
-  const expandAncestors = (nodeId: string) => {
-    setExpandedIds(prev => {
-      const next = new Set(prev)
-      let cursor = parentMap.get(nodeId)
-      while (cursor) {
-        next.add(cursor)
-        cursor = parentMap.get(cursor)
-      }
-      return next
-    })
-  }
-
   const locateFirstRiskNode = () => {
-    const delayedNode = allNodes.find(node => node.status === 'delayed' && node.type === 'task')
-    if (!delayedNode) {
-      return
-    }
+    const delayed = allNodes.find(n => n.status === 'delayed')
+    if (!delayed) return
     setStatusFilter('all')
-    setSelectedNodeId(delayedNode.id)
-    expandAncestors(delayedNode.id)
+    // 展开所有节点
+    const ids = new Set<string>()
+    const walk = (list: TaskTreeNode[]) => {
+      list.forEach(n => {
+        if (n.children.length > 0) {
+          ids.add(n.id)
+          walk(n.children)
+        }
+      })
+    }
+    walk(filteredNodes)
+    setExpandedItems(ids)
   }
 
-  const handleAssign = () => {
-    if (!selectedNode?.taskCode || !assigneeDraft.trim()) {
-      return
-    }
-
-    onAssignTask?.(selectedNode.taskCode, assigneeDraft.trim())
+  const handleExpandedItemsChange = (_event: React.SyntheticEvent | null, itemIds: string[]) => {
+    setExpandedItems(new Set(itemIds))
   }
 
   return (
-    <section className="tm-tree-view">
-      <div className="tm-tree-header">
-        <div className="tm-tree-title-block">
-          <span className="tm-tree-eyebrow">模板实例化结构</span>
-          <h3>任务树（参考 WBS）</h3>
-          <p>支持状态筛选、全部展开/收起、定位风险节点，保持项目级树结构浏览体验。</p>
-        </div>
-        <div className="tm-tree-summary-pills">
-          <span className="tm-tree-summary-pill">
-            <strong>{model.summary.projectCount}</strong>
-            <span>项目</span>
-          </span>
-          <span className="tm-tree-summary-pill">
-            <strong>{model.summary.workPackageCount}</strong>
-            <span>工作包</span>
-          </span>
-          <span className="tm-tree-summary-pill">
-            <strong>{model.summary.taskCount}</strong>
-            <span>任务</span>
-          </span>
-          <span className="tm-tree-summary-pill warning">
-            <strong>{model.summary.delayedCount}</strong>
-            <span>风险节点</span>
-          </span>
-          <span className="tm-tree-summary-pill muted">更新于 {model.updatedAt}</span>
-        </div>
-      </div>
-
-      <div className="tm-tree-controls" role="toolbar" aria-label="任务树控制">
-        <div className="tm-tree-filter-group">
-          {(Object.keys(STATUS_LABELS) as TreeStatusFilter[]).map(filterKey => (
-            <button
-              key={filterKey}
-              type="button"
-              className={`tm-tree-filter-btn ${statusFilter === filterKey ? 'active' : ''}`}
-              onClick={() => setStatusFilter(filterKey)}
-              aria-pressed={statusFilter === filterKey}
+    <Box sx={{ p: 2 }}>
+      {/* ── 统计 + 控制栏 ── */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          mb: 2,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+          {(Object.keys(STATUS_LABELS) as TreeStatusFilter[]).map(key => (
+            <Button
+              key={key}
+              size="small"
+              variant={statusFilter === key ? 'contained' : 'outlined'}
+              onClick={() => setStatusFilter(key)}
+              sx={{
+                borderRadius: 20,
+                fontSize: 12,
+                minWidth: 'auto',
+                px: 1.5,
+                py: 0.3,
+              }}
             >
-              <span>{STATUS_LABELS[filterKey]}</span>
-              <strong>{statusCounter[filterKey]}</strong>
-            </button>
+              {STATUS_LABELS[key]} ({statusCounter[key]})
+            </Button>
           ))}
-        </div>
+        </Box>
 
-        <div className="tm-tree-action-group">
-          <button
-            type="button"
-            className="tm-tree-ghost-btn"
-            onClick={() => setExpandedIds(new Set(collectDefaultExpandedIds(filteredNodes)))}
+        <Box sx={{ display: 'flex', gap: 1, ml: 'auto' }}>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => {
+              const ids = new Set<string>()
+              const walk = (list: TaskTreeNode[]) => {
+                list.forEach(n => {
+                  if (n.type !== 'task') ids.add(n.id)
+                  if (n.children.length > 0) walk(n.children)
+                })
+              }
+              walk(filteredNodes)
+              setExpandedItems(ids)
+            }}
+            sx={{ fontSize: 12, textTransform: 'none' }}
           >
             全部展开
-          </button>
-          <button
-            type="button"
-            className="tm-tree-ghost-btn"
-            onClick={() => setExpandedIds(new Set())}
+          </Button>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => setExpandedItems(new Set())}
+            sx={{ fontSize: 12, textTransform: 'none' }}
           >
             全部收起
-          </button>
-          <button
-            type="button"
-            className="tm-tree-danger-btn"
-            onClick={locateFirstRiskNode}
+          </Button>
+          <Button
+            size="small"
+            variant="text"
+            color="warning"
             disabled={statusCounter.delayed === 0}
+            onClick={locateFirstRiskNode}
+            sx={{ fontSize: 12, textTransform: 'none' }}
           >
             定位风险节点
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Box>
+      </Box>
 
-      <div className="tm-tree-layout">
-        <div className="card tm-tree-card">
-          <div className="tm-tree-table-header">
-            <span>编码 / 节点名称</span>
-            <span>负责人</span>
-            <span>状态</span>
-            <span>进度</span>
-          </div>
-          <div className="tm-tree-table-body">
-            {visibleRows.length ? (
-              visibleRows.map(({ node, depth }) => {
-                const hasChildren = node.children.length > 0
-                const isExpanded = expandedIds.has(node.id)
-                const isSelected = selectedNode?.id === node.id
+      {/* ── 表头 ── */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 140px 100px 100px',
+          gap: 1,
+          px: 1,
+          py: 0.8,
+          borderBottom: '1px solid var(--pm-border-light)',
+        }}
+      >
+        <Typography variant="caption" sx={{ color: 'var(--pm-text-40)', fontWeight: 600 }}>
+          编码 / 节点名称
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: 'var(--pm-text-40)', fontWeight: 600, textAlign: 'center' }}
+        >
+          负责人
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: 'var(--pm-text-40)', fontWeight: 600, textAlign: 'center' }}
+        >
+          状态
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: 'var(--pm-text-40)', fontWeight: 600, textAlign: 'center' }}
+        >
+          进度
+        </Typography>
+      </Box>
 
-                return (
-                  <button
-                    key={node.id}
-                    type="button"
-                    className={`tm-tree-row ${isSelected ? 'selected' : ''} ${node.status === 'delayed' ? 'risk' : ''}`}
-                    onClick={() => {
-                      setSelectedNodeId(node.id)
-                      expandAncestors(node.id)
-                    }}
-                  >
-                    <span className="tm-tree-node" style={{ paddingLeft: `${12 + depth * 20}px` }}>
-                      {hasChildren ? (
-                        <span
-                          className={`tm-tree-toggle ${isExpanded ? 'expanded' : ''}`}
-                          onClick={event => {
-                            event.stopPropagation()
-                            toggleNode(node.id)
-                          }}
-                        >
-                          ▸
-                        </span>
-                      ) : (
-                        <span className="tm-tree-toggle spacer" />
-                      )}
-                      <span className="tm-tree-code">{node.code}</span>
-                      <span className="tm-tree-name">{node.name}</span>
-                      <span className="tm-tree-type">{TYPE_LABELS[node.type]}</span>
-                    </span>
-                    <span className="tm-tree-owner">{node.owner}</span>
-                    <span className={`tm-tree-status ${node.status}`}>{node.statusLabel}</span>
-                    <span className="tm-tree-progress">{node.progress}%</span>
-                  </button>
-                )
-              })
-            ) : (
-              <div className="tm-tree-empty-panel">当前筛选条件下没有匹配节点</div>
-            )}
-          </div>
-        </div>
-
-        <aside className="card tm-tree-panel">
-          {selectedNode ? (
-            <>
-              <div className="tm-tree-panel-header">
-                <div>
-                  <span className="tm-tree-eyebrow">节点详情</span>
-                  <h4>{selectedNode.name}</h4>
-                </div>
-                <span className={`tm-tree-status ${selectedNode.status}`}>
-                  {selectedNode.statusLabel}
-                </span>
-              </div>
-
-              <div className="tm-tree-panel-grid">
-                <div className="tm-tree-panel-field">
-                  <span>节点编码</span>
-                  <strong>{selectedNode.code}</strong>
-                </div>
-                <div className="tm-tree-panel-field">
-                  <span>节点类型</span>
-                  <strong>{TYPE_LABELS[selectedNode.type]}</strong>
-                </div>
-                <div className="tm-tree-panel-field">
-                  <span>负责人</span>
-                  <strong>{selectedNode.owner}</strong>
-                </div>
-                <div className="tm-tree-panel-field">
-                  <span>子节点数</span>
-                  <strong>{selectedNode.children.length}</strong>
-                </div>
-              </div>
-
-              <div className="tm-tree-panel-section">
-                <div className="tm-tree-panel-section-head">
-                  <span>进度</span>
-                  <strong>{selectedNode.progress}%</strong>
-                </div>
-                <div className="tm-tree-progress-track">
-                  <div
-                    className={`tm-tree-progress-fill ${selectedNode.status}`}
-                    style={{ width: `${selectedNode.progress}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="tm-tree-panel-section">
-                <span className="tm-tree-eyebrow">前置依赖</span>
-                <div className="tm-tree-chip-list">
-                  {selectedNode.dependencies.length ? (
-                    selectedNode.dependencies.map(dependency => (
-                      <span key={dependency} className="tm-tree-info-chip">
-                        {dependency}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="tm-tree-empty-text">无前置依赖</span>
-                  )}
-                </div>
-              </div>
-
-              {selectedNode.taskCode ? (
-                <>
-                  <div className="tm-tree-panel-section tm-tree-assign-section">
-                    <span className="tm-tree-eyebrow">任务派单</span>
-                    <div className="tm-tree-assignee-editor">
-                      <select
-                        value={assigneeDraft}
-                        onChange={event => {
-                          if (!selectedNode) {
-                            return
-                          }
-                          const nextValue = event.target.value
-                          setAssigneeDraftByNodeId(prev => ({
-                            ...prev,
-                            [selectedNode.id]: nextValue,
-                          }))
-                        }}
-                        aria-label="选择任务负责人"
-                      >
-                        <option value="">请选择负责人</option>
-                        {assigneeOptions.map(option => (
-                          <option key={option.id} value={option.name} disabled={option.disabled}>
-                            {option.name}
-                            {option.statusLabel ? `（${option.statusLabel}）` : ''}
-                          </option>
-                        ))}
-                      </select>
-                      <button type="button" onClick={handleAssign} disabled={!assigneeDraft.trim()}>
-                        保存派单
-                      </button>
-                    </div>
-                    {selectedNodeAssigneeDisabled ? (
-                      <p className="tm-tree-assign-warning">
-                        当前负责人已处于不可分配状态，建议尽快重新分配。
-                      </p>
-                    ) : null}
-                    <p className="tm-tree-assign-tip">说明：仅可分配状态人员可参与派单。</p>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="tm-tree-open-btn"
-                    onClick={() => {
-                      if (selectedNode.taskCode) {
-                        onOpenTask(selectedNode.taskCode)
-                      }
-                    }}
-                  >
-                    打开任务详情
-                  </button>
-                </>
-              ) : null}
-            </>
-          ) : (
-            <span className="tm-tree-empty-text">请选择一个节点查看详情</span>
-          )}
-        </aside>
-      </div>
-    </section>
+      {/* ── 树视图 ── */}
+      {filteredNodes.length > 0 ? (
+        <SimpleTreeView
+          expandedItems={Array.from(expandedItems)}
+          onExpandedItemsChange={handleExpandedItemsChange}
+          sx={{
+            '& .MuiTreeItem-content': {
+              py: 0.3,
+              px: 0.5,
+              borderRadius: 1,
+              borderBottom: '1px solid var(--pm-border-light)',
+              '&:hover': { bgcolor: 'var(--pm-element-hover)' },
+              '&.Mui-focused': { bgcolor: 'var(--pm-primary-15)' },
+            },
+            '& .MuiTreeItem-label': { py: 0 },
+            '& .MuiTreeItem-iconContainer': { mx: 0.5 },
+          }}
+        >
+          {renderTreeItems(filteredNodes, onOpenTask)}
+        </SimpleTreeView>
+      ) : (
+        <Box sx={{ textAlign: 'center', py: 6, color: 'var(--pm-text-40)' }}>
+          当前筛选条件下没有匹配的节点
+        </Box>
+      )}
+    </Box>
   )
 }
 
