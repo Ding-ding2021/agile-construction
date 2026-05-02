@@ -80,13 +80,23 @@ function App() {
     taskRepository
       .loadTasks('__all')
       .then(tasks => {
-        if (cancelled) return
+        if (cancelled) {
+          setIsTaskDetailLoading(false)
+          return
+        }
         const task = tasks?.find(t => t.code === route.taskCode)
-        if (!task?.projectId) return
+        if (!task?.projectId) {
+          setIsTaskDetailLoading(false)
+          return
+        }
         return taskRepository.getTaskDetail(task.projectId, route.taskCode)
       })
       .then(apiDetail => {
-        if (cancelled || !apiDetail) return
+        if (cancelled) return
+        if (!apiDetail) {
+          setIsTaskDetailLoading(false)
+          return
+        }
         const fallback = resolveTaskDetail(route.taskCode)
         if (fallback) {
           // 合并 API 数据与 mock 数据

@@ -6,6 +6,7 @@
  * 状态流转、附件管理、检查项追踪、流转日志查看。
  */
 import { useState, type SyntheticEvent } from 'react'
+import dayjs from 'dayjs'
 import type {
   TaskDetail,
   TaskPriority,
@@ -28,18 +29,14 @@ import {
 } from '../ui'
 import StatusSelect, { type StatusTone } from '../ui/StatusSelect'
 
+// 规范封装组件
+import { PmButton, PmInput, PmSelect, PmCard, PmDatePicker, PmPersonnelSelect } from '../shared/mui'
+
 // MUI Components
 import {
   Box,
-  Paper,
   Typography,
-  Button,
   Chip,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   IconButton,
   Stack,
   Tabs,
@@ -50,6 +47,8 @@ import {
   DialogContent,
   DialogActions,
   Tooltip,
+  TextField,
+  Autocomplete,
 } from '@mui/material'
 
 // MUI Icons
@@ -204,17 +203,14 @@ const FormField = ({
   value: string
   multiline?: boolean
 }) => (
-  <TextField
+  <PmInput
     label={label}
     value={value}
     fullWidth
-    variant="outlined"
-    size="small"
     multiline={multiline}
     rows={multiline ? 3 : 1}
     slotProps={{ input: { readOnly: true } }}
     sx={{
-      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
       '& .MuiInputBase-input': { color: COLORS.textWhite },
     }}
   />
@@ -251,9 +247,19 @@ const TaskDetailPage = ({
 
   // 编辑状态
   const [assigneeDraft, setAssigneeDraft] = useState(taskDetail.assigneeName ?? '')
-  const [plannedStartAt, setPlannedStartAt] = useState(taskDetail.plannedStartAt)
-  const [plannedEndAt, setPlannedEndAt] = useState(taskDetail.plannedEndAt)
+  const [plannedStartAt, setPlannedStartAt] = useState(
+    taskDetail.plannedStartAt ? dayjs(taskDetail.plannedStartAt) : null
+  )
+  const [plannedEndAt, setPlannedEndAt] = useState(
+    taskDetail.plannedEndAt ? dayjs(taskDetail.plannedEndAt) : null
+  )
   const [riskLevel, setRiskLevel] = useState<TaskRiskLevel>(taskDetail.riskLevel)
+  const [actualStartDate, setActualStartDate] = useState<dayjs.Dayjs | null>(
+    taskDetail.actualStartAt ? dayjs(taskDetail.actualStartAt) : null
+  )
+  const [actualEndDate, setActualEndDate] = useState<dayjs.Dayjs | null>(
+    taskDetail.actualEndAt ? dayjs(taskDetail.actualEndAt) : null
+  )
   const [activeTab, setActiveTab] = useState(0)
 
   // Dialog 状态
@@ -263,15 +269,16 @@ const TaskDetailPage = ({
   const [relationSearch, setRelationSearch] = useState('')
   const [relationType, setRelationType] = useState<TaskRelation['relationType']>('finish_start')
   const [showBindStandard, setShowBindStandard] = useState(false)
-  const [tagInput, setTagInput] = useState('')
 
   const handleTabChange = (_e: SyntheticEvent, v: number) => setActiveTab(v)
 
   // 检测草稿态是否有未保存的变更，用于控制"保存/重置"按钮的显示
+  const plannedStartStr = plannedStartAt?.format('YYYY-MM-DDTHH:mm:ss') ?? ''
+  const plannedEndStr = plannedEndAt?.format('YYYY-MM-DDTHH:mm:ss') ?? ''
   const hasChanges =
     assigneeDraft !== (taskDetail.assigneeName ?? '') ||
-    plannedStartAt !== taskDetail.plannedStartAt ||
-    plannedEndAt !== taskDetail.plannedEndAt ||
+    plannedStartStr !== (taskDetail.plannedStartAt ?? '') ||
+    plannedEndStr !== (taskDetail.plannedEndAt ?? '') ||
     riskLevel !== taskDetail.riskLevel
 
   const handleStatusSelect = (nextStatus: string) => {
@@ -294,7 +301,11 @@ const TaskDetailPage = ({
     if (assigneeDraft !== (taskDetail.assigneeName ?? '')) {
       onAssign?.(taskDetail.code, assigneeDraft)
     }
-    onInlineUpdate?.(taskDetail.code, { plannedStartAt, plannedEndAt, riskLevel })
+    onInlineUpdate?.(taskDetail.code, {
+      plannedStartAt: plannedStartStr || undefined,
+      plannedEndAt: plannedEndStr || undefined,
+      riskLevel,
+    })
   }
 
   const priority = PRIORITY_CONFIG[taskDetail.priority]
@@ -426,68 +437,68 @@ const TaskDetailPage = ({
                 <SectionTitle>基本信息</SectionTitle>
                 {/* Tags */}
                 <Box sx={{ mb: 1.5 }}>
-                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 0.5 }}>
-                    {taskDetail.tags.map(tag => (
-                      <Chip
-                        key={tag}
-                        icon={<LocalOffer sx={{ fontSize: 14 }} />}
-                        label={tag}
-                        size="small"
-                        variant="outlined"
-                        onDelete={
-                          isReadonly
-                            ? undefined
-                            : () => {
-                                const next = taskDetail.tags.filter(t => t !== tag)
-                                onTagsChange?.(taskDetail.code, next)
-                              }
-                        }
-                        sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
-                      />
-                    ))}
-                  </Box>
-                  {!isReadonly && (
-                    <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
-                      <TextField
-                        size="small"
-                        placeholder="添加标签..."
-                        value={tagInput}
-                        onChange={e => setTagInput(e.target.value)}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' && tagInput.trim()) {
-                            e.preventDefault()
-                            const value = tagInput.trim()
-                            if (!taskDetail.tags.includes(value)) {
-                              onTagsChange?.(taskDetail.code, [...taskDetail.tags, value])
-                            }
-                            setTagInput('')
-                          }
-                        }}
-                        sx={{
-                          minWidth: 120,
-                          '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
-                          '& .MuiInputBase-input': {
-                            color: COLORS.textWhite,
-                            fontSize: 12,
-                            py: 0.8,
+                  {!isReadonly ? (
+                    <Autocomplete
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={taskDetail.tags}
+                      onChange={(_e, newValue) => {
+                        onTagsChange?.(taskDetail.code, newValue as string[])
+                      }}
+                      slotProps={{
+                        chip: {
+                          icon: <LocalOffer sx={{ fontSize: 14 }} />,
+                          size: 'small',
+                          variant: 'outlined',
+                          sx: {
+                            borderColor: COLORS.border,
+                            color: COLORS.text70,
+                            height: 24,
+                            '& .MuiChip-deleteIcon': { color: COLORS.text40 },
                           },
-                          '& .MuiOutlinedInput-notchedOutline': { borderColor: COLORS.border },
-                        }}
-                      />
-                      <IconButton
-                        size="small"
-                        disabled={!tagInput.trim()}
-                        onClick={() => {
-                          const value = tagInput.trim()
-                          if (value && !taskDetail.tags.includes(value)) {
-                            onTagsChange?.(taskDetail.code, [...taskDetail.tags, value])
-                          }
-                          setTagInput('')
-                        }}
-                        sx={{ color: COLORS.blue, '&.Mui-disabled': { color: COLORS.text40 } }}
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
+                        },
+                      }}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          placeholder="添加标签..."
+                          variant="outlined"
+                          sx={{
+                            minWidth: 200,
+                            '& .MuiOutlinedInput-root': {
+                              backgroundColor: 'var(--pm-input-bg)',
+                              borderRadius: 'var(--pm-radius-sm, 8px)',
+                              py: 0,
+                              '& fieldset': { borderColor: 'var(--pm-border)' },
+                              '&:hover fieldset': { borderColor: 'var(--pm-border)' },
+                              '&.Mui-focused fieldset': { borderColor: 'var(--pm-primary)' },
+                            },
+                            '& .MuiInputBase-input': {
+                              color: 'var(--pm-text-white)',
+                              fontSize: 14,
+                              py: 1.2,
+                            },
+                            '& .MuiAutocomplete-tag': {
+                              mb: 0,
+                              mt: 0,
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                      {taskDetail.tags.map(tag => (
+                        <Chip
+                          key={tag}
+                          icon={<LocalOffer sx={{ fontSize: 14 }} />}
+                          label={tag}
+                          size="small"
+                          variant="outlined"
+                          sx={{ borderColor: COLORS.border, color: COLORS.text70, height: 24 }}
+                        />
+                      ))}
                     </Box>
                   )}
                 </Box>
@@ -553,53 +564,54 @@ const TaskDetailPage = ({
               <CardSection>
                 <SectionTitle>执行人 & 时间</SectionTitle>
                 <Stack spacing={4}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>负责人</InputLabel>
-                    <Select
-                      value={assigneeDraft}
-                      label="负责人"
-                      disabled={isReadonly}
-                      onChange={e => setAssigneeDraft(e.target.value)}
-                    >
-                      <MenuItem value="">
-                        <em>未分配</em>
-                      </MenuItem>
-                      {assigneeOptions.map(opt => (
-                        <MenuItem key={opt.id} value={opt.name} disabled={opt.disabled}>
-                          {opt.name} {opt.statusLabel && `(${opt.statusLabel})`}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <PmPersonnelSelect
+                    label="负责人"
+                    value={assigneeDraft}
+                    disabled={isReadonly}
+                    onChange={setAssigneeDraft}
+                    options={[
+                      { id: '', name: '未分配', disabled: false },
+                      ...assigneeOptions.map(opt => ({
+                        id: opt.id,
+                        name: opt.name,
+                        statusLabel: opt.statusLabel,
+                        disabled: opt.disabled,
+                      })),
+                    ]}
+                  />
                   <FormField
                     label="执行方"
                     value={taskDetail.assigneeType === 'internal' ? '内部团队' : '外部供应商'}
                   />
                   <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField
+                    <PmDatePicker
                       label="计划开始"
-                      type="date"
-                      size="small"
-                      fullWidth
                       value={plannedStartAt}
                       disabled={isReadonly}
-                      onChange={e => setPlannedStartAt(e.target.value)}
-                      slotProps={{ inputLabel: { shrink: true } }}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => setPlannedStartAt(v as dayjs.Dayjs | null)}
                     />
-                    <TextField
+                    <PmDatePicker
                       label="计划结束"
-                      type="date"
-                      size="small"
-                      fullWidth
                       value={plannedEndAt}
                       disabled={isReadonly}
-                      onChange={e => setPlannedEndAt(e.target.value)}
-                      slotProps={{ inputLabel: { shrink: true } }}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => setPlannedEndAt(v as dayjs.Dayjs | null)}
                     />
                   </Box>
                   <Box sx={{ display: 'flex', gap: 2 }}>
-                    <FormField label="实际开始" value={taskDetail.actualStartAt ?? '--'} />
-                    <FormField label="实际结束" value={taskDetail.actualEndAt ?? '--'} />
+                    <PmDatePicker
+                      label="实际开始"
+                      value={actualStartDate}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => setActualStartDate(v as dayjs.Dayjs | null)}
+                    />
+                    <PmDatePicker
+                      label="实际结束"
+                      value={actualEndDate}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      onChange={(v: any) => setActualEndDate(v as dayjs.Dayjs | null)}
+                    />
                   </Box>
                   {taskDetail.parentTaskId && (
                     <FieldRow label="父任务 ID" value={taskDetail.parentTaskId} />
@@ -613,15 +625,7 @@ const TaskDetailPage = ({
           {activeTab === 1 && (
             <>
               {/* 状态操作区 */}
-              <Paper
-                variant="outlined"
-                sx={{
-                  p: 4,
-                  bgcolor: COLORS.card,
-                  borderColor: COLORS.border,
-                  borderRadius: 'var(--pm-radius-card)',
-                }}
-              >
+              <PmCard>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ color: COLORS.text70, fontWeight: 500 }}>
                     状态
@@ -656,17 +660,17 @@ const TaskDetailPage = ({
                       )
                     )
                   })()}
-                  <Button
-                    variant="outlined"
-                    size="small"
+                  <PmButton
+                    variant="secondary"
+                    size="sm"
                     startIcon={<Notifications />}
                     onClick={onRemind}
                     disabled={isReadonly}
                   >
                     催办
-                  </Button>
+                  </PmButton>
                 </Box>
-              </Paper>
+              </PmCard>
 
               <CardSection>
                 <SectionTitle>进度</SectionTitle>
@@ -707,14 +711,13 @@ const TaskDetailPage = ({
                     !isReadonly &&
                     bindableTemplates &&
                     bindableTemplates.length > 0 && (
-                      <Button
-                        size="small"
-                        variant="outlined"
+                      <PmButton
+                        variant="secondary"
+                        size="sm"
                         onClick={() => setShowBindStandard(true)}
-                        sx={{ borderRadius: 10, fontSize: 12 }}
                       >
                         绑定标准
-                      </Button>
+                      </PmButton>
                     )}
                 </Box>
                 <Stack spacing={2}>
@@ -726,28 +729,26 @@ const TaskDetailPage = ({
                   <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
                     执行标准
                   </Typography>
-                  <TextField
+                  <PmInput
                     value={taskDetail.executionStandards.join('\n')}
                     multiline
                     rows={2}
                     fullWidth
                     slotProps={{ input: { readOnly: true } }}
                     sx={{
-                      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
                       '& .MuiInputBase-input': { color: COLORS.textWhite },
                     }}
                   />
                   <Typography variant="body2" sx={{ color: COLORS.blue, fontWeight: 500, mt: 1 }}>
                     验收标准
                   </Typography>
-                  <TextField
+                  <PmInput
                     value={taskDetail.acceptanceStandards.join('\n')}
                     multiline
                     rows={2}
                     fullWidth
                     slotProps={{ input: { readOnly: true } }}
                     sx={{
-                      '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
                       '& .MuiInputBase-input': { color: COLORS.textWhite },
                     }}
                   />
@@ -790,31 +791,20 @@ const TaskDetailPage = ({
               <CardSection>
                 <SectionTitle>风险与SLA</SectionTitle>
                 <Stack spacing={4}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>风险等级</InputLabel>
-                    <Select
-                      value={riskLevel}
-                      label="风险等级"
-                      disabled={isReadonly}
-                      onChange={e => setRiskLevel(e.target.value as TaskRiskLevel)}
-                    >
-                      {['低风险', '中风险', '高风险'].map(r => (
-                        <MenuItem key={r} value={r}>
-                          {r}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <PmSelect
+                    label="风险等级"
+                    value={riskLevel}
+                    disabled={isReadonly}
+                    onChange={e => setRiskLevel(e.target.value as TaskRiskLevel)}
+                    options={['低风险', '中风险', '高风险'].map(r => ({ value: r, label: r }))}
+                  />
                   <FieldRow label="SLA 状态" value={taskDetail.slaStatus} />
                   <FieldRow label="催办次数" value={`${taskDetail.remindCount} 次`} />
                   {taskDetail.blockedReason && (
-                    <Paper
-                      variant="outlined"
+                    <PmCard
                       sx={{
-                        p: 1.5,
                         bgcolor: 'rgba(255,77,79,0.06)',
                         borderColor: 'rgba(255,77,79,0.15)',
-                        borderRadius: '10px',
                         display: 'flex',
                         gap: 1,
                       }}
@@ -831,7 +821,7 @@ const TaskDetailPage = ({
                           {taskDetail.blockedReason}
                         </Typography>
                       </Box>
-                    </Paper>
+                    </PmCard>
                   )}
                 </Stack>
               </CardSection>
@@ -855,11 +845,7 @@ const TaskDetailPage = ({
                 {taskDetail.submissions?.length > 0 ? (
                   <Stack spacing={1.5}>
                     {taskDetail.submissions.map(sub => (
-                      <Paper
-                        key={sub.id}
-                        variant="outlined"
-                        sx={{ p: 1.5, bgcolor: 'var(--pm-input)' }}
-                      >
+                      <PmCard key={sub.id} sx={{ bgcolor: 'var(--pm-input)' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                           <Typography variant="body2" sx={{ fontWeight: 500 }}>
                             {sub.submissionType === 'normal'
@@ -909,7 +895,7 @@ const TaskDetailPage = ({
                             {sub.reviewComment && ` (${sub.reviewComment})`}
                           </Typography>
                         )}
-                      </Paper>
+                      </PmCard>
                     ))}
                   </Stack>
                 ) : (
@@ -918,22 +904,22 @@ const TaskDetailPage = ({
                   </Typography>
                 )}
                 <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
+                  <PmButton
+                    variant="secondary"
+                    size="sm"
                     startIcon={<CloudUpload />}
                     disabled={isReadonly}
                   >
                     上传资料
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
+                  </PmButton>
+                  <PmButton
+                    variant="primary"
+                    size="sm"
                     onClick={() => setShowSubmitDialog(true)}
                     disabled={isReadonly}
                   >
                     提交验收
-                  </Button>
+                  </PmButton>
                 </Box>
               </CardSection>
 
@@ -1004,15 +990,14 @@ const TaskDetailPage = ({
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <SectionTitle>前置任务 ({taskDetail.relations.length})</SectionTitle>
                 {!isReadonly && (
-                  <Button
-                    size="small"
-                    variant="outlined"
+                  <PmButton
+                    variant="secondary"
+                    size="sm"
                     startIcon={<Add />}
                     onClick={() => setShowAddRelation(true)}
-                    sx={{ borderRadius: 10, fontSize: 12 }}
                   >
                     添加前置
-                  </Button>
+                  </PmButton>
                 )}
               </Box>
               <Stack spacing={0}>
@@ -1087,22 +1072,24 @@ const TaskDetailPage = ({
           {/* ── 保存按钮 ── */}
           {hasChanges && !isReadonly && (
             <Box sx={{ position: 'sticky', bottom: 16, pt: 2, pb: 2 }}>
-              <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                <Button
-                  variant="outlined"
+              <PmCard sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                <PmButton
+                  variant="ghost"
                   onClick={() => {
                     setAssigneeDraft(taskDetail.assigneeName ?? '')
-                    setPlannedStartAt(taskDetail.plannedStartAt)
-                    setPlannedEndAt(taskDetail.plannedEndAt)
+                    setPlannedStartAt(
+                      taskDetail.plannedStartAt ? dayjs(taskDetail.plannedStartAt) : null
+                    )
+                    setPlannedEndAt(taskDetail.plannedEndAt ? dayjs(taskDetail.plannedEndAt) : null)
                     setRiskLevel(taskDetail.riskLevel)
                   }}
                 >
                   重置
-                </Button>
-                <Button variant="contained" startIcon={<Save />} onClick={handleSave}>
+                </PmButton>
+                <PmButton variant="primary" startIcon={<Save />} onClick={handleSave}>
                   保存修改
-                </Button>
-              </Paper>
+                </PmButton>
+              </PmCard>
             </Box>
           )}
         </Stack>
@@ -1125,13 +1112,9 @@ const TaskDetailPage = ({
               选择一个任务模板，将其执行标准和验收标准绑定到当前任务。绑定后将生成标准快照。
             </Typography>
             {bindableTemplates.map(tpl => (
-              <Paper
+              <PmCard
                 key={tpl.id}
-                variant="outlined"
                 sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  borderColor: 'var(--pm-border)',
                   cursor: 'pointer',
                   transition: 'all 0.15s',
                   '&:hover': { borderColor: 'var(--pm-primary)', bgcolor: 'var(--pm-primary-15)' },
@@ -1155,14 +1138,14 @@ const TaskDetailPage = ({
                     验收标准：{tpl.acceptanceCount} 项
                   </Typography>
                 </Box>
-              </Paper>
+              </PmCard>
             ))}
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button onClick={() => setShowBindStandard(false)} sx={{ color: COLORS.text70 }}>
+          <PmButton variant="ghost" onClick={() => setShowBindStandard(false)}>
             取消
-          </Button>
+          </PmButton>
         </DialogActions>
       </Dialog>
 
@@ -1182,45 +1165,27 @@ const TaskDetailPage = ({
             <Typography variant="body2" sx={{ color: COLORS.text70 }}>
               选择当前任务的依赖关系。前置任务需要先完成后，当前任务才能开始。
             </Typography>
-            <TextField
+            <PmInput
               label="前置任务编码"
               placeholder="例如 PRJ-001-T-001"
               value={relationSearch}
               onChange={e => setRelationSearch(e.target.value)}
               fullWidth
-              size="small"
-              sx={{
-                '& .MuiOutlinedInput-root': { backgroundColor: 'var(--pm-input)' },
-                '& .MuiInputBase-input': { color: COLORS.textWhite },
-                '& .MuiInputLabel-root': { color: COLORS.text40 },
-              }}
             />
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ color: COLORS.text40 }}>依赖类型</InputLabel>
-              <Select
-                value={relationType}
-                label="依赖类型"
-                onChange={e => setRelationType(e.target.value as TaskRelation['relationType'])}
-                sx={{
-                  color: COLORS.textWhite,
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: COLORS.border },
-                }}
-              >
-                {RELATION_TYPE_OPTIONS.map(opt => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <PmSelect
+              label="依赖类型"
+              value={relationType}
+              onChange={e => setRelationType(e.target.value as TaskRelation['relationType'])}
+              options={RELATION_TYPE_OPTIONS.map(opt => ({ value: opt.value, label: opt.label }))}
+            />
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button onClick={() => setShowAddRelation(false)} sx={{ color: COLORS.text70 }}>
+          <PmButton variant="ghost" onClick={() => setShowAddRelation(false)}>
             取消
-          </Button>
-          <Button
-            variant="contained"
+          </PmButton>
+          <PmButton
+            variant="primary"
             disabled={!relationSearch.trim()}
             onClick={() => {
               onAddRelation?.(taskDetail.code, {
@@ -1234,7 +1199,7 @@ const TaskDetailPage = ({
             }}
           >
             添加
-          </Button>
+          </PmButton>
         </DialogActions>
       </Dialog>
 

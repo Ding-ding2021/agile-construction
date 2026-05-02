@@ -31,6 +31,54 @@ export const PmButton = forwardRef<HTMLButtonElement, PmButtonProps>(
           ? undefined
           : 'primary'
 
+    const variantSx: Record<string, object> = {
+      primary: {
+        backgroundColor: 'var(--pm-primary)',
+        color: '#fff',
+        boxShadow: 'var(--pm-shadow-primary)',
+        '&:hover': {
+          backgroundColor: 'var(--pm-primary-light)',
+          boxShadow: 'var(--pm-shadow-primary)',
+        },
+        '&:active': {
+          backgroundColor: 'var(--pm-primary-dark)',
+        },
+      },
+      secondary: {
+        backgroundColor: 'rgba(22, 139, 217, 0.12)',
+        color: '#9dccff',
+        border: '1px solid rgba(22, 139, 217, 0.4)',
+        '&:hover': {
+          backgroundColor: 'rgba(22, 139, 217, 0.2)',
+          borderColor: 'rgba(22, 139, 217, 0.6)',
+        },
+      },
+      ghost: {
+        color: 'var(--pm-text-70)',
+        '&:hover': {
+          backgroundColor: 'var(--pm-element-hover)',
+        },
+      },
+      danger: {
+        backgroundColor: 'var(--pm-red)',
+        color: '#fff',
+        '&:hover': {
+          backgroundColor: 'var(--pm-red-light)',
+        },
+      },
+      icon: {
+        minWidth: sizeStyles[size].minWidth,
+        width: sizeStyles[size].minWidth,
+        height: sizeStyles[size].minWidth,
+        padding: 0,
+        borderRadius: 'var(--pm-radius-sm, 8px)',
+        color: 'var(--pm-text-70)',
+        '&:hover': {
+          backgroundColor: 'var(--pm-element-hover)',
+        },
+      },
+    }
+
     return (
       <MuiButton
         ref={ref}
@@ -39,9 +87,12 @@ export const PmButton = forwardRef<HTMLButtonElement, PmButtonProps>(
         disabled={disabled || loading}
         sx={{
           ...sizeStyles[size],
-          borderRadius: variant === 'icon' ? '10px' : '14px',
-          minWidth: variant === 'icon' ? sizeStyles[size].minWidth : undefined,
-          p: variant === 'icon' ? 0 : undefined,
+          borderRadius:
+            variant === 'icon' ? 'var(--pm-radius-sm, 8px)' : 'var(--pm-radius-md, 10px)',
+          fontWeight: 500,
+          textTransform: 'none',
+          transition: 'all 0.2s ease',
+          ...variantSx[variant],
           ...sx,
         }}
         {...rest}
