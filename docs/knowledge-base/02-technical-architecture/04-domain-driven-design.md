@@ -1,3 +1,10 @@
+---
+title: 04 Domain Driven Design
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 领域驱动设计 (DDD)
 
 ## 核心概念

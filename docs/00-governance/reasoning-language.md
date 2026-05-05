@@ -1,3 +1,12 @@
+---
+title: AI 推理语言规范
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-05
+source_of_truth: true
+related_docs: [docs/00-governance/document-governance.md]
+---
+
 # 推理语言配置
 
 所有推理过程（意图声明、思考链、分析步骤）必须使用中文输出。

@@ -1,3 +1,10 @@
+---
+title: 02 Requirement Phase
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 需求阶段
 
 ## 目标

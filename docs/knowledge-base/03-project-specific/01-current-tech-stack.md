@@ -1,3 +1,10 @@
+---
+title: 01 Current Tech Stack
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 当前项目技术栈
 
 ## 核心技术

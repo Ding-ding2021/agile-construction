@@ -1,3 +1,9 @@
+---
+title: 任务中心 ERD
+status: active
+last_updated: 2026-05-05
+---
+
 # 任务中心实体关系图
 
 ## 完整 ER 图

@@ -1,3 +1,9 @@
+---
+title: Component System Proposal Mui
+status: archived
+last_updated: 2026-05-05
+---
+
 # 列表、按钮、输入框组件化方案 —— 基于 MUI + 设计规范
 
 ## 一、现状诊断

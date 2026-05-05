@@ -1,3 +1,9 @@
+---
+title: 设计规范 V2.0 原始版
+status: archived
+last_updated: 2026-05-05
+---
+
 # 🎨 连锁门店建设管理系统 - 完整设计规范
 
 > **设计理念**: Liquid Glass（液态玻璃） + Material Design 3  

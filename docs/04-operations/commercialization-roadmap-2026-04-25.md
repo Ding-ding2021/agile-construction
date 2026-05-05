@@ -1,3 +1,9 @@
+---
+title: Commercialization Roadmap 2026 04 25
+status: archived
+last_updated: 2026-05-05
+---
+
 # 多Agent建店管理平台 — 商业化路线建议
 
 > **报告日期**：2026-04-25  

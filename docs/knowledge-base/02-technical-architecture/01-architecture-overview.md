@@ -1,3 +1,10 @@
+---
+title: 01 Architecture Overview
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 技术架构概览
 
 ## 架构演进阶段

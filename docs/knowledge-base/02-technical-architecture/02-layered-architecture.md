@@ -1,3 +1,10 @@
+---
+title: 02 Layered Architecture
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 分层架构详解
 
 ## 五层架构模型

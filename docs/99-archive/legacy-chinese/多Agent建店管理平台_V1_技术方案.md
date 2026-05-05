@@ -1,3 +1,9 @@
+---
+title: 多Agent建店管理平台_V1_技术方案
+status: archived
+last_updated: 2026-05-05
+---
+
 # 多Agent建店管理平台 V1 技术方案草案
 
 ## 1. 技术方案目标
