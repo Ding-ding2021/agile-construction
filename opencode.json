@@ -6,7 +6,7 @@
     "docs/00-governance/reasoning-language.md",
     "docs/03-engineering/development-guide.md"
   ],
-  "plugin": ["opencode-agent-memory"],
+  "plugin": ["opencode-agent-memory", "superpowers@git+https://github.com/obra/superpowers.git"],
   "agent": {
     "explore": {
       "description": "Fast codebase exploration",

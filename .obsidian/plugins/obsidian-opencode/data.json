@@ -1,0 +1,14 @@
+{
+  "port": 14097,
+  "hostname": "127.0.0.1",
+  "autoStart": true,
+  "opencodePath": "/Users/dylan/.opencode/bin/opencode",
+  "projectDirectory": "/Users/dylan/CodeBuddy/agile-construction",
+  "startupTimeout": 45000,
+  "defaultViewLocation": "sidebar",
+  "injectWorkspaceContext": true,
+  "maxNotesInContext": 20,
+  "maxSelectionLength": 2000,
+  "customCommand": "",
+  "useCustomCommand": false
+}

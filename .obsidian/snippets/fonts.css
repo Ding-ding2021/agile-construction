@@ -1,0 +1,11 @@
+/* Obsidian 系统字体 — 编辑 & 阅读模式 */
+body {
+  --font-text:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  --font-text-size: 16px;
+  --font-interface:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-monospace: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  /* 页面宽度：编辑区 & 阅读模式 */
+  --file-line-width: 880px;
+}
