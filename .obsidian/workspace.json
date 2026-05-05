@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/01-product/digital-employee-prd.md",
-                "mode": "source",
+                "file": "docs/01-product/product-roadmap-v1.2-draft.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "digital-employee-prd"
+              "title": "product-roadmap-v1.2-draft"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/01-product/digital-employee-prd.md",
+                "file": "CLAUDE.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "digital-employee-prd 的反向链接列表"
+              "title": "CLAUDE 的反向链接列表"
             }
           },
           {
@@ -156,23 +156,35 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/01-product/product-roadmap-v2.md",
+                "file": "CLAUDE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "product-roadmap-v2 的大纲"
+              "title": "CLAUDE 的大纲"
+            }
+          },
+          {
+            "id": "79e60865a8e07add",
+            "type": "leaf",
+            "state": {
+              "type": "opencode-view",
+              "state": {},
+              "icon": "opencode-logo",
+              "title": "OpenCode"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 810.5
   },
   "left-ribbon": {
     "hiddenItems": {
+      "opencode-obsidian:OpenCode": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -183,44 +195,52 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "9bc59ddce56076e1",
+  "active": "41293c06ea29e6eb",
   "lastOpenFiles": [
-    "dist/assets/index-DF8ai027.js",
-    "标准管理需求文档.md",
-    "CODEBUDDY.md",
-    "dist/index.html",
-    "dist/assets/index-WG3nMFEd.css",
-    "dist/assets/index-DMfogvix.js",
-    "scripts/tokenize-css.py",
-    "项目管理需求文档.md",
-    "采购管理需求文档.md",
-    "状态机设计说明.md",
-    "标准库结构化说明.md",
-    "多Agent建店管理平台_V1_技术方案.md",
-    "多Agent建店管理平台_V1_PRD.md",
-    "任务树建模说明.md",
-    "任务中心需求文档.md",
-    "产品规划文档.md",
-    "src/components/task/TaskSidebar.tsx",
-    "src/components/personnel/Sidebar.tsx",
-    "src/components/personnel/Header.tsx",
-    "src/components/layout/Sidebar.tsx",
-    "src/components/layout/Header.tsx",
-    "DEVELOPMENT_GUIDE.md",
-    "CODING_STANDARDS.md",
-    "node_modules/prettier/plugins/yaml.d.ts",
-    "node_modules/prettier/THIRD-PARTY-NOTICES.md",
-    "node_modules/prettier/README.md",
-    "node_modules/lint-staged/README.md",
-    "node_modules/lint-staged/MIGRATION.md",
-    "node_modules/slice-ansi/node_modules/is-fullwidth-code-point/readme.md",
-    "node_modules/slice-ansi/node_modules/ansi-styles/readme.md",
-    "node_modules/slice-ansi/readme.md",
-    "node_modules/log-update/node_modules/is-fullwidth-code-point/readme.md",
-    "node_modules/log-update/node_modules/wrap-ansi/readme.md",
-    "node_modules/log-update/node_modules/strip-ansi/readme.md",
-    "node_modules/log-update/node_modules/emoji-regex/README.md",
-    "node_modules/log-update/node_modules/string-width/readme.md",
+    "deepseek-models.json",
+    "docs/00-governance/code-review-checklist.md",
+    "memory/patterns/shadcn-workflow.md",
+    "memory/decisions",
+    "memory/patterns",
+    "memory/archive/MEMORY-2026-04.md",
+    "memory/archive",
+    "src-next/dist/assets/index-C7d6xhYI.js",
+    "src-next/dist/assets/index-DOtMiBGI.css",
+    "src-next/dist/assets/index-RftqZ2b3.js",
+    "src-next/dist/assets/index-B2QU_QBZ.js",
+    "src-next/dist/assets/index-Cw5CvcuW.css",
+    "src-next/dist/assets/index-BOYljb05.js",
+    "src-next/dist/assets",
+    "src-next/node_modules/@floating-ui/core/README.md",
+    "src-next/node_modules/@floating-ui/dom/README.md",
+    "src-next/node_modules/@floating-ui/react-dom/README.md",
+    "src-next/node_modules/@base-ui/utils/README.md",
+    "src-next/node_modules/@base-ui/utils/CHANGELOG.md",
+    "src-next/node_modules/@base-ui/react/README.md",
+    "src-next/node_modules/@base-ui/react/CHANGELOG.md",
+    "src-next/node_modules/@babel/runtime/README.md",
+    "src-next/node_modules/@floating-ui/utils/README.md",
+    "node_modules/date-fns/SECURITY.md",
+    "node_modules/date-fns/LICENSE.md",
+    "node_modules/date-fns/README.md",
+    "node_modules/date-fns/CHANGELOG.md",
+    "node_modules/date-fns/docs/webpack.md",
+    "node_modules/date-fns/docs/unicodeTokens.md",
+    "node_modules/date-fns/docs/timeZones.md",
+    "node_modules/date-fns/docs/release.md",
+    "node_modules/date-fns/docs/logotype.svg",
+    "node_modules/date-fns/docs/logo.svg",
+    "node_modules/date-fns/docs/i18nContributionGuide.md",
+    "node_modules/date-fns/docs/i18n.md",
+    "node_modules/date-fns/docs/gettingStarted.md",
+    "node_modules/date-fns/docs/fp.md",
+    "node_modules/date-fns/docs/cdn.md",
+    "node_modules/react-day-picker/node_modules/date-fns-jalali/docs/logotype.svg",
+    "node_modules/react-day-picker/node_modules/date-fns-jalali/docs/logo.svg",
+    "src-next/node_modules/date-fns/docs/logotype.svg",
+    "src-next/node_modules/date-fns/docs/logo.svg",
+    "src-next/node_modules/date-fns-jalali/docs/logotype.svg",
+    "src-next/node_modules/date-fns-jalali/docs/logo.svg",
     "未命名.canvas"
   ]
 }
