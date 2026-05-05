@@ -3,17 +3,23 @@ id: DOC-00-GOVERNANCE-CODING-STANDARDS
 title: 📝 连锁门店建设管理系统 - 代码规范
 owner: docs-maintainer
 status: active
-last_updated: 2026-04-16
+last_updated: 2026-05-05
 source_of_truth: true
-related_code: []
-related_docs: []
+related_code:
+  - eslint.config.js
+  - .prettierrc
+  - tsconfig.app.json
+related_docs:
+  - docs/00-governance/design-specification.md
+  - docs/00-governance/component-development-contract.md
+  - docs/03-engineering/development-guide.md
 ---
 
 # 📝 连锁门店建设管理系统 - 代码规范
 
-> **版本**: v1.0.0  
-> **最后更新**: 2026-03-14  
-> **基于设计规范**: docs/00-governance/design-specification.md v1.1.0
+> **版本**: v2.0.0  
+> **最后更新**: 2026-05-05  
+> **基于设计规范**: docs/00-governance/design-specification.md v2.0.0
 > **执行补充（2026-03-31）**: 注释规则采用工程模式，关键逻辑/边界条件/复杂状态流需中文注释，不执行“每一行代码都注释”。
 
 ---
@@ -36,54 +42,66 @@ related_docs: []
 
 ### 1.1 ESLint 配置
 
-**推荐规则：**
+项目使用 ESLint flat config（`eslint.config.js`），基于 `typescript-eslint` + `eslint-plugin-react-hooks` + `eslint-plugin-react-refresh`：
 
 ```javascript
-// .eslintrc.js
-module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-  ],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': 'warn',
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    'react/prop-types': 'off',
+// eslint.config.js — 实际配置（flat config）
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist', 'src/generated/prisma']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    rules: {
+      // 质量防线
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+      'no-debugger': 'error',
+
+      // React 规范
+      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/immutability': 'off',
+      'react-hooks/set-state-in-render': 'off',
+
+      // TypeScript 严格
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    },
   },
-}
+])
 ```
 
 ### 1.2 Prettier 配置
 
 ```json
-// .prettierrc
 {
-  "semi": true,
-  "trailingComma": "es5",
+  "semi": false,
   "singleQuote": true,
-  "printWidth": 100,
   "tabWidth": 2,
-  "useTabs": false,
-  "bracketSpacing": true,
-  "bracketSameLine": false,
-  "arrowParens": "always",
-  "endOfLine": "lf"
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "arrowParens": "avoid"
 }
 ```
 
 ### 1.3 代码格式示例
 
 ```tsx
-// ✅ 推荐
+// ✅ 推荐：无分号、箭头参数无括号
 function MyComponent({ prop1, prop2 }: MyComponentProps) {
   const [state, setState] = useState(initialValue)
 
@@ -103,15 +121,15 @@ function MyComponent({ prop1, prop2 }: MyComponentProps) {
   )
 }
 
-// ❌ 避免
+// ❌ 避免：使用分号、箭头参数加括号、缺少类型标注
 function myComponent({ prop1, prop2 }) {
-  const [state, setState] = useState(initialValue)
+  const [state, setState] = useState(initialValue);
   return (
     <div className="container">
       <h1>Title</h1>
       <p>Content</p>
     </div>
-  )
+  );
 }
 ```
 
@@ -448,45 +466,32 @@ function ResponsiveLayout() {
 
 ```
 src/
-├── app/                      # 应用入口
-│   ├── layout.tsx           # 根布局
-│   ├── page.tsx             # 首页
-│   └── routes.tsx           # 路由配置
-├── components/               # 通用组件
-│   ├── ui/                  # UI 基础组件
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── ...
-│   ├── layout/              # 布局组件
-│   │   ├── DashboardLayout.tsx
-│   │   └── Sidebar.tsx
-│   └── features/            # 功能组件
-│       ├── projects/
-│       └── tasks/
-├── pages/                   # 页面组件
-│   ├── ProjectsPage.tsx
-│   ├── ProjectDetailPage.tsx
-│   └── ...
-├── hooks/                   # 自定义 Hooks
-│   ├── useData.ts
-│   ├── useProjects.ts
-│   └── ...
-├── lib/                     # 工具函数
-│   ├── utils.ts
-│   ├── supabase.ts
-│   └── ...
-├── types/                   # TypeScript 类型定义
-│   ├── index.ts
-│   ├── project.ts
-│   └── ...
-├── constants/               # 常量
-│   ├── index.ts
-│   └── routes.ts
-├── styles/                  # 全局样式
-│   └── globals.css
-└── assets/                  # 静态资源
-    ├── images/
-    └── icons/
+├── config/           # 路由、导航、特性注册表
+│   ├── routes.ts    # 路由配置 + AppRoute 类型
+│   └── navigation.ts # 统一导航函数
+├── components/       # 页面组件 + 共享组件
+│   ├── project/     # 项目管理域
+│   ├── task/        # 任务管理域
+│   ├── shared/      # 共享组件（AppSidebar, PageHeader, StatsCards 等）
+│   │   ├── navigation/
+│   │   ├── data-display/
+│   │   └── mui/
+│   └── router/      # AppRouter
+├── domain/           # 纯领域逻辑（状态机、守卫）
+│   ├── projectStatusMachine.ts
+│   └── taskStateMachine.guards.ts
+├── data/             # 静态/mock 数据
+│   ├── projects.ts
+│   └── taskManagement.data.ts
+├── services/         # API 客户端、Repository
+│   ├── repositories/
+│   ├── api/
+│   └── prisma.ts
+├── store/            # Zustand 状态管理
+│   └── projectStore.ts
+├── config/           # 路由、导航
+├── App.tsx           # 主应用编排
+└── main.tsx          # 入口
 ```
 
 ### 5.2 文件命名
@@ -867,8 +872,7 @@ git commit -m "add feature"
 ## 📚 相关文档
 
 - [设计规范](./docs/00-governance/design-specification.md)
-- [技术栈文档](./TECHNOLOGY_STACK.md)
-- [项目结构](./PROJECT_STRUCTURE.md)
+- [编码规范](./docs/00-governance/coding-standards.md)
 - [开发指南](./docs/03-engineering/development-guide.md)
 
 ---
