@@ -207,7 +207,7 @@ export const taskRepository = {
       if (remoteTasks.length === 0 && localTasks && localTasks.length > 0) {
         const results = await Promise.allSettled(
           localTasks.map(task => {
-            const { id: _id, parentTaskId, ...rest } = task
+            const { parentTaskId, ...rest } = task
             const payload = {
               ...rest,
               parentId: parentTaskId,
@@ -366,6 +366,7 @@ export const taskRepository = {
   },
 
   // ── 载入含树状结构的任务 ───────────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 返回类型由 getTaskTree 动态决定，可能是 TaskItem[] 或树状结构
   async loadTasksWithTree(projectCode: string): Promise<any> {
     try {
       return await serverAdapter.getTaskTree(projectCode)

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- 测试 mock 需要 any */
+
 import { describe, it, expect, vi } from 'vitest'
 
 import * as clientModule from '../services/api/client'

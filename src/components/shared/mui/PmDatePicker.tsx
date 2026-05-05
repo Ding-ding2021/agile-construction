@@ -70,7 +70,7 @@ export interface PmDatePickerProps extends DatePickerProps {
   readOnly?: boolean
 }
 
-export function PmDatePicker({ readOnly, sx, ...rest }: PmDatePickerProps) {
+export function PmDatePicker({ readOnly, sx: _sx, ...rest }: PmDatePickerProps) {
   return (
     <DatePicker
       {...rest}

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- 测试 mock 需要 any */
+
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
 import type { TaskItem } from '../components/task/taskManagement.types'

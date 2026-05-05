@@ -19,7 +19,7 @@ related_docs:
 
 > **版本**: v2.0.0  
 > **最后更新**: 2026-05-05  
-> **基于设计规范**: docs/00-governance/design-specification.md v2.0.0
+> **基于设计规范**: docs/01-product/design-spec-v2-shadcn.md v2.1.0
 > **执行补充（2026-03-31）**: 注释规则采用工程模式，关键逻辑/边界条件/复杂状态流需中文注释，不执行“每一行代码都注释”。
 
 ---
@@ -35,6 +35,7 @@ related_docs:
 7. [注释规范](#7-注释规范)
 8. [性能优化](#8-性能优化)
 9. [Git 提交规范](#9-git-提交规范)
+10. [双栈编码规范](#10-双栈编码规范)
 
 ---
 
@@ -596,75 +597,9 @@ const CONFIG = {
 
 **执行标准：关键逻辑注释（工程模式）**
 
-仅在边界条件、复杂流程、状态变更、关键业务逻辑处加注释，不要求每一行都注释。
+仅在边界条件、复杂流程、状态变更、关键业务逻辑处加注释，不要求每行都注释。
 
-#### 7.1.1 行内注释规范
-
-```typescript
-// ✅ 推荐：每一行都有清晰的中文解释
-import { clsx } from 'clsx'; // 导入 clsx 库，用于动态拼接 CSS 类名
-import type { PaginationData } from './types'; // 导入类型定义，用于类型检查
-
-// 自定义向左箭头图标组件
-const ChevronLeft = () => (
-  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
-    <path d="M10 12L5 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-// 定义组件属性类型接口
-interface PaginationInfoProps {
-  data: PaginationData; // 接收分页数据对象
-}
-
-// 分页信息组件：显示总记录数和当前页码
-export function PaginationInfo({ data }: PaginationInfoProps) {
-  return (
-    <div className="flex items-center">
-      <span className="text-xs text-white/40 leading-[16px]">
-        共 {data.totalItems} 条记录，当前第 {data.currentPage} / {data.totalPages} 页
-      </span>
-    </div>
-  );
-}
-```
-
-#### 7.1.2 注释内容要求
-
-| 代码类型     | 注释要求             | 示例                                                                               |
-| ------------ | -------------------- | ---------------------------------------------------------------------------------- |
-| **导入语句** | 说明导入的内容和用途 | `import { useState } from 'react'; // 导入 React 的状态管理 Hook`                  |
-| **变量声明** | 说明变量的作用       | `const [isLoading, setIsLoading] = useState(false); // 定义加载状态，初始为未加载` |
-| **函数定义** | 说明函数的功能       | `function fetchData() { // 从后端 API 获取数据`                                    |
-| **条件判断** | 说明判断的逻辑       | `if (data.currentPage === 1) { // 如果是第一页`                                    |
-| **循环语句** | 说明循环的目的       | `pages.map((page) => { // 遍历所有页码，生成按钮`                                  |
-| **JSX 元素** | 说明组件的作用       | `<PaginationInfo data={data} /> // 渲染分页信息组件`                               |
-| **CSS 类名** | （可选，复杂时说明） | `className="bg-[#154DD9]" // 使用品牌蓝色作为背景`                                 |
-
-#### 7.1.3 注释位置
-
-```typescript
-// ✅ 推荐：注释在代码上方或行尾
-import { useState } from 'react'; // 导入状态管理 Hook
-
-// 定义组件属性接口
-interface ButtonProps {
-  label: string; // 按钮显示的文字
-  onClick: () => void; // 点击事件处理函数
-}
-
-// 按钮组件：可点击的交互按钮
-export function Button({ label, onClick }: ButtonProps) {
-  return (
-    <button
-      onClick={onClick} // 点击时触发传入的函数
-      className="px-4 py-2 bg-blue-500 text-white" // 蓝色背景白色文字
-    >
-      {label}
-    </button>
-  );
-}
-```
+> **统一原则**：仅对**关键逻辑、业务边界、复杂状态流转**写中文注释。不要求 import 语句、简单变量声明、普通 JSX 的注释。
 
 ### 7.2 传统项目注释规范（参考）
 
@@ -869,9 +804,37 @@ git commit -m "add feature"
 
 ---
 
+## 10. 双栈编码规范
+
+项目有两条独立的开发线，共享 `node_modules/prisma/local-api`：
+
+### 10.1 src/（MUI 版 — 维护模式）
+
+| 维度 | 规范 |
+|------|------|
+| UI 库 | MUI v9 + Emotion |
+| 样式 | CSS 变量 `var(--pm-*)`，深色玻璃态 |
+| 路由 | Hash 路由，`readRouteFromHash()` + `navigation.ts` |
+| 状态 | Zustand + persist（`projectStore.ts`） |
+| 数据 | Repository 模式（API 优先 + localStorage 降级） |
+| CSS | 同文件 `.css`，不使用 CSS Modules |
+
+### 10.2 src-next/（shadcn 版 — 活跃开发）
+
+| 维度 | 规范 |
+|------|------|
+| UI 库 | shadcn/ui (base-nova) + @base-ui/react |
+| 样式 | Tailwind CSS v4，oklch 色值 |
+| 路由 | React Router v7 BrowserRouter |
+| 图标 | lucide-react（通过 icon.tsx 适配层统一 16px） |
+| 组件来源 | 必须来自 shadcn 官方 registry |
+| 禁止事项 | `--pm-*` 旧品牌色、MUI `sx/style` prop、`bg-white/X` 透明度色值 |
+
+---
+
 ## 📚 相关文档
 
-- [设计规范](./docs/00-governance/design-specification.md)
+- [设计规范](./docs/01-product/design-spec-v2-shadcn.md)
 - [编码规范](./docs/00-governance/coding-standards.md)
 - [开发指南](./docs/03-engineering/development-guide.md)
 

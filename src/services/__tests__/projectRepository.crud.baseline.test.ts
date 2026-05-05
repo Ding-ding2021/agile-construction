@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- 测试 mock 需要 any */
+
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { projectRepository } from '../repositories/projectRepository'
 import type { ProjectItem } from '../../data/projects'
