@@ -1,3 +1,9 @@
+---
+title: Task Entity Relationship
+status: active
+last_updated: 2026-05-05
+---
+
 # 任务模块实体关系图
 
 > 基于 `docs/01-product/task-center-prd.md` V1.01 + `docs/01-product/task-center-erd.md`

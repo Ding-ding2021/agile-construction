@@ -1,3 +1,9 @@
+---
+title: Gantt Component Analysis
+status: archived
+last_updated: 2026-05-05
+---
+
 # 甘特图组件设计与外部库引入建议
 
 ## 一、现有实现分析

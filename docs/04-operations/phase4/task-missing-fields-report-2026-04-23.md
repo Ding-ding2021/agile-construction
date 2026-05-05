@@ -1,3 +1,9 @@
+---
+title: Task Missing Fields Report 2026 04 23
+status: archived
+last_updated: 2026-05-05
+---
+
 # 任务管理模块缺失字段核查报告
 
 > 日期：2026-04-23

@@ -1,3 +1,10 @@
+---
+title: 06 Testing Strategy
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 测试策略
 
 ## 测试金字塔

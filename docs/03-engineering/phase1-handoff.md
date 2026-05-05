@@ -1,3 +1,9 @@
+---
+title: Phase 1 交接文档
+status: active
+last_updated: 2026-05-05
+---
+
 # Phase 1 冷启动交接文档
 
 > 生成时间：2026-04-24

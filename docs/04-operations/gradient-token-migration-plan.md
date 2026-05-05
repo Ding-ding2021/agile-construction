@@ -1,3 +1,9 @@
+---
+title: Gradient Token Migration Plan
+status: archived
+last_updated: 2026-05-05
+---
+
 # 渐变色 Token 化迁移方案
 
 ## 现状分析

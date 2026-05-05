@@ -1,3 +1,9 @@
+---
+title: Ui Ux Improvement Proposal 2026 04 24
+status: archived
+last_updated: 2026-05-05
+---
+
 # 页面与交互改进建议报告
 
 > **项目**: 多Agent建店管理平台（WorkBuddy）  

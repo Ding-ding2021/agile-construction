@@ -1,3 +1,10 @@
+---
+title: 05 Performance Optimization
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 性能优化方案
 
 ## 优化层次

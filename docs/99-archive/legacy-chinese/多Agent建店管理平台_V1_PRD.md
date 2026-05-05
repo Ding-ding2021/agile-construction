@@ -1,3 +1,9 @@
+---
+title: 多Agent建店管理平台_V1_PRD
+status: archived
+last_updated: 2026-05-05
+---
+
 # 多Agent建店管理平台 V1 PRD
 
 ## 1. 文档概述

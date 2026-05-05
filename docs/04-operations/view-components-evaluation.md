@@ -1,3 +1,9 @@
+---
+title: View Components Evaluation
+status: archived
+last_updated: 2026-05-05
+---
+
 # 日历/看板/卡片/地图视图组件评估与建议
 
 ## 一、日历视图

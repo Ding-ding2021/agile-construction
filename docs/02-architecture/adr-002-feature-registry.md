@@ -1,3 +1,9 @@
+---
+title: Adr 002 Feature Registry
+status: active
+last_updated: 2026-05-05
+---
+
 # ADR-002: FeatureRegistry — 统一页面注册模式
 
 > **状态**: Accepted  

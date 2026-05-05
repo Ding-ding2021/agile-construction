@@ -1,3 +1,10 @@
+---
+title: 01 Development Overview
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 产品开发流程概览
 
 ## 六阶段开发模型

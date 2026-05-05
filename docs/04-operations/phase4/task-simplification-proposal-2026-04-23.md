@@ -1,3 +1,9 @@
+---
+title: Task Simplification Proposal 2026 04 23
+status: archived
+last_updated: 2026-05-05
+---
+
 # 任务管理模块简化建议书
 
 > 日期：2026-04-23

@@ -1,3 +1,9 @@
+---
+title: 工单团队管理 PRD
+status: active
+last_updated: 2026-05-05
+---
+
 # 工队资源管理模块 PRD
 
 ## 1. 文档概述

@@ -1,3 +1,10 @@
+---
+title: 03 Development Standards
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 项目开发规范
 
 ## 代码规范

@@ -1,3 +1,10 @@
+---
+title: 06 Release Phase
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 发布阶段
 
 ## 目标

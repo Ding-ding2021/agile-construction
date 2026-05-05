@@ -1,3 +1,9 @@
+---
+title: Task Management Assessment 2026 04 23
+status: archived
+last_updated: 2026-05-05
+---
+
 # 任务管理模块专项评估报告
 
 > 评估日期：2026-04-23

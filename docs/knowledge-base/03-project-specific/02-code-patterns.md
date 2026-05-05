@@ -1,3 +1,10 @@
+---
+title: 02 Code Patterns
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 项目代码模式
 
 ## 1. 状态机模式

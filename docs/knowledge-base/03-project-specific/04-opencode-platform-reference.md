@@ -1,3 +1,10 @@
+---
+title: 04 Opencode Platform Reference
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # OpenCode 平台参考 — 模式与代理体系
 
 > 本文档记录 OpenCode 平台的工作模式、代理角色和调度参数体系。作为项目开发中与 OpenCode 交互的参考手册。

@@ -1,3 +1,9 @@
+---
+title: Task Center Prd Evaluation Report
+status: archived
+last_updated: 2026-05-05
+---
+
 # 任务中心 PRD 文档评估报告
 
 > 评估日期：2026-04-23

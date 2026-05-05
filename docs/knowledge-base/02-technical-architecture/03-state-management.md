@@ -1,3 +1,10 @@
+---
+title: 03 State Management
+status: superseded
+last_updated: 2026-05-05
+superseded_by: docs/ (see docs/README.md for current docs)
+---
+
 # 状态管理方案
 
 ## 状态分类

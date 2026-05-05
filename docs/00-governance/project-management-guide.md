@@ -1,3 +1,12 @@
+---
+title: 项目整体管理流程指南
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-01
+source_of_truth: true
+related_docs: [docs/00-governance/document-governance.md]
+---
+
 # 项目整体管理流程指南
 
 > **SSOT** 本文档是项目管理体系的唯一权威来源
