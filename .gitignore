@@ -31,3 +31,7 @@ coverage/
 *.db-wal
 *.snapshot-backup
 .claude/worktrees/
+
+# API key config files
+deepseek-models.json
+.opencode/memory

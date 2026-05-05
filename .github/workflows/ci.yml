@@ -26,13 +26,13 @@ jobs:
       - name: Lint (full project)
         run: npx eslint "src/**/*.{ts,tsx}"
 
-      - name: Verify stage3 docs
+      - name: Verify key docs exist
         run: |
-          test -f docs/phase3/launch-checklist.md
-          test -f docs/phase3/collaboration-matrix.md
-          test -f docs/phase3/cloudbase-e2e-checklist.md
-          test -f docs/phase3/weekly-governance-metrics.md
-          test -f docs/phase3/feishu-publish-runbook.md
+          test -f docs/03-engineering/release/launch-checklist.md
+          test -f docs/03-engineering/release/feishu-publish-runbook.md
+          test -f docs/03-engineering/integration-guide.md
+          test -f docs/00-governance/document-governance.md
+          test -f docs/README.md
 
       - name: Type & Build
         run: npm run build
