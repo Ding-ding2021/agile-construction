@@ -2,7 +2,7 @@
 
 > 本文件是仓库文档唯一导航入口（SSOT 索引）。
 > 所有 active 文档必须在本页登记。
-> 最后索引更新：2026-04-26（覆盖 84 个 .md 文件）
+> 最后索引更新：2026-05-05（覆盖 84 个 .md 文件）
 
 ## 文档分层
 
@@ -24,6 +24,7 @@
 - `docs/00-governance/design-specification.md` — 设计规范
 - `docs/00-governance/document-governance.md` — 文档治理规则
 - `docs/00-governance/mvp-code-quality-plan-v2.md` — MVP 代码质量方案（质量红线）
+- `docs/00-governance/code-review-checklist.md` — Code Review Checklist
 - `docs/00-governance/pr-doc-checklist.md` — PR 文档检查清单
 
 ### 01-product（产品规划与需求）
