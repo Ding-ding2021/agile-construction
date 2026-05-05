@@ -8,4 +8,9 @@ npx lint-staged || exit 1
 echo "📝 检查 TypeScript 类型..."
 npx tsc --noEmit || exit 1
 
+# 3. 检查 commit message 格式（Conventional Commits）
+BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
+echo "📝 检查分支名..."
+echo "$BRANCH_NAME" | grep -qE "^(feat|fix|docs|refactor|chore|test)/" || echo "⚠️  建议分支名遵循 type/scope 格式"
+
 echo "✅ 检查通过"
