@@ -15,7 +15,7 @@ import type {
   TaskStatus,
 } from './taskManagement.types'
 import { isTaskReadonlyStatus, STATUS_TONE_MAP } from './taskManagement.types'
-import { getAvailableNextStatuses } from './taskStateMachine.guards'
+import { getAvailableNextStatuses } from '../../domain/taskStatusMachine'
 import type { TaskItem } from './taskManagement.types'
 import {
   StatusChip,

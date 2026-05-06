@@ -144,6 +144,8 @@ exports.Prisma.ProjectScalarFieldEnum = {
   name: 'name',
   brand: 'brand',
   status: 'status',
+  parentStatus: 'parentStatus',
+  subStatusJson: 'subStatusJson',
   statusTone: 'statusTone',
   stage: 'stage',
   progress: 'progress',
@@ -190,6 +192,27 @@ exports.Prisma.ProjectMilestoneScalarFieldEnum = {
   completedDate: 'completedDate'
 };
 
+exports.Prisma.WorkPackageScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  code: 'code',
+  name: 'name',
+  status: 'status',
+  managerId: 'managerId',
+  stageId: 'stageId',
+  description: 'description',
+  progress: 'progress',
+  plannedStartAt: 'plannedStartAt',
+  plannedEndAt: 'plannedEndAt',
+  actualStartAt: 'actualStartAt',
+  actualEndAt: 'actualEndAt',
+  plannedWorkHours: 'plannedWorkHours',
+  actualWorkHours: 'actualWorkHours',
+  budget: 'budget',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProjectTaskScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
@@ -202,6 +225,8 @@ exports.Prisma.ProjectTaskScalarFieldEnum = {
   dueDate: 'dueDate',
   parentId: 'parentId',
   nodeLevelType: 'nodeLevelType',
+  treeLevel: 'treeLevel',
+  treePath: 'treePath',
   priority: 'priority',
   progress: 'progress',
   taskType: 'taskType',
@@ -209,8 +234,14 @@ exports.Prisma.ProjectTaskScalarFieldEnum = {
   riskLevel: 'riskLevel',
   slaStatus: 'slaStatus',
   description: 'description',
-  actualStartDate: 'actualStartDate',
-  actualEndDate: 'actualEndDate',
+  requiredFlag: 'requiredFlag',
+  milestoneFlag: 'milestoneFlag',
+  ownerRole: 'ownerRole',
+  assigneeType: 'assigneeType',
+  brandId: 'brandId',
+  storeId: 'storeId',
+  actualStartAt: 'actualStartAt',
+  actualEndAt: 'actualEndAt',
   blockedReason: 'blockedReason',
   remindCount: 'remindCount',
   tags: 'tags',
@@ -219,10 +250,44 @@ exports.Prisma.ProjectTaskScalarFieldEnum = {
   plannedWorkHours: 'plannedWorkHours',
   actualWorkHours: 'actualWorkHours',
   standardSnapshotId: 'standardSnapshotId',
+  standardBindingStatus: 'standardBindingStatus',
+  snapshotStatus: 'snapshotStatus',
+  derivedFromTaskId: 'derivedFromTaskId',
+  isRectification: 'isRectification',
+  rectificationReason: 'rectificationReason',
+  closeReason: 'closeReason',
+  reopenCount: 'reopenCount',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedBy: 'updatedBy',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskEventLogScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  eventType: 'eventType',
+  eventAction: 'eventAction',
+  beforeValue: 'beforeValue',
+  afterValue: 'afterValue',
+  operatorId: 'operatorId',
+  operatorSource: 'operatorSource',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TaskSubmissionScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  submissionType: 'submissionType',
+  description: 'description',
+  attachmentIds: 'attachmentIds',
+  status: 'status',
+  submittedBy: 'submittedBy',
+  submittedAt: 'submittedAt',
+  reviewedBy: 'reviewedBy',
+  reviewResult: 'reviewResult',
+  reviewComment: 'reviewComment',
+  reviewedAt: 'reviewedAt'
 };
 
 exports.Prisma.TaskRelationScalarFieldEnum = {
@@ -230,6 +295,15 @@ exports.Prisma.TaskRelationScalarFieldEnum = {
   fromTaskId: 'fromTaskId',
   toTaskId: 'toTaskId',
   relationType: 'relationType'
+};
+
+exports.Prisma.ChecklistItemScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  label: 'label',
+  done: 'done',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ProjectRiskScalarFieldEnum = {
@@ -367,8 +441,12 @@ exports.Prisma.ModelName = {
   Project: 'Project',
   ProjectPhase: 'ProjectPhase',
   ProjectMilestone: 'ProjectMilestone',
+  WorkPackage: 'WorkPackage',
   ProjectTask: 'ProjectTask',
+  TaskEventLog: 'TaskEventLog',
+  TaskSubmission: 'TaskSubmission',
   TaskRelation: 'TaskRelation',
+  ChecklistItem: 'ChecklistItem',
   ProjectRisk: 'ProjectRisk',
   ProjectMember: 'ProjectMember',
   ProjectStatusLog: 'ProjectStatusLog',

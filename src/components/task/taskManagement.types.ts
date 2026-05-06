@@ -70,6 +70,10 @@ export interface TaskItem {
   // ── P1 字段 ──
   /** 节点层级类型 */
   nodeLevelType: TaskNodeLevelType
+  /** 节点深度（根=0） */
+  treeLevel?: number
+  /** Materialized Path */
+  treePath?: string
   /** 优先级 */
   priority: TaskPriority
   /** 进度 0-100 */

@@ -24,7 +24,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import type { TaskItem, TaskStatus } from './taskManagement.types'
 import { STATUS_TONE_MAP, resolveAvailableStatusOptions } from './taskManagement.types'
-import { validateStatusTransition } from './taskStateMachine.guards'
+import { validateStatusTransition } from '../../domain/taskStatusMachine'
 import StatusChip from '../ui/StatusChip'
 
 const STATUS_ORDER: TaskStatus[] = [

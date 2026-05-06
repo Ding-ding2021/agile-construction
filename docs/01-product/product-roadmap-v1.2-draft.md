@@ -2,28 +2,30 @@
 id: DOC-01-PRODUCT-PRODUCT-ROADMAP-V1-2
 title: 连锁门店营建管理系统 - 产品规划文档 V1.2
 owner: docs-maintainer
-status: draft
-last_updated: 2026-04-24
+status: active
+last_updated: 2026-05-06
 source_of_truth: true
 related_code:
-  - src/App.tsx
-  - src/components/project/
-  - src/components/task/
+  - src-next/
   - local-api/
 related_docs:
   - docs/01-product/project-management-prd.md
   - docs/01-product/task-center-prd.md
   - docs/01-product/multi-agent-v1-prd.md
+  - docs/01-product/design-spec-v2-shadcn.md
+  - docs/PLAN.md
+  - docs/03-engineering/development-plan-v1.2.md
 ---
 
 # 连锁门店营建管理系统 - 产品规划文档 V1.2
 
 > **文档版本**：V1.2  
-> **文档状态**：草案（整合 V1.1 + V2.3，修正假设与路线）  
+> **文档状态**：活跃（整合 V1.1 + V2.3，当前工作基线）  
 > **项目阶段**：V1 / MVP（内部系统）→ V2 / 平台化（战略展望）  
 > **核心用户**：V1 品牌方营建部门；V2 品牌方、建设方、加盟商、资源方  
-> **设计风格**：Liquid Glass + Material Design 3  
-> **技术口径**：前端 `React + TypeScript + Tailwind`；V1 后端 `Node.js + Express + SQLite`；V2 后端 `PostgreSQL + Redis`
+> **UI 主栈**：shadcn/ui Neutral Light（`src-next/`，Tailwind CSS v4）  
+> **V1 后端**：Node.js + Express + SQLite + Prisma  
+> **V2 后端**：PostgreSQL + Redis（战略目标）
 
 ---
 
@@ -1020,6 +1022,7 @@ gantt
 
 | 版本 | 日期       | 变更内容                                                                                                                                                                                                                                                                                                  | 作者            |
 | ---- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| V1.2 | 2026-05-06 | 文档状态从 draft 升为 active；前端技术栈更新为 shadcn/ui Neutral Light（`src-next/`）；related_code 指向更新                                                                                                                                                                                              | docs-maintainer |
 | V1.2 | 2026-04-24 | 整合 V1.1 + V2.3；统一战略口径；修正数据假设；补充角色体系；细化实施路线；重新评估技术路线；**UI组件选型从自研改为MUI v9 + MUI X**；**明确开发模式为产品经理+AI编码并补充评估机制**；**新增风险评估与应对章节（含Agent效果风险、分阶段风险聚焦）**；**新增MVP验证阶段成本估算（含AI Token费用详细测算）** | docs-maintainer |
 | V2.3 | 2026-04-23 | 新增商业模式章节：平台定位、收费模式、收入测算、成本结构、盈利预测                                                                                                                                                                                                                                        | docs-maintainer |
 | V2.2 | 2026-04-23 | 新增财务结算痛点、财务专员角色、财务结算价值支柱、增强结算 Agent 能力                                                                                                                                                                                                                                     | docs-maintainer |

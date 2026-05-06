@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'src/generated/prisma']),
+  globalIgnores(['dist', 'src/generated/prisma', 'src-next/dist', 'src-next/node_modules']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -33,6 +33,15 @@ export default defineConfig([
       // === TypeScript 严格 ===
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  // src-next/ 豁免：shadcn 生成代码的常见误报
+  {
+    files: ['src-next/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'react-refresh/only-export-components': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])
