@@ -5,11 +5,11 @@ import { ApiError } from '../middleware/error'
 import { extractProjectCode } from './projectHelpers'
 
 const TASK_COLUMNS = [
-  'id',
+  't.id as id',
   'project_id as projectId',
-  'code',
-  'name',
-  'status',
+  't.code as code',
+  't.name as name',
+  't.status as status',
   'assignee_id as assigneeId',
   'assignee_name as assigneeName',
   'start_date as plannedStartAt',
@@ -17,12 +17,12 @@ const TASK_COLUMNS = [
   'parent_id as parentId',
   'node_level_type as nodeLevelType',
   'priority',
-  'progress',
+  't.progress as progress',
   'task_type as taskType',
   'source_type as sourceType',
-  'risk_level as riskLevel',
+  't.risk_level as riskLevel',
   'sla_status as slaStatus',
-  'description',
+  't.description as description',
   'required_flag as requiredFlag',
   'milestone_flag as milestoneFlag',
   'owner_role as ownerRole',
@@ -47,13 +47,58 @@ const TASK_COLUMNS = [
   'close_reason as closeReason',
   'reopen_count as reopenCount',
   'created_by as createdBy',
-  'created_at as createdAt',
+  't.created_at as createdAt',
   'updated_by as updatedBy',
-  'updated_at as updatedAt',
+  't.updated_at as updatedAt',
+  'project_tasks.id',
+  'project_tasks.project_id as projectId',
+  'project_tasks.code',
+  'project_tasks.name',
+  'project_tasks.status',
+  'project_tasks.assignee_id as assigneeId',
+  'project_tasks.assignee_name as assigneeName',
+  'project_tasks.start_date as plannedStartAt',
+  'project_tasks.due_date as plannedEndAt',
+  'project_tasks.parent_id as parentId',
+  'project_tasks.node_level_type as nodeLevelType',
+  'project_tasks.priority',
+  'project_tasks.progress',
+  'project_tasks.task_type as taskType',
+  'project_tasks.source_type as sourceType',
+  'project_tasks.risk_level as riskLevel',
+  'project_tasks.sla_status as slaStatus',
+  'project_tasks.description',
+  'project_tasks.required_flag as requiredFlag',
+  'project_tasks.milestone_flag as milestoneFlag',
+  'project_tasks.owner_role as ownerRole',
+  'project_tasks.assignee_type as assigneeType',
+  'project_tasks.brand_id as brandId',
+  'project_tasks.store_id as storeId',
+  'project_tasks.actual_start_date as actualStartAt',
+  'project_tasks.actual_end_date as actualEndAt',
+  'project_tasks.blocked_reason as blockedReason',
+  'project_tasks.remind_count as remindCount',
+  'project_tasks.tags',
+  'project_tasks.work_package_id as workPackageId',
+  'project_tasks.sla_rule_id as slaRuleId',
+  'project_tasks.planned_work_hours as plannedWorkHours',
+  'project_tasks.actual_work_hours as actualWorkHours',
+  'project_tasks.standard_snapshot_id as standardSnapshotId',
+  'project_tasks.standard_binding_status as standardBindingStatus',
+  'project_tasks.snapshot_status as snapshotStatus',
+  'project_tasks.derived_from_task_id as derivedFromTaskId',
+  'project_tasks.is_rectification as isRectification',
+  'project_tasks.rectification_reason as rectificationReason',
+  'project_tasks.close_reason as closeReason',
+  'project_tasks.reopen_count as reopenCount',
+  'project_tasks.created_by as createdBy',
+  'project_tasks.created_at as createdAt',
+  'project_tasks.updated_by as updatedBy',
+  'project_tasks.updated_at as updatedAt',
 ].join(', ')
 
 /** 带 projectName 的完整列定义（需要 JOIN projects 表） */
-const TASK_COLUMNS_FULL = `${TASK_COLUMNS}, p.name as projectName`
+const TASK_COLUMNS_FULL = `${TASK_COLUMNS}, p.name as projectName, p.code as projectCode`
 
 /** SQLite 返回 0/1 整数，转换为前端期望的 boolean */
 function formatBoolField(row: Record<string, unknown>, fields: string[]): void {
@@ -79,9 +124,7 @@ function parseTagsField(tags: unknown): string[] {
 
 /** 为行数据添加计算字段 */
 function addComputedFields(row: Record<string, unknown>, db?: Database.Database): void {
-  // isBlocked：有阻塞原因即为阻塞
   row.isBlocked = !!row.blockedReason
-  // predecessorStatus：查询前置任务状态
   if (db && row.id) {
     const pre = db
       .prepare(
@@ -121,7 +164,7 @@ export function getAllTasks(req: Request, res: Response, _next: NextFunction): v
     .prepare(
       `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
        LEFT JOIN projects p ON p.id = project_tasks.project_id
-       ORDER BY id ASC LIMIT ? OFFSET ?`
+       ORDER BY project_tasks.id ASC LIMIT ? OFFSET ?`
     )
     .all(pageSize, offset) as Record<string, unknown>[]
   const parsed = rows.map(row => {
@@ -156,7 +199,7 @@ export function getTasks(req: Request, res: Response, _next: NextFunction): void
     .prepare(
       `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
        LEFT JOIN projects p ON p.id = project_tasks.project_id
-       WHERE project_id = ? ORDER BY id ASC LIMIT ? OFFSET ?`
+       WHERE project_id = ? ORDER BY project_tasks.id ASC LIMIT ? OFFSET ?`
     )
     .all(projectId, pageSize, offset) as Record<string, unknown>[]
 
@@ -258,7 +301,7 @@ export function createTask(req: Request, res: Response, _next: NextFunction): vo
   const created = db
     .prepare(
       `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
-       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE id = ?`
+       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE project_tasks.id = ?`
     )
     .get(result.lastInsertRowid) as Record<string, unknown> | undefined
 
@@ -277,8 +320,8 @@ export function getTaskTree(req: Request, res: Response, _next: NextFunction): v
 
   const rows = db
     .prepare(
-      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
-       LEFT JOIN projects p ON p.id = project_tasks.project_id
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks t
+       LEFT JOIN projects p ON p.id = t.project_id
        WHERE project_id = ?`
     )
     .all(projectId) as Record<string, unknown>[]
@@ -290,7 +333,10 @@ export function getTaskTree(req: Request, res: Response, _next: NextFunction): v
     return task
   })
 
-  function buildTree(list: any[], parentId: number | null): any[] {
+  function buildTree(
+    list: Record<string, unknown>[],
+    parentId: number | null
+  ): Record<string, unknown>[] {
     return list
       .filter(t => (t.parentId ?? null) === parentId)
       .map(t => ({ ...t, children: buildTree(list, t.id) }))
@@ -311,18 +357,62 @@ function resolveTaskId(db: Database.Database, projectId: number, raw: string): n
   return row.id
 }
 
+/** 带 projectId 上下文的查询（通过项目路由） */
 export function getTaskByCode(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(extractProjectCode(req))
+  const taskCode = req.params.taskCode
+  findTaskByCode(db, taskCode, projectId, res)
+}
+
+function findTaskByCode(
+  db: Database.Database,
+  taskCode: string,
+  projectId: number | null,
+  res: Response
+): void {
+  if (projectId) {
+    const row = db
+      .prepare(
+        `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks t
+         LEFT JOIN projects p ON p.id = t.project_id
+         WHERE t.code = ? AND project_id = ?`
+      )
+      .get(taskCode, projectId) as Record<string, unknown> | undefined
+
+    if (!row) throw new ApiError('Task not found', 'NOT_FOUND', 404)
+    const parsed = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
+    formatBoolField(parsed, BOOL_FIELDS)
+    addComputedFields(parsed, db)
+    res.json(parsed)
+  } else {
+    const row = db
+      .prepare(
+        `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks t
+         LEFT JOIN projects p ON p.id = t.project_id
+         WHERE t.code = ?`
+      )
+      .get(taskCode) as Record<string, unknown> | undefined
+
+    if (!row) throw new ApiError('Task not found', 'NOT_FOUND', 404)
+    const parsed = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
+    formatBoolField(parsed, BOOL_FIELDS)
+    addComputedFields(parsed, db)
+    res.json(parsed)
+  }
+}
+
+export function getTaskByCodeGlobal(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
   const taskCode = req.params.taskCode
 
   const row = db
     .prepare(
       `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
        LEFT JOIN projects p ON p.id = project_tasks.project_id
-       WHERE code = ? AND project_id = ?`
+       WHERE project_tasks.code = ?`
     )
-    .get(taskCode, projectId) as Record<string, unknown> | undefined
+    .get(taskCode) as Record<string, unknown> | undefined
 
   if (!row) {
     throw new ApiError('Task not found', 'NOT_FOUND', 404)
@@ -411,7 +501,7 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
   const updated = db
     .prepare(
       `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
-       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE id = ?`
+       LEFT JOIN projects p ON p.id = project_tasks.project_id WHERE project_tasks.id = ?`
     )
     .get(taskId) as Record<string, unknown> | undefined
 
@@ -429,7 +519,6 @@ export function deleteTask(req: Request, res: Response, _next: NextFunction): vo
   const projectId = getProjectId(extractProjectCode(req))
   const taskId = resolveTaskId(db, projectId, req.params.taskId)
 
-  // 检查是否有子任务
   const childCount = db
     .prepare('SELECT COUNT(*) as cnt FROM project_tasks WHERE parent_id = ? AND project_id = ?')
     .get(taskId, projectId) as { cnt: number }
