@@ -8,6 +8,7 @@ import { Trash2, AlertTriangle } from 'lucide-react'
 import { useWBSStore } from '@/store/wbsStore'
 import { WBS_STATUS_STYLE } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
+import { DateTimePicker } from '@/components/ui/date-time-picker'
 
 export function WBSTreeSidePanel() {
   const flatNodes = useWBSStore(s => s.flatNodes)
@@ -134,24 +135,24 @@ export function WBSTreeSidePanel() {
 
           <div>
             <label className="text-[11px] font-medium text-muted-foreground">计划开始</label>
-            <Input
-              type="date"
-              value={selectedNode.plannedStart?.slice(0, 10) ?? ''}
-              onChange={e => handleFieldChange('plannedStart', e.target.value)}
-              onBlur={() => handleSave('plannedStart')}
-              className="mt-1"
-            />
+            <div className="mt-1">
+              <DateTimePicker
+                value={selectedNode.plannedStart ? new Date(selectedNode.plannedStart) : undefined}
+                onChange={date => handleFieldChange('plannedStart', date?.toISOString() ?? '')}
+                placeholder="选择开始日期"
+              />
+            </div>
           </div>
 
           <div>
             <label className="text-[11px] font-medium text-muted-foreground">计划结束</label>
-            <Input
-              type="date"
-              value={selectedNode.plannedEnd?.slice(0, 10) ?? ''}
-              onChange={e => handleFieldChange('plannedEnd', e.target.value)}
-              onBlur={() => handleSave('plannedEnd')}
-              className="mt-1"
-            />
+            <div className="mt-1">
+              <DateTimePicker
+                value={selectedNode.plannedEnd ? new Date(selectedNode.plannedEnd) : undefined}
+                onChange={date => handleFieldChange('plannedEnd', date?.toISOString() ?? '')}
+                placeholder="选择结束日期"
+              />
+            </div>
           </div>
         </div>
 
