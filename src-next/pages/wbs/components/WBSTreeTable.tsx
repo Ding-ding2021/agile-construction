@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import {
   Table,
@@ -9,8 +9,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useWBSStore } from '@/store/wbsStore'
 import { WBSTreeNodeRow } from './WBSTreeNodeRow'
 import type { WBSNode } from '@/types/wbs'
@@ -24,17 +22,11 @@ interface WBSTreeTableProps {
 export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
   const tree = useWBSStore(s => s.tree)
   const loading = useWBSStore(s => s.loading)
-  const error = useWBSStore(s => s.error)
   const expandedIds = useWBSStore(s => s.expandedIds)
   const selectedId = useWBSStore(s => s.selectedId)
-  const loadTree = useWBSStore(s => s.loadTree)
   const selectNode = useWBSStore(s => s.selectNode)
   const toggleExpand = useWBSStore(s => s.toggleExpand)
   const addNode = useWBSStore(s => s.addNode)
-
-  useEffect(() => {
-    loadTree(projectCode)
-  }, [projectCode, loadTree])
 
   const handleAddChild = useCallback(
     (parentId: number, _level: WBSNode['nodeLevel']) => {
@@ -43,29 +35,54 @@ export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
     [projectCode, addNode]
   )
 
-  if (error) {
+  if (loading) {
     return (
-      <Card className="p-6">
-        <div className="flex flex-col items-center justify-center gap-3 py-8">
-          <AlertCircle className="size-6 text-destructive" />
-          <p className="text-sm text-muted-foreground">{error}</p>
-          <Button variant="outline" size="sm" onClick={() => loadTree(projectCode)}>
-            <RefreshCw className="size-3.5 mr-1" />
-            重试
-          </Button>
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            工作分解结构 (WBS)
+          </h3>
+        </div>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-8" />
+                <TableHead className="w-24">WBS 编码</TableHead>
+                <TableHead>名称</TableHead>
+                <TableHead className="w-16">级别</TableHead>
+                <TableHead className="w-16">状态</TableHead>
+                <TableHead className="w-24">进度</TableHead>
+                <TableHead className="w-20">负责人</TableHead>
+                <TableHead className="w-40">计划时间</TableHead>
+                <TableHead className="w-8" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <TableRow key={i}>
+                  {Array.from({ length: COL_COUNT }).map((_, j) => (
+                    <TableCell key={j} className="py-2">
+                      <Skeleton className="h-4 w-full" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       </Card>
     )
   }
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between mb-3">
+    <Card>
+      <div className="flex items-center justify-between px-4 pt-4">
         <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           工作分解结构 (WBS)
         </h3>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border mx-4 mb-4 mt-3">
         <Table>
           <TableHeader>
             <TableRow>
@@ -74,24 +91,14 @@ export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
               <TableHead>名称</TableHead>
               <TableHead className="w-16">级别</TableHead>
               <TableHead className="w-16">状态</TableHead>
-              <TableHead className="w-20">进度</TableHead>
+              <TableHead className="w-24">进度</TableHead>
               <TableHead className="w-20">负责人</TableHead>
               <TableHead className="w-40">计划时间</TableHead>
               <TableHead className="w-8" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <TableRow key={i}>
-                  {Array.from({ length: COL_COUNT }).map((_, j) => (
-                    <TableCell key={j} className="py-2">
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : tree.length === 0 ? (
+            {tree.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={COL_COUNT}

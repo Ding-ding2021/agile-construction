@@ -75,7 +75,7 @@ export function WBSTreeSidePanel() {
 
         <div className="space-y-3">
           <div>
-            <label className="text-[11px] font-medium text-muted-foreground">WBS 编码</label>
+            <label className="text-xs font-medium text-muted-foreground">WBS 编码</label>
             <p className="text-sm font-mono">{selectedNode.wbsCode}</p>
           </div>
 
