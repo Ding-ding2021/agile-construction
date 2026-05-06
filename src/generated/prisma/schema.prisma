@@ -51,7 +51,9 @@ model Project {
   code                   String   @unique
   name                   String
   brand                  String
-  status                 String
+  status                 String // 旧版单状态字段（向后兼容）
+  parentStatus           String   @default("启动") @map("parent_status") // 新版父状态
+  subStatusJson          String?  @map("sub_status_json") // JSON: SubStatusProgress
   statusTone             String   @map("status_tone")
   stage                  String
   progress               Int      @default(0)
@@ -78,12 +80,13 @@ model Project {
   updatedAt              DateTime @updatedAt @map("updated_at")
 
   // 关联
-  phases     ProjectPhase[]
-  milestones ProjectMilestone[]
-  taskTree   ProjectTask[]
-  risks      ProjectRisk[]
-  members    ProjectMember[]
-  statusLogs ProjectStatusLog[]
+  phases       ProjectPhase[]
+  milestones   ProjectMilestone[]
+  taskTree     ProjectTask[]
+  risks        ProjectRisk[]
+  members      ProjectMember[]
+  statusLogs   ProjectStatusLog[]
+  workPackages WorkPackage[]
 
   @@map("projects")
 }
@@ -118,43 +121,89 @@ model ProjectMilestone {
   @@map("project_milestones")
 }
 
-// ─── 任务表（扩展：对齐 PRD 58 字段，P0 字段优先）─────────────
+// ─── 工作包表（Phase 2 新增，成本归集单元）─────────────────────
+model WorkPackage {
+  id               Int      @id @default(autoincrement())
+  projectId        Int      @map("project_id")
+  code             String   @unique
+  name             String
+  status           String   @default("规划中") // 规划中 | 执行中 | 已完成 | 已暂停
+  managerId        String?  @map("manager_id")
+  stageId          String?  @map("stage_id")
+  description      String?
+  progress         Int      @default(0)
+  plannedStartAt   String?  @map("planned_start_at")
+  plannedEndAt     String?  @map("planned_end_at")
+  actualStartAt    String?  @map("actual_start_at")
+  actualEndAt      String?  @map("actual_end_at")
+  plannedWorkHours Int?     @map("planned_work_hours")
+  actualWorkHours  Int?     @map("actual_work_hours")
+  budget           String?
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  project Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks   ProjectTask[]
+
+  @@map("work_packages")
+}
+
+// ─── 任务表（对齐 PRD 58 字段，P0 字段优先）───────────────────
 // P0: id, code, name, projectId, status, assigneeId, plannedStartAt, plannedEndAt, createdBy, createdAt
 model ProjectTask {
-  id           Int     @id @default(autoincrement())
-  projectId    Int     @map("project_id")
-  code         String  @unique
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  code         String    @unique
   name         String
-  status       String
-  assigneeId   String? @map("assignee_id")
-  assigneeName String? @map("assignee_name")
-  startDate    String? @map("start_date")
-  dueDate      String? @map("due_date")
+  status       String    @default("草稿")
+  assigneeId   String?   @map("assignee_id")
+  assigneeName String?   @map("assignee_name")
+  startDate    DateTime? @map("start_date")
+  dueDate      DateTime? @map("due_date")
 
   // ── 树形结构（P0） ──
   parentId      Int?    @map("parent_id")
-  nodeLevelType String? @map("node_level_type")
+  nodeLevelType String? @map("node_level_type") // project_root | work_package | task
+  treeLevel     Int?    @map("tree_level")
+  treePath      String? @map("tree_path")
 
-  // ── P1 字段 ──
-  priority    String  @default("medium")
-  progress    Int     @default(0)
-  taskType    String? @map("task_type")
-  sourceType  String? @map("source_type")
-  riskLevel   String? @map("risk_level")
-  slaStatus   String? @map("sla_status")
-  description String?
+  // ── P1 业务属性 ──
+  priority      String  @default("medium")
+  progress      Int     @default(0)
+  taskType      String? @map("task_type")
+  sourceType    String? @map("source_type") // manual | template | agent | derived
+  riskLevel     String? @map("risk_level")
+  slaStatus     String? @map("sla_status")
+  description   String?
+  requiredFlag  Boolean @default(true) @map("required_flag")
+  milestoneFlag Boolean @default(false) @map("milestone_flag")
+  ownerRole     String? @map("owner_role")
+  assigneeType  String? @map("assignee_type") // internal | vendor
+  brandId       String? @map("brand_id")
+  storeId       String? @map("store_id")
 
-  // ── P2 字段 ──
-  actualStartDate    String? @map("actual_start_date")
-  actualEndDate      String? @map("actual_end_date")
-  blockedReason      String? @map("blocked_reason")
-  remindCount        Int     @default(0) @map("remind_count")
-  tags               String? // JSON array, e.g. '["消防","审批"]'
-  workPackageId      String? @map("work_package_id")
-  slaRuleId          String? @map("sla_rule_id")
-  plannedWorkHours   Int?    @map("planned_work_hours")
-  actualWorkHours    Int?    @map("actual_work_hours")
-  standardSnapshotId String? @map("standard_snapshot_id")
+  // ── P2 执行与SLA ──
+  actualStartAt    DateTime? @map("actual_start_date")
+  actualEndAt      DateTime? @map("actual_end_date")
+  blockedReason    String?   @map("blocked_reason")
+  remindCount      Int       @default(0) @map("remind_count")
+  tags             String? // JSON array
+  workPackageId    String?   @map("work_package_id")
+  slaRuleId        String?   @map("sla_rule_id")
+  plannedWorkHours Int?      @map("planned_work_hours")
+  actualWorkHours  Int?      @map("actual_work_hours")
+
+  // ── P2 标准合规 ──
+  standardSnapshotId    String? @map("standard_snapshot_id")
+  standardBindingStatus String  @default("unbound") @map("standard_binding_status") // bound | unbound
+  snapshotStatus        String  @default("draft") @map("snapshot_status") // draft | bound | expired
+
+  // ── P2 派生与整改 ──
+  derivedFromTaskId   Int?    @map("derived_from_task_id")
+  isRectification     Boolean @default(false) @map("is_rectification")
+  rectificationReason String? @map("rectification_reason")
+  closeReason         String? @map("close_reason")
+  reopenCount         Int     @default(0) @map("reopen_count")
 
   // ── 审计字段（P0） ──
   createdBy String   @map("created_by")
@@ -163,13 +212,60 @@ model ProjectTask {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // ── 关联 ──
-  project           Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  parentTask        ProjectTask?   @relation("TaskTree", fields: [parentId], references: [id])
-  childTasks        ProjectTask[]  @relation("TaskTree")
-  taskRelationsFrom TaskRelation[] @relation("TaskFrom")
-  taskRelationsTo   TaskRelation[] @relation("TaskTo")
+  project           Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parentTask        ProjectTask?     @relation("TaskTree", fields: [parentId], references: [id])
+  childTasks        ProjectTask[]    @relation("TaskTree")
+  derivedFrom       ProjectTask?     @relation("DerivedTask", fields: [derivedFromTaskId], references: [id])
+  derivedTasks      ProjectTask[]    @relation("DerivedTask")
+  taskRelationsFrom TaskRelation[]   @relation("TaskFrom")
+  taskRelationsTo   TaskRelation[]   @relation("TaskTo")
+  eventLogs         TaskEventLog[]
+  submissions       TaskSubmission[]
+  checklist         ChecklistItem[]
+  workPackage       WorkPackage?     @relation(fields: [workPackageId], references: [code])
 
   @@map("project_tasks")
+}
+
+// ─── 任务事件日志表（审计追踪）──────────────────────────────────
+model TaskEventLog {
+  id             Int      @id @default(autoincrement())
+  taskId         Int      @map("task_id")
+  eventType      String   @map("event_type") // status_change | field_change | comment | attachment | assign | favorite
+  eventAction    String   @map("event_action")
+  beforeValue    String?  @map("before_value") // JSON
+  afterValue     String?  @map("after_value") // JSON
+  operatorId     String   @map("operator_id")
+  operatorSource String   @default("user") @map("operator_source") // user | agent | system
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  task ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([eventType])
+  @@map("task_event_logs")
+}
+
+// ─── 任务提交记录表（成果提交与验收）───────────────────────────
+model TaskSubmission {
+  id             Int       @id @default(autoincrement())
+  taskId         Int       @map("task_id")
+  submissionType String    @default("normal") @map("submission_type") // normal | rectification | supplement
+  description    String?
+  attachmentIds  String?   @map("attachment_ids") // JSON: string[]
+  status         String    @default("submitted") // submitted | rejected | accepted
+  submittedBy    String    @map("submitted_by")
+  submittedAt    DateTime  @default(now()) @map("submitted_at")
+  reviewedBy     String?   @map("reviewed_by")
+  reviewResult   String?   @map("review_result") // pass | reject
+  reviewComment  String?   @map("review_comment")
+  reviewedAt     DateTime? @map("reviewed_at")
+
+  task ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([status])
+  @@map("task_submissions")
 }
 
 // ─── 任务关联表（前置依赖） ────────────────────────────────────
@@ -184,6 +280,21 @@ model TaskRelation {
 
   @@unique([fromTaskId, toTaskId, relationType])
   @@map("task_relations")
+}
+
+// ─── 任务检查项表（P2-T1 独立实体） ────────────────────────────
+model ChecklistItem {
+  id        Int      @id @default(autoincrement())
+  taskId    Int      @map("task_id")
+  label     String
+  done      Boolean  @default(false)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("checklist_items")
 }
 
 // ─── 项目风险表 ────────────────────────────────────────────────

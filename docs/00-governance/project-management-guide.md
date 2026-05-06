@@ -4,14 +4,22 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-05-01
 source_of_truth: true
+<<<<<<< Updated upstream
 related_docs: [docs/00-governance/document-governance.md]
 ---
 
 # 项目整体管理流程指南
+=======
+related_code:
+  - scripts/gh-setup.py
+  - scripts/gh-sync.py
+  - scripts/gh-release.py
+related_docs:
+  - docs/00-governance/document-governance.md
+---
+>>>>>>> Stashed changes
 
-> **SSOT** 本文档是项目管理体系的唯一权威来源
-> **状态**: active
-> **更新**: 2026-05-01
+# 项目整体管理流程指南
 
 ## 概述
 

@@ -158,12 +158,14 @@ model ProjectTask {
   status          String   @default("草稿")
   assigneeId      String?  @map("assignee_id")
   assigneeName    String?  @map("assignee_name")
-  startDate       String?  @map("start_date")
-  dueDate         String?  @map("due_date")
+  startDate       DateTime?  @map("start_date")
+  dueDate         DateTime?  @map("due_date")
 
   // ── 树形结构（P0） ──
   parentId        Int?     @map("parent_id")
   nodeLevelType   String?  @map("node_level_type")  // project_root | work_package | task
+  treeLevel       Int?     @map("tree_level")
+  treePath        String?  @map("tree_path")
 
   // ── P1 业务属性 ──
   priority        String   @default("medium")
@@ -181,8 +183,8 @@ model ProjectTask {
   storeId         String?  @map("store_id")
 
   // ── P2 执行与SLA ──
-  actualStartDate  String?  @map("actual_start_date")
-  actualEndDate    String?  @map("actual_end_date")
+  actualStartAt  DateTime?  @map("actual_start_date")
+  actualEndAt    DateTime?  @map("actual_end_date")
   blockedReason    String?  @map("blocked_reason")
   remindCount      Int      @default(0) @map("remind_count")
   tags             String?  // JSON array
@@ -219,6 +221,7 @@ model ProjectTask {
   taskRelationsTo   TaskRelation[] @relation("TaskTo")
   eventLogs       TaskEventLog[]
   submissions     TaskSubmission[]
+  checklist       ChecklistItem[]
   workPackage     WorkPackage? @relation(fields: [workPackageId], references: [code])
 
   @@map("project_tasks")
@@ -277,6 +280,21 @@ model TaskRelation {
 
   @@unique([fromTaskId, toTaskId, relationType])
   @@map("task_relations")
+}
+
+// ─── 任务检查项表（P2-T1 独立实体） ────────────────────────────
+model ChecklistItem {
+  id        Int      @id @default(autoincrement())
+  taskId    Int      @map("task_id")
+  label     String
+  done      Boolean  @default(false)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task      ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("checklist_items")
 }
 
 // ─── 项目风险表 ────────────────────────────────────────────────
@@ -377,6 +395,57 @@ model TaskTemplate {
   updatedAt           DateTime @updatedAt @map("updated_at")
 
   @@map("task_templates")
+}
+
+// ─── 人员主表（阶段 A - 人员最小底座）───────────────────────────
+model Person {
+  id                 Int      @id @default(autoincrement())
+  personCode         String   @map("person_code")
+  name               String
+  mobile             String
+  email              String?
+  avatarUrl          String?  @map("avatar_url")
+  orgId              Int      @map("org_id")
+  title              String?
+  employmentType     Int      @default(1) @map("employment_type") // 1内部 2外包 3供应商
+  personStatus       Int      @default(1) @map("person_status")   // 1在岗 2请假 3离岗 4禁用
+  availabilityStatus Int      @default(1) @map("availability_status") // 1可分配 2忙碌 3不可分配
+  workCity           String?  @map("work_city")
+  currentTaskCount   Int      @default(0) @map("current_task_count")
+  criticalTaskCount  Int      @default(0) @map("critical_task_count")
+  riskLevel          Int      @default(1) @map("risk_level")
+  remark             String?
+  isDeleted          Boolean  @default(false) @map("is_deleted")
+  deletedAt          DateTime? @map("deleted_at")
+  createdBy          String   @default("system") @map("created_by")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedBy          String?  @map("updated_by")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  organization       Organization @relation(fields: [orgId], references: [id])
+
+  @@unique([orgId, mobile])
+  @@unique([personCode])
+  @@index([orgId, personStatus, availabilityStatus])
+  @@index([orgId, personStatus])
+  @@map("pm_person")
+}
+
+// ─── 组织表（阶段 A - 人员最小底座）─────────────────────────────
+model Organization {
+  id            Int      @id @default(autoincrement())
+  orgCode       String   @unique @map("org_code")
+  orgName       String   @map("org_name")
+  orgType       Int      @default(1) @map("org_type") // 1品牌方 2平台 3资源方
+  status        Int      @default(1)                    // 1启用 2禁用
+  contactName   String?  @map("contact_name")
+  contactMobile String?  @map("contact_mobile")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  persons       Person[]
+
+  @@map("pm_organization")
 }
 
 // ─── 供应商表（采购管理）────────────────────────────────────────

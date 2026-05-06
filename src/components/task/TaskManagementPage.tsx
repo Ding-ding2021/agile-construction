@@ -22,7 +22,7 @@ import type {
   TaskStatus,
 } from './taskManagement.types'
 import { STATUS_TONE_MAP } from './taskManagement.types'
-import { validateStatusTransition } from './taskStateMachine.guards'
+import { validateStatusTransition } from '../../domain/taskStatusMachine'
 import TaskKanbanView from './TaskKanbanView'
 import TaskCalendarView from './TaskCalendarView'
 import { taskRepository } from '../../services/repositories/taskRepository'

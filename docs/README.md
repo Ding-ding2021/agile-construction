@@ -1,14 +1,15 @@
 ---
 title: 文档中心（统一入口）
 status: active
-last_updated: 2026-05-05
+last_updated: 2026-05-06（第二批归档完成）
 ---
 
 # 文档中心（统一入口）
 
 > 本文件是仓库文档唯一导航入口（SSOT 索引）。
 > 所有 active 文档必须在本页登记。
-> 最后索引更新：2026-05-05（覆盖 84 个 .md 文件）
+> 计划类文档的管理详见 [PLAN.md](docs/PLAN.md)。
+> 最后索引更新：2026-05-06（覆盖 70 个 .md 文件）
 
 ## 文档分层
 
@@ -22,12 +23,13 @@ last_updated: 2026-05-05
 
 ## Active 文档索引
 
+- `docs/PLAN.md` — 项目计划总览（计划类文档集中管理入口）
+
 ### 00-governance（治理规则）
 
 - `docs/00-governance/coding-standards.md` — 编码规范
 - `docs/00-governance/component-development-contract.md` — 组件开发合同规范
 - `docs/00-governance/design-checklist.md` — 设计检查清单
-- `docs/00-governance/design-specification.md` — 设计规范
 - `docs/00-governance/document-governance.md` — 文档治理规则
 - `docs/00-governance/mvp-code-quality-plan-v2.md` — MVP 代码质量方案（质量红线）
 - `docs/00-governance/code-review-checklist.md` — Code Review Checklist
@@ -35,10 +37,9 @@ last_updated: 2026-05-05
 
 ### 01-product（产品规划与需求）
 
-- `docs/01-product/product-roadmap.md` — 产品规划总纲 V1.0
-- `docs/01-product/product-roadmap-v1.2-draft.md` — 产品路线图 V1.2（当前工作基线）
-- `docs/01-product/product-roadmap-v2.md` — 产品规划 V2.3（加盟模式+建设方枢纽+客户经理+财务结算+商业模式+AI数字员工）⭐ 最新
+- `docs/01-product/product-roadmap-v1.2-draft.md` — 产品路线图 V1.2（活跃，当前 SSOT）
 - `docs/01-product/project-management-prd.md` — 项目管理 PRD
+- `docs/01-product/design-spec-v2-shadcn.md` — 前端设计规范 V2 shadcn Neutral Light ⬅ UI 设计 SSOT
 - `docs/01-product/task-center-prd.md` — 任务中心 PRD
 - `docs/01-product/task-center-erd.md` — 任务中心 ER 图
 - `docs/01-product/personnel-management-prd.md` — 人员管理 PRD
@@ -75,45 +76,14 @@ last_updated: 2026-05-05
 
 ### 04-operations（阶段运营与治理）
 
-**顶层：**
-
-- `docs/04-operations/commercialization-roadmap-2026-04-25.md` — 商业化路线图
-- `docs/04-operations/component-system-proposal-mui.md` — MUI 组件系统提案
-- `docs/04-operations/four-page-optimization-plan.md` — 四页面优化方案
-- `docs/04-operations/gantt-component-analysis.md` — 甘特图组件分析
-- `docs/04-operations/gradient-token-migration-plan.md` — 渐变 Token 迁移方案
-- `docs/04-operations/market-trend-analysis-2026-04-25.md` — 市场趋势分析
-- `docs/04-operations/project-detail-layout-diagnosis.md` — 项目详情布局诊断
-- `docs/04-operations/ui-ux-improvement-proposal-2026-04-24.md` — UI/UX 改进提案
-- `docs/04-operations/view-components-evaluation.md` — 视图组件评估
-- `docs/04-operations/visual-audit-report-2026-04-25.md` — 视觉审计报告
+**当前运营：**
 
 - `docs/04-operations/development-issues-summary-2026-05-02.md` — 开发问题汇总
-
-**Phase 1：**
-
-- `docs/04-operations/phase1/development-progress-assessment-2026-04-25.md` — P1-P1.5 进度评估
-- `docs/04-operations/phase1/p1-p1.5-fix-plan-2026-04-25.md` — P1-P1.5 修复计划
-
-**Phase 3：**
-
-- `docs/04-operations/phase3/cloudbase-e2e-checklist.md` — CloudBase E2E 检查清单
-- `docs/04-operations/phase3/collaboration-matrix.md` — 协作矩阵
-- `docs/04-operations/phase3/local-backend-feasibility.md` — 本地后端可行性
-- `docs/04-operations/phase3/weekly-governance-metrics.md` — 周度治理指标
-- `docs/04-operations/phase3/document-governance-audit-2026-04-16.md` — 文档治理审计（2026-04-16）
 
 **Phase 4：**
 
 - `docs/04-operations/phase4/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — Phase 3 回顾与 Phase 4 提案
-- `docs/04-operations/phase4/development-progress-assessment-2026-04-23.md` — Phase 4 进度评估
-- `docs/04-operations/phase4/page-issues-audit-2026-04-25.md` — 页面问题审计
-- `docs/04-operations/phase4/phase15-assessment-2026-04-25.md` — Phase 1.5 评估
 - `docs/04-operations/phase4/roadmap-v1.2-impact-assessment.md` — Roadmap V1.2 影响评估
-- `docs/04-operations/phase4/task-center-prd-evaluation-report.md` — 任务中心 PRD 评估
-- `docs/04-operations/phase4/task-management-assessment-2026-04-23.md` — 任务管理评估
-- `docs/04-operations/phase4/task-missing-fields-report-2026-04-23.md` — 任务缺失字段报告
-- `docs/04-operations/phase4/task-simplification-proposal-2026-04-23.md` — 任务简化提案
 
 ### 05-knowledge-base（领域知识库）
 
@@ -147,9 +117,39 @@ last_updated: 2026-05-05
 ### 99-archive（历史归档）
 
 - `docs/99-archive/文档索引.md` — 旧版中文文档索引（已废弃，由本 README 替代）
-- `docs/99-archive/DESIGN_SPECIFICATION_v2.0_original.md` — 设计规范 V2.0 原始完整版（已迁移到 `00-governance/design-specification.md`）
+- `docs/99-archive/product-roadmap.md` — 产品规划 V1.0（已归档，被 V1.2 替代）
+- `docs/99-archive/product-roadmap-v2.md` — 产品规划 V2.3（已归档，被 V1.2 替代）
+- `docs/99-archive/design-specification.md` — 设计规范 MUI 版（已废弃，由 shadcn V2 替代）
+- `docs/99-archive/component-system-proposal-mui.md` — MUI 组件系统提案（已归档）
+- `docs/99-archive/gradient-token-migration-plan.md` — 渐变 Token 迁移方案（已归档）
+- `docs/99-archive/commercialization-roadmap-2026-04-25.md` — 商业化路线图（已归档，内容纳入 V1.2）
+- `docs/99-archive/four-page-optimization-plan.md` — 四页面优化方案（已归档，MUI 旧栈）
+- `docs/99-archive/gantt-component-analysis.md` — 甘特图组件分析（已归档，MUI 旧栈）
+- `docs/99-archive/market-trend-analysis-2026-04-25.md` — 市场趋势分析（已归档）
+- `docs/99-archive/project-detail-layout-diagnosis.md` — 项目详情布局诊断（已归档，MUI 旧栈）
+- `docs/99-archive/ui-ux-improvement-proposal-2026-04-24.md` — UI/UX 改进提案（已归档，MUI 旧栈）
+- `docs/99-archive/view-components-evaluation.md` — 视图组件评估（已归档）
+- `docs/99-archive/visual-audit-report-2026-04-25.md` — 视觉审计报告（已归档，MUI 旧栈）
+- `docs/99-archive/DESIGN_SPECIFICATION_v2.0_original.md` — 设计规范 V2.0 原始完整版（已归档）
+- `docs/99-archive/phase1/` — Phase 1 评估与治理文档（已归档）
+  - `development-progress-assessment-2026-04-25.md` — P1-P1.5 进度评估
+  - `p1-p1.5-fix-plan-2026-04-25.md` — P1-P1.5 修复计划
+- `docs/99-archive/phase3/` — Phase 3 评估与治理文档（已归档）
+  - `cloudbase-e2e-checklist.md` — CloudBase E2E 检查清单
+  - `collaboration-matrix.md` — 协作矩阵
+  - `local-backend-feasibility.md` — 本地后端可行性
+  - `weekly-governance-metrics.md` — 周度治理指标
+  - `document-governance-audit-2026-04-16.md` — 文档治理审计
+- `docs/99-archive/phase4/` — Phase 4 一次性评估报告（已归档）
+  - `development-progress-assessment-2026-04-23.md` — Phase 4 进度评估
+  - `page-issues-audit-2026-04-25.md` — 页面问题审计
+  - `phase15-assessment-2026-04-25.md` — Phase 1.5 评估
+  - `task-center-prd-evaluation-report.md` — 任务中心 PRD 评估
+  - `task-management-assessment-2026-04-23.md` — 任务管理评估
+  - `task-missing-fields-report-2026-04-23.md` — 任务缺失字段报告
+  - `task-simplification-proposal-2026-04-23.md` — 任务简化提案
 - `docs/99-archive/legacy-chinese/` — 10 篇中文原始文档（已迁移到 `docs/` 英文版）
-  - `产品规划文档.md` → `01-product/product-roadmap.md`
+  - `产品规划文档.md` → `99-archive/product-roadmap.md`
   - `任务中心需求文档.md` → `01-product/task-center-prd.md`
   - `任务树建模说明.md` → `02-architecture/task-tree-modeling.md`
   - `多Agent建店管理平台_V1_PRD.md` → `01-product/multi-agent-v1-prd.md`
