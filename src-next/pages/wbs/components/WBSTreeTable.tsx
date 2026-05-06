@@ -108,11 +108,13 @@ export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              tree.map(node => (
+              tree.map((node, idx) => (
                 <WBSTreeNodeRow
                   key={node.id}
                   node={node}
                   depth={0}
+                  isLastChild={idx === tree.length - 1}
+                  ancestorHasNext={[]}
                   expandedIds={expandedIds}
                   selectedId={selectedId}
                   onToggle={toggleExpand}
