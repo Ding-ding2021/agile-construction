@@ -498,3 +498,31 @@ model TemplateInstantiation {
 
   @@map("template_instantiations")
 }
+
+// ─── WBS 分解结构表（Phase 2 新增，独立于 ProjectTask / WorkPackage）───
+model WBSNode {
+  id            Int      @id @default(autoincrement())
+  projectCode   String   @map("project_code")
+  wbsCode       String   @map("wbs_code")
+  name          String
+  nodeLevel     String   @default("task") @map("node_level")
+  status        String   @default("pending")
+  progress      Int      @default(0)
+  plannedStart  String?  @map("planned_start")
+  plannedEnd    String?  @map("planned_end")
+  duration      Int      @default(0)
+  assignee      String?
+  parentId      Int?     @map("parent_id")
+  sortOrder     Int      @default(0) @map("sort_order")
+  dependencies  String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  parent   WBSNode?  @relation("WBSParent", fields: [parentId], references: [id])
+  children WBSNode[] @relation("WBSParent")
+
+  @@index([projectCode])
+  @@index([parentId])
+  @@index([projectCode, parentId])
+  @@map("wbs_nodes")
+}
