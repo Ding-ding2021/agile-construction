@@ -1,15 +1,15 @@
-import { FolderTree, GanttChartSquare, Network, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useWBSStore } from '@/store/wbsStore'
 
 const VIEW_TABS = [
-  { id: 'tree', label: '树视图', icon: FolderTree },
-  { id: 'gantt', label: '甘特图', icon: GanttChartSquare },
-  { id: 'network', label: '网络图', icon: Network },
+  { value: 'tree', label: '树视图' },
+  { value: 'gantt', label: '甘特图' },
+  { value: 'network', label: '网络图' },
 ] as const
 
-export type ViewTab = (typeof VIEW_TABS)[number]['id']
+export type ViewTab = (typeof VIEW_TABS)[number]['value']
 
 interface WBSToolbarProps {
   projectCode: string
@@ -22,35 +22,31 @@ export function WBSToolbar({ projectCode, activeView, onViewChange }: WBSToolbar
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1 rounded-lg border p-0.5">
-        {VIEW_TABS.map(tab => {
-          const Icon = tab.icon
-          const isActive = activeView === tab.id
-          const isDisabled = tab.id !== 'tree'
+      <ToggleGroup
+        type="single"
+        value={activeView}
+        onValueChange={v => v && onViewChange(v as ViewTab)}
+        variant="outline"
+        size="sm"
+      >
+        {VIEW_TABS.map(tab => (
+          <ToggleGroupItem
+            key={tab.value}
+            value={tab.value}
+            disabled={tab.value !== 'tree'}
+            title={tab.value !== 'tree' ? '将在阶段 2 实现' : undefined}
+          >
+            {tab.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() => !isDisabled && onViewChange(tab.id)}
-              disabled={isDisabled}
-              title={isDisabled ? '将在阶段 2 实现' : undefined}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                isActive && 'bg-secondary text-foreground',
-                !isActive && 'text-muted-foreground',
-                isDisabled && 'opacity-50 cursor-not-allowed'
-              )}
-            >
-              <Icon className="size-4" />
-              {tab.label}
-            </button>
-          )
-        })}
-      </div>
-
-      <Button size="sm" onClick={() => addNode(projectCode, { name: '新建节点' })}>
+      <Button
+        size="sm"
+        onClick={() => addNode(projectCode, { name: '新建工作包', nodeLevel: 'workPackage' })}
+      >
         <Plus className="size-4" />
-        添加节点
+        新建工作包
       </Button>
     </div>
   )

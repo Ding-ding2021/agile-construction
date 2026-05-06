@@ -2,6 +2,7 @@ import { TableCell, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { ChevronRight, ChevronDown, Plus } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { WBS_STATUS_STYLE, WBS_LEVEL_INDENT } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
 import type { WBSNode } from '@/types/wbs'
@@ -29,8 +30,6 @@ export function WBSTreeNodeRow({
   const isExpanded = expandedIds.includes(node.id)
   const isSelected = selectedId === node.id
 
-  const indent = depth * WBS_LEVEL_INDENT
-
   return (
     <>
       <TableRow
@@ -39,7 +38,7 @@ export function WBSTreeNodeRow({
         onClick={() => onSelect(node.id)}
       >
         <TableCell className="py-1.5">
-          <div className="flex items-center" style={{ paddingLeft: indent }}>
+          <div className="flex items-center" style={{ paddingLeft: depth * WBS_LEVEL_INDENT }}>
             {hasChildren ? (
               <button
                 onClick={e => {
@@ -64,23 +63,25 @@ export function WBSTreeNodeRow({
         </TableCell>
         <TableCell className="py-1.5 text-sm font-medium">{node.name}</TableCell>
         <TableCell className="py-1.5">
-          <Badge variant="ghost" className="text-[10px] font-medium">
+          <Badge variant="ghost" className="text-xs font-medium">
             {getNodeLevelBadge(node.nodeLevel)}
           </Badge>
         </TableCell>
         <TableCell className="py-1.5">
           <Badge
             variant="ghost"
-            className={
-              'text-[10px] font-medium ' + (WBS_STATUS_STYLE[node.status] ?? 'bg-zinc-100')
-            }
+            className={cn(
+              'text-xs font-medium',
+              WBS_STATUS_STYLE[node.status] ??
+                'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+            )}
           >
             {WBS_STATUS_LABEL[node.status]}
           </Badge>
         </TableCell>
         <TableCell className="py-1.5">
-          <div className="flex items-center gap-1.5">
-            <Progress value={node.progress} className="w-10 h-1.5" />
+          <div className="flex items-center gap-2">
+            <Progress value={node.progress} className="w-20 h-1.5" />
             <span className="text-xs tabular-nums">{node.progress}%</span>
           </div>
         </TableCell>
