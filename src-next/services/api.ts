@@ -123,3 +123,27 @@ export const api = {
   getOrganizations: () =>
     request<{ data: import('../types/personnel').OrganizationItem[] }>('/organizations'),
 }
+
+// ─── WBS ────────────────────────────────────────────────────────
+
+export const wbsApi = {
+  getTree: (projectCode: string) =>
+    request<import('../types/wbs').WBSNode[]>(`/projects/${projectCode}/wbs`),
+
+  create: (projectCode: string, data: Record<string, unknown>) =>
+    request<import('../types/wbs').WBSNode>(`/projects/${projectCode}/wbs`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (projectCode: string, id: number, data: Record<string, unknown>) =>
+    request<import('../types/wbs').WBSNode>(`/projects/${projectCode}/wbs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (projectCode: string, id: number) =>
+    request<{ deleted: number }>(`/projects/${projectCode}/wbs/${id}`, {
+      method: 'DELETE',
+    }),
+}
