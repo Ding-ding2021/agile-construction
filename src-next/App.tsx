@@ -10,6 +10,7 @@ import TaskDetailSheet from './pages/tasks/TaskDetailSheet'
 import SettingsPage from './pages/settings/SettingsPage'
 import PersonnelListPage from './pages/personnel/PersonnelListPage'
 import PersonnelDetailPage from './pages/personnel/PersonnelDetailPage'
+import { WBSView } from '@/pages/wbs/WBSView'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
 import type { TaskItem } from '@/types/task'
@@ -131,6 +132,7 @@ export default function App() {
                           <div className="p-6 text-muted-foreground">项目中心（建设中）</div>
                         }
                       />
+                      <Route path="/projects/:projectCode/wbs" element={<WBSView />} />
                       <Route path="/personnel/:id" element={<PersonnelDetailPage />} />
                       <Route path="/personnel" element={<PersonnelListPage />} />
                       <Route path="/settings" element={<SettingsPage />} />
