@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Trash2, AlertTriangle } from 'lucide-react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useWBSStore } from '@/store/wbsStore'
-import { WBS_STATUS_STYLE } from '../constants/wbs-styles'
+import { WBS_STATUS_STYLE, WBS_STATUS_FALLBACK } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
 import { DateTimePicker } from '@/components/ui/date-time-picker'
 
@@ -103,7 +103,10 @@ export function WBSTreeSidePanel() {
                 </Badge>
                 <Badge
                   variant="ghost"
-                  className={'text-xs font-medium ' + (WBS_STATUS_STYLE[selectedNode.status] ?? '')}
+                  className={
+                    'text-xs font-medium ' +
+                    (WBS_STATUS_STYLE[selectedNode.status] ?? WBS_STATUS_FALLBACK)
+                  }
                 >
                   {WBS_STATUS_LABEL[selectedNode.status]}
                 </Badge>

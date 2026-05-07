@@ -7,6 +7,8 @@ export const WBS_STATUS_STYLE: Record<WBSStatus, string> = {
   blocked: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
 }
 
+export const WBS_STATUS_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+
 export const WBS_LEVEL_STYLE: Record<WBSNodeLevel, { nameStyle: string; codeStyle: string }> = {
   workPackage: {
     nameStyle: 'text-sm font-semibold text-foreground',

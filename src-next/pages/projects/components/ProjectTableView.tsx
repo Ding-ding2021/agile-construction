@@ -12,6 +12,8 @@ import {
 import { PROJECT_STATUS_STYLE } from '@/pages/projects/constants/project-styles'
 import type { ProjectItem } from '@/types/project'
 
+const STATUS_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+
 interface ProjectTableViewProps {
   projects: ProjectItem[]
   loading: boolean
@@ -110,8 +112,7 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
                   variant="ghost"
                   className={
                     'text-xs font-medium ' +
-                    (PROJECT_STATUS_STYLE[project.status] ??
-                      'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400')
+                    (PROJECT_STATUS_STYLE[project.status] ?? STATUS_FALLBACK)
                   }
                 >
                   {project.status}
