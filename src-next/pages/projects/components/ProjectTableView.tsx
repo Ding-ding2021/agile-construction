@@ -94,7 +94,7 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
             <TableRow
               key={project.id}
               className="cursor-pointer transition-colors hover:bg-muted/50"
-              onClick={() => navigate(`/projects/${project.code}/wbs`)}
+              onClick={() => navigate(`/projects/${project.code}`)}
             >
               <TableCell className="py-2.5 text-xs font-mono text-muted-foreground">
                 {project.code}
