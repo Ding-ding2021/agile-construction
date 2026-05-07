@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useWBSStore } from '@/store/wbsStore'
 import { WBSToolbar, type ViewTab } from './components/WBSToolbar'
@@ -7,8 +7,12 @@ import { WBSTreeSidePanel } from './components/WBSTreeSidePanel'
 
 export function WBSView() {
   const { projectCode } = useParams<{ projectCode: string }>()
-  const { error } = useWBSStore()
+  const { error, loadTree } = useWBSStore()
   const [activeView, setActiveView] = useState<ViewTab>('tree')
+
+  useEffect(() => {
+    if (projectCode) loadTree(projectCode)
+  }, [projectCode, loadTree])
 
   if (!projectCode) {
     return (
