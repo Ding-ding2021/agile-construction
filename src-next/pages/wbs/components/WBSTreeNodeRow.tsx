@@ -4,9 +4,11 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { ChevronRight, ChevronDown, Plus, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { WBS_STATUS_STYLE, WBS_LEVEL_STYLE } from '../constants/wbs-styles'
+import { WBS_STATUS_STYLE, WBS_STATUS_FALLBACK, WBS_LEVEL_STYLE } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
 import type { WBSNode } from '@/types/wbs'
+
+const LEVEL_WIDTH = 32
 
 interface WBSTreeNodeRowProps {
   node: WBSNode
@@ -27,7 +29,6 @@ function TreeLines({
   ancestorHasNext: boolean[]
   isLastChild: boolean
 }) {
-  const LEVEL_WIDTH = 32
   return (
     <div className="flex items-end h-full">
       {ancestorHasNext.map((hasNext, i) => (
@@ -122,8 +123,7 @@ export function WBSTreeNodeRow({
             variant="ghost"
             className={cn(
               'text-xs font-medium',
-              WBS_STATUS_STYLE[node.status] ??
-                'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+              WBS_STATUS_STYLE[node.status] ?? WBS_STATUS_FALLBACK
             )}
           >
             {WBS_STATUS_LABEL[node.status]}

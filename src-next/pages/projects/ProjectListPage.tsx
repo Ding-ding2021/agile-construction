@@ -71,7 +71,10 @@ export default function ProjectListPage() {
     }
     list = [...list].sort((a, b) => {
       const mul = sortDir === 'asc' ? 1 : -1
-      return (a[sortKey] ?? 0) < (b[sortKey] ?? 0) ? -mul : mul
+      if (sortKey === 'progress') {
+        return (a.progress - b.progress) * mul
+      }
+      return String(a.plannedOpenDate ?? '').localeCompare(String(b.plannedOpenDate ?? '')) * mul
     })
     return list
   }, [projects, search, statusFilter, sortKey, sortDir])
