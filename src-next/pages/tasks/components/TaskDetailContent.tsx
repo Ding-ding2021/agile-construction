@@ -53,7 +53,7 @@ export default function TaskDetailContent({
     api.updateTask(pc, taskId, { status }).then(() => {
       toast.success(`状态已变更为「${status}」`)
       onReload?.()
-    }).catch(e => toast.error('状态变更失败'))
+    }).catch(() => toast.error('状态变更失败'))
   }, [pc, taskId, onReload])
 
   const handleRemind = useCallback((_code: string) => {

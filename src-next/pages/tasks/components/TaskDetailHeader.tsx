@@ -11,7 +11,7 @@ interface TaskDetailHeaderProps {
   onOpenPage?: () => void
 }
 
-export default function TaskDetailHeader({ task, mode, onBack, onPrev, onNext, onOpenPage }: TaskDetailHeaderProps) {
+export default function TaskDetailHeader({ task: _task, mode, onBack, onPrev, onNext, onOpenPage }: TaskDetailHeaderProps) {
   return (
     <div className="flex items-center justify-between px-5 py-3 border-b border-border/50 shrink-0">
       <div className="flex items-center gap-0.5">

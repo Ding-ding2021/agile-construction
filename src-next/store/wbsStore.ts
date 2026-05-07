@@ -10,7 +10,9 @@ interface WBSState {
   expandedIds: number[]
   loading: boolean
   error: string | null
+  ganttZoom: number
 
+  setGanttZoom: (zoom: number) => void
   loadTree: (projectCode: string) => Promise<void>
   selectNode: (id: number | null) => void
   toggleExpand: (id: number) => void
@@ -28,6 +30,9 @@ export const useWBSStore = create<WBSState>((set, get) => ({
   expandedIds: [],
   loading: false,
   error: null,
+  ganttZoom: 40,
+
+  setGanttZoom: zoom => set({ ganttZoom: zoom }),
 
   loadTree: async projectCode => {
     set({ loading: true, error: null })

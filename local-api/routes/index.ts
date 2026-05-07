@@ -8,6 +8,7 @@ import memberRoutes from './members'
 import logRoutes from './logs'
 import auditRoutes from './audit'
 import wbsRoutes from './wbs'
+import calendarRoutes from './calendar'
 import personnelRoutes from './personnel'
 import organizationRoutes from './organizations'
 import * as taskCtrl from '../controllers/tasks'
@@ -31,5 +32,8 @@ router.use('/audit/logs', auditRoutes)
 // 人员管理
 router.use('/personnel', personnelRoutes)
 router.use('/organizations', organizationRoutes)
+
+// 日历
+router.use('/calendars', calendarRoutes)
 
 export default router

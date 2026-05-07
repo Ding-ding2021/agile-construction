@@ -526,3 +526,29 @@ model WBSNode {
   @@index([projectCode, parentId])
   @@map("wbs_nodes")
 }
+
+// ─── 项目日历表 ───
+model Calendar {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String?
+  isDefault   Boolean             @default(false) @map("is_default")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  exceptions  CalendarException[]
+
+  @@map("calendars")
+}
+
+model CalendarException {
+  id           Int      @id @default(autoincrement())
+  calendarId   Int      @map("calendar_id")
+  date         String
+  isWorkingDay Boolean  @map("is_working_day")
+  reason       String?
+  calendar     Calendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+
+  @@unique([calendarId, date])
+  @@index([calendarId])
+  @@map("calendar_exceptions")
+}

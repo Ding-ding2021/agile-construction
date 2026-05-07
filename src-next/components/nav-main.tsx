@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar"
 import { ChevronRightIcon } from "lucide-react"
 
-function NavLink({ url, children, onClick, ...props }: { url: string; children: ReactNode; onClick?: (e: any) => void; [key: string]: any }) {
+function NavLink({ url, children, onClick, ...props }: { url: string; children?: ReactNode; onClick?: React.MouseEventHandler<HTMLButtonElement> } & Record<string, unknown>) {
   const navigate = useNavigate()
   return (
     <button type="button" onClick={(e) => { navigate(url); onClick?.(e) }} {...props}>

@@ -30,6 +30,11 @@ export function getNodeLevelBadge(level: WBSNode['nodeLevel']): string {
   return map[level]
 }
 
+export function parseDependencies(deps: string | null): number[] {
+  if (!deps || deps.trim() === '') return []
+  return deps.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n))
+}
+
 export const WBS_STATUS_LABEL: Record<WBSNode['status'], string> = {
   pending: '待开始',
   in_progress: '进行中',

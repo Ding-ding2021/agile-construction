@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { useSettings } from "@/hooks/useSettings"
-import { LayoutDashboard, CheckSquare, FolderKanban, Users, Settings, Package } from "lucide-react"
+import { LayoutDashboard, CheckSquare, FolderKanban, Users, Settings } from "lucide-react"
 
 const data = {
   user: {

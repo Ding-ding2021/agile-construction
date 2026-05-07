@@ -5,7 +5,7 @@ import {
   isSameDay, isToday, format,
 } from 'date-fns'
 import {
-  ChevronLeft, ChevronRight, ChevronDown,
+  ChevronLeft, ChevronRight,
   Settings, Plus, Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'

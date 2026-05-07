@@ -25,17 +25,13 @@ export function WBSToolbar({ projectCode, activeView, onViewChange }: WBSToolbar
       <div className="flex items-center gap-1 rounded-lg border border-border p-0.5">
         {VIEW_TABS.map(tab => {
           const isActive = activeView === tab.value
-          const isDisabled = tab.value !== 'tree'
           return (
             <button
               key={tab.value}
-              onClick={() => !isDisabled && onViewChange(tab.value)}
-              disabled={isDisabled}
-              title={isDisabled ? '将在阶段 2 实现' : undefined}
+              onClick={() => onViewChange(tab.value)}
               className={cn(
                 'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground',
-                isDisabled && 'opacity-40 cursor-not-allowed'
+                isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:text-foreground'
               )}
             >
               {tab.label}
@@ -44,10 +40,7 @@ export function WBSToolbar({ projectCode, activeView, onViewChange }: WBSToolbar
         })}
       </div>
 
-      <Button
-        size="sm"
-        onClick={() => addNode(projectCode, { name: '新建工作包', nodeLevel: 'workPackage' })}
-      >
+      <Button size="sm" onClick={() => addNode(projectCode, { name: '新建工作包', nodeLevel: 'workPackage' })}>
         <Plus className="size-4" />
         新建工作包
       </Button>

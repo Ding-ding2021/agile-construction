@@ -3,13 +3,13 @@ id: DOC-PLAN
 title: 项目计划总览
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-06
+last_updated: 2026-05-07
 source_of_truth: true
 related_docs:
   - docs/README.md
   - docs/01-product/product-roadmap-v1.2-draft.md
   - docs/01-product/design-spec-v2-shadcn.md
-  - docs/03-engineering/development-plan-v1.2.md
+  - docs/03-engineering/development-plan-v2.0.md
 ---
 
 # 项目计划总览
@@ -27,7 +27,7 @@ related_docs:
 | UI 主栈      | shadcn/ui Neutral Light（`src-next/`，npm workspace 接入）                |
 | UI 副栈      | MUI v9 + Emotion（`src/`，维护模式，仅修 bug）                            |
 | 默认构建入口 | `npm run dev` → shadcn，`npm run dev:legacy` → MUI                        |
-| 开发计划     | V1.2（MUI 旧栈，Phase 2~6 Issues 已关闭，待升版 V2.0 重新规划 shadcn 版） |
+| 开发计划     | V2.0（shadcn 新栈，Phase 1/1.5 已完成，Phase 2 按 WBS→8标签→标准→任务顺序规划） |
 | 产品路线图   | V1.2（active，当前工作基线）                                              |
 | 数据层       | local-api + Prisma + SQLite                                               |
 
@@ -49,7 +49,8 @@ related_docs:
 | [产品路线图 V1.2](docs/01-product/product-roadmap-v1.2-draft.md)     | active     | 当前产品规划基线（SSOT）                                       |
 | [前端设计规范 V2 — shadcn](docs/01-product/design-spec-v2-shadcn.md) | active     | 当前 UI 设计规范                                               |
 | [WBS 框架设计](docs/02-architecture/wbs-framework-design.md)         | draft      | 四视图集成方案（树/甘特/网络图/思维导图），新 Phase 2 首项任务 |
-| [开发计划 V1.2](docs/03-engineering/development-plan-v1.2.md)        | active     | 工程任务分解（MUI 旧栈，Phase 2~6 已关闭待 V2.0 升版）         |
+| [开发计划 V2.0](docs/03-engineering/development-plan-v2.0.md)        | active     | 工程任务分解（shadcn 新栈，Phase 2 WBS→8标签→标准→任务）      |
+| [开发计划 V1.2](docs/03-engineering/development-plan-v1.2.md)        | superseded | 已由 V2.0 替代，保留历史参考                                    |
 | [设计规范（MUI）](docs/00-governance/design-specification.md)        | deprecated | 已被 shadcn V2 替代                                            |
 | [文档治理规范](docs/00-governance/document-governance.md)            | active     | 文档管理规则                                                   |
 | [编码规范](docs/00-governance/coding-standards.md)                   | active     | 代码风格与质量规则                                             |
@@ -66,7 +67,9 @@ related_docs:
 | 2026-05-06 | 开发策略：新功能在 src-next/ 开发，src/ 只维护不新增 | 后续所有开发在 shadcn 上进行                       |
 | 2026-05-06 | shadcn npm workspace 接入完成，设为默认构建入口      | `npm run dev` 启动 shadcn，MUI 退为 `dev:legacy`   |
 | 2026-05-07 | Phase 2~6 MUI 旧计划关闭，待 V2.0 重新规划           | 旧 P2-T1~T9 已关闭，新 Phase 2 从 WBS 框架开始     |
-| 2026-05-07 | 确定 WBS 框架四视图方案（树/甘特/网络图/思维导图）   | 分阶段交付，对应新 Phase 2 范围与任务+进度管理标签 |
+| 2026-05-07 | 确定 WBS 框架四视图方案（树/甘特/网络图/思维导图）         | 分阶段交付，对应新 Phase 2 范围与任务+进度管理标签 |
+| 2026-05-07 | 开发计划 V2.0 发布，V1.2 标记为 superseded                  | 新开发计划基于 shadcn 架构，Phase 2 重新排序        |
+| 2026-05-07 | 产品功能模块调整：资产 → 工队管理                           | 8 P0 模块：工作台/项目/任务/标准/采购/工队/人员/设置 |
 
 ---
 
@@ -78,9 +81,9 @@ related_docs:
 - [x] src-next/ 测试基础设施搭建（vitest + testing library，8 文件 31 用例通过）
 - [x] WBS 框架设计（四视图方案文档完成）
 - [x] WBS 框架阶段 1 实施（树视图核心，含 Sheet/连接线/E2E）
-- [ ] [#47](https://github.com/Ding-ding2021/agile-construction/issues/47) 升版开发计划 V2.0（基于当前 shadcn 架构，替代 V1.2 MUI 旧计划）
+- [x] [#47](https://github.com/Ding-ding2021/agile-construction/issues/47) 升版开发计划 V2.0（基于当前 shadcn 架构，替代 V1.2 MUI 旧计划）
 - [ ] [#45](https://github.com/Ding-ding2021/agile-construction/issues/45) 项目列表页 src→src-next 迁移（范围收缩：仅项目管理列表页，不含 8 标签和标准管理）
-- [ ] 迁移模块测试覆盖 ≥ 模块阈值（覆盖率作为迁移验收条件，而非独立 Issue）
+- [x] 迁移模块测试覆盖 ≥ 模块阈值（覆盖率作为迁移验收条件，而非独立 Issue）
 
 ---
 

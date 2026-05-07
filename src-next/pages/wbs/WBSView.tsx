@@ -4,6 +4,8 @@ import { useWBSStore } from '@/store/wbsStore'
 import { WBSToolbar, type ViewTab } from './components/WBSToolbar'
 import { WBSTreeTable } from './components/WBSTreeTable'
 import { WBSTreeSidePanel } from './components/WBSTreeSidePanel'
+import { WBSNetworkDiagram } from './components/WBSNetworkDiagram'
+import { WBSGanttSvar } from './components/WBSGanttSvar'
 
 export function WBSView() {
   const { projectCode } = useParams<{ projectCode: string }>()
@@ -47,13 +49,13 @@ export function WBSView() {
           </div>
         )}
         {activeView === 'gantt' && (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
-            甘特图视图 — 阶段 2 实现
+          <div className="flex-1 overflow-auto">
+            <WBSGanttSvar />
           </div>
         )}
         {activeView === 'network' && (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
-            网络图视图 — 阶段 2 实现
+          <div className="flex-1 overflow-hidden">
+            <WBSNetworkDiagram />
           </div>
         )}
       </div>

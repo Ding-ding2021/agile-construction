@@ -1,0 +1,18 @@
+/* SVAR Gantt shadcn 主题覆盖 */
+.wx-gantt {
+  --wx-gantt-bar-height: 20px;
+  --wx-gantt-row-height: 28px;
+  --wx-font: inherit;
+}
+
+.svar-day-nonworking {
+  background-color: hsl(var(--muted) / 0.3) !important;
+}
+
+/* 摘要条样式 */
+.wx-gantt-task-summary .wx-gantt-task-bar {
+  background: hsl(var(--muted-foreground) / 0.35) !important;
+  border: 1px solid hsl(var(--muted-foreground) / 0.5) !important;
+  border-radius: 3px !important;
+  height: 14px !important;
+}

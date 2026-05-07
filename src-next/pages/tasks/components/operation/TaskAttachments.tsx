@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Paperclip, Upload, FileText, Image, FileArchive, File } from 'lucide-react'
+import { Upload, FileText, Image, FileArchive, File } from 'lucide-react'
 import type { TaskAttachment } from '@/types/task'
 
 interface TaskAttachmentsProps {

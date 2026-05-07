@@ -39,7 +39,7 @@ export default function TaskRiskSla({ task, readonly, onRiskChange }: TaskRiskSl
           </Badge>
         ) : (
           <div className="flex items-center gap-2">
-            <Select value={draft} onValueChange={setDraft}>
+            <Select value={draft} onValueChange={v => setDraft(v ?? '')}>
               <SelectTrigger className="h-8 text-xs flex-1">
                 <SelectValue placeholder="选择风险等级" />
               </SelectTrigger>

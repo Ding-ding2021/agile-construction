@@ -1,4 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ThemeColorSection } from './ThemeColorSection'
 import { FontSection } from './FontSection'
 import { LogoSettings } from './LogoSettings'

@@ -132,6 +132,8 @@ Backlog → Ready → In Progress → AI Completed → In Review → Done
 - **Python 脚本**: `python scripts/gh-sync.py` 查看今日日志
 - **全景扫描**: `python scripts/scan-tools.py` 查看 Skills/Agents/MCP 统计
 - **保存报告**: `python scripts/scan-tools.py --md --save` 生成 `docs/SCAN-REPORT.md`
+- **质量仪表盘**: `python scripts/scan-tools.py --report` 查看 KPI 和 Skill 使用率
+- **保存仪表盘**: `python scripts/scan-tools.py --report --md --save` 生成 `docs/DASHBOARD.md`
 
 ### 标签体系（20 个）
 
@@ -173,6 +175,27 @@ Backlog → Ready → In Progress → AI Completed → In Review → Done
 ### B. 更新长期记忆（如有以下情况）
 
 如有架构决策（ADR 级）、技术债务变化、关键文档索引变化，同步更新 `.workbuddy/memory/MEMORY.md`。
+
+### C. 写入质量评价（新增）
+
+将本次任务的质量数据写入 `.workbuddy/stats/YYYY-MM-DD.json`：
+
+```json
+{
+  "task": "{任务简述}",
+  "date": "{YYYY-MM-DD}",
+  "risk_level": "L1/L2/L3",
+  "human_interventions": 0,
+  "requirement_deviation": 0.0,
+  "spec_changes": 0,
+  "rework_rounds": 0,
+  "bugs_found_post_delivery": 0,
+  "skills_called": ["skill1", "skill2"],
+  "notes": ""
+}
+```
+
+填写后运行 `python scripts/scan-tools.py --report` 确认仪表盘已更新。
 
 ## 深度引用
 

@@ -5,7 +5,6 @@ import { CalendarDays, GripVertical } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
 import { STATUS_STYLE, SLA_STYLE, avatarColor } from '../../constants/task-styles'
 import type { TaskItem } from '@/types/task'
 
@@ -44,8 +43,8 @@ export const KanbanCard = memo(function KanbanCard({ task, onClick, isDragging }
           <div className="flex items-start gap-1">
             <button
               className="mt-0.5 cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground shrink-0"
-              onPointerDown={(e) => { e.stopPropagation(); listeners?.onPointerDown?.(e) }}
-              {...{ onKeyDown: listeners?.onKeyDown }}
+              onPointerDown={(e) => { e.stopPropagation(); (listeners?.onPointerDown as (...args: unknown[]) => void)?.(e) }}
+              onKeyDown={listeners?.onKeyDown as React.KeyboardEventHandler | undefined}
             >
               <GripVertical className="size-3.5" />
             </button>

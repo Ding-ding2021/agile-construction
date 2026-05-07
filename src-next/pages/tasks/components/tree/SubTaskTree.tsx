@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, type MouseEvent } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
 import { ChevronRight, ChevronDown } from 'lucide-react'
 import type { TaskSubtaskNode } from '@/types/task'
 

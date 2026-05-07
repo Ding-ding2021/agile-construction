@@ -1,9 +1,10 @@
 const BASE = '/api'
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
+async function request<T>(path: string, options?: RequestInit, signal?: AbortSignal): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     ...options,
+    signal,
   })
   if (!res.ok) {
     const body = await res.json().catch(() => null)
@@ -146,4 +147,34 @@ export const wbsApi = {
     request<{ deleted: number }>(`/projects/${projectCode}/wbs/${id}`, {
       method: 'DELETE',
     }),
+}
+
+export const calendarsApi = {
+  list: () => request<import('../types/calendar').CalendarItem[]>('/calendars'),
+
+  get: (id: number) => request<import('../types/calendar').CalendarDetail>(`/calendars/${id}`),
+
+  create: (data: { name: string; description?: string; isDefault?: boolean }) =>
+    request<import('../types/calendar').CalendarItem>('/calendars', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: number, data: { name?: string; description?: string; isDefault?: boolean }) =>
+    request<import('../types/calendar').CalendarItem>(`/calendars/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (id: number) =>
+    request<{ success: boolean }>(`/calendars/${id}`, { method: 'DELETE' }),
+
+  setExceptions: (id: number, exceptions: { date: string; isWorkingDay: boolean; reason?: string }[]) =>
+    request<import('../types/calendar').CalendarException[]>(`/calendars/${id}/exceptions`, {
+      method: 'PUT',
+      body: JSON.stringify({ exceptions }),
+    }),
+
+  checkPeriod: (from: string, to: string, signal?: AbortSignal) =>
+    request<import('../types/calendar').DayStatus[]>(`/calendars/check?from=${from}&to=${to}`, undefined, signal),
 }

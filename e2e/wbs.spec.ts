@@ -36,4 +36,81 @@ test.describe('WBS 页面', () => {
     )
     expect(sheet).toBeTruthy()
   })
+
+  test('甘特图切换并显示时间轴', async ({ page }) => {
+    await page.goto('http://localhost:5173/projects/P001/wbs')
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/projects/P001/wbs') && resp.status() === 200,
+      { timeout: 15000 }
+    )
+    await page.waitForTimeout(1000)
+
+    await page.getByRole('button', { name: '甘特图' }).click()
+    await page.waitForTimeout(500)
+
+    await expect(page.getByText(/W\d+/)).toBeVisible()
+  })
+
+  test('网络图切换并显示节点', async ({ page }) => {
+    await page.goto('http://localhost:5173/projects/P001/wbs')
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/projects/P001/wbs') && resp.status() === 200,
+      { timeout: 15000 }
+    )
+    await page.waitForTimeout(1000)
+
+    await page.getByRole('button', { name: '网络图' }).click()
+    await page.waitForTimeout(1000)
+
+    await expect(page.locator('.react-flow__node')).toBeVisible()
+  })
+
+  test('甘特图展开/折叠子节点', async ({ page }) => {
+    await page.goto('http://localhost:5173/projects/P001/wbs')
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/projects/P001/wbs') && resp.status() === 200,
+      { timeout: 15000 }
+    )
+    await page.waitForTimeout(1000)
+
+    await page.getByRole('button', { name: '甘特图' }).click()
+    await page.waitForTimeout(500)
+
+    const expandBtn = page.locator('button[aria-label="展开"]').first()
+    if (await expandBtn.isVisible().catch(() => false)) {
+      await expandBtn.click()
+      await page.waitForTimeout(300)
+      await expect(page.locator('button[aria-label="折叠"]').first()).toBeVisible()
+    }
+  })
+
+  test('甘特图缩放切换日/周/月', async ({ page }) => {
+    await page.goto('http://localhost:5173/projects/P001/wbs')
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/projects/P001/wbs') && resp.status() === 200,
+      { timeout: 15000 }
+    )
+    await page.waitForTimeout(1000)
+
+    await page.getByRole('button', { name: '甘特图' }).click()
+    await page.waitForTimeout(500)
+
+    await page.getByRole('button', { name: '周' }).click()
+    await page.waitForTimeout(300)
+    await expect(page.getByText(/W\d+/)).toBeVisible()
+  })
+
+  test('甘特图左侧信息列', async ({ page }) => {
+    await page.goto('http://localhost:5173/projects/P001/wbs')
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/projects/P001/wbs') && resp.status() === 200,
+      { timeout: 15000 }
+    )
+    await page.waitForTimeout(1000)
+
+    await page.getByRole('button', { name: '甘特图' }).click()
+    await page.waitForTimeout(500)
+
+    await expect(page.getByText('任务名称')).toBeVisible()
+  })
 })

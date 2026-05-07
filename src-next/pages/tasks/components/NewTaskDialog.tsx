@@ -114,7 +114,7 @@ export function NewTaskDialog({
       return (
         <Select
           value={fields[key] || ''}
-          onValueChange={v => onFieldsChange({ ...fields, [key]: v })}
+          onValueChange={v => onFieldsChange({ ...fields, [key]: v ?? '' })}
         >
           <SelectTrigger className="h-8">
             <SelectValue placeholder={`选择${label}`} />
