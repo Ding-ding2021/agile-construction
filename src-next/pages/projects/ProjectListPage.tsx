@@ -25,11 +25,7 @@ export default function ProjectListPage() {
     setLoading(true)
     api
       .getProjects()
-      .then((res: unknown) => {
-        const data = res as { data?: ProjectItem[] } | ProjectItem[]
-        const list = Array.isArray(data) ? data : (data.data ?? [])
-        setProjects(list)
-      })
+      .then(setProjects)
       .catch(() => setProjects([]))
       .finally(() => setLoading(false))
   }, [])
