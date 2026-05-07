@@ -12,14 +12,23 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu'
-import { Search, TableIcon, MapIcon, Filter, ArrowUpDown, Plus } from 'lucide-react'
+import {
+  TableIcon,
+  Columns3,
+  CalendarIcon,
+  MapIcon,
+  Search,
+  Filter,
+  ArrowUpDown,
+  Plus,
+} from 'lucide-react'
 import { api } from '@/services/api'
 import { ProjectTableView } from './components/ProjectTableView'
 import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 import { getProjectMetrics } from './constants/project-styles'
 import type { ProjectItem } from '@/types/project'
 
-const VIEWS = ['table', 'map'] as const
+const VIEWS = ['table', 'kanban', 'calendar', 'map'] as const
 type ViewType = (typeof VIEWS)[number]
 
 const STATUS_OPTIONS = ['待启动', '执行中', '待验收', '已验收', '已关闭', '已暂停']
@@ -95,6 +104,14 @@ export default function ProjectListPage() {
                 <TabsTrigger value="table">
                   <TableIcon className="size-4" />
                   表格
+                </TabsTrigger>
+                <TabsTrigger value="kanban" disabled>
+                  <Columns3 className="size-4" />
+                  看板
+                </TabsTrigger>
+                <TabsTrigger value="calendar" disabled>
+                  <CalendarIcon className="size-4" />
+                  日历
                 </TabsTrigger>
                 <TabsTrigger value="map" disabled>
                   <MapIcon className="size-4" />
@@ -176,13 +193,23 @@ export default function ProjectListPage() {
           </div>
 
           {view === 'table' && <ProjectTableView projects={paged} loading={loading} />}
+          {view === 'kanban' && (
+            <div className="flex items-center justify-center h-48 text-sm text-muted-foreground rounded-md border border-border">
+              看板视图 — 后续实现
+            </div>
+          )}
+          {view === 'calendar' && (
+            <div className="flex items-center justify-center h-48 text-sm text-muted-foreground rounded-md border border-border">
+              日历视图 — 后续实现
+            </div>
+          )}
           {view === 'map' && (
             <div className="flex items-center justify-center h-48 text-sm text-muted-foreground rounded-md border border-border">
               地图视图 — 后续实现
             </div>
           )}
 
-          {!isEmpty && totalPages > 1 && (
+          {!isEmpty && (
             <TaskPaginationBar
               page={safePage}
               totalPages={totalPages}
