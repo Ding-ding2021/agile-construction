@@ -59,7 +59,7 @@ export default function ProjectListPage() {
         <p className="text-sm text-muted-foreground">查看和管理所有门店建设项目</p>
       </div>
 
-      <SectionCards metrics={metrics} />
+      <SectionCards className="px-0" cardSize="lg" metrics={metrics} />
 
       <ProjectToolbar search={search} onSearchChange={setSearch} onNewProject={() => {}} />
 
