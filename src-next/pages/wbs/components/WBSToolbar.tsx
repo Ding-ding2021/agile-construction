@@ -1,15 +1,15 @@
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { cn } from '@/lib/utils'
 import { useWBSStore } from '@/store/wbsStore'
 
-const VIEW_TABS = [
+export type ViewTab = 'tree' | 'gantt' | 'network'
+
+const VIEW_TABS: { value: ViewTab; label: string }[] = [
   { value: 'tree', label: '树视图' },
   { value: 'gantt', label: '甘特图' },
   { value: 'network', label: '网络图' },
-] as const
-
-export type ViewTab = (typeof VIEW_TABS)[number]['value']
+]
 
 interface WBSToolbarProps {
   projectCode: string
@@ -22,24 +22,27 @@ export function WBSToolbar({ projectCode, activeView, onViewChange }: WBSToolbar
 
   return (
     <div className="flex items-center justify-between">
-      <ToggleGroup
-        type="single"
-        value={activeView}
-        onValueChange={v => v && onViewChange(v as ViewTab)}
-        variant="outline"
-        size="sm"
-      >
-        {VIEW_TABS.map(tab => (
-          <ToggleGroupItem
-            key={tab.value}
-            value={tab.value}
-            disabled={tab.value !== 'tree'}
-            title={tab.value !== 'tree' ? '将在阶段 2 实现' : undefined}
-          >
-            {tab.label}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+      <div className="flex items-center gap-1 rounded-lg border border-border p-0.5">
+        {VIEW_TABS.map(tab => {
+          const isActive = activeView === tab.value
+          const isDisabled = tab.value !== 'tree'
+          return (
+            <button
+              key={tab.value}
+              onClick={() => !isDisabled && onViewChange(tab.value)}
+              disabled={isDisabled}
+              title={isDisabled ? '将在阶段 2 实现' : undefined}
+              className={cn(
+                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground',
+                isDisabled && 'opacity-40 cursor-not-allowed'
+              )}
+            >
+              {tab.label}
+            </button>
+          )
+        })}
+      </div>
 
       <Button
         size="sm"
