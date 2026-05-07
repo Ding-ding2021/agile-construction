@@ -38,12 +38,9 @@ export function WBSView() {
       <WBSToolbar projectCode={projectCode} activeView={activeView} onViewChange={setActiveView} />
       <div className="flex flex-1 min-h-0">
         {activeView === 'tree' && (
-          <>
-            <div className="flex-1 overflow-auto">
-              <WBSTreeTable projectCode={projectCode} />
-            </div>
-            <WBSTreeSidePanel projectCode={projectCode} />
-          </>
+          <div className="flex-1 overflow-auto">
+            <WBSTreeTable projectCode={projectCode} />
+          </div>
         )}
         {activeView === 'gantt' && (
           <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
@@ -56,6 +53,7 @@ export function WBSView() {
           </div>
         )}
       </div>
+      <WBSTreeSidePanel />
     </div>
   )
 }

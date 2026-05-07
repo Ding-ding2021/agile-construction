@@ -43,7 +43,7 @@ export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
             工作分解结构 (WBS)
           </h3>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -82,7 +82,7 @@ export function WBSTreeTable({ projectCode }: WBSTreeTableProps) {
           工作分解结构 (WBS)
         </h3>
       </div>
-      <div className="rounded-md border mx-4 mb-4 mt-3">
+      <div className="rounded-md border border-border mx-4 mb-4 mt-3">
         <Table>
           <TableHeader>
             <TableRow>

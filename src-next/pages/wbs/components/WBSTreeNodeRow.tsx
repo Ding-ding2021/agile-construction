@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { ChevronRight, ChevronDown, Plus, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { WBS_STATUS_STYLE, WBS_LEVEL_STYLE, WBS_LEVEL_INDENT } from '../constants/wbs-styles'
+import { WBS_STATUS_STYLE, WBS_LEVEL_STYLE } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
 import type { WBSNode } from '@/types/wbs'
 
