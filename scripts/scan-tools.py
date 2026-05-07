@@ -28,6 +28,7 @@ MCP_CONFIGS = [
 ]
 AGENTS_DIR = PROJECT_ROOT / ".agents"
 WORKBUDDY_DIR = PROJECT_ROOT / ".workbuddy"
+STATS_DIR = WORKBUDDY_DIR / "stats"
 
 
 # ─── 工具函数 ────────────────────────────────────────────────
@@ -240,6 +241,247 @@ def scan_workbuddy() -> dict:
     return result
 
 
+# ─── 质量指标 ────────────────────────────────────────────────
+
+STATS_REQUIRED_FIELDS = {
+    "task", "date", "risk_level", "human_interventions",
+    "requirement_deviation", "spec_changes", "rework_rounds",
+    "bugs_found_post_delivery", "skills_called",
+}
+
+
+def scan_stats() -> list[dict]:
+    """读取 .workbuddy/stats/*.json，返回所有质量评价记录。"""
+    records = []
+    if not STATS_DIR.exists():
+        return records
+    for f in sorted(STATS_DIR.glob("*.json")):
+        try:
+            data = json.loads(f.read_text(encoding="utf-8"))
+            missing = STATS_REQUIRED_FIELDS - set(data.keys())
+            if missing:
+                print(f"  ⚠  {f.name}: 缺少字段 {missing}", file=sys.stderr)
+                continue
+            records.append(data)
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"  ⚠  {f.name}: {e}", file=sys.stderr)
+    return records
+
+
+def infer_expected_skills(records: list[dict], threshold: float = 0.5) -> dict:
+    """从历史记录推断每个风险等级应调用的 skills。
+    
+    threshold: 调用率超过此值才算"期望调用"。
+    """
+    by_level: dict[str, Counter] = {}
+    counts: dict[str, int] = {}
+    for r in records:
+        level = r.get("risk_level", "unknown")
+        if level not in by_level:
+            by_level[level] = Counter()
+            counts[level] = 0
+        counts[level] += 1
+        for s in r.get("skills_called", []):
+            by_level[level][s] += 1
+
+    expected: dict[str, set] = {}
+    for level, counter in by_level.items():
+        total = counts[level]
+        expected[level] = {s for s, c in counter.items() if c / total >= threshold}
+    return expected
+
+
+def calc_drift(record: dict, expected_skills: set) -> dict:
+    """计算单条记录的偏差。"""
+    actual = set(record.get("skills_called", []))
+    missed = expected_skills - actual
+    extra = actual - expected_skills
+    return {
+        "missed": sorted(missed),
+        "extra": sorted(extra),
+        "drift_score": len(missed) + len(extra),
+    }
+
+
+def calc_avg(values: list) -> float:
+    """安全计算均值。"""
+    return sum(values) / len(values) if values else 0.0
+
+
+def generate_dashboard(records: list[dict], expected_map: dict) -> str:
+    """生成 CLI 仪表盘。"""
+    if not records:
+        lines = ["\n  📊 暂无质量评价数据。"]
+        lines.append("  💡 提示: 完成任务后 AI 会自动引导填写评价记录。")
+        return "\n".join(lines)
+
+    total = len(records)
+    levels = Counter(r.get("risk_level", "?") for r in records)
+    interventions = [r.get("human_interventions", 0) for r in records]
+    deviations = [r.get("requirement_deviation", 0.0) for r in records]
+    reworks = [r.get("rework_rounds", 0) for r in records]
+    bugs = [r.get("bugs_found_post_delivery", 0) for r in records]
+
+    # Skill 使用率
+    skill_counter: Counter = Counter()
+    for r in records:
+        for s in r.get("skills_called", []):
+            skill_counter[s] += 1
+    sorted_skills = sorted(skill_counter.items(), key=lambda x: -x[1])
+
+    # 偏差检测
+    drifts = []
+    for r in records:
+        level = r.get("risk_level", "unknown")
+        expected = expected_map.get(level, set())
+        if expected:
+            drift = calc_drift(r, expected)
+            if drift["drift_score"] > 0:
+                drifts.append((r["task"], level, drift))
+
+    lines = []
+    lines.append("")
+    lines.append("╔══════════════════════════════════════════════════╗")
+    lines.append("║  AI 开发质量仪表盘                              ║")
+    lines.append("╚══════════════════════════════════════════════════╝")
+    lines.append("")
+    lines.append(f"  📊 总记录: {total} 条")
+    level_str = " / ".join(f"{k}={v}" for k, v in sorted(levels.items()))
+    lines.append(f"     分级:  {level_str}")
+    lines.append("")
+    lines.append(f"  KPI 汇总（均值）")
+    lines.append(f"  {'─' * 50}")
+    lines.append(f"    人工干预次数    {calc_avg(interventions):.2f}")
+    lines.append(f"    需求偏差度      {calc_avg(deviations):.2f}")
+    lines.append(f"    返工轮次        {calc_avg(reworks):.2f}")
+    lines.append(f"    交付后 Bug 数   {calc_avg(bugs):.2f}")
+    lines.append("")
+    lines.append(f"  Skill 使用率")
+    lines.append(f"  {'─' * 50}")
+    # 只显示 top 20
+    for name, cnt in sorted_skills[:20]:
+        pct = cnt / total * 100
+        bar = "█" * max(1, int(pct / 5))
+        marker = "" if pct >= 50 else "  ← 偏低"
+        lines.append(f"    {name:30s} {cnt:2d}次 {pct:3.0f}% {bar}{marker}")
+    lines.append("")
+
+    if drifts:
+        lines.append(f"  ⚠ 偏差检测")
+        lines.append(f"  {'─' * 50}")
+        for task, level, drift in drifts[:10]:
+            parts = []
+            if drift["missed"]:
+                parts.append(f"应调未调: {','.join(drift['missed'])}")
+            if drift["extra"]:
+                parts.append(f"误调: {','.join(drift['extra'])}")
+            lines.append(f"    {task[:40]:40s} {'; '.join(parts)}")
+        lines.append("")
+
+    lines.append(f"  💡 python scripts/scan-tools.py --report --md  查看详细报告")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def generate_markdown_report(records: list[dict], expected_map: dict) -> str:
+    """生成 Markdown 仪表盘。"""
+    if not records:
+        return "## 📊 暂无质量评价数据\n\n完成任务后 AI 会自动引导填写评价记录。\n"
+
+    total = len(records)
+    levels = Counter(r.get("risk_level", "?") for r in records)
+    interventions = [r.get("human_interventions", 0) for r in records]
+    deviations = [r.get("requirement_deviation", 0.0) for r in records]
+    reworks = [r.get("rework_rounds", 0) for r in records]
+    bugs = [r.get("bugs_found_post_delivery", 0) for r in records]
+
+    skill_counter: Counter = Counter()
+    for r in records:
+        for s in r.get("skills_called", []):
+            skill_counter[s] += 1
+    sorted_skills = sorted(skill_counter.items(), key=lambda x: -x[1])
+
+    drifts = []
+    for r in records:
+        level = r.get("risk_level", "unknown")
+        expected = expected_map.get(level, set())
+        if expected:
+            drift = calc_drift(r, expected)
+            if drift["drift_score"] > 0:
+                drifts.append((r["task"], r["date"], level, drift))
+
+    lines = []
+    lines.append(f"# AI 开发质量仪表盘")
+    lines.append(f"")
+    lines.append(f"> 生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    lines.append(f"")
+
+    # 总览
+    lines.append(f"## 📊 总览")
+    lines.append(f"")
+    level_str = ", ".join(f"{k}={v}" for k, v in sorted(levels.items()))
+    lines.append(f"| 指标 | 数值 |")
+    lines.append(f"|------|------|")
+    lines.append(f"| 记录总数 | {total} |")
+    lines.append(f"| 风险分布 | {level_str} |")
+    lines.append(f"| 人工干预率 | {calc_avg(interventions):.2f} |")
+    lines.append(f"| 平均偏差度 | {calc_avg(deviations):.2f} |")
+    lines.append(f"| 返工率 | {calc_avg(reworks):.2f} |")
+    lines.append(f"| Bug 率 | {calc_avg(bugs):.2f} |")
+    lines.append("")
+
+    # KPI 趋势
+    lines.append("## KPI 趋势")
+    lines.append("")
+    lines.append("| 日期 | 任务 | 等级 | 干预 | 偏差 | 返工 | Bug | Skills |")
+    lines.append("|------|------|------|------|------|------|------|--------|")
+    for r in reversed(records[-20:]):
+        skill_str = ", ".join(r.get("skills_called", [])[:5])
+        if len(r.get("skills_called", [])) > 5:
+            skill_str += "..."
+        lines.append(
+            f"| {r['date']} | {r['task'][:30]} | {r['risk_level']} "
+            f"| {r['human_interventions']} | {r['requirement_deviation']} "
+            f"| {r['rework_rounds']} | {r['bugs_found_post_delivery']} "
+            f"| {skill_str} |"
+        )
+    lines.append("")
+
+    # Skill 使用率
+    lines.append("## Skill 使用率")
+    lines.append("")
+    lines.append("| Skill | 调用次数 | 使用率 |")
+    lines.append("|-------|---------|-------|")
+    for name, cnt in sorted_skills:
+        pct = cnt / total * 100
+        bar = "█" * max(1, int(pct / 5))
+        lines.append(f"| `{name}` | {cnt} | {pct:.0f}% {bar} |")
+    lines.append("")
+
+    # 偏差检测
+    if drifts:
+        lines.append("## ⚠ 偏差检测")
+        lines.append("")
+        lines.append("| 任务 | 日期 | 等级 | 应调未调 | 误调 |")
+        lines.append("|------|------|------|---------|------|")
+        for task, date, level, drift in drifts:
+            missed = ", ".join(drift["missed"]) if drift["missed"] else "—"
+            extra = ", ".join(drift["extra"]) if drift["extra"] else "—"
+            lines.append(f"| {task[:35]} | {date} | {level} | {missed} | {extra} |")
+        lines.append("")
+
+    # 全部记录
+    lines.append("## 📋 全部评价记录")
+    lines.append("")
+    for r in records:
+        lines.append(f"- **{r['date']}** {r['task']} ({r.get('risk_level', '?')}) "
+                      f"干预={r['human_interventions']} 偏差={r['requirement_deviation']} "
+                      f"返工={r['rework_rounds']} bug={r['bugs_found_post_delivery']}")
+    lines.append("")
+
+    return "\n".join(lines)
+
+
 # ─── 报告生成 ────────────────────────────────────────────────
 
 def generate_summary(project_skills: list, global_skills: list, mcps: list, agents: dict, workbuddy: dict) -> str:
@@ -424,6 +666,25 @@ def main():
     args = set(sys.argv[1:])
     save = "--save" in args
     md = "--md" in args
+    report = "--report" in args
+
+    if report:
+        print("📊 正在生成质量仪表盘...", file=sys.stderr)
+        records = scan_stats()
+        expected_map = infer_expected_skills(records)
+        print(f"   ✅ 评价记录:   {len(records)} 条", file=sys.stderr)
+
+        if md or save:
+            output = generate_markdown_report(records, expected_map)
+            if save:
+                output_path = PROJECT_ROOT / "docs" / "DASHBOARD.md"
+                output_path.write_text(output, encoding="utf-8")
+                print(f"\n📄 仪表盘已保存: {output_path.relative_to(PROJECT_ROOT)}", file=sys.stderr)
+            if md:
+                print(output)
+        else:
+            print(generate_dashboard(records, expected_map))
+        return
 
     print("🔍 正在扫描...", file=sys.stderr)
 

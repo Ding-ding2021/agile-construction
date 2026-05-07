@@ -1,0 +1,12 @@
+{
+  "task": "Task 3: 修复 WBS 甘特图条组件 — 移除 opacity、纯色语义、无障碍支持",
+  "date": "2026-05-07",
+  "risk_level": "L1",
+  "human_interventions": 0,
+  "requirement_deviation": 0.0,
+  "spec_changes": 0,
+  "rework_rounds": 0,
+  "bugs_found_post_delivery": 0,
+  "skills_called": [],
+  "notes": "文件替换完成。build 有预先存在的错误（WBSGanttTimeline 相关），无来自 WBSGanttBar.tsx 的新错误。isParent 设为 optional 以兼容调用方 WBSGanttChart 的现有传参。"
+}
