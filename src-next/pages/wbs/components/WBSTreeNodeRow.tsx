@@ -27,22 +27,22 @@ function TreeLines({
   ancestorHasNext: boolean[]
   isLastChild: boolean
 }) {
+  const LEVEL_WIDTH = 32
   return (
     <div className="flex items-end h-full">
       {ancestorHasNext.map((hasNext, i) => (
-        <div key={i} className="w-7 shrink-0 relative h-9">
+        <div key={i} className="shrink-0 relative h-9" style={{ width: LEVEL_WIDTH }}>
           <div
-            className={cn('absolute left-3 top-0 w-px bg-border/50', hasNext ? 'bottom-0' : 'h-0')}
+            className={cn('absolute left-4 top-0 w-px bg-border/50', hasNext ? 'bottom-0' : 'h-0')}
           />
         </div>
       ))}
-      {/* Current level connector */}
-      <div className="w-7 shrink-0 relative h-9">
-        <div className={cn('absolute left-3 w-3.5', isLastChild ? 'top-0 h-1/2' : 'top-0 h-full')}>
+      <div className="shrink-0 relative h-9" style={{ width: LEVEL_WIDTH }}>
+        <div className={cn('absolute left-4 w-4', isLastChild ? 'top-0 h-1/2' : 'top-0 h-full')}>
           <div className="absolute left-0 bottom-1/2 w-full h-px bg-border" />
           {!isLastChild && <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />}
         </div>
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 size-1.5 rounded-full border border-border bg-background" />
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 size-1.5 rounded-full border border-border bg-background" />
       </div>
     </div>
   )
@@ -95,10 +95,8 @@ export function WBSTreeNodeRow({
             </div>
           </div>
         </TableCell>
-        <TableCell className="py-2 text-xs font-mono text-muted-foreground/60">
-          {node.wbsCode}
-        </TableCell>
-        <TableCell className={cn('py-2 text-sm', levelStyle.nameStyle)}>{node.name}</TableCell>
+        <TableCell className={cn('py-2 font-mono', levelStyle.codeStyle)}>{node.wbsCode}</TableCell>
+        <TableCell className={cn('py-2', levelStyle.nameStyle)}>{node.name}</TableCell>
         <TableCell className="py-2">
           <Badge variant="ghost" className="text-xs font-medium">
             {getNodeLevelBadge(node.nodeLevel)}

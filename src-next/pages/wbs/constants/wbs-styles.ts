@@ -7,16 +7,19 @@ export const WBS_STATUS_STYLE: Record<WBSStatus, string> = {
   blocked: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
 }
 
-export const WBS_LEVEL_STYLE: Record<WBSNodeLevel, { nameStyle: string; indentColor: string }> = {
+export const WBS_LEVEL_STYLE: Record<WBSNodeLevel, { nameStyle: string; codeStyle: string }> = {
   workPackage: {
-    nameStyle: 'font-semibold text-foreground',
-    indentColor: 'border-l-2 border-foreground/20',
+    nameStyle: 'text-sm font-semibold text-foreground',
+    codeStyle: 'text-xs font-semibold text-foreground/50',
   },
   task: {
-    nameStyle: 'font-medium text-foreground',
-    indentColor: 'border-l-2 border-foreground/10',
+    nameStyle: 'text-sm font-medium text-foreground/85',
+    codeStyle: 'text-xs text-foreground/40',
   },
-  subtask: { nameStyle: 'text-muted-foreground', indentColor: 'border-l-2 border-foreground/5' },
+  subtask: {
+    nameStyle: 'text-xs text-muted-foreground',
+    codeStyle: 'text-xs text-muted-foreground/60',
+  },
 }
 
-export const WBS_LEVEL_INDENT = 28
+export const WBS_LEVEL_INDENT = 8 // w-8 = 32px per level
