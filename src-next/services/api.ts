@@ -38,7 +38,7 @@ export const api = {
       `/projects/${projectCode}/members`
     ),
 
-  getProjects: () => request<{ data: unknown[] }>('/projects'),
+  getProjects: () => request<import('../types/project').ProjectItem[]>('/projects'),
 
   // -- 任务更新 --
   updateTask: (projectCode: string, taskId: number, payload: Record<string, unknown>) =>
