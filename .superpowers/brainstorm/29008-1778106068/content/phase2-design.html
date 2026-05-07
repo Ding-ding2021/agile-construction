@@ -1,0 +1,173 @@
+<h2>阶段 2 — 甘特图 + 网络图</h2>
+<p class="subtitle">基于阶段 1 的 WBS 数据，生成甘特时程和 PERT 网络图</p>
+
+<div class="section">
+  <h3>整体架构</h3>
+  
+  <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; font-size:12px;">
+    <div style="border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px; flex:1; min-width:140px;">
+      <div style="font-weight:600; margin-bottom:6px;">WBSView</div>
+      <div style="color:#888;">路由页面</div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">→</div>
+    <div style="border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px; flex:1; min-width:140px;">
+      <div style="font-weight:600; margin-bottom:6px;">WBSToolbar</div>
+      <div style="color:#888;">🌳 📊 🔗 切换</div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">→</div>
+    <div style="border:1px solid rgba(96,165,250,0.3); background:rgba(96,165,250,0.06); border-radius:8px; padding:12px; flex:1; min-width:140px;">
+      <div style="font-weight:600; margin-bottom:6px;">📊 WBSGantt</div>
+      <div style="color:#888;">甘特图视图（新增）</div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">|</div>
+    <div style="border:1px solid rgba(96,165,250,0.3); background:rgba(96,165,250,0.06); border-radius:8px; padding:12px; flex:1; min-width:140px;">
+      <div style="font-weight:600; margin-bottom:6px;">🔗 WBSNetwork</div>
+      <div style="color:#888;">网络图视图（新增）</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>甘特图方案</h3>
+  
+  <p style="font-size:13px; color:#ccc;">
+    推荐 <b>@svar-ui/react-gantt</b>（v3.5.0，134★，MIT）：<br>
+  </p>
+  
+  <div class="mockup">
+    <div class="mockup-header">📊 WBSGantt 组件设计</div>
+    <div class="mockup-body" style="display:flex; padding:0; min-height:180px;">
+      <div style="width:35%; border-right:1px solid rgba(255,255,255,0.1); font-size:11px; padding:8px;">
+        <div style="display:flex; padding:4px 6px; color:#888; border-bottom:1px solid rgba(255,255,255,0.06);">
+          <span style="width:40px;">编码</span>
+          <span style="flex:1;">任务</span>
+        </div>
+        <div style="padding:3px 6px; margin-top:4px;">CY <b>朝阳旗舰店</b></div>
+        <div style="padding:3px 6px; padding-left:14px;">CY-01 店面装修</div>
+        <div style="padding:2px 6px; padding-left:26px;">CY-01.01 地面铺装</div>
+        <div style="padding:2px 6px; padding-left:26px;">CY-01.02 墙面施工</div>
+        <div style="padding:3px 6px; padding-left:14px;">CY-02 设备采购安装</div>
+      </div>
+      <div style="flex:1; overflow:hidden; font-size:10px;">
+        <div style="display:flex; padding:4px 8px; border-bottom:1px solid rgba(255,255,255,0.06); color:#888;">
+          <span style="flex:1; text-align:center;">5/1</span>
+          <span style="flex:1; text-align:center;">6/1</span>
+          <span style="flex:1; text-align:center;">7/1</span>
+          <span style="flex:1; text-align:center;">8/1</span>
+        </div>
+        <div style="padding:20px 0; position:relative;">
+          <div style="position:absolute; top:24px; left:8%; width:55%; height:16px; background:rgba(96,165,250,0.2); border-radius:3px; display:flex; border-left:2px solid #60a5fa;">
+            <div style="height:16px; background:#60a5fa; border-radius:3px; width:45%;"></div>
+          </div>
+          <div style="position:absolute; top:50px; left:25%; width:18%; height:12px; background:#4ade80; border-radius:3px;"></div>
+          <div style="position:absolute; top:64px; left:48%; width:15%; height:12px; background:#fbbf24; border-radius:3px;"></div>
+          <div style="position:absolute; top:86px; left:45%; width:35%; height:16px; background:rgba(96,165,250,0.2); border-radius:3px; border-left:2px solid #60a5fa;">
+            <div style="height:16px; background:#60a5fa; border-radius:3px; width:25%;"></div>
+          </div>
+          <div style="position:absolute; top:48px; left:43%; height:18px; border-left:1px dashed rgba(255,255,255,0.2);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="display:flex; gap:12px; margin-top:12px;">
+    <div class="pros" style="flex:1;">
+      <h4>选型理由</h4>
+      <ul>
+        <li>React 19 + TypeScript 原生支持</li>
+        <li>拖拽调整时间条</li>
+        <li>依赖连线（FS/SS/FF/SF）</li>
+        <li>10K 任务性能测试通过</li>
+        <li>进度条展示</li>
+      </ul>
+    </div>
+    <div class="cons" style="flex:1;">
+      <h4>注意事项</h4>
+      <ul>
+        <li>需要适配 shadcn/ui 深色主题</li>
+        <li>与 WBS 树数据双向同步</li>
+        <li>自定义列可能需要额外工作</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>网络图方案</h3>
+  
+  <p style="font-size:13px; color:#ccc;">
+    推荐 <b>@xyflow/react</b>（React Flow v12，40K★）：<br>
+    <span style="color:#888;">DAG 自动布局 + 自定义节点 + 缩放/平移</span>
+  </p>
+  
+  <div class="mockup">
+    <div class="mockup-header">🔗 WBSNetwork 组件设计</div>
+    <div class="mockup-body" style="min-height:160px; display:flex; align-items:center; justify-content:center; position:relative; font-size:12px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+        <div style="display:flex; gap:40px; align-items:flex-start;">
+          <div style="background:rgba(96,165,250,0.15); border:2px solid #60a5fa; border-radius:8px; padding:8px 14px; text-align:center;">
+            <div style="font-size:10px; color:#888;">CY-01.01</div>
+            <div style="font-weight:500;">地面铺装</div>
+            <div style="font-size:10px; color:#4ade80;">5/15-6/1</div>
+          </div>
+          <div style="position:relative;">
+            <div style="width:40px; height:0; border-top:2px solid rgba(255,255,255,0.3); position:absolute; top:50%; left:-40px;"></div>
+            <div style="background:rgba(251,191,36,0.15); border:2px solid #fbbf24; border-radius:8px; padding:8px 14px; text-align:center;">
+              <div style="font-size:10px; color:#888;">CY-01.02</div>
+              <div style="font-weight:500;">墙面施工</div>
+              <div style="font-size:10px; color:#fbbf24;">6/1-6/20</div>
+            </div>
+          </div>
+          <div style="position:relative;">
+            <div style="width:40px; height:0; border-top:2px solid rgba(255,255,255,0.3); position:absolute; top:50%; left:-40px;"></div>
+            <div style="background:rgba(251,191,36,0.15); border:2px solid #fbbf24; border-radius:8px; padding:8px 14px; text-align:center;">
+              <div style="font-size:10px; color:#888;">CY-01.03</div>
+              <div style="font-weight:500;">天棚吊顶</div>
+              <div style="font-size:10px; color:#fbbf24;">6/15-7/5</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px; color:#888; text-align:center;">
+          <span style="background:rgba(255,255,255,0.05); padding:3px 8px; border-radius:4px;">
+            🔑 关键路径：地面铺装 → 墙面施工 → 天棚吊顶
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="display:flex; gap:12px; margin-top:12px;">
+    <div class="pros" style="flex:1;">
+      <h4>选型理由</h4>
+      <ul>
+        <li>React Flow 生态成熟，40K★</li>
+        <li>自动布局算法（dagre）</li>
+        <li>自定义节点样式 = shadcn/ui</li>
+        <li>缩放/平移/迷你地图</li>
+        <li>关键路径高亮</li>
+      </ul>
+    </div>
+    <div class="cons" style="flex:1;">
+      <h4>注意事项</h4>
+      <ul>
+        <li>需要 dagre 自动布局库</li>
+        <li>大图（>100节点）可能需要虚拟化</li>
+        <li>后续思维导图可复用同一技术栈</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>三视图共享数据流</h3>
+  
+  <div style="background:rgba(0,0,0,0.2); border-radius:8px; padding:14px; font-family: 'SF Mono', 'Fira Code', monospace; font-size:12px; line-height:1.7;">
+    ① <span style="color:#fbbf24;">WBS数据</span> (API) → WBS Store (Zustand)<br>
+    ② ↔ <span style="color:#60a5fa;">WBSTreeTable</span>  ← 编辑 WBS 结构/编码/日期/依赖<br>
+    ③ ↔ <span style="color:#60a5fa;">WBSGantt</span>  ← 读取 dates + dependencies 渲染时间条<br>
+    ④ ↔ <span style="color:#60a5fa;">WBSNetwork</span> ← 读取 dependencies 渲染 PERT<br>
+    <span style="color:#888;">所有视图读写同一份 WBS Store，切换无数据同步成本</span>
+  </div>
+</div>
+
+<p style="font-size:12px; color:#888; text-align:center; margin-top:16px;">阶段 2 的设计是否合理？</p>

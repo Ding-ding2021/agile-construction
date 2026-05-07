@@ -1,0 +1,101 @@
+<h2>WBS 框架 — 设计方案</h2>
+<p class="subtitle">四视图 + 流程串联，分阶段交付</p>
+
+<div class="section">
+  <h3>核心流程</h3>
+  
+  <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; padding:16px; font-size:13px;">
+    <div style="background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:8px 14px;">
+      🧠 思维导图<br><span style="font-size:11px; color:#888;">自由分解</span>
+    </div>
+    <span style="color:#888;">→ 导入 →</span>
+    <div style="background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:8px 14px;">
+      🌳 WBS 树<br><span style="font-size:11px; color:#888;">层级+编码</span>
+    </div>
+    <span style="color:#888;">→ 赋予时间/逻辑 →</span>
+    <div style="background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:8px 14px;">
+      📊 甘特图<br><span style="font-size:11px; color:#888;">时间条</span>
+    </div>
+    <span style="color:#888;">↕</span>
+    <div style="background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:8px 14px;">
+      🔗 网络图<br><span style="font-size:11px; color:#888;">依赖PERT</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>两种交付策略</h3>
+  
+  <div style="display:flex; gap:16px; flex-wrap:wrap;">
+    <div style="flex:1; min-width:240px; background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.2); border-radius:10px; padding:16px;">
+      <h4 style="margin-top:0;">方案 A：分阶段（推荐）</h4>
+      <p style="font-size:13px; color:#ccc;"><b>阶段 1 — WBS 树核心</b></p>
+      <ul style="font-size:12px; color:#888; padding-left:16px;">
+        <li>扩展 SubTaskTree → WBS 编码+进度汇总</li>
+        <li>工作包 CRUD + 工期/前置任务字段</li>
+        <li>数据导出 → 思维导图/甘图输入</li>
+      </ul>
+      <p style="font-size:13px; color:#ccc;"><b>阶段 2 — 甘特图 + 网络图</b></p>
+      <ul style="font-size:12px; color:#888; padding-left:16px;">
+        <li>集成 Gantt 库（@svar-ui/react-gantt）</li>
+        <li>依赖连线 + 关键路径</li>
+        <li>网络图基于 same data 自动排布</li>
+      </ul>
+      <p style="font-size:13px; color:#ccc;"><b>阶段 3 — 思维导图画布</b></p>
+      <ul style="font-size:12px; color:#888; padding-left:16px;">
+        <li>轻量画布 React Flow / 自绘</li>
+        <li>拖拽创建节点 → 一键导入 WBS 树</li>
+      </ul>
+    </div>
+    
+    <div style="flex:1; min-width:240px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:16px;">
+      <h4 style="margin-top:0;">方案 B：树+甘特同步开发</h4>
+      <p style="font-size:13px; color:#ccc;"><b>一阶段完成树 + 甘特</b></p>
+      <ul style="font-size:12px; color:#888; padding-left:16px;">
+        <li>WBS 树核心功能（编码/汇总/CRUD）</li>
+        <li>甘特图同时到位（使用第三方库）</li>
+        <li>WBS 树 ↔ 甘特图双向联动</li>
+        <li>工期/依赖在树中编辑，甘特图实时反映</li>
+        <li style="margin-top:8px;">网络图和思维导图延后</li>
+        <li style="color:#f97316;">⚠ 单次交付量大，约 2-3 个工作日</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>各视图技术选型</h3>
+  <table style="width:100%; border-collapse:collapse; font-size:12px; color:#ccc;">
+    <thead>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+        <th style="padding:6px 8px; text-align:left;">视图</th>
+        <th style="padding:6px 8px; text-align:left;">技术方案</th>
+        <th style="padding:6px 8px; text-align:left;">理由</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:6px 8px;">🌳 树</td>
+        <td style="padding:6px 8px;">自建（基于现有 SubTaskTree）</td>
+        <td style="padding:6px 8px; color:#888;">已用 shadcn/ui Table，避免引入重量级树库</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 8px;">📊 甘特图</td>
+        <td style="padding:6px 8px;">@svar-ui/react-gantt 或自建</td>
+        <td style="padding:6px 8px; color:#888;">高星（134★），React19/TS，支持 10K 任务</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 8px;">🔗 网络图</td>
+        <td style="padding:6px 8px;">@xyflow/react (React Flow)</td>
+        <td style="padding:6px 8px; color:#888;">DAG 自动布局 + 自定义节点，社区成熟</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 8px;">🧠 思维导图</td>
+        <td style="padding:6px 8px;">React Flow 或 markmap</td>
+        <td style="padding:6px 8px; color:#888;">React Flow 复用网络图技术栈，或 mindmap 轻量方案</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="font-size:12px; color:#888; text-align:center; margin-top:16px;">在浏览器中点击选择方案，或在终端告诉我你倾向于哪个方向</p>

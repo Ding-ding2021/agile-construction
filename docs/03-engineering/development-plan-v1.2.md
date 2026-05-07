@@ -2,13 +2,8 @@
 id: DOC-03-ENGINEERING-DEVELOPMENT-PLAN-V1-2
 title: 连锁门店营建管理系统 - 详细开发计划 V1.2
 owner: docs-maintainer
-<<<<<<< Updated upstream
 status: active
 last_updated: 2026-05-06
-=======
-status: draft
-last_updated: 2026-05-03
->>>>>>> Stashed changes
 source_of_truth: true
 related_docs:
   - docs/01-product/product-roadmap-v1.2-draft.md
@@ -20,21 +15,12 @@ related_docs:
 
 # 连锁门店营建管理系统 - 详细开发计划 V1.2
 
-<<<<<<< Updated upstream
 > **文档版本**：V1.1  
 > **适用场景**：单人 + AI 编码模式（基于 MUI v9 旧栈）  
 > **计划性质**：工程任务分解（不考虑日历时间，按依赖关系排序）  
 > **当前基线**：Phase 1 已完成，Phase 1.5 进行中（底座收官）  
 > **核心原则**：先还技术债务，再补功能；状态机驱动；标准先行  
 > **注意**：本文档描述的是 MUI v9 + `src/` 旧栈的开发计划。2026-05-06 起 UI 主栈已切换为 shadcn/ui（`src-next/`），旧栈仅维护不新增。新栈开发计划待 V2.0 升版。
-=======
-> **文档版本**：V1.2
-> **适用场景**：单人 + AI 编码模式
-> **计划性质**：工程任务分解（不考虑日历时间，按依赖关系排序）
-> **当前基线**：Phase 1 全部完成，Phase 1.5 全部完成（底座搭建与收尾）
-> **核心原则**：按数据依赖关系分层推进—「任务是原子 → 标准定义规则 → 模板组合任务 → 项目实例化模板」
-> **架构调整**（2026-05-03）：重组——每阶段聚焦单一领域，打通一个完整闭环后再进入下一领域
->>>>>>> Stashed changes
 
 ---
 
