@@ -63,7 +63,22 @@ function SiteHeaderWithTitle() {
     '/personnel': '人员管理',
     '/settings': '系统设置',
   }
-  const basePath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/')
+
+  // 详情页：显示面包屑
+  const segments = path.split('/').filter(Boolean)
+  if (
+    segments.length >= 2 &&
+    segments[0] === 'projects' &&
+    segments[1] !== undefined &&
+    segments[1] !== 'new'
+  ) {
+    const projectCode = segments[1]
+    return (
+      <SiteHeader breadcrumbs={[{ label: '项目管理', to: '/projects' }, { label: projectCode }]} />
+    )
+  }
+
+  const basePath = '/' + segments.slice(0, 1).join('/')
   return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
 }
 
