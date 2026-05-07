@@ -63,7 +63,6 @@ function SiteHeaderWithTitle() {
     '/personnel': '人员管理',
     '/settings': '系统设置',
   }
-  const path = useLocation().pathname
   const basePath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/')
   return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
 }
