@@ -196,3 +196,68 @@ export const calendarsApi = {
       signal
     ),
 }
+
+export function getTemplates() {
+  return request<{ data: import('@/types/template').ProjectTemplate[] }>('/templates')
+}
+
+export function getTemplate(id: number) {
+  return request<import('@/types/template').ProjectTemplate>(`/templates/${id}`)
+}
+
+export function createTemplate(data: Record<string, unknown>) {
+  return request<import('@/types/template').ProjectTemplate>('/templates', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateTemplate(id: number, data: Record<string, unknown>) {
+  return request<import('@/types/template').ProjectTemplate>(`/templates/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export function deleteTemplate(id: number) {
+  return request<{ success: boolean }>(`/templates/${id}`, { method: 'DELETE' })
+}
+
+export function getTemplateBindings(id: number) {
+  return request<{ data: import('@/types/template').TaskTemplate[] }>(`/templates/${id}/bindings`)
+}
+
+export function addTemplateBinding(id: number, taskTemplateId: string) {
+  return request(`/templates/${id}/bindings`, {
+    method: 'POST',
+    body: JSON.stringify({ taskTemplateId }),
+  })
+}
+
+export function removeTemplateBinding(id: number, bindingId: string) {
+  return request<{ success: boolean }>(`/templates/${id}/bindings/${bindingId}`, {
+    method: 'DELETE',
+  })
+}
+
+export function getTaskTemplates() {
+  return request<{ data: import('@/types/template').TaskTemplate[] }>('/task-templates')
+}
+
+export function createTaskTemplate(data: Record<string, unknown>) {
+  return request<import('@/types/template').TaskTemplate>('/task-templates', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateTaskTemplate(id: number, data: Record<string, unknown>) {
+  return request<import('@/types/template').TaskTemplate>(`/task-templates/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export function deleteTaskTemplate(id: number) {
+  return request<{ success: boolean }>(`/task-templates/${id}`, { method: 'DELETE' })
+}
