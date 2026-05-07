@@ -35,11 +35,23 @@ export const api = {
     request<{ data: import('../types/task').TaskSubtaskNode[] }>(`/tasks/${taskCode}/subtasks`),
 
   getMembers: (projectCode: string) =>
-    request<{ id: number; userId: string; name: string; role: string }[]>(
-      `/projects/${projectCode}/members`
+    request<import('../types/project-detail').ProjectMember[]>(`/projects/${projectCode}/members`),
+
+  getMilestones: (projectCode: string) =>
+    request<import('../types/project-detail').ProjectMilestone[]>(
+      `/projects/${projectCode}/milestones`
     ),
 
   getProjects: () => request<import('../types/project').ProjectItem[]>('/projects'),
+
+  getProjectDetail: (projectCode: string) =>
+    request<import('../types/project-detail').ProjectDetail>(`/projects/${projectCode}`),
+
+  updateProject: (projectCode: string, data: Record<string, unknown>) =>
+    request<import('../types/project-detail').ProjectOverview>(`/projects/${projectCode}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
 
   // -- 任务更新 --
   updateTask: (projectCode: string, taskId: number, payload: Record<string, unknown>) =>
@@ -166,15 +178,21 @@ export const calendarsApi = {
       body: JSON.stringify(data),
     }),
 
-  delete: (id: number) =>
-    request<{ success: boolean }>(`/calendars/${id}`, { method: 'DELETE' }),
+  delete: (id: number) => request<{ success: boolean }>(`/calendars/${id}`, { method: 'DELETE' }),
 
-  setExceptions: (id: number, exceptions: { date: string; isWorkingDay: boolean; reason?: string }[]) =>
+  setExceptions: (
+    id: number,
+    exceptions: { date: string; isWorkingDay: boolean; reason?: string }[]
+  ) =>
     request<import('../types/calendar').CalendarException[]>(`/calendars/${id}/exceptions`, {
       method: 'PUT',
       body: JSON.stringify({ exceptions }),
     }),
 
   checkPeriod: (from: string, to: string, signal?: AbortSignal) =>
-    request<import('../types/calendar').DayStatus[]>(`/calendars/check?from=${from}&to=${to}`, undefined, signal),
+    request<import('../types/calendar').DayStatus[]>(
+      `/calendars/check?from=${from}&to=${to}`,
+      undefined,
+      signal
+    ),
 }
