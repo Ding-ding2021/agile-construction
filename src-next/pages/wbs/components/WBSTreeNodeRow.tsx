@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { ChevronRight, ChevronDown, Plus } from 'lucide-react'
+import { ChevronRight, ChevronDown, Plus, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { WBS_STATUS_STYLE, WBS_LEVEL_STYLE } from '../constants/wbs-styles'
 import { getNodeLevelBadge, WBS_STATUS_LABEL } from '@/lib/wbs-utils'
@@ -23,15 +23,9 @@ interface WBSTreeNodeRowProps {
 function TreeLines({
   ancestorHasNext,
   isLastChild,
-  nodeId,
-  nodeLevel,
-  onAddChild,
 }: {
   ancestorHasNext: boolean[]
   isLastChild: boolean
-  nodeId: number
-  nodeLevel: WBSNode['nodeLevel']
-  onAddChild: (parentId: number, level: WBSNode['nodeLevel']) => void
 }) {
   const LEVEL_WIDTH = 32
   return (
@@ -48,16 +42,7 @@ function TreeLines({
           <div className="absolute left-0 bottom-1/2 w-full h-px bg-border" />
           {!isLastChild && <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />}
         </div>
-        <button
-          onClick={e => {
-            e.stopPropagation()
-            onAddChild(nodeId, nodeLevel)
-          }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 size-5 flex items-center justify-center rounded-full border border-border bg-background hover:bg-muted transition-colors z-10"
-          title="添加子节点"
-        >
-          <Plus className="size-3 text-muted-foreground" />
-        </button>
+        <Circle className="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 size-2 fill-background text-border" />
       </div>
     </div>
   )
@@ -88,13 +73,7 @@ export function WBSTreeNodeRow({
       >
         <TableCell className="py-2">
           <div className="flex items-center gap-1">
-            <TreeLines
-              ancestorHasNext={ancestorHasNext}
-              isLastChild={isLastChild}
-              nodeId={node.id}
-              nodeLevel={node.nodeLevel}
-              onAddChild={onAddChild}
-            />
+            <TreeLines ancestorHasNext={ancestorHasNext} isLastChild={isLastChild} />
             <div className="size-5 flex items-center justify-center shrink-0">
               {hasChildren ? (
                 <button
@@ -102,7 +81,8 @@ export function WBSTreeNodeRow({
                     e.stopPropagation()
                     onToggle(node.id)
                   }}
-                  className="size-4 flex items-center justify-center rounded hover:bg-muted"
+                  className="size-4 flex items-center justify-center rounded hover:bg-muted transition-colors"
+                  title={isExpanded ? '折叠' : '展开'}
                 >
                   {isExpanded ? (
                     <ChevronDown className="size-3.5 text-muted-foreground" />
@@ -111,13 +91,27 @@ export function WBSTreeNodeRow({
                   )}
                 </button>
               ) : (
-                <span className="size-4 inline-block" />
+                <Circle className="size-1.5 fill-muted-foreground/30 text-muted-foreground/30" />
               )}
             </div>
           </div>
         </TableCell>
         <TableCell className={cn('py-2 font-mono', levelStyle.codeStyle)}>{node.wbsCode}</TableCell>
-        <TableCell className={cn('py-2', levelStyle.nameStyle)}>{node.name}</TableCell>
+        <TableCell className={cn('py-2', levelStyle.nameStyle)}>
+          <div className="flex items-center gap-2">
+            <span>{node.name}</span>
+            <button
+              onClick={e => {
+                e.stopPropagation()
+                onAddChild(node.id, node.nodeLevel)
+              }}
+              className="size-5 flex items-center justify-center rounded hover:bg-muted transition-colors opacity-0 group-hover:opacity-100 shrink-0"
+              title="添加子节点"
+            >
+              <Plus className="size-3 text-muted-foreground" />
+            </button>
+          </div>
+        </TableCell>
         <TableCell className="py-2">
           <Badge variant="ghost" className="text-xs font-medium">
             {getNodeLevelBadge(node.nodeLevel)}
