@@ -11,6 +11,7 @@ import SettingsPage from './pages/settings/SettingsPage'
 import PersonnelListPage from './pages/personnel/PersonnelListPage'
 import PersonnelDetailPage from './pages/personnel/PersonnelDetailPage'
 import ProjectListPage from './pages/projects/ProjectListPage'
+import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import { WBSView } from '@/pages/wbs/WBSView'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
@@ -62,7 +63,9 @@ function SiteHeaderWithTitle() {
     '/personnel': '人员管理',
     '/settings': '系统设置',
   }
-  return <SiteHeader title={titles[path] || '数字营建'} />
+  const path = useLocation().pathname
+  const basePath = '/' + path.split('/').filter(Boolean).slice(0, 1).join('/')
+  return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
 }
 
 function LayoutWithSettings({ children }: { children: ReactNode }) {
@@ -128,6 +131,8 @@ export default function App() {
                         }
                       />
                       <Route path="/projects" element={<ProjectListPage />} />
+                      <Route path="/projects/new" element={<ProjectDetailPage />} />
+                      <Route path="/projects/:projectCode" element={<ProjectDetailPage />} />
                       <Route path="/projects/:projectCode/wbs" element={<WBSView />} />
                       <Route path="/personnel/:id" element={<PersonnelDetailPage />} />
                       <Route path="/personnel" element={<PersonnelListPage />} />
