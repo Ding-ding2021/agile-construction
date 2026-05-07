@@ -107,15 +107,28 @@ related_code:
 - ❌ MUI 遗留的 `sx`、`style` prop
 - ❌ HEX 色值（统一使用 oklch）
 
+### 2.6 纯黑纯白限制
+
+| 规则       | 禁止                                    | 推荐替代                                            |
+| ---------- | --------------------------------------- | --------------------------------------------------- |
+| 纯黑背景   | `#000000` `bg-black` `rgb(0,0,0)`       | 最深 `bg-neutral-950` ≈ `oklch(0.145 0 0)`          |
+| 纯白背景   | `#FFFFFF` `bg-white` `rgb(255,255,255)` | 最浅 `bg-neutral-50` ≈ `oklch(0.985 0 0)`           |
+| 纯黑文字   | `#000` `text-black`                     | 最深 `text-neutral-900` 或 `text-foreground`        |
+| 纯白文字   | `#FFF` `text-white`                     | 最浅 `text-neutral-50` 或 `text-primary-foreground` |
+| opacity 色 | `bg-black/10` 等透明度色值              | 用 Tailwind gray scale 分层（`neutral-50/100/200`） |
+
 ### 2.5 边框规范
 
 | 元素       | 类名                                            |
 | ---------- | ----------------------------------------------- |
 | 卡片外框   | `border border-border`                          |
 | 表格外框   | `border border-border`                          |
+| 表格列分割 | `border-r border-border`（最后一列不加）        |
 | 行下分割线 | `border-b border-border`                        |
 | 禁用硬边框 | 不使用 `border-r/t/l/b` 不加 `border-border`    |
 | 禁用       | `ring-1 ring-foreground/10`（用 `border` 替代） |
+
+暗色模式表格边框自动适配 `border-border`（≈ `neutral-700`），无需额外 dark: 前缀。
 
 ---
 
@@ -137,15 +150,21 @@ related_code:
 
 使用 Tailwind spacing scale，不定义自定义间距变量。
 
-| Tailwind | 值   | 场景                         |
-| -------- | ---- | ---------------------------- |
-| `gap-1`  | 4px  | 图标与文字                   |
-| `gap-2`  | 8px  | Badge 组、内联元素           |
-| `gap-3`  | 12px | 表单字段间                   |
-| `gap-4`  | 16px | 卡片内容区、页面内容 padding |
-| `gap-6`  | 24px | 区块之间                     |
-| `p-4`    | 16px | 页面边距                     |
-| `p-8`    | 32px | large 页面边距               |
+### 4.1 2px 跳跃原则
+
+所有间距（margin / padding / gap）必须是 **2px 的整数倍**。禁止使用 `p-2.5` `m-1.5` 等 0.5 步长，禁止 `style={{ marginTop: 13 }}` 等硬编码。
+
+| Tailwind | 值   | 跳跃倍数 | 场景                         |
+| -------- | ---- | -------- | ---------------------------- |
+| `gap-1`  | 4px  | 2×       | 图标与文字                   |
+| `gap-2`  | 8px  | 4×       | Badge 组、内联元素           |
+| `gap-3`  | 12px | 6×       | 表单字段间                   |
+| `gap-4`  | 16px | 8×       | 卡片内容区、页面内容 padding |
+| `gap-6`  | 24px | 12×      | 区块之间、卡片内 padding     |
+| `p-4`    | 16px | 8×       | 页面边距                     |
+| `p-8`    | 32px | 16×      | large 页面边距               |
+
+shadcn 组件自带的内部间距不受此限制（它们遵循 shadcn 自身规范）。
 
 ---
 
@@ -390,7 +409,6 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 ```tsx
 import { Toaster, toast } from '@/components/ui/sonner'
-
 ;<Toaster />
 toast.success('成功')
 toast.error('失败')
@@ -524,7 +542,6 @@ import { X as XPrimitive } from '@base-ui/react/x'
 
 ```tsx
 import { PermissionGuard } from '@/components/permission-guard'
-
 ;<Route
   path="/settings"
   element={
@@ -539,7 +556,6 @@ import { PermissionGuard } from '@/components/permission-guard'
 
 ```tsx
 import { Acl } from '@/components/acl'
-
 ;<Acl perm="task:delete">
   <Button variant="destructive">删除任务</Button>
 </Acl>
@@ -591,6 +607,40 @@ npx vite build --config src-next/vite.config.ts
 - [ ] 图标通过 `Icon` 适配层引用，统一 16px
 - [ ] 权限敏感操作使用 `<Acl>` 或 `usePermission()` 控制可见性
 - [ ] 主题色板切换后所有组件颜色正确转换
+- [ ] 间距均为 2px 整数倍（无 `p-2.5` `m-1.5` 等 0.5 步长）
+- [ ] 无纯黑 `bg-black` / `text-black`，无纯白 `bg-white` / `text-white`
+- [ ] 无 `opacity` 做颜色过渡（如 `bg-black/10`）
+- [ ] 组件复用遵循优先级：ui/ 已有 > 安装新组件 > 组合 shadcn > 手写
+
+---
+
+## 七、组件复用规范
+
+### 7.1 复用优先级
+
+| 优先级    | 做法                                                    | 条件                             |
+| --------- | ------------------------------------------------------- | -------------------------------- |
+| 1（最高） | 直接使用 `src-next/components/ui/` 下已有组件           | 项目已有该 shadcn 组件           |
+| 2         | 调用 `shadcn-management` skill 搜索并安装新组件         | 官方 registry 存在               |
+| 3         | 用现有 shadcn 组件组合搭建（如 Table + Badge + Button） | 官方未提供直接组件               |
+| 4（最低） | 手写自定义组件                                          | 以上均无法满足，且必须符合本规范 |
+
+### 7.2 禁止行为
+
+- ❌ 手写 shadcn 已提供的 UI 基础组件（Button / Input / Select / Checkbox 等）
+- ❌ 引入 shadcn 外的第三方 UI 库（MUI、Ant Design、Chakra 等）
+- ❌ 在 `src-next/` 中使用 MUI 旧栈组件
+- ❌ 硬编码 `style` prop（性能动画场景除外）
+
+### 7.3 组件安装流程
+
+当需要新组件时：
+
+1. 调用 `shadcn-management` skill 搜索组件
+2. 确认组件来源为 shadcn 官方 registry
+3. 使用 `npx shadcn@latest add <component>` 安装
+4. 组件自动添加到 `src-next/components/ui/`
+5. 验收时确认无自定义修改
 
 ---
 

@@ -17,10 +17,12 @@
 - `npm run build` — 构建 shadcn 生产版本
 - `npm run build:legacy` — 构建 MUI 生产版本（`tsc -b && vite build`）
 - `npm run lint` — ESLint 全仓库检查
-- `npm run test` — Vitest watch 模式
-- `npm run test:run` — Vitest 单次运行
+- `npm run test` — Vitest watch 模式（根目录，旧 src/ 测试）
+- `npm run test:run` — Vitest 单次运行（根目录）
+- `npm run test -w src-next` — Vitest watch（src-next shadcn 测试，8 文件 31 用例）
+- `npm run test:run -w src-next` — 单次运行 src-next 测试
 - `npx eslint <file>` — 单文件快速验证（替代单测）
-- `npm run ladle` — Ladle 组件预览（src-next/，端口 61000）
+- `BROWSER=chrome npm run ladle` — Ladle 组件预览（src-next/，端口 61000，Chrome 打开）
 - `npm run ladle:build` — 构建 Ladle 静态站点
 - Ladle 页面预览：`src-next/src/stories/pages.stories.tsx`，包含 Personnel/Settings/Dashboard 三个真实页面（内置 API mock，无需启动后端）
 - Ladle 组件预览：`src-next/src/stories/*.stories.tsx`（button/card/badge 等 shadcn 组件）
@@ -77,6 +79,27 @@ Prettier 配置：`semi: false`, `singleQuote: true`, `printWidth: 100`, `arrowP
 - **禁止**修改 `src/data/` 中类型定义不同步更新 UI 消费方
 - **修改前**先 `npm run lint`
 
+## 测试约束
+
+- **前端功能必须有 Playwright E2E 测试覆盖**，覆盖核心用户流程
+- E2E 测试是验收前置条件，`npm run test:e2e` 未通过不得交付
+
+## Squad 小组协作约束
+
+- **强制评估**：任何开发任务先评估风险等级，L2/L3 自动触发 `squad-pre-dev-evaluation`（L1 豁免）
+- **强制验收**：开发完成后必须调用 `squad-post-dev-review` skill（L1 低风险任务可豁免）
+- **全票通过制**：评估/验收组中任一角色投反对票则流程中止（组长可仲裁）
+- **独立输出**：子代理各自输出独立评估/验收报告，不得共享状态
+- **先评估后计划**：评估组全票通过后方可编写实现计划
+- **Karpathy 准则**：开发交付者编码前必须调用 `karpathy-guidelines` skill，四项准则贯穿编码全程（Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven Execution）
+- **增量重审**：验收打回后仅派有问题的角色重审，避免全量重新调用
+
+## 模型分配约束
+
+- **强推理任务**（组长/技术评估员/开发交付者/代码质量验收员）→ v4-pro
+- **模式化检查任务**（产品/UI评估员、功能/UI验收员）→ v4-flash
+- **L1 极简任务** → v4-flash 或 opencode go
+
 ## 项目管理
 
 完整流程见 `docs/00-governance/project-management-guide.md`
@@ -107,6 +130,8 @@ Backlog → Ready → In Progress → AI Completed → In Review → Done
 - **同一时间只有一个 In Progress**
 - **质量门禁**: build/lint/test 通过 → Human 验收 → 关闭
 - **Python 脚本**: `python scripts/gh-sync.py` 查看今日日志
+- **全景扫描**: `python scripts/scan-tools.py` 查看 Skills/Agents/MCP 统计
+- **保存报告**: `python scripts/scan-tools.py --md --save` 生成 `docs/SCAN-REPORT.md`
 
 ### 标签体系（20 个）
 

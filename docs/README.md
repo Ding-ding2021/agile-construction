@@ -59,6 +59,7 @@ last_updated: 2026-05-06（第二批归档完成）
 - `docs/02-architecture/state-machine-design.md` — 状态机设计
 - `docs/02-architecture/structured-standard-library.md` — 结构化标准库
 - `docs/02-architecture/task-tree-modeling.md` — 任务树建模
+- `docs/02-architecture/wbs-framework-design.md` — WBS 框架设计方案（draft）
 - `docs/02-architecture/template-data-contract.md` — 模板数据契约
 
 ### 03-engineering（工程实施）

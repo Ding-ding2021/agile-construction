@@ -16,7 +16,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/test/'],
+      exclude: ['node_modules/', 'src/test/', 'src/stories/', '.ladle/', 'dist/', 'dist-ladle/'],
+      thresholds: {
+        lines: 10,
+        statements: 10,
+        functions: 8,
+        branches: 5,
+      },
     },
   },
 })

@@ -1,0 +1,290 @@
+<h2>WBS 参考 — 真实产品设计</h2>
+<p class="subtitle">来自优秀项目管理工具的 WBS 界面模式，按视觉架构分类</p>
+
+<div class="section">
+  <h3>1. 树形大纲 + 侧栏详情（Nean Project / Alios）</h3>
+  <p style="color: var(--text-muted, #888);">左侧是无限嵌套的树形任务列表，右侧或下方是选中节点的详情面板。自动汇总子任务进度到父节点。</p>
+  
+  <div class="mockup">
+    <div class="mockup-header">参考模式 A· 树+详情分栏</div>
+    <div class="mockup-body" style="display:flex; padding:0; min-height:220px; font-family: system-ui, sans-serif;">
+      <div style="width:45%; border-right:1px solid rgba(255,255,255,0.1);">
+        <div style="padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.06); font-size:12px; color:#888; display:flex; justify-content:space-between;">
+          <span>🔍 搜索 WBS...</span>
+          <span>➕ 新建</span>
+        </div>
+        <div style="padding:6px 0; font-size:13px;">
+          <div style="padding:5px 14px; display:flex; align-items:center; gap:6px; background:rgba(59,130,246,0.1); border-left:2px solid #60a5fa;">
+            <span style="color:#888;">▼</span>
+            <span style="color:#88C0D0; font-size:11px;">CY</span>
+            <span style="font-weight:500;">朝阳旗舰店</span>
+            <span style="margin-left:auto; color:#888; font-size:11px;">45%</span>
+          </div>
+          <div style="padding:5px 14px; padding-left:28px; display:flex; align-items:center; gap:6px;">
+            <span style="color:#888;">▼</span>
+            <span style="color:#4ade80; width:6px; height:6px; border-radius:50%; background:#4ade80;"></span>
+            <span style="color:#81A1C1; font-size:11px;">01</span>
+            <span>店面装修</span>
+            <span style="margin-left:auto; color:#888; font-size:11px;">60%</span>
+          </div>
+          <div style="padding:5px 14px; padding-left:42px; display:flex; align-items:center; gap:6px;">
+            <span style="opacity:0; width:12px;">▸</span>
+            <span style="color:#4ade80; width:6px; height:6px; border-radius:50%; background:#4ade80;"></span>
+            <span style="color:#999; font-size:11px;">01</span>
+            <span>地面铺装</span>
+            <span style="margin-left:auto; font-size:11px; color:#4ade80;">✓ 完成</span>
+          </div>
+          <div style="padding:5px 14px; padding-left:42px; display:flex; align-items:center; gap:6px;">
+            <span style="opacity:0; width:12px;">▸</span>
+            <span style="width:6px; height:6px; border-radius:50%; background:#fbbf24;"></span>
+            <span style="color:#999; font-size:11px;">02</span>
+            <span>墙面施工</span>
+            <span style="margin-left:auto; font-size:11px; color:#fbbf24;">⏳ 待开始</span>
+          </div>
+          <div style="padding:5px 14px; display:flex; align-items:center; gap:6px;">
+            <span style="color:#888;">▶</span>
+            <span style="width:6px; height:6px; border-radius:50%; background:#60a5fa;"></span>
+            <span style="color:#81A1C1; font-size:11px;">02</span>
+            <span>设备采购安装</span>
+            <span style="margin-left:auto; color:#888; font-size:11px;">30%</span>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1; padding:12px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="font-size:14px; font-weight:500; margin:0;">店面装修</h4>
+          <span style="background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 10px; border-radius:12px; font-size:11px;">工作包</span>
+        </div>
+        <div style="font-size:13px; color:#888;">
+          <div style="margin-bottom:8px;">
+            <span style="color:#ccc;">WBS编码:</span>
+            <span style="color:#88C0D0; margin-left:6px;">CY-01</span>
+          </div>
+          <div style="margin-bottom:8px;">
+            <span style="color:#ccc;">负责人:</span>
+            <span style="margin-left:6px;">张伟</span>
+          </div>
+          <div style="margin-bottom:8px;">
+            <span style="color:#ccc;">计划:</span>
+            <span style="margin-left:6px;">2026-05-01 ~ 2026-06-30</span>
+          </div>
+          <div style="margin-bottom:8px;">
+            <span style="color:#ccc;">进度:</span>
+            <div style="display:inline-block; width:120px; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; vertical-align:middle; margin-left:6px;">
+              <div style="height:6px; background:#60a5fa; border-radius:3px; width:60%;"></div>
+            </div>
+            <span style="margin-left:6px;">60%</span>
+          </div>
+          <div style="margin-bottom:8px;">
+            <span style="color:#ccc;">子任务:</span>
+            <span style="margin-left:6px;">2/4 已完成</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px; color:#666; margin-top:4px;">参考: Nean Project (neanproject.com), Alios (alios.work)</p>
+</div>
+
+<div class="section">
+  <h3>2. WBS + 甘特联动（Orchesia / Jira Hierarchy / GanttPRO）</h3>
+  <p style="color: var(--text-muted, #888);">左侧 WBS 树，右侧甘特时间条。拖拽任务可同时更新 WBS 层级和时间。依赖关系以连线表示。</p>
+  
+  <div class="mockup">
+    <div class="mockup-header">参考模式 B· 树+甘特联动</div>
+    <div class="mockup-body" style="display:flex; padding:0; min-height:200px;">
+      <div style="width:35%; border-right:1px solid rgba(255,255,255,0.1); font-size:12px; padding:8px;">
+        <div style="padding:4px 8px;">▼ 🏗️ <b>朝阳旗舰店</b></div>
+        <div style="padding:4px 8px; padding-left:20px;">▼ 📦 <span style="color:#81A1C1;">01</span> 店面装修</div>
+        <div style="padding:3px 8px; padding-left:34px; background:rgba(255,255,255,0.03); border-radius:4px;">✓ 地面铺装</div>
+        <div style="padding:3px 8px; padding-left:34px;">⏳ 墙面施工</div>
+        <div style="padding:3px 8px; padding-left:34px;">⏳ 天棚吊顶</div>
+        <div style="padding:3px 8px; padding-left:34px;">⏳ 门窗安装</div>
+        <div style="padding:4px 8px; padding-left:20px;">▶ 📦 <span style="color:#81A1C1;">02</span> 设备采购安装</div>
+      </div>
+      <div style="flex:1; overflow:hidden; font-size:11px;">
+        <div style="display:flex; padding:6px 12px; border-bottom:1px solid rgba(255,255,255,0.06); gap:0;">
+          <span style="flex:1; text-align:center; color:#888;">5月</span>
+          <span style="flex:1; text-align:center; color:#888;">6月</span>
+          <span style="flex:1; text-align:center; color:#888;">7月</span>
+        </div>
+        <div style="padding:18px 0; position:relative;">
+          <div style="position:absolute; top:24px; left:15%; width:35%; height:14px; background:rgba(96,165,250,0.25); border-radius:3px; display:flex; align-items:center; padding:0 6px;">
+            <span style="font-size:9px; color:#ccc;">店面装修</span>
+          </div>
+          <div style="position:absolute; top:24px; left:15%; width:14%; height:14px; background:#4ade80; border-radius:3px;"></div>
+          <div style="position:absolute; top:50px; left:18%; width:10%; height:12px; background:#4ade80; border-radius:3px;"></div>
+          <div style="position:absolute; top:68px; left:28%; width:15%; height:12px; background:#fbbf24; border-radius:3px;"></div>
+          <div style="position:absolute; top:68px; left:43%; width:12%; height:12px; background:#fbbf24; border-radius:3px;"></div>
+          <div style="position:absolute; top:86px; left:55%; width:15%; height:12px; background:#fbbf24; border-radius:3px;"></div>
+          <div style="position:absolute; top:108px; left:45%; width:30%; height:14px; background:rgba(96,165,250,0.25); border-radius:3px; display:flex; align-items:center; padding:0 6px;">
+            <span style="font-size:9px; color:#ccc;">设备采购安装</span>
+          </div>
+          <div style="position:absolute; top:50px; left:40%; height:38px; border-left:1px dashed rgba(255,255,255,0.15);"></div>
+          <div style="position:absolute; top:50px; left:55%; height:56px; border-left:1px dashed rgba(255,255,255,0.15);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px; color:#666; margin-top:4px;">参考: Orchesia (orchesia.com), GanttPRO (ganttpro.com), Jira Hierarchy (upscale.tech)</p>
+</div>
+
+<div class="section">
+  <h3>3. 思维导图式 WBS（Easy WBS / Miro / Creately）</h3>
+  <p style="color: var(--text-muted, #888);">以思维导图/气泡图形式展示 WBS 层级，节点可拖拽重排、缩放。适合演示/规划阶段。</p>
+  
+  <div class="mockup">
+    <div class="mockup-header">参考模式 C· 思维导图</div>
+    <div class="mockup-body" style="min-height:160px; display:flex; align-items:center; justify-content:center; position:relative; padding:20px;">
+      <div style="text-align:center;">
+        <div style="background:#60a5fa; color:#fff; border-radius:8px; padding:6px 16px; font-weight:600; display:inline-block; font-size:14px;">朝阳旗舰店</div>
+        <div style="display:flex; gap:20px; margin-top:20px; justify-content:center;">
+          <div>
+            <div style="width:0; height:16px; border-left:2px solid rgba(255,255,255,0.2); margin:0 auto;"></div>
+            <div style="background:rgba(96,165,250,0.2); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:6px 14px; font-size:12px;">📦 店面装修</div>
+            <div style="display:flex; gap:8px; margin-top:12px; justify-content:center;">
+              <div>
+                <div style="width:0; height:10px; border-left:1px solid rgba(255,255,255,0.15); margin:0 auto;"></div>
+                <div style="background:rgba(74,222,128,0.15); border-radius:6px; padding:4px 10px; font-size:11px;">✓ 地面铺装</div>
+              </div>
+              <div>
+                <div style="width:0; height:10px; border-left:1px solid rgba(255,255,255,0.15); margin:0 auto;"></div>
+                <div style="background:rgba(251,191,36,0.15); border-radius:6px; padding:4px 10px; font-size:11px;">⏳ 墙面施工</div>
+              </div>
+              <div>
+                <div style="width:0; height:10px; border-left:1px solid rgba(255,255,255,0.15); margin:0 auto;"></div>
+                <div style="background:rgba(251,191,36,0.15); border-radius:6px; padding:4px 10px; font-size:11px;">⏳ 天棚吊顶</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div style="width:0; height:16px; border-left:2px solid rgba(255,255,255,0.2); margin:0 auto;"></div>
+            <div style="background:rgba(96,165,250,0.2); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:6px 14px; font-size:12px;">📦 设备采购安装</div>
+          </div>
+          <div>
+            <div style="width:0; height:16px; border-left:2px solid rgba(255,255,255,0.2); margin:0 auto;"></div>
+            <div style="background:rgba(96,165,250,0.2); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:6px 14px; font-size:12px;">📦 验收交付</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px; color:#666; margin-top:4px;">参考: Easy WBS / Redmine (easy8.com), Miro (miro.com), Creately (creately.com)</p>
+</div>
+
+<div class="section">
+  <h3>4. 表格式 WBS（Asana / Monday.com / ClickUp）</h3>
+  <p style="color: var(--text-muted, #888);">可排序表格，缩进表达层级。支持多列（状态/优先级/截止日/负责人），适合数据密集型团队。</p>
+  
+  <div class="mockup">
+    <div class="mockup-header">参考模式 D· 表格式层级</div>
+    <div class="mockup-body" style="padding:0; font-size:12px;">
+      <div style="display:flex; border-bottom:1px solid rgba(255,255,255,0.06); color:#888; padding:6px 10px;">
+        <span style="width:24px;"></span>
+        <span style="flex:2;">任务</span>
+        <span style="width:60px;">状态</span>
+        <span style="width:60px;">优先级</span>
+        <span style="width:80px;">负责人</span>
+        <span style="width:80px;">截止日</span>
+      </div>
+      <div style="padding:0 10px;">
+        <div style="display:flex; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+          <span style="width:24px;">▼</span>
+          <span style="flex:2; display:flex; align-items:center; gap:6px;">
+            <span style="width:16px; height:16px; background:#60a5fa; border-radius:4px;"></span>
+            <b>朝阳旗舰店</b>
+          </span>
+          <span style="width:60px;"><span style="background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 6px; border-radius:8px;">进行中</span></span>
+          <span style="width:60px; color:#f97316;">高</span>
+          <span style="width:80px;">张伟</span>
+          <span style="width:80px; color:#888;">08/30</span>
+        </div>
+        <div style="display:flex; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); padding-left:24px;">
+          <span style="width:24px;">▼</span>
+          <span style="flex:2; display:flex; align-items:center; gap:6px;">
+            <span style="width:16px; height:16px; background:#81A1C1; border-radius:4px;"></span>
+            <span style="color:#81A1C1; font-size:11px;">CY-01</span> 店面装修
+          </span>
+          <span style="width:60px;"><span style="background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 6px; border-radius:8px;">进行中</span></span>
+          <span style="width:60px; color:#f97316;">高</span>
+          <span style="width:80px;">张伟</span>
+          <span style="width:80px; color:#888;">06/30</span>
+        </div>
+        <div style="display:flex; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); padding-left:44px;">
+          <span style="width:24px;"></span>
+          <span style="flex:2; color:#888;">✓ 地面铺装</span>
+          <span style="width:60px;"><span style="background:rgba(74,222,128,0.2); color:#4ade80; padding:2px 6px; border-radius:8px;">已完成</span></span>
+          <span style="width:60px; color:#888;">中</span>
+          <span style="width:80px;">李工</span>
+          <span style="width:80px; color:#888;">06/15</span>
+        </div>
+        <div style="display:flex; align-items:center; padding:6px 0; padding-left:44px;">
+          <span style="width:24px;"></span>
+          <span style="flex:2; color:#888;">⏳ 墙面施工</span>
+          <span style="width:60px;"><span style="background:rgba(251,191,36,0.2); color:#fbbf24; padding:2px 6px; border-radius:8px;">待开始</span></span>
+          <span style="width:60px; color:#f97316;">高</span>
+          <span style="width:80px;">王工</span>
+          <span style="width:80px; color:#888;">06/25</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px; color:#666; margin-top:4px;">参考: Asana (asana.com), Monday.com, ClickUp (clickup.com)</p>
+</div>
+
+<div class="section">
+  <h3>技术选型参考 — React Tree 库</h3>
+  <table style="width:100%; border-collapse:collapse; font-size:12px; color:#ccc;">
+    <thead>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.1); text-align:left;">
+        <th style="padding:6px 8px;">库</th>
+        <th style="padding:6px 8px;">版本</th>
+        <th style="padding:6px 8px;">拖拽</th>
+        <th style="padding:6px 8px;">虚拟化</th>
+        <th style="padding:6px 8px;">分析</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:6px 8px;"><b>react-arborist</b></td>
+        <td style="padding:6px 8px;">v3.5</td>
+        <td style="padding:6px 8px;">✅</td>
+        <td style="padding:6px 8px;">✅</td>
+        <td style="padding:6px 8px;">功能最全，VS Code 级别树</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 8px;"><b>headless-tree</b></td>
+        <td style="padding:6px 8px;">v1.6</td>
+        <td style="padding:6px 8px;">✅</td>
+        <td style="padding:6px 8px;">✅ 灵活</td>
+        <td style="padding:6px 8px;">无头组件，3.1kB 核心</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 8px;"><b>react-sortable-tree</b></td>
+        <td style="padding:6px 8px;">v5.0</td>
+        <td style="padding:6px 8px;">✅</td>
+        <td style="padding:6px 8px;">✅</td>
+        <td style="padding:6px 8px;">成熟，react-dnd 驱动</td>
+      </tr>
+      <tr>
+        <td style="color:#888;">
+          <td style="padding:6px 8px;" colspan="4" style="padding:6px 8px;">项目已用 @dnd-kit（KanbanView）+ shadcn/ui，可自行实现树而不引入重量级依赖</td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.15); border-radius:8px; padding:16px;">
+  <h3 style="margin-top:0;">项目现有基础</h3>
+  <ul style="color:#ccc; font-size:13px; line-height:1.8;">
+    <li>✅ <code>SubTaskTree.tsx</code> — 已有 Table 树组件，可重用展开/折叠/缩进模式</li>
+    <li>✅ <code>TaskSubtaskNode</code> — 类型已支持 <code>children</code> 递归</li>
+    <li>✅ <code>nodeLevelType</code> 字段 — 已定义 WBS 层级（项目/工作包/任务/子任务）</li>
+    <li>✅ 已有 <code>@dnd-kit</code> 依赖 — KanbanView 已使用</li>
+    <li>✅ 设计规范定义 4 层上限 + 父任务进度汇总规则 + WBS 编码</li>
+    <li>🔲 需要新增：WBS 编码自动生成、进度汇总计算、工作包级别 CRUD</li>
+  </ul>
+</div>
+
+<p style="font-size:12px; color:#666; text-align:center; margin-top:24px;">哪种参考模式最接近你想要的？或者在浏览器中点击选择后告诉我你的倾向。</p>

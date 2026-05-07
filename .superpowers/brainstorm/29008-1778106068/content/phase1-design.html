@@ -1,0 +1,140 @@
+<h2>阶段 1 — WBS 树核心设计</h2>
+<p class="subtitle">在现有 SubTaskTree 基础上扩展 WBS 编码、进度汇总、工作包管理</p>
+
+<div class="section">
+  <h3>架构概览</h3>
+  
+  <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; font-size:12px;">
+    <div style="border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px; flex:1; min-width:160px;">
+      <div style="font-weight:600; margin-bottom:8px;">页面层</div>
+      <div style="color:#888; line-height:1.8;">
+        WBSView.tsx<br>
+        <span style="font-size:11px;">(路由: /projects/:id/wbs)</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">→</div>
+    <div style="border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px; flex:1; min-width:160px;">
+      <div style="font-weight:600; margin-bottom:8px;">视图切换层</div>
+      <div style="color:#888; line-height:1.8;">
+        WBSToolbar<br>
+        <span style="font-size:11px;">(树/甘特/网络图 Tab 切换)</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">→</div>
+    <div style="border:1px solid rgba(96,165,250,0.3); background:rgba(96,165,250,0.06); border-radius:8px; padding:12px; flex:1; min-width:160px;">
+      <div style="font-weight:600; margin-bottom:8px;">🌳 WBS 树</div>
+      <div style="color:#888; line-height:1.8;">
+        WBSTreeTable<br>
+        <span style="font-size:11px;">(扩展 SubTaskTree)</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; color:#888;">→</div>
+    <div style="border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px; flex:1; min-width:160px;">
+      <div style="font-weight:600; margin-bottom:8px;">数据层</div>
+      <div style="color:#888; line-height:1.8;">
+        api/wbs.ts<br>
+        <span style="font-size:11px;">+ 本地 store</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>组件树</h3>
+  <div style="font-family: 'SF Mono', 'Fira Code', monospace; font-size:12px; background:rgba(0,0,0,0.2); border-radius:8px; padding:16px; line-height:1.9;">
+    <span style="color:#60a5fa;">WBSView</span> ← 路由页面<br>
+    ├── <span style="color:#88C0D0;">WBSToolbar</span> ← 视图 Tab 切换 + 操作按钮<br>
+    │   ├── 视图切换（🌳树 / 📊甘特 / 🔗网络图）<br>
+    │   ├── 新建工作包按钮<br>
+    │   └── 展开/折叠全部<br>
+    ├── <span style="color:#88C0D0;">WBSTreeTable</span> ← <b style="color:#fbbf24;">核心组件</b><br>
+    │   ├── WBS编码列（自动生成: CY-01, CY-01.01）<br>
+    │   ├── 任务名称列（缩进+展开/折叠）<br>
+    │   ├── 状态列（色标 Badge）<br>
+    │   ├── 进度列（Progress bar + 汇总）<br>
+    │   ├── 负责人列<br>
+    │   ├── 计划日期列<br>
+    │   └── 操作列（编辑/添加子任务/删除）<br>
+    └── <span style="color:#88C0D0;">WBSTreeSidePanel</span> ← 选中节点详情<br>
+        ├── 基本信息编辑<br>
+        ├── 工期/前置任务设置<br>
+        └── 备注
+  </div>
+</div>
+
+<div class="section">
+  <h3>数据模型扩展</h3>
+  <div style="font-family: 'SF Mono', 'Fira Code', monospace; font-size:12px; background:rgba(0,0,0,0.2); border-radius:8px; padding:16px; line-height:1.6;">
+    <span style="color:#88C0D0;">interface WBSNode</span> {<br>
+    <span style="color:#888;">  // 继承现有 TaskSubtaskNode</span><br>
+    &nbsp;&nbsp;id: string<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">wbsCode</b>: string  <span style="color:#888;">// CY-01.01.01</span><br>
+    &nbsp;&nbsp;name: string<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">nodeLevel</b>: 'project' | 'workPackage' | 'task' | 'subtask'<br>
+    &nbsp;&nbsp;status: TaskStatus<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">progress</b>: number  <span style="color:#888;">// 子节点自动汇总</span><br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">plannedStart</b>: string | null<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">plannedEnd</b>: string | null<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">duration</b>: number  <span style="color:#888;">// 天</span><br>
+    &nbsp;&nbsp;assignee: string | null<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">parentId</b>: string | null<br>
+    &nbsp;&nbsp;<b style="color:#fbbf24;">children</b>: WBSNode[]<br>
+    }
+  </div>
+</div>
+
+<div class="section">
+  <h3>WBS 编码自动生成规则</h3>
+  <table style="width:100%; border-collapse:collapse; font-size:12px;">
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+      <td style="padding:6px 8px; color:#88C0D0;">CY-01</td>
+      <td style="padding:6px 8px;">项目前缀 + 两位序号</td>
+      <td style="padding:6px 8px;">工作包</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+      <td style="padding:6px 8px; color:#88C0D0;">CY-01.01</td>
+      <td style="padding:6px 8px;">父编码 + 两位序号</td>
+      <td style="padding:6px 8px;">任务</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 8px; color:#88C0D0;">CY-01.01.01</td>
+      <td style="padding:6px 8px;">递进编号</td>
+      <td style="padding:6px 8px;">子任务</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section">
+  <h3>进度汇总规则</h3>
+  <ul style="font-size:12px; color:#ccc; line-height:1.8;">
+    <li><b>叶子节点</b>（子任务）：手动填写进度 0-100%</li>
+    <li><b>父节点</b>（任务/工作包）：= 子节点进度均值（按必做子任务加权）</li>
+    <li><b>项目节点</b>：= 工作包进度均值</li>
+    <li>有未完成的必做子任务时，父节点状态不得为"已完成"</li>
+    <li>关键路径上的任务显示特殊标记</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>阶段 1 交付清单</h3>
+  <table style="width:100%; border-collapse:collapse; font-size:12px;">
+    <thead>
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+        <th style="padding:4px 8px; text-align:left;">模块</th>
+        <th style="padding:4px 8px; text-align:left;">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:4px 8px;">数据模型</td><td style="padding:4px 8px; color:#888;">WBSNode 类型 + wbsCode/nodeLevel/progress 字段</td></tr>
+      <tr><td style="padding:4px 8px;">WBS 编码</td><td style="padding:4px 8px; color:#888;">自动生成 + 重排序时重编码</td></tr>
+      <tr><td style="padding:4px 8px;">WBSTreeTable</td><td style="padding:4px 8px; color:#888;">树形表格 + 展开/折叠 + 状态/进度/负责人列</td></tr>
+      <tr><td style="padding:4px 8px;">进度汇总</td><td style="padding:4px 8px; color:#888;">父子进度联动计算</td></tr>
+      <tr><td style="padding:4px 8px;">WBSToolbar</td><td style="padding:4px 8px; color:#888;">视图切换 + 新建工作包 + 展开全部</td></tr>
+      <tr><td style="padding:4px 8px;">WBSTreeSidePanel</td><td style="padding:4px 8px; color:#888;">节点详情 + 工期/依赖编辑</td></tr>
+      <tr><td style="padding:4px 8px;">API</td><td style="padding:4px 8px; color:#888;">WBS 树 CRUD 接口</td></tr>
+      <tr><td style="padding:4px 8px;">路由</td><td style="padding:4px 8px; color:#888;">/projects/:id/wbs + 任务详情 WBS 标签嵌入</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="font-size:12px; color:#888; text-align:center; margin-top:16px;">阶段 1 的设计看起来是否合理？需要调整什么吗？</p>
