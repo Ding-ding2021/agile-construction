@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { Label } from '@/components/ui/label'
 import { DateTimePicker } from '@/components/ui/date-time-picker'
+import { PersonSelect } from '@/components/personnel/person-select'
 import type { TaskDetail } from '@/types/task'
 
 function toDate(s: string | undefined): Date | undefined {
@@ -17,6 +17,7 @@ function toStr(d: Date | undefined): string {
 }
 
 type TaskPeopleSaveData = {
+  assigneeId?: number
   assigneeName?: string
   plannedStartAt?: string
   plannedEndAt?: string
@@ -27,19 +28,16 @@ type TaskPeopleSaveData = {
 interface TaskPeopleProps {
   task: TaskDetail
   readonly?: boolean
-  assigneeOptions?: { id: string; name: string }[]
   onSave?: (code: string, data: TaskPeopleSaveData) => void
 }
 
-export default function TaskPeople({ task, readonly, assigneeOptions = [], onSave }: TaskPeopleProps) {
-  const [assigneeDraft, setAssigneeDraft] = useState(task.assigneeName ?? '')
+export default function TaskPeople({ task, readonly, onSave }: TaskPeopleProps) {
   const [startDraft, setStartDraft] = useState(task.plannedStartAt?.slice(0, 16) ?? '')
   const [endDraft, setEndDraft] = useState(task.plannedEndAt?.slice(0, 16) ?? '')
 
-  // Ensure current assignee is always in the options list
-  const allOptions = task.assigneeName && !assigneeOptions.some(o => o.name === task.assigneeName)
-    ? [{ id: task.assigneeName, name: task.assigneeName }, ...assigneeOptions]
-    : assigneeOptions
+  const handlePersonChange = (personId: number, personName: string) => {
+    onSave?.(task.code, { assigneeId: personId, assigneeName: personName })
+  }
 
   const handleDateSave = (type: 'start' | 'end', val: string) => {
     if (type === 'start') {
@@ -61,23 +59,20 @@ export default function TaskPeople({ task, readonly, assigneeOptions = [], onSav
 
   return (
     <Card className="p-4 space-y-3">
-      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">负责人 & 时间</h4>
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        负责人 & 时间
+      </h4>
 
       <div className="space-y-1.5">
         <Label className="text-xs text-muted-foreground">负责人</Label>
         {readonly ? (
           <span className="text-sm">{task.assigneeName || '—'}</span>
         ) : (
-          <NativeSelect
-            value={assigneeDraft}
-            onChange={e => setAssigneeDraft(e.target.value)}
-            size="sm"
-          >
-            <NativeSelectOption value="未分配">未分配</NativeSelectOption>
-            {allOptions.map(opt => (
-              <NativeSelectOption key={opt.id} value={opt.name}>{opt.name}</NativeSelectOption>
-            ))}
-          </NativeSelect>
+          <PersonSelect
+            value={task.assigneeId ? Number(task.assigneeId) : undefined}
+            onChange={handlePersonChange}
+            placeholder="选择负责人..."
+          />
         )}
       </div>
 

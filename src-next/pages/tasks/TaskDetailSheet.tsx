@@ -13,9 +13,7 @@ interface TaskDetailSheetProps {
 export default function TaskDetailSheet({ task, onClose }: TaskDetailSheetProps) {
   const navigate = useNavigate()
   const isLocalTask = task ? String(task.id).startsWith('new-') : false
-  const { task: detail, loading, assigneeOptions, reload } = useTaskDetail(
-    isLocalTask ? null : task?.code ?? null
-  )
+  const { task: detail, loading, reload } = useTaskDetail(isLocalTask ? null : (task?.code ?? null))
 
   const handleOpenPage = () => {
     if (task?.code) {
@@ -26,15 +24,18 @@ export default function TaskDetailSheet({ task, onClose }: TaskDetailSheetProps)
 
   return (
     <Sheet open={!!task} onOpenChange={open => !open && onClose()}>
-      <SheetContent className="w-full !max-w-[900px] sm:!max-w-[900px] p-0 flex flex-col" showCloseButton={false}>
+      <SheetContent
+        className="w-full !max-w-[900px] sm:!max-w-[900px] p-0 flex flex-col"
+        showCloseButton={false}
+      >
         {loading && (
           <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
             加载中...
           </div>
         )}
 
-        {(detail || isLocalTask) && (
-          isLocalTask ? (
+        {(detail || isLocalTask) &&
+          (isLocalTask ? (
             <div className="flex flex-col p-6 gap-6">
               <SheetHeader>
                 <SheetTitle>{task!.name}</SheetTitle>
@@ -67,11 +68,9 @@ export default function TaskDetailSheet({ task, onClose }: TaskDetailSheetProps)
               mode="sheet"
               onBack={onClose}
               onOpenPage={handleOpenPage}
-              assigneeOptions={assigneeOptions}
               onReload={reload}
             />
-          )
-        )}
+          ))}
 
         {!loading && !detail && !isLocalTask && task && (
           <div className="flex items-center justify-center h-full text-sm text-muted-foreground">

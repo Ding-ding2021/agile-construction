@@ -18,12 +18,10 @@ import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import type { TaskDetail, TaskStatus } from '@/types/task'
-import type { MemberOption } from '@/hooks/useTaskDetail'
 
 interface TaskDetailContentProps {
   task: TaskDetail
   mode: 'sheet' | 'page'
-  assigneeOptions?: MemberOption[]
   onBack: () => void
   onPrev?: () => void
   onNext?: () => void
@@ -43,7 +41,6 @@ export default function TaskDetailContent({
   onReload,
   onUploadAttachment,
   onBindStandard,
-  assigneeOptions,
 }: TaskDetailContentProps) {
   const pc = task.projectCode ?? ''
   const taskId = task.id as unknown as number
@@ -79,7 +76,12 @@ export default function TaskDetailContent({
   const handleAssigneeSave = useCallback(
     (
       _code: string,
-      data: { assigneeName?: string; plannedStartAt?: string; plannedEndAt?: string }
+      data: {
+        assigneeId?: number
+        assigneeName?: string
+        plannedStartAt?: string
+        plannedEndAt?: string
+      }
     ) => {
       if (!pc || !taskId) return
       api
@@ -173,12 +175,7 @@ export default function TaskDetailContent({
       {leftTab === 'detail' ? (
         <>
           <TaskBasicInfo task={task} readonly={readonly} onTagsChange={handleTagsChange} />
-          <TaskPeople
-            task={task}
-            readonly={readonly}
-            onSave={handleAssigneeSave}
-            assigneeOptions={assigneeOptions}
-          />
+          <TaskPeople task={task} readonly={false} onSave={handleAssigneeSave} />
           <Separator />
           <OperationTaskChecklist
             projectCode={pc}
