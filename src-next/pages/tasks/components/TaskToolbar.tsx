@@ -115,7 +115,11 @@ export function TaskToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="ghost" size="sm" className="h-7 text-[11px] gap-0.5 px-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-[11px] gap-0.5 px-2 text-muted-foreground"
+              >
                 <Filter className="size-3.5" />
                 筛选
                 {(statusFilter.length > 0 || slaFilter.length > 0) &&
@@ -160,7 +164,11 @@ export function TaskToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="ghost" size="sm" className="h-7 text-[11px] gap-0.5 px-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-[11px] gap-0.5 px-2 text-muted-foreground"
+              >
                 <ArrowUpDown className="size-3.5" />
                 排序
               </Button>
@@ -199,7 +207,7 @@ export function TaskToolbar({
               <Button
                 variant="ghost"
                 size="sm"
-                className={`h-7 text-[11px] gap-0.5 px-2 ${groupBy ? 'text-primary font-medium' : ''}`}
+                className={`h-7 text-[11px] gap-0.5 px-2 text-muted-foreground ${groupBy ? 'text-primary font-medium' : ''}`}
               >
                 <Layers className="size-3.5" />
                 分组{groupBy ? ` (${groupOptions.find(g => g.id === groupBy)?.label})` : ''}
