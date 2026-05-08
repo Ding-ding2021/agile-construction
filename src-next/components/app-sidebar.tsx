@@ -16,7 +16,6 @@ import {
   LayoutDashboard,
   CheckSquare,
   FolderKanban,
-  FileText,
   BookOpen,
   Users,
   HardHat,
@@ -57,14 +56,14 @@ const data = {
       ],
     },
     {
-      title: '模板中心',
-      url: '/templates',
-      icon: <FileText />,
-    },
-    {
       title: '标准管理',
       url: '/standards',
       icon: <BookOpen />,
+      items: [
+        { title: '标准文件', url: '/standards' },
+        { title: '项目模板', url: '/templates' },
+        { title: '任务模板', url: '/templates' },
+      ],
     },
     {
       title: '人员管理',
