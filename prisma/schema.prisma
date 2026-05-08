@@ -661,3 +661,32 @@ model CrewCertification {
 
   @@map("crew_certifications")
 }
+
+// ─── 采购订单表（Phase 4 - 采购管理）───────────────────────────
+model ProcurementOrder {
+  id              Int      @id @default(autoincrement())
+  orderCode       String   @unique @map("order_code")
+  title           String
+  projectCode     String   @map("project_code")
+  supplierId      Int      @map("supplier_id")
+  categoryId      Int?     @map("category_id")
+  quantity        Int      @default(1)
+  unit            String   @default("个")
+  budgetAmount    Float?   @map("budget_amount")
+  actualAmount    Float?   @map("actual_amount")
+  status          String   @default("draft") // draft→pending→approved→ordered→delivered→closed
+  priority        String   @default("medium") // low/medium/high/urgent
+  applicant       String   @map("applicant")
+  applicantName   String   @map("applicant_name")
+  assignee        String?
+  description     String?
+  taskCode        String?  @map("task_code") // 关联任务编码（P4-T2联动）
+  expectedDate    String?  @map("expected_date")
+  deliveredDate   String?  @map("delivered_date")
+  remark          String?
+  isDeleted       Boolean  @default(false) @map("is_deleted")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("procurement_orders")
+}

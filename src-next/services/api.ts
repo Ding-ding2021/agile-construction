@@ -465,3 +465,36 @@ export function deleteCrewCertification(crewId: number, certId: number) {
     method: 'DELETE',
   })
 }
+
+// ─── 采购管理 ──────────────────────────────────────────────────
+
+export function getProcurements(params?: Record<string, string>) {
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  return request<{ data: import('@/types/procurement').ProcurementOrder[] }>(`/procurement${qs}`)
+}
+
+export function getProcurement(id: number) {
+  return request<import('@/types/procurement').ProcurementOrder>(`/procurement/${id}`)
+}
+
+export function createProcurement(data: Record<string, unknown>) {
+  return request<import('@/types/procurement').ProcurementOrder>('/procurement', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateProcurement(id: number, data: Record<string, unknown>) {
+  return request<import('@/types/procurement').ProcurementOrder>(`/procurement/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export function deleteProcurement(id: number) {
+  return request<{ success: boolean }>(`/procurement/${id}`, { method: 'DELETE' })
+}
+
+export function getSuppliers() {
+  return request<{ data: import('@/types/procurement').Supplier[] }>('/procurement/suppliers')
+}

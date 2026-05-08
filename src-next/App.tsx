@@ -22,6 +22,8 @@ import StandardListPage from './pages/standards/StandardListPage'
 import StandardDetailPage from './pages/standards/StandardDetailPage'
 import CrewListPage from './pages/crews/CrewListPage'
 import CrewDetailPage from './pages/crews/CrewDetailPage'
+import ProcurementListPage from './pages/procurement/ProcurementListPage'
+import ProcurementDetailPage from './pages/procurement/ProcurementDetailPage'
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   constructor(props: { children: ReactNode }) {
@@ -70,6 +72,7 @@ function SiteHeaderWithTitle() {
     '/standards': '标准管理',
     '/personnel': '人员管理',
     '/crews': '工队管理',
+    '/procurement': '采购管理',
     '/settings': '系统设置',
   }
 
@@ -165,6 +168,8 @@ export default function App() {
                       <Route path="/personnel" element={<PersonnelListPage />} />
                       <Route path="/crews/:id" element={<CrewDetailPage />} />
                       <Route path="/crews" element={<CrewListPage />} />
+                      <Route path="/procurement/:id" element={<ProcurementDetailPage />} />
+                      <Route path="/procurement" element={<ProcurementListPage />} />
                       <Route path="/settings" element={<SettingsPage />} />
                     </Routes>
                   </main>

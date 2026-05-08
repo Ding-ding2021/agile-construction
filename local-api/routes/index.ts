@@ -16,6 +16,7 @@ import standardRoutes from './standards'
 import personnelRoutes from './personnel'
 import organizationRoutes from './organizations'
 import crewRoutes from './crews'
+import procurementRoutes from './procurement'
 import * as taskCtrl from '../controllers/tasks'
 
 const router = Router()
@@ -37,6 +38,9 @@ router.use('/audit/logs', auditRoutes)
 // 人员管理
 router.use('/personnel', personnelRoutes)
 router.use('/organizations', organizationRoutes)
+
+// 采购管理
+router.use('/procurement', procurementRoutes)
 
 // 日历
 router.use('/calendars', calendarRoutes)

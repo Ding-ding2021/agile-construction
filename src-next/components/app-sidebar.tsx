@@ -20,6 +20,7 @@ import {
   BookOpen,
   Users,
   HardHat,
+  ShoppingCart,
   Settings,
 } from 'lucide-react'
 
@@ -74,6 +75,11 @@ const data = {
       title: '工队管理',
       url: '/crews',
       icon: <HardHat />,
+    },
+    {
+      title: '采购管理',
+      url: '/procurement',
+      icon: <ShoppingCart />,
     },
     {
       title: '系统设置',
