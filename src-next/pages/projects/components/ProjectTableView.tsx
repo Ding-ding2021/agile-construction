@@ -28,12 +28,12 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>编码</TableHead>
-              <TableHead>项目名称</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead>进度</TableHead>
-              <TableHead>负责人</TableHead>
-              <TableHead>计划开业</TableHead>
+              <TableHead className="bg-muted/60">编码</TableHead>
+              <TableHead className="bg-muted/60">项目名称</TableHead>
+              <TableHead className="bg-muted/60">状态</TableHead>
+              <TableHead className="bg-muted/60">进度</TableHead>
+              <TableHead className="bg-muted/60">负责人</TableHead>
+              <TableHead className="bg-muted/60">计划开业</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -58,12 +58,12 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>编码</TableHead>
-              <TableHead>项目名称</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead>进度</TableHead>
-              <TableHead>负责人</TableHead>
-              <TableHead>计划开业</TableHead>
+              <TableHead className="bg-muted/60">编码</TableHead>
+              <TableHead className="bg-muted/60">项目名称</TableHead>
+              <TableHead className="bg-muted/60">状态</TableHead>
+              <TableHead className="bg-muted/60">进度</TableHead>
+              <TableHead className="bg-muted/60">负责人</TableHead>
+              <TableHead className="bg-muted/60">计划开业</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -83,12 +83,12 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-28">编码</TableHead>
-            <TableHead>项目名称</TableHead>
-            <TableHead className="w-24">状态</TableHead>
-            <TableHead className="w-32">进度</TableHead>
-            <TableHead className="w-24">负责人</TableHead>
-            <TableHead className="w-28">计划开业</TableHead>
+            <TableHead className="w-28 bg-muted/60">编码</TableHead>
+            <TableHead className="bg-muted/60">项目名称</TableHead>
+            <TableHead className="w-24 bg-muted/60">状态</TableHead>
+            <TableHead className="w-32 bg-muted/60">进度</TableHead>
+            <TableHead className="w-24 bg-muted/60">负责人</TableHead>
+            <TableHead className="w-28 bg-muted/60">计划开业</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

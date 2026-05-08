@@ -137,7 +137,11 @@ export default function ProjectListPage() {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
-                    <Button variant="ghost" size="sm" className="h-7 text-xs gap-0.5 px-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                    >
                       <Filter className="size-3.5" />
                       筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
                     </Button>
@@ -161,7 +165,11 @@ export default function ProjectListPage() {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
-                    <Button variant="ghost" size="sm" className="h-7 text-xs gap-0.5 px-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                    >
                       <ArrowUpDown className="size-3.5" />
                       排序
                     </Button>
