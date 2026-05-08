@@ -1,7 +1,15 @@
 import type { Request, Response } from 'express'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
-import { getProjectId } from './projectHelpers'
+
+function getProjectId(projectCode: string): number {
+  const db = getDatabase()
+  const project = db.prepare('SELECT id FROM projects WHERE code = ?').get(projectCode) as
+    | { id: number }
+    | undefined
+  if (!project) throw new ApiError('Project not found', 'NOT_FOUND', 404)
+  return project.id
+}
 
 export function instantiateFromTemplate(req: Request, res: Response): void {
   const db = getDatabase()

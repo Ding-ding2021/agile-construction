@@ -5,51 +5,6 @@ import { ApiError } from '../middleware/error'
 import { extractProjectCode } from './projectHelpers'
 
 const TASK_COLUMNS = [
-  't.id as id',
-  'project_id as projectId',
-  't.code as code',
-  't.name as name',
-  't.status as status',
-  'assignee_id as assigneeId',
-  'assignee_name as assigneeName',
-  'start_date as plannedStartAt',
-  'due_date as plannedEndAt',
-  'parent_id as parentId',
-  'node_level_type as nodeLevelType',
-  'priority',
-  't.progress as progress',
-  'task_type as taskType',
-  'source_type as sourceType',
-  't.risk_level as riskLevel',
-  'sla_status as slaStatus',
-  't.description as description',
-  'required_flag as requiredFlag',
-  'milestone_flag as milestoneFlag',
-  'owner_role as ownerRole',
-  'assignee_type as assigneeType',
-  'brand_id as brandId',
-  'store_id as storeId',
-  'actual_start_date as actualStartAt',
-  'actual_end_date as actualEndAt',
-  'blocked_reason as blockedReason',
-  'remind_count as remindCount',
-  'tags',
-  'work_package_id as workPackageId',
-  'sla_rule_id as slaRuleId',
-  'planned_work_hours as plannedWorkHours',
-  'actual_work_hours as actualWorkHours',
-  'standard_snapshot_id as standardSnapshotId',
-  'standard_binding_status as standardBindingStatus',
-  'snapshot_status as snapshotStatus',
-  'derived_from_task_id as derivedFromTaskId',
-  'is_rectification as isRectification',
-  'rectification_reason as rectificationReason',
-  'close_reason as closeReason',
-  'reopen_count as reopenCount',
-  'created_by as createdBy',
-  't.created_at as createdAt',
-  'updated_by as updatedBy',
-  't.updated_at as updatedAt',
   'project_tasks.id',
   'project_tasks.project_id as projectId',
   'project_tasks.code',
@@ -320,8 +275,8 @@ export function getTaskTree(req: Request, res: Response, _next: NextFunction): v
 
   const rows = db
     .prepare(
-      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks t
-       LEFT JOIN projects p ON p.id = t.project_id
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
        WHERE project_id = ?`
     )
     .all(projectId) as Record<string, unknown>[]
