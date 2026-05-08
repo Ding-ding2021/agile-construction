@@ -47,7 +47,7 @@ interface TaskToolbarProps {
   groupOptions: { id: string; label: string }[]
   columnDefs: ColumnDef[]
   onToggleColumn: (id: string) => void
-  onNewTask: () => void
+  onNewTask?: () => void
 }
 
 export function TaskToolbar({
@@ -233,11 +233,15 @@ export function TaskToolbar({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="w-px h-4 bg-border" />
-        <Button size="sm" className="h-7 text-xs" onClick={onNewTask}>
-          <Plus className="size-3.5" />
-          新建任务
-        </Button>
+        {onNewTask && (
+          <>
+            <div className="w-px h-4 bg-border" />
+            <Button size="sm" className="h-7 text-xs" onClick={onNewTask}>
+              <Plus className="size-3.5" />
+              新建任务
+            </Button>
+          </>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
