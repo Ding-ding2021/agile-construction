@@ -309,6 +309,16 @@ export function deleteRule(standardId: number, clauseId: number, ruleId: number)
   )
 }
 
+export function instantiateFromTemplate(projectCode: string, templateId: number) {
+  return request<{ success: boolean; taskCount: number; taskIds: number[] }>(
+    `/projects/${projectCode}/instantiate`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ templateId }),
+    }
+  )
+}
+
 export function getTemplates() {
   return request<{ data: import('@/types/template').ProjectTemplate[] }>('/templates')
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
-import { Users, Target, ArrowUpRight, ClipboardList, Settings } from 'lucide-react'
+import { Users, Target, ArrowUpRight, ClipboardList, Settings, Sparkles } from 'lucide-react'
+import { InstantiateDialog } from '@/pages/projects/components/InstantiateDialog'
 import { PROJECT_STATUS_STYLE } from '@/pages/projects/constants/project-styles'
 import type { ProjectDetail } from '@/types/project-detail'
 
@@ -19,6 +20,11 @@ interface TabOverviewProps {
 
 export function TabOverview({ project, loading }: TabOverviewProps) {
   const navigate = useNavigate()
+  const [showInstantiate, setShowInstantiate] = useState(false)
+
+  const handleInstantiateSuccess = (taskCount: number) => {
+    alert(`成功生成 ${taskCount} 个任务`)
+  }
 
   const metrics: MetricCardData[] = useMemo(() => {
     if (!project) return []
@@ -145,6 +151,14 @@ export function TabOverview({ project, loading }: TabOverviewProps) {
           </CardHeader>
           <CardContent className="space-y-2">
             <Button
+              variant="default"
+              className="w-full justify-start gap-2"
+              onClick={() => setShowInstantiate(true)}
+            >
+              <Sparkles className="size-4" />
+              从模板生成任务
+            </Button>
+            <Button
               variant="outline"
               className="w-full justify-start gap-2"
               onClick={() => navigate(`/projects/${project.code}/wbs`)}
@@ -181,6 +195,12 @@ export function TabOverview({ project, loading }: TabOverviewProps) {
               <ArrowUpRight className="size-3 ml-auto" />
             </Button>
           </CardContent>
+          <InstantiateDialog
+            projectCode={project.code}
+            open={showInstantiate}
+            onOpenChange={setShowInstantiate}
+            onSuccess={handleInstantiateSuccess}
+          />
         </Card>
       </div>
     </div>

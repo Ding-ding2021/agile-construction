@@ -9,6 +9,7 @@ import logRoutes from './logs'
 import auditRoutes from './audit'
 import wbsRoutes from './wbs'
 import calendarRoutes from './calendar'
+import instantiationRoutes from './instantiation'
 import templateRoutes from './templates'
 import taskTemplateRoutes from './task-templates'
 import standardRoutes from './standards'
@@ -43,5 +44,6 @@ router.use('/calendars', calendarRoutes)
 router.use('/templates', templateRoutes)
 router.use('/task-templates', taskTemplateRoutes)
 router.use('/standards', standardRoutes)
+router.use('/projects', instantiationRoutes)
 
 export default router
