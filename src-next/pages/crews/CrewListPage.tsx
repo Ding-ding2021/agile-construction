@@ -348,13 +348,13 @@ export default function CrewListPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[180px]">工队名称</TableHead>
-                  <TableHead className="w-[100px]">编码</TableHead>
-                  <TableHead className="w-[100px]">负责人</TableHead>
-                  <TableHead className="w-[60px]">人数</TableHead>
-                  <TableHead className="w-[70px]">评级</TableHead>
-                  <TableHead className="w-[70px]">状态</TableHead>
-                  <TableHead className="w-[120px]">专长</TableHead>
+                  <TableHead className="w-[180px] bg-muted/60">工队名称</TableHead>
+                  <TableHead className="w-[100px] bg-muted/60">编码</TableHead>
+                  <TableHead className="w-[100px] bg-muted/60">负责人</TableHead>
+                  <TableHead className="w-[60px] bg-muted/60">人数</TableHead>
+                  <TableHead className="w-[70px] bg-muted/60">评级</TableHead>
+                  <TableHead className="w-[70px] bg-muted/60">状态</TableHead>
+                  <TableHead className="w-[120px] bg-muted/60">专长</TableHead>
                   <TableHead className="w-24">操作</TableHead>
                 </TableRow>
               </TableHeader>

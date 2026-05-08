@@ -205,12 +205,12 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[35%]">任务名称</TableHead>
-              <TableHead className="w-[15%]">编码</TableHead>
-              <TableHead className="w-[12%]">状态</TableHead>
-              <TableHead className="w-[12%]">负责人</TableHead>
-              <TableHead className="w-[16%]">进度</TableHead>
-              <TableHead className="w-[10%]">层级</TableHead>
+              <TableHead className="w-[35%] bg-muted/60">任务名称</TableHead>
+              <TableHead className="w-[15%] bg-muted/60">编码</TableHead>
+              <TableHead className="w-[12%] bg-muted/60">状态</TableHead>
+              <TableHead className="w-[12%] bg-muted/60">负责人</TableHead>
+              <TableHead className="w-[16%] bg-muted/60">进度</TableHead>
+              <TableHead className="w-[10%] bg-muted/60">层级</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>{tree.roots.map(root => renderTree(root, 0))}</TableBody>

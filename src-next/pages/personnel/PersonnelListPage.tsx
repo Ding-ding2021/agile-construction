@@ -689,7 +689,7 @@ export default function PersonnelListPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-10">
+                    <TableHead className="w-10 bg-muted/60">
                       <Checkbox
                         checked={allSelected ? true : someSelected ? 'indeterminate' : false}
                         onCheckedChange={toggleAll}
@@ -701,7 +701,7 @@ export default function PersonnelListPage() {
                         {col.label}
                       </ResizableHead>
                     ))}
-                    <TableHead className="w-24">操作</TableHead>
+                    <TableHead className="w-24 bg-muted/60">操作</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -927,7 +927,7 @@ function ResizableHead({
     <th
       ref={thRef}
       data-slot="table-head"
-      className="h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground relative"
+      className="h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground relative bg-muted/60"
       style={{ width: width ? `${width}px` : undefined }}
     >
       {children}

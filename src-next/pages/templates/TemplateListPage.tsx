@@ -178,13 +178,13 @@ export default function TemplateListPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>模板名称</TableHead>
-              <TableHead>编码</TableHead>
-              <TableHead>品牌</TableHead>
-              <TableHead>店型</TableHead>
-              <TableHead>版本</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead className="text-right">操作</TableHead>
+              <TableHead className="bg-muted/60">模板名称</TableHead>
+              <TableHead className="bg-muted/60">编码</TableHead>
+              <TableHead className="bg-muted/60">品牌</TableHead>
+              <TableHead className="bg-muted/60">店型</TableHead>
+              <TableHead className="bg-muted/60">版本</TableHead>
+              <TableHead className="bg-muted/60">状态</TableHead>
+              <TableHead className="text-right bg-muted/60">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

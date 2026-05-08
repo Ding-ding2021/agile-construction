@@ -188,12 +188,12 @@ export default function StandardListPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>编码</TableHead>
-              <TableHead>名称</TableHead>
-              <TableHead>品牌</TableHead>
-              <TableHead>店型</TableHead>
-              <TableHead>来源</TableHead>
-              <TableHead>状态</TableHead>
+              <TableHead className="bg-muted/60">编码</TableHead>
+              <TableHead className="bg-muted/60">名称</TableHead>
+              <TableHead className="bg-muted/60">品牌</TableHead>
+              <TableHead className="bg-muted/60">店型</TableHead>
+              <TableHead className="bg-muted/60">来源</TableHead>
+              <TableHead className="bg-muted/60">状态</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

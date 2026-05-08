@@ -408,13 +408,13 @@ export default function ProcurementListPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[150px]">订单编码</TableHead>
-                  <TableHead className="w-[180px]">标题</TableHead>
-                  <TableHead className="w-[100px]">金额</TableHead>
-                  <TableHead className="w-[80px]">状态</TableHead>
-                  <TableHead className="w-[70px]">优先级</TableHead>
-                  <TableHead className="w-[80px]">申请人</TableHead>
-                  <TableHead className="w-[100px]">创建日期</TableHead>
+                  <TableHead className="w-[150px] bg-muted/60">订单编码</TableHead>
+                  <TableHead className="w-[180px] bg-muted/60">标题</TableHead>
+                  <TableHead className="w-[100px] bg-muted/60">金额</TableHead>
+                  <TableHead className="w-[80px] bg-muted/60">状态</TableHead>
+                  <TableHead className="w-[70px] bg-muted/60">优先级</TableHead>
+                  <TableHead className="w-[80px] bg-muted/60">申请人</TableHead>
+                  <TableHead className="w-[100px] bg-muted/60">创建日期</TableHead>
                   <TableHead className="w-24">操作</TableHead>
                 </TableRow>
               </TableHeader>

@@ -150,7 +150,7 @@ function ResizableHead({
     <th
       ref={thRef}
       data-slot="table-head"
-      className="h-12 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground relative"
+      className="h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground relative bg-muted/60"
       style={{ width: width ? `${width}px` : undefined }}
     >
       {children}
@@ -178,7 +178,7 @@ export function TaskTableView({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-10">
+            <TableHead className="w-10 bg-muted/60">
               <Checkbox checked={!!allSelected} onCheckedChange={onToggleAll} aria-label="全选" />
             </TableHead>
             {visibleColumns.map(col => (
