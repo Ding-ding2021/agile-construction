@@ -611,3 +611,53 @@ model StandardRule {
 
   @@map("standard_rules")
 }
+
+// ─── 工队管理表（Phase 5 - 工队管理）───────────────────────────
+model Crew {
+  id          Int              @id @default(autoincrement())
+  name        String
+  code        String           @unique
+  leaderName  String?          @map("leader_name")
+  leaderPhone String?          @map("leader_phone")
+  memberCount Int              @default(0) @map("member_count")
+  rating      String?          // 优秀 / 良好 / 一般
+  status      String           @default("active") // active / inactive
+  speciality  String?          // 专长领域
+  workCities  String?          // JSON: string[]
+  isDeleted   Boolean          @default(false) @map("is_deleted")
+  members     CrewMember[]
+  certificates CrewCertification[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("crews")
+}
+
+model CrewMember {
+  id         Int      @id @default(autoincrement())
+  crewId     Int      @map("crew_id")
+  personId   Int      @map("person_id")
+  role       String   // 队长 / 副队长 / 队员
+  joinDate   String?  @map("join_date")
+  crew       Crew     @relation(fields: [crewId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([crewId, personId])
+  @@map("crew_members")
+}
+
+model CrewCertification {
+  id          Int      @id @default(autoincrement())
+  crewId      Int      @map("crew_id")
+  certType    String   @map("cert_type") // 资质证书 / 安全许可证 / 营业执照
+  certName    String   @map("cert_name")
+  certNumber  String?  @map("cert_number")
+  issueDate   String?  @map("issue_date")
+  expireDate  String?  @map("expire_date")
+  status      String   @default("valid") // valid / expiring / expired
+  fileUrl     String?  @map("file_url")
+  crew        Crew     @relation(fields: [crewId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("crew_certifications")
+}

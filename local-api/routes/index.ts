@@ -15,6 +15,7 @@ import taskTemplateRoutes from './task-templates'
 import standardRoutes from './standards'
 import personnelRoutes from './personnel'
 import organizationRoutes from './organizations'
+import crewRoutes from './crews'
 import * as taskCtrl from '../controllers/tasks'
 
 const router = Router()
@@ -39,6 +40,9 @@ router.use('/organizations', organizationRoutes)
 
 // 日历
 router.use('/calendars', calendarRoutes)
+
+// 工队管理
+router.use('/crews', crewRoutes)
 
 // 模板中心
 router.use('/templates', templateRoutes)

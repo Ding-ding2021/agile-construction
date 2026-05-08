@@ -19,6 +19,7 @@ import {
   FileText,
   BookOpen,
   Users,
+  HardHat,
   Settings,
 } from 'lucide-react'
 
@@ -68,6 +69,11 @@ const data = {
       title: '人员管理',
       url: '/personnel',
       icon: <Users />,
+    },
+    {
+      title: '工队管理',
+      url: '/crews',
+      icon: <HardHat />,
     },
     {
       title: '系统设置',

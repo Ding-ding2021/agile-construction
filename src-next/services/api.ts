@@ -383,3 +383,85 @@ export function updateTaskTemplate(id: number, data: Record<string, unknown>) {
 export function deleteTaskTemplate(id: number) {
   return request<{ success: boolean }>(`/task-templates/${id}`, { method: 'DELETE' })
 }
+
+// ─── 工队管理 ──────────────────────────────────────────────────
+
+export function getCrews() {
+  return request<{ data: import('@/types/crew').CrewItem[] }>('/crews')
+}
+
+export function getCrew(id: number) {
+  return request<import('@/types/crew').CrewItem>(`/crews/${id}`)
+}
+
+export function createCrew(data: import('@/types/crew').CrewFormData) {
+  return request<import('@/types/crew').CrewItem>('/crews', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateCrew(id: number, data: Partial<import('@/types/crew').CrewFormData>) {
+  return request<import('@/types/crew').CrewItem>(`/crews/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export function deleteCrew(id: number) {
+  return request<{ success: boolean }>(`/crews/${id}`, { method: 'DELETE' })
+}
+
+export function getCrewMembers(crewId: number) {
+  return request<{ data: import('@/types/crew').CrewMemberItem[] }>(`/crews/${crewId}/members`)
+}
+
+export function addCrewMember(
+  crewId: number,
+  data: { personId: number; role: string; joinDate?: string }
+) {
+  return request<import('@/types/crew').CrewMemberItem>(`/crews/${crewId}/members`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function removeCrewMember(crewId: number, memberId: number) {
+  return request<{ success: boolean }>(`/crews/${crewId}/members/${memberId}`, { method: 'DELETE' })
+}
+
+export function getCrewCertifications(crewId: number) {
+  return request<{ data: import('@/types/crew').CrewCertificationItem[] }>(
+    `/crews/${crewId}/certifications`
+  )
+}
+
+export function createCrewCertification(
+  crewId: number,
+  data: import('@/types/crew').CrewCertFormData
+) {
+  return request<import('@/types/crew').CrewCertificationItem>(`/crews/${crewId}/certifications`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateCrewCertification(
+  crewId: number,
+  certId: number,
+  data: Partial<import('@/types/crew').CrewCertFormData>
+) {
+  return request<import('@/types/crew').CrewCertificationItem>(
+    `/crews/${crewId}/certifications/${certId}`,
+    {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }
+  )
+}
+
+export function deleteCrewCertification(crewId: number, certId: number) {
+  return request<{ success: boolean }>(`/crews/${crewId}/certifications/${certId}`, {
+    method: 'DELETE',
+  })
+}
