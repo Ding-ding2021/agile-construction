@@ -150,7 +150,7 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
                 <FileText className="size-3.5 text-muted-foreground" />
               </span>
             )}
-            <span className="text-xs font-normal text-foreground/80">{task.name}</span>
+            <span className="text-sm font-medium">{task.name}</span>
           </div>
         </TableCell>
         <TableCell className="text-xs text-muted-foreground">{task.code}</TableCell>

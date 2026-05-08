@@ -43,7 +43,7 @@ function renderCell(task: TaskItem, colId: string) {
     case 'code':
       return <span className="text-xs font-mono text-muted-foreground">{task.code}</span>
     case 'name':
-      return <span className="text-xs font-normal text-foreground/80">{task.name}</span>
+      return <span className="text-sm font-normal text-foreground/80">{task.name}</span>
     case 'status':
       return (
         <Badge
