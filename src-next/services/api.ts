@@ -68,10 +68,42 @@ export const api = {
     }),
 
   // -- 检查项 --
-  toggleChecklist: (projectCode: string, taskId: number, itemId: number, done: boolean) =>
-    request<unknown>(`/projects/${projectCode}/tasks/${taskId}/checklist/${itemId}`, {
-      method: 'PUT',
-      body: JSON.stringify({ done }),
+  getChecklist: (projectCode: string, taskId: number) =>
+    request<{ data: import('../types/task').TaskChecklistItem[] }>(
+      `/projects/${projectCode}/tasks/${taskId}/checklist`
+    ),
+
+  createChecklistItem: (
+    projectCode: string,
+    taskId: number,
+    data: { name: string; clauseId?: number; result?: string; inspector?: string; remark?: string }
+  ) =>
+    request<{ data: import('../types/task').TaskChecklistItem }>(
+      `/projects/${projectCode}/tasks/${taskId}/checklist`,
+      { method: 'POST', body: JSON.stringify(data) }
+    ),
+
+  updateChecklistItem: (
+    projectCode: string,
+    taskId: number,
+    itemId: number,
+    data: Partial<{
+      name: string
+      result: string
+      inspector: string
+      inspectedAt: string
+      remark: string
+      clauseId: number
+    }>
+  ) =>
+    request<{ data: import('../types/task').TaskChecklistItem }>(
+      `/projects/${projectCode}/tasks/${taskId}/checklist/${itemId}`,
+      { method: 'PUT', body: JSON.stringify(data) }
+    ),
+
+  deleteChecklistItem: (projectCode: string, taskId: number, itemId: number) =>
+    request<{ message: string }>(`/projects/${projectCode}/tasks/${taskId}/checklist/${itemId}`, {
+      method: 'DELETE',
     }),
 
   // -- 前置任务 --
@@ -93,11 +125,6 @@ export const api = {
     }),
 
   // -- 额外数据 --
-  getChecklist: (projectCode: string, taskId: number) =>
-    request<{ data: import('../types/task').TaskChecklistItem[] }>(
-      `/projects/${projectCode}/tasks/${taskId}/checklist`
-    ),
-
   getFlowLogs: (projectCode: string, taskId: number) =>
     request<{ data: import('../types/task').TaskFlowLog[] }>(
       `/projects/${projectCode}/tasks/${taskId}/logs`

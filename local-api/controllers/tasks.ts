@@ -430,6 +430,16 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
   const taskId = resolveTaskId(db, projectId, req.params.taskId)
   const body = req.body
 
+  if (body.status) {
+    const current = db
+      .prepare('SELECT status FROM project_tasks WHERE id = ? AND project_id = ?')
+      .get(taskId, projectId) as { status: string } | undefined
+    if (current) {
+      const guardMsg = guardStatusTransition(db, taskId, current.status, body.status)
+      if (guardMsg) throw new ApiError(guardMsg, 'STATUS_GUARD', 400)
+    }
+  }
+
   const ALLOWED_UPDATE_FIELDS = new Set([
     'status',
     'assigneeId',
@@ -540,4 +550,190 @@ export function deleteTask(req: Request, res: Response, _next: NextFunction): vo
   }
 
   res.status(204).end()
+}
+
+/** 查询前置任务依赖 */
+export function getTaskDependencies(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+
+  const predecessors = db
+    .prepare(
+      `SELECT r.id, r.from_task_id as fromTaskId, r.to_task_id as toTaskId,
+              r.relation_type as relationType,
+              ft.code as fromTaskCode, ft.name as fromTaskName, ft.status as fromTaskStatus
+       FROM task_relations r
+       JOIN project_tasks ft ON ft.id = r.from_task_id
+       WHERE r.to_task_id = ?
+       ORDER BY r.id`
+    )
+    .all(taskId)
+
+  const successors = db
+    .prepare(
+      `SELECT r.id, r.from_task_id as fromTaskId, r.to_task_id as toTaskId,
+              r.relation_type as relationType,
+              tt.code as toTaskCode, tt.name as toTaskName, tt.status as toTaskStatus
+       FROM task_relations r
+       JOIN project_tasks tt ON tt.id = r.to_task_id
+       WHERE r.from_task_id = ?
+       ORDER BY r.id`
+    )
+    .all(taskId)
+
+  res.json({ data: { predecessors, successors } })
+}
+
+/** 前置任务是否全部完成（守卫条件） */
+function checkPredecessorsDone(db: ReturnType<typeof getDatabase>, taskId: number): boolean {
+  const blockers = db
+    .prepare(
+      `SELECT COUNT(*) as cnt FROM task_relations r
+       JOIN project_tasks ft ON ft.id = r.from_task_id
+       WHERE r.to_task_id = ? AND r.relation_type = 'finish_start'
+       AND ft.status NOT IN ('已完成', '已关闭')`
+    )
+    .get(taskId) as { cnt: number }
+  return blockers.cnt === 0
+}
+
+/** 状态流转是否合法（状态机守卫） */
+const STATUS_TRANSITIONS: Record<string, string[]> = {
+  草稿: ['待分配'],
+  待分配: ['待执行'],
+  待执行: ['执行中'],
+  执行中: ['已暂停', '待提交'],
+  已暂停: ['执行中'],
+  待提交: ['待验收'],
+  待验收: ['不通过', '已完成'],
+  不通过: ['执行中'],
+  已完成: ['已关闭'],
+  已关闭: [],
+}
+
+function checkTransition(from: string, to: string): string | null {
+  const allowed = STATUS_TRANSITIONS[from]
+  if (!allowed) return `未知来源状态: ${from}`
+  if (!allowed.includes(to)) return `不允许从「${from}」流转到「${to}」`
+  return null
+}
+
+export function getTaskStateMachine(req: Request, res: Response, _next: NextFunction): void {
+  res.json({
+    transitions: STATUS_TRANSITIONS,
+    statuses: Object.keys(STATUS_TRANSITIONS),
+  })
+}
+
+/** 批量创建任务（支持模板实例化） */
+export function batchCreateTasks(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const tasks = req.body.tasks
+  if (!Array.isArray(tasks) || tasks.length === 0) {
+    throw new ApiError('tasks array is required', 'VALIDATION_ERROR', 400)
+  }
+
+  const insertStmt = db.prepare(`
+    INSERT INTO project_tasks (
+      project_id, code, name, status,
+      assignee_id, assignee_name,
+      start_date, due_date, parent_id, node_level_type,
+      priority, task_type, source_type, description,
+      required_flag, milestone_flag, owner_role, assignee_type,
+      created_by, created_at
+    ) VALUES (
+      @projectId, @code, @name, @status,
+      @assigneeId, @assigneeName,
+      @plannedStartAt, @plannedEndAt, @parentId, @nodeLevelType,
+      @priority, @taskType, @sourceType, @description,
+      @requiredFlag, @milestoneFlag, @ownerRole, @assigneeType,
+      @createdBy, @now
+    )
+  `)
+
+  const now = new Date().toISOString()
+  const createdIds: number[] = []
+
+  const insertMany = db.transaction((items: Record<string, unknown>[]) => {
+    for (const item of items) {
+      const info = insertStmt.run({
+        projectId,
+        code: item.code || '',
+        name: item.name || '',
+        status: item.status || '草稿',
+        assigneeId: item.assigneeId || '',
+        assigneeName: item.assigneeName || '待分配',
+        plannedStartAt: item.plannedStartAt || null,
+        plannedEndAt: item.plannedEndAt || null,
+        parentId: item.parentId || null,
+        nodeLevelType: item.nodeLevelType || 'task',
+        priority: item.priority || 'medium',
+        taskType: item.taskType || '标准任务',
+        sourceType: item.sourceType || (item.parentId ? 'template' : 'manual'),
+        description: item.description || null,
+        requiredFlag: item.requiredFlag ? 1 : 0,
+        milestoneFlag: item.milestoneFlag ? 1 : 0,
+        ownerRole: item.ownerRole || null,
+        assigneeType: item.assigneeType || null,
+        createdBy: item.createdBy || '系统',
+        now,
+      })
+      createdIds.push(Number(info.lastInsertRowid))
+    }
+  })
+
+  insertMany(tasks as Record<string, unknown>[])
+
+  const created = db
+    .prepare(
+      `SELECT ${TASK_COLUMNS_FULL} FROM project_tasks
+       LEFT JOIN projects p ON p.id = project_tasks.project_id
+       WHERE project_tasks.id IN (${createdIds.map(() => '?').join(',')})`
+    )
+    .all(...createdIds) as Record<string, unknown>[]
+
+  const parsed = created.map(row => {
+    const r = { ...row, tags: parseTagsField(row.tags) } as Record<string, unknown>
+    formatBoolField(r, BOOL_FIELDS)
+    addComputedFields(r, db)
+    return r
+  })
+
+  res.status(201).json({ data: parsed, count: parsed.length })
+}
+
+/** 状态变更时检查守卫条件 */
+function guardStatusTransition(
+  db: ReturnType<typeof getDatabase>,
+  taskId: number,
+  from: string,
+  to: string
+): string | null {
+  const guardErr = checkTransition(from, to)
+  if (guardErr) return guardErr
+
+  // 从"待执行"到"执行中"：必须有负责人
+  if (from === '待执行' && to === '执行中') {
+    const task = db.prepare('SELECT assignee_id FROM project_tasks WHERE id = ?').get(taskId) as
+      | {
+          assignee_id: string | null
+        }
+      | undefined
+    if (!task?.assignee_id) return '必须指定负责人后才能开始执行'
+  }
+
+  // 从"执行中"到"待提交"：前置任务必须完成
+  if (from === '执行中' && to === '待提交') {
+    if (!checkPredecessorsDone(db, taskId)) return '存在未完成的前置任务，请先完成前置任务'
+  }
+
+  return null
+}
+
+export { statusTransitionAllowed, checkPredecessorsDone }
+
+function statusTransitionAllowed(from: string, to: string): boolean {
+  return checkTransition(from, to) === null
 }

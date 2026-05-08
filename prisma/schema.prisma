@@ -282,16 +282,19 @@ model TaskRelation {
   @@map("task_relations")
 }
 
-// ─── 任务检查项表（P2-T1 独立实体） ────────────────────────────
+// ─── 任务检查项表（P2-T4 硬化独立实体） ────────────────────────
 model ChecklistItem {
-  id        Int      @id @default(autoincrement())
-  taskId    Int      @map("task_id")
-  label     String
-  done      Boolean  @default(false)
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  task      ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  id             Int         @id @default(autoincrement())
+  taskId         Int         @map("task_id")
+  clauseId       Int?        @map("clause_id")  // 关联标准条款（可空）
+  name           String
+  result         String?     // pass / fail / pending
+  inspector      String?
+  inspectedAt    DateTime?   @map("inspected_at")
+  remark         String?
+  task           ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
 
   @@index([taskId])
   @@map("checklist_items")

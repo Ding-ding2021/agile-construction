@@ -34,6 +34,15 @@ router.get('/:taskId/relations', relationCtrl.getRelations)
 router.post('/:taskId/relations', relationCtrl.createRelation)
 router.delete('/:taskId/relations/:relationId', relationCtrl.deleteRelation)
 
+// 前置任务依赖
+router.get('/:taskId/dependencies', taskCtrl.getTaskDependencies)
+
+// 批量创建
+router.post('/batch', taskCtrl.batchCreateTasks)
+
+// 状态机定义
+router.get('/state-machine', taskCtrl.getTaskStateMachine)
+
 // 催办
 router.post('/:taskId/remind', relationCtrl.remindTask)
 

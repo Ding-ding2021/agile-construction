@@ -1,6 +1,14 @@
 export type TaskStatus =
-  | '草稿' | '待分配' | '待执行' | '执行中' | '已暂停'
-  | '待提交' | '待验收' | '不通过' | '已完成' | '已关闭'
+  | '草稿'
+  | '待分配'
+  | '待执行'
+  | '执行中'
+  | '已暂停'
+  | '待提交'
+  | '待验收'
+  | '不通过'
+  | '已完成'
+  | '已关闭'
 
 export interface TaskItem {
   id: string
@@ -58,8 +66,12 @@ export interface TaskRelation {
 
 export interface TaskChecklistItem {
   id: string
-  label: string
-  done: boolean
+  name: string
+  result?: 'pass' | 'fail' | 'pending'
+  clauseId?: number | null
+  inspector?: string | null
+  inspectedAt?: string | null
+  remark?: string | null
 }
 
 export interface TaskSubmission {
@@ -93,8 +105,8 @@ export interface TaskDetail extends TaskItem {
   actualWorkHours?: number
   updatedBy?: string
   updatedAt?: string
-  executionStandards: string[]
-  acceptanceStandards: string[]
+  standardClauseIds: number[]
+  acceptanceClauseIds: number[]
   checklist: TaskChecklistItem[]
   standardBindingStatus?: string
   snapshotStatus?: string
