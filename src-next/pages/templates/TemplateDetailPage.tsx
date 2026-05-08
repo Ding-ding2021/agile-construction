@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ChevronLeft, Plus, Trash2, ArrowLeft } from 'lucide-react'
+import { ChevronLeft, Plus, Trash2, ArrowLeft, BookOpen } from 'lucide-react'
 import {
   getTemplate,
   getTaskTemplates,
@@ -36,8 +36,12 @@ import {
   addTemplateBinding,
   removeTemplateBinding,
   getTemplateBindings,
+  updateTaskTemplate,
+  getStandards,
+  getClauses,
 } from '@/services/api'
 import type { ProjectTemplate, TaskTemplate } from '@/types/template'
+import type { StandardItem, StandardClause } from '@/types/standard'
 import {
   TEMPLATE_STATUS_STYLE,
   TEMPLATE_STATUS_OPTIONS,
@@ -63,6 +67,13 @@ export default function TemplateDetailPage() {
   const [newTaskParent, setNewTaskParent] = useState('')
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+
+  const [showBinding, setShowBinding] = useState(false)
+  const [bindingTarget, setBindingTarget] = useState<TaskTemplate | null>(null)
+  const [allStandards, setAllStandards] = useState<StandardItem[]>([])
+  const [clauseMap, setClauseMap] = useState<Record<number, StandardClause[]>>({})
+  const [selectedExecClauses, setSelectedExecClauses] = useState<number[]>([])
+  const [selectedAcceptClauses, setSelectedAcceptClauses] = useState<number[]>([])
 
   const loadData = useCallback(async () => {
     if (!numericId) return
@@ -140,6 +151,63 @@ export default function TemplateDetailPage() {
     } catch (err) {
       console.warn('Failed to create task template:', err)
     }
+  }
+
+  const openBindingDialog = async (tt: TaskTemplate) => {
+    setBindingTarget(tt)
+    const binding = tt.standardBinding as
+      | { executionStandardIds?: number[]; acceptanceStandardIds?: number[] }
+      | undefined
+    setSelectedExecClauses(binding?.executionStandardIds ?? [])
+    setSelectedAcceptClauses(binding?.acceptanceStandardIds ?? [])
+    try {
+      const stdRes = await getStandards()
+      setAllStandards(stdRes.data)
+      const map: Record<number, StandardClause[]> = {}
+      await Promise.all(
+        stdRes.data.map(async s => {
+          try {
+            const cRes = await getClauses(s.id)
+            map[s.id] = cRes.data
+          } catch {
+            map[s.id] = []
+          }
+        })
+      )
+      setClauseMap(map)
+    } catch {
+      setAllStandards([])
+    }
+    setShowBinding(true)
+  }
+
+  const handleSaveBinding = async () => {
+    if (!bindingTarget) return
+    try {
+      await updateTaskTemplate(bindingTarget.id, {
+        standardBinding: JSON.stringify({
+          executionStandardIds: selectedExecClauses,
+          acceptanceStandardIds: selectedAcceptClauses,
+        }),
+      })
+      setShowBinding(false)
+      const bindRes = await getTemplateBindings(numericId)
+      setBindings(bindRes.data)
+    } catch (err) {
+      console.warn('Failed to save binding:', err)
+    }
+  }
+
+  const toggleExecClause = (clauseId: number) => {
+    setSelectedExecClauses(prev =>
+      prev.includes(clauseId) ? prev.filter(id => id !== clauseId) : [...prev, clauseId]
+    )
+  }
+
+  const toggleAcceptClause = (clauseId: number) => {
+    setSelectedAcceptClauses(prev =>
+      prev.includes(clauseId) ? prev.filter(id => id !== clauseId) : [...prev, clauseId]
+    )
   }
 
   const getLevelLabel = (level: string) => {
@@ -254,13 +322,14 @@ export default function TemplateDetailPage() {
                 <TableHead>编码</TableHead>
                 <TableHead>层级</TableHead>
                 <TableHead>版本</TableHead>
+                <TableHead>标准绑定</TableHead>
                 <TableHead className="w-20">操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {bindings.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-sm text-muted-foreground py-6">
+                  <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-6">
                     暂未绑定任务模板，点击"绑定已有"或"新建任务模板"
                   </TableCell>
                 </TableRow>
@@ -280,6 +349,25 @@ export default function TemplateDetailPage() {
                     <TableCell>
                       <Button
                         variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs gap-1"
+                        onClick={() => openBindingDialog(tt)}
+                      >
+                        <BookOpen className="size-3" />
+                        {(() => {
+                          const b = tt.standardBinding as
+                            | { executionStandardIds?: number[]; acceptanceStandardIds?: number[] }
+                            | undefined
+                          const total =
+                            (b?.executionStandardIds?.length ?? 0) +
+                            (b?.acceptanceStandardIds?.length ?? 0)
+                          return total > 0 ? `${total} 条` : '配置'
+                        })()}
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
                         size="icon"
                         className="size-7 text-destructive"
                         onClick={() => setDeleteConfirm(tt.taskTemplateId)}
@@ -294,6 +382,103 @@ export default function TemplateDetailPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <Dialog open={showBinding} onOpenChange={setShowBinding}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>标准绑定配置</DialogTitle>
+            <DialogDescription>
+              {bindingTarget ? `为 "${bindingTarget.taskTemplateName}" 绑定标准条款` : ''}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {allStandards.length === 0 ? (
+              <div className="text-sm text-muted-foreground text-center py-4">
+                暂无标准，请先在标准管理模块创建
+              </div>
+            ) : (
+              allStandards.map(std => {
+                const clauses = clauseMap[std.id] || []
+                const execClauses = clauses.filter(
+                  c => c.clauseType === 'execution' || c.clauseType === 'general'
+                )
+                const acceptClauses = clauses.filter(
+                  c => c.clauseType === 'acceptance' || c.clauseType === 'general'
+                )
+                if (clauses.length === 0) return null
+                return (
+                  <Card key={std.id}>
+                    <CardHeader className="py-3">
+                      <CardTitle className="text-sm">{std.name}</CardTitle>
+                      <CardDescription className="text-xs">{std.code}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="py-2 space-y-3">
+                      {execClauses.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-muted-foreground mb-1.5">
+                            执行标准
+                          </div>
+                          <div className="space-y-1">
+                            {execClauses.map(clause => (
+                              <label
+                                key={clause.id}
+                                className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/50 rounded px-2 py-1"
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="size-4 accent-primary"
+                                  checked={selectedExecClauses.includes(clause.id)}
+                                  onChange={() => toggleExecClause(clause.id)}
+                                />
+                                <span className="text-xs font-mono text-muted-foreground">
+                                  {clause.code}
+                                </span>
+                                <span>{clause.title}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {acceptClauses.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-muted-foreground mb-1.5">
+                            验收标准
+                          </div>
+                          <div className="space-y-1">
+                            {acceptClauses.map(clause => (
+                              <label
+                                key={clause.id}
+                                className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/50 rounded px-2 py-1"
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="size-4 accent-primary"
+                                  checked={selectedAcceptClauses.includes(clause.id)}
+                                  onChange={() => toggleAcceptClause(clause.id)}
+                                />
+                                <span className="text-xs font-mono text-muted-foreground">
+                                  {clause.code}
+                                </span>
+                                <span>{clause.title}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )
+              })
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowBinding(false)}>
+              取消
+            </Button>
+            <Button onClick={handleSaveBinding}>保存</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={showAddTask} onOpenChange={setShowAddTask}>
         <DialogContent>

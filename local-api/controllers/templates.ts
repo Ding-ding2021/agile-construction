@@ -344,7 +344,8 @@ export function updateTaskTemplate(req: Request, res: Response, _next: NextFunct
         required_flag = COALESCE(?, required_flag),
         owner_role = COALESCE(?, owner_role),
         parent_template_code = COALESCE(?, parent_template_code),
-        sort_order = COALESCE(?, sort_order)
+        sort_order = COALESCE(?, sort_order),
+        standard_binding = COALESCE(?, standard_binding)
     WHERE id = ?
   `
   ).run(
@@ -355,6 +356,7 @@ export function updateTaskTemplate(req: Request, res: Response, _next: NextFunct
     body.ownerRole ?? null,
     body.parentTemplateCode ?? null,
     body.sortOrder ?? null,
+    body.standardBinding ?? null,
     id
   )
 
