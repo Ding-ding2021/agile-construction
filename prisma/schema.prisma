@@ -552,3 +552,59 @@ model CalendarException {
   @@index([calendarId])
   @@map("calendar_exceptions")
 }
+
+// ─── 标准管理表（Phase 2 - 标准管理基础）─────────────────────────
+model Standard {
+  id         Int              @id @default(autoincrement())
+  code       String           @unique
+  name       String
+  brand      String?
+  storeType  String?          @map("store_type")
+  sourceType String           @map("source_type") // brand / industry / supplier / project
+  status     String           @default("active") // active / inactive / draft
+  isDeleted  Boolean          @default(false) @map("is_deleted")
+  files      StandardFile[]
+  clauses    StandardClause[]
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  @@map("standards")
+}
+
+model StandardFile {
+  id          Int      @id @default(autoincrement())
+  standardId  Int      @map("standard_id")
+  fileName    String   @map("file_name")
+  fileVersion String   @map("file_version")
+  content     String?
+  standard    Standard @relation(fields: [standardId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("standard_files")
+}
+
+model StandardClause {
+  id         Int            @id @default(autoincrement())
+  standardId Int            @map("standard_id")
+  code       String         // 条款编号，同一标准内 unique
+  title      String
+  content    String?
+  clauseType String         @map("clause_type") // execution / acceptance / general
+  sortOrder  Int            @default(0) @map("sort_order")
+  standard   Standard       @relation(fields: [standardId], references: [id], onDelete: Cascade)
+  rules      StandardRule[]
+
+  @@unique([standardId, code])
+  @@map("standard_clauses")
+}
+
+model StandardRule {
+  id          Int            @id @default(autoincrement())
+  clauseId    Int            @map("clause_id")
+  judgeType   String         @map("judge_type") // boolean / range / enum
+  paramConfig String?        @map("param_config") // JSON
+  description String?
+  clause      StandardClause @relation(fields: [clauseId], references: [id], onDelete: Cascade)
+
+  @@map("standard_rules")
+}

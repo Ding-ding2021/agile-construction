@@ -197,6 +197,91 @@ export const calendarsApi = {
     ),
 }
 
+export function getStandards(params?: Record<string, string>) {
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  return request<{ data: import('@/types/standard').StandardItem[] }>(`/standards${qs}`)
+}
+
+export function getStandard(id: number) {
+  return request<import('@/types/standard').StandardItem>(`/standards/${id}`)
+}
+
+export function createStandard(data: Record<string, unknown>) {
+  return request<import('@/types/standard').StandardItem>('/standards', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateStandard(id: number, data: Record<string, unknown>) {
+  return request<import('@/types/standard').StandardItem>(`/standards/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export function deleteStandard(id: number) {
+  return request<{ success: boolean }>(`/standards/${id}`, { method: 'DELETE' })
+}
+
+export function getClauses(standardId: number) {
+  return request<{ data: import('@/types/standard').StandardClause[] }>(
+    `/standards/${standardId}/clauses`
+  )
+}
+
+export function createClause(standardId: number, data: Record<string, unknown>) {
+  return request<import('@/types/standard').StandardClause>(`/standards/${standardId}/clauses`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
+
+export function updateClause(standardId: number, clauseId: number, data: Record<string, unknown>) {
+  return request<import('@/types/standard').StandardClause>(
+    `/standards/${standardId}/clauses/${clauseId}`,
+    { method: 'PUT', body: JSON.stringify(data) }
+  )
+}
+
+export function deleteClause(standardId: number, clauseId: number) {
+  return request<{ success: boolean }>(`/standards/${standardId}/clauses/${clauseId}`, {
+    method: 'DELETE',
+  })
+}
+
+export function getRules(standardId: number, clauseId: number) {
+  return request<{ data: import('@/types/standard').StandardRule[] }>(
+    `/standards/${standardId}/clauses/${clauseId}/rules`
+  )
+}
+
+export function createRule(standardId: number, clauseId: number, data: Record<string, unknown>) {
+  return request<import('@/types/standard').StandardRule>(
+    `/standards/${standardId}/clauses/${clauseId}/rules`,
+    { method: 'POST', body: JSON.stringify(data) }
+  )
+}
+
+export function updateRule(
+  standardId: number,
+  clauseId: number,
+  ruleId: number,
+  data: Record<string, unknown>
+) {
+  return request<import('@/types/standard').StandardRule>(
+    `/standards/${standardId}/clauses/${clauseId}/rules/${ruleId}`,
+    { method: 'PUT', body: JSON.stringify(data) }
+  )
+}
+
+export function deleteRule(standardId: number, clauseId: number, ruleId: number) {
+  return request<{ success: boolean }>(
+    `/standards/${standardId}/clauses/${clauseId}/rules/${ruleId}`,
+    { method: 'DELETE' }
+  )
+}
+
 export function getTemplates() {
   return request<{ data: import('@/types/template').ProjectTemplate[] }>('/templates')
 }

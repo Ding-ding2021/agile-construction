@@ -11,6 +11,7 @@ import wbsRoutes from './wbs'
 import calendarRoutes from './calendar'
 import templateRoutes from './templates'
 import taskTemplateRoutes from './task-templates'
+import standardRoutes from './standards'
 import personnelRoutes from './personnel'
 import organizationRoutes from './organizations'
 import * as taskCtrl from '../controllers/tasks'
@@ -41,5 +42,6 @@ router.use('/calendars', calendarRoutes)
 // 模板中心
 router.use('/templates', templateRoutes)
 router.use('/task-templates', taskTemplateRoutes)
+router.use('/standards', standardRoutes)
 
 export default router

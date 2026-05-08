@@ -12,7 +12,15 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { useSettings } from '@/hooks/useSettings'
-import { LayoutDashboard, CheckSquare, FolderKanban, FileText, Users, Settings } from 'lucide-react'
+import {
+  LayoutDashboard,
+  CheckSquare,
+  FolderKanban,
+  FileText,
+  BookOpen,
+  Users,
+  Settings,
+} from 'lucide-react'
 
 const data = {
   user: {
@@ -50,6 +58,11 @@ const data = {
       title: '模板中心',
       url: '/templates',
       icon: <FileText />,
+    },
+    {
+      title: '标准管理',
+      url: '/standards',
+      icon: <BookOpen />,
     },
     {
       title: '人员管理',

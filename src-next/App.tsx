@@ -18,6 +18,8 @@ import { SiteHeader } from '@/components/site-header'
 import type { TaskItem } from '@/types/task'
 import TemplateListPage from './pages/templates/TemplateListPage'
 import TemplateDetailPage from './pages/templates/TemplateDetailPage'
+import StandardListPage from './pages/standards/StandardListPage'
+import StandardDetailPage from './pages/standards/StandardDetailPage'
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   constructor(props: { children: ReactNode }) {
@@ -63,6 +65,7 @@ function SiteHeaderWithTitle() {
     '/tasks': '任务管理',
     '/projects': '项目管理',
     '/templates': '模板中心',
+    '/standards': '标准管理',
     '/personnel': '人员管理',
     '/settings': '系统设置',
   }
@@ -153,6 +156,8 @@ export default function App() {
                       <Route path="/projects/:projectCode/wbs" element={<WBSView />} />
                       <Route path="/templates" element={<TemplateListPage />} />
                       <Route path="/templates/:id" element={<TemplateDetailPage />} />
+                      <Route path="/standards" element={<StandardListPage />} />
+                      <Route path="/standards/:id" element={<StandardDetailPage />} />
                       <Route path="/personnel/:id" element={<PersonnelDetailPage />} />
                       <Route path="/personnel" element={<PersonnelListPage />} />
                       <Route path="/settings" element={<SettingsPage />} />
