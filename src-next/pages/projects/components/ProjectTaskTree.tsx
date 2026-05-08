@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   Table,
   TableHeader,
@@ -13,6 +12,8 @@ import { Progress } from '@/components/ui/progress'
 import { ChevronRight, ChevronDown, FileText } from 'lucide-react'
 import { api } from '@/services/api'
 import { cn } from '@/lib/utils'
+import TaskDetailSheet from '@/pages/tasks/TaskDetailSheet'
+import type { TaskItem } from '@/types/task'
 
 interface FlatTask {
   id: number
@@ -43,17 +44,18 @@ interface ProjectTaskTreeProps {
 }
 
 export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
-  const navigate = useNavigate()
   const [tasks, setTasks] = useState<FlatTask[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null)
 
   useEffect(() => {
     setLoading(true)
     api
       .getTasks(projectCode)
       .then(res => {
-        const data = (res.data as unknown as Record<string, unknown>[]).map(r => ({
+        const raw = res.data as unknown as Record<string, unknown>[]
+        const data = raw.map(r => ({
           id: r.id as number,
           code: r.code as string,
           name: r.name as string,
@@ -85,6 +87,24 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
     })
   }, [])
 
+  const handleTaskClick = useCallback(
+    (task: FlatTask) => {
+      setSelectedTask({
+        id: task.id,
+        code: task.code,
+        name: task.name,
+        projectName: projectCode,
+        projectCode: projectCode,
+        status: task.status,
+        owner: task.assigneeName,
+        assigneeName: task.assigneeName,
+        priority: task.priority || 'medium',
+        progress: task.progress,
+      } as unknown as TaskItem)
+    },
+    [projectCode]
+  )
+
   const tree = useMemo(() => {
     const roots = tasks.filter(t => !t.parentId)
     const childMap = new Map<number, FlatTask[]>()
@@ -104,12 +124,19 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
     const indent = depth * 20
 
     return (
-      <TableRow key={task.id} className="hover:bg-muted/50">
+      <TableRow
+        key={task.id}
+        className="cursor-pointer hover:bg-muted/50"
+        onClick={() => handleTaskClick(task)}
+      >
         <TableCell>
           <div className="flex items-center gap-1" style={{ paddingLeft: indent }}>
             {hasChildren ? (
               <button
-                onClick={() => toggleExpand(task.id)}
+                onClick={e => {
+                  e.stopPropagation()
+                  toggleExpand(task.id)
+                }}
                 className="size-5 flex items-center justify-center hover:bg-muted rounded"
               >
                 {isExpanded ? (
@@ -123,12 +150,7 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
                 <FileText className="size-3.5 text-muted-foreground" />
               </span>
             )}
-            <button
-              className="text-sm font-medium hover:text-primary transition-colors text-left"
-              onClick={() => navigate(`/projects/${projectCode}/wbs?taskId=${task.id}`)}
-            >
-              {task.name}
-            </button>
+            <span className="text-sm font-medium">{task.name}</span>
           </div>
         </TableCell>
         <TableCell className="text-xs text-muted-foreground">{task.code}</TableCell>
@@ -178,20 +200,23 @@ export function ProjectTaskTree({ projectCode }: ProjectTaskTreeProps) {
   }
 
   return (
-    <div className="rounded-md border border-border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[35%]">任务名称</TableHead>
-            <TableHead className="w-[15%]">编码</TableHead>
-            <TableHead className="w-[12%]">状态</TableHead>
-            <TableHead className="w-[12%]">负责人</TableHead>
-            <TableHead className="w-[16%]">进度</TableHead>
-            <TableHead className="w-[10%]">层级</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>{tree.roots.map(root => renderTree(root, 0))}</TableBody>
-      </Table>
-    </div>
+    <>
+      <div className="rounded-md border border-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[35%]">任务名称</TableHead>
+              <TableHead className="w-[15%]">编码</TableHead>
+              <TableHead className="w-[12%]">状态</TableHead>
+              <TableHead className="w-[12%]">负责人</TableHead>
+              <TableHead className="w-[16%]">进度</TableHead>
+              <TableHead className="w-[10%]">层级</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>{tree.roots.map(root => renderTree(root, 0))}</TableBody>
+        </Table>
+      </div>
+      <TaskDetailSheet task={selectedTask} onClose={() => setSelectedTask(null)} />
+    </>
   )
 }

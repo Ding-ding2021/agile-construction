@@ -76,20 +76,8 @@ function SiteHeaderWithTitle() {
     '/settings': '系统设置',
   }
 
-  // 详情页：显示面包屑
+  // 详情页路径用 title 代替面包屑，详情页内部有自己的头部
   const segments = path.split('/').filter(Boolean)
-  if (
-    segments.length >= 2 &&
-    segments[0] === 'projects' &&
-    segments[1] !== undefined &&
-    segments[1] !== 'new'
-  ) {
-    const projectCode = segments[1]
-    return (
-      <SiteHeader breadcrumbs={[{ label: '项目管理', to: '/projects' }, { label: projectCode }]} />
-    )
-  }
-
   const basePath = '/' + segments.slice(0, 1).join('/')
   return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
 }
