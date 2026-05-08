@@ -50,8 +50,9 @@ export function PersonSelect({
 
   return (
     <Select
-      value={value ? String(value) : undefined}
+      value={value ? String(value) : null}
       onValueChange={v => {
+        if (!v) return
         const person = persons.find(p => p.id === Number(v))
         onChange(Number(v), person?.name ?? '')
       }}

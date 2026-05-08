@@ -88,10 +88,11 @@ export default function TaskDetailContent({
         .updateTask(pc, taskId, data)
         .then(() => {
           toast.success('已保存')
+          onReload?.()
         })
         .catch(() => toast.error('保存失败'))
     },
-    [pc, taskId]
+    [pc, taskId, onReload]
   )
 
   const handleRiskChange = useCallback(
