@@ -23,23 +23,15 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { Search, Plus } from 'lucide-react'
+import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 import {
   getProcurements,
   createProcurement,
@@ -211,8 +203,8 @@ export default function ProcurementListPage() {
             }
           />
 
-          <div className="flex items-center justify-end gap-4">
-            <InputGroup className="max-w-[200px]">
+          <div className="flex items-center justify-end gap-2">
+            <InputGroup className="max-w-[180px]">
               <InputGroupAddon align="inline-start">
                 <Search />
               </InputGroupAddon>
@@ -509,63 +501,17 @@ export default function ProcurementListPage() {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              共 {filtered.length} 条，第 {(page - 1) * pageSize + 1}-
-              {Math.min(page * pageSize, filtered.length)} 条
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Label
-                  htmlFor="rows-per-page"
-                  className="text-sm text-muted-foreground whitespace-nowrap"
-                >
-                  每页
-                </Label>
-                <Select value={String(pageSize)} onValueChange={v => setPageSize(Number(v))}>
-                  <SelectTrigger className="w-16 h-8" id="rows-per-page">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="20">20</SelectItem>
-                      <SelectItem value="50">50</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => setPage(p => Math.max(1, p - 1))}
-                      className={page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                    />
-                  </PaginationItem>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                    <PaginationItem key={p}>
-                      <PaginationLink
-                        onClick={() => setPage(p)}
-                        isActive={p === page}
-                        className="cursor-pointer"
-                      >
-                        {p}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                      className={
-                        page >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          </div>
+          <TaskPaginationBar
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            total={filtered.length}
+            rangeStart={(page - 1) * pageSize + 1}
+            rangeEnd={Math.min(page * pageSize, filtered.length)}
+            selectedCount={0}
+          />
         </div>
       </div>
     </div>

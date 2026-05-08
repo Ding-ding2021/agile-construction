@@ -23,17 +23,8 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -47,7 +38,8 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
-import { Search, Filter, Plus } from 'lucide-react'
+import { Search, Filter, ArrowUpDown, Plus } from 'lucide-react'
+import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 import { getCrews, createCrew, updateCrew, deleteCrew } from '@/services/api'
 import type { CrewItem, CrewFormData, CrewStatus } from '@/types/crew'
 import { CREW_STATUS_LABEL, CREW_RATING_OPTIONS } from '@/types/crew'
@@ -60,6 +52,8 @@ export default function CrewListPage() {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [statusFilter, setStatusFilter] = useState<string[]>([])
+  const [sortKey, setSortKey] = useState<'name'>('name')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [showDialog, setShowDialog] = useState(false)
   const [editCrew, setEditCrew] = useState<CrewItem | null>(null)
   const [formData, setFormData] = useState<CrewFormData>({ name: '' })
@@ -94,6 +88,10 @@ export default function CrewListPage() {
         c.code.toLowerCase().includes(search.toLowerCase()) ||
         (c.leaderName || '').toLowerCase().includes(search.toLowerCase())
     )
+    .sort((a, b) => {
+      const cmp = a.name.localeCompare(b.name)
+      return sortDir === 'asc' ? cmp : -cmp
+    })
 
   const totalPages = Math.ceil(filtered.length / pageSize)
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize)
@@ -204,7 +202,7 @@ export default function CrewListPage() {
             }
           />
 
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-2">
             <InputGroup className="max-w-[180px]">
               <InputGroupAddon align="inline-start">
                 <Search />
@@ -217,9 +215,15 @@ export default function CrewListPage() {
             </InputGroup>
             <div className="w-px h-4 bg-border" />
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 h-7 px-2 text-[11px] rounded-md hover:bg-muted transition-colors">
-                <Filter className="size-3.5" />
-                筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <Filter className="size-3.5" />
+                  筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-36">
                 <DropdownMenuGroup>
@@ -238,6 +242,38 @@ export default function CrewListPage() {
                     </DropdownMenuCheckboxItem>
                   ))}
                 </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <ArrowUpDown className="size-3.5" />
+                  排序
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-36">
+                <DropdownMenuCheckboxItem
+                  checked={sortKey === 'name' && sortDir === 'asc'}
+                  onCheckedChange={() => {
+                    setSortKey('name')
+                    setSortDir('asc')
+                  }}
+                >
+                  名称 ↑
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  checked={sortKey === 'name' && sortDir === 'desc'}
+                  onCheckedChange={() => {
+                    setSortKey('name')
+                    setSortDir('desc')
+                  }}
+                >
+                  名称 ↓
+                </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button size="sm" className="h-7 text-xs" onClick={openCreate}>
@@ -435,63 +471,17 @@ export default function CrewListPage() {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              共 {filtered.length} 条，第 {(page - 1) * pageSize + 1}-
-              {Math.min(page * pageSize, filtered.length)} 条
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Label
-                  htmlFor="rows-per-page"
-                  className="text-sm text-muted-foreground whitespace-nowrap"
-                >
-                  每页
-                </Label>
-                <Select value={String(pageSize)} onValueChange={v => setPageSize(Number(v))}>
-                  <SelectTrigger className="w-16 h-8" id="rows-per-page">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="20">20</SelectItem>
-                      <SelectItem value="50">50</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => setPage(p => Math.max(1, p - 1))}
-                      className={page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                    />
-                  </PaginationItem>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                    <PaginationItem key={p}>
-                      <PaginationLink
-                        onClick={() => setPage(p)}
-                        isActive={p === page}
-                        className="cursor-pointer"
-                      >
-                        {p}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                      className={
-                        page >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          </div>
+          <TaskPaginationBar
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            total={filtered.length}
+            rangeStart={(page - 1) * pageSize + 1}
+            rangeEnd={Math.min(page * pageSize, filtered.length)}
+            selectedCount={0}
+          />
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PageShell } from '@/components/page-shell'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import {
   Dialog,
@@ -21,26 +22,18 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import { Search, Plus } from 'lucide-react'
+import { Search, Plus, Filter, ArrowUpDown, Eye } from 'lucide-react'
 import { getTemplates, createTemplate } from '@/services/api'
 import type { ProjectTemplate } from '@/types/template'
 import { TEMPLATE_STATUS_STYLE, TEMPLATE_STATUS_OPTIONS } from '@/types/template'
+import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 
 const PAGE_SIZE = 10
 
@@ -50,6 +43,8 @@ export default function TemplateListPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [sortKey, setSortKey] = useState<'templateName' | 'brand'>('templateName')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [page, setPage] = useState(1)
 
   const [showCreate, setShowCreate] = useState(false)
@@ -74,11 +69,17 @@ export default function TemplateListPage() {
     loadData()
   }, [loadData])
 
-  const filtered = allItems.filter(item => {
-    const matchSearch = !search || item.templateName.toLowerCase().includes(search.toLowerCase())
-    const matchStatus = statusFilter === 'all' || item.status === statusFilter
-    return matchSearch && matchStatus
-  })
+  const filtered = allItems
+    .filter(item => {
+      const matchSearch = !search || item.templateName.toLowerCase().includes(search.toLowerCase())
+      const matchStatus = statusFilter === 'all' || item.status === statusFilter
+      return matchSearch && matchStatus
+    })
+    .sort((a, b) => {
+      const av = String(a[sortKey] ?? '').toLowerCase()
+      const bv = String(b[sortKey] ?? '').toLowerCase()
+      return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
+    })
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -125,53 +126,134 @@ export default function TemplateListPage() {
   }
 
   return (
-    <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
+    <PageShell>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold">模板中心</h1>
           <p className="text-sm text-muted-foreground mt-0.5">管理项目模板和任务模板</p>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus className="size-4 mr-1" />
-          新建模板
-        </Button>
       </div>
 
       <SectionCards metrics={metrics} cardSize="lg" />
 
-      <div className="flex items-center gap-3">
-        <InputGroup>
-          <InputGroupAddon>
-            <Search className="size-4" />
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder="搜索模板名称..."
-            value={search}
-            onChange={e => {
-              setSearch(e.target.value)
-              setPage(1)
-            }}
-          />
-        </InputGroup>
-        <Select
-          value={statusFilter}
-          onValueChange={v => {
-            setStatusFilter(v ?? 'all')
-            setPage(1)
-          }}
-        >
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="状态筛选" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部状态</SelectItem>
-            {TEMPLATE_STATUS_OPTIONS.map(opt => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex items-center justify-between gap-4">
+        <div />
+        <div className="flex items-center gap-2">
+          <InputGroup className="max-w-[180px]">
+            <InputGroupAddon align="inline-start">
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="搜索模板名称..."
+              value={search}
+              onChange={e => {
+                setSearch(e.target.value)
+                setPage(1)
+              }}
+            />
+          </InputGroup>
+          <div className="w-px h-4 bg-border" />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <Filter className="size-3.5" />
+                  状态
+                  {statusFilter !== 'all' &&
+                    ` (${TEMPLATE_STATUS_OPTIONS.find(o => o.value === statusFilter)?.label ?? statusFilter})`}
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={statusFilter === 'all'}
+                onCheckedChange={() => {
+                  setStatusFilter('all')
+                  setPage(1)
+                }}
+              >
+                全部状态
+              </DropdownMenuCheckboxItem>
+              {TEMPLATE_STATUS_OPTIONS.map(opt => (
+                <DropdownMenuCheckboxItem
+                  key={opt.value}
+                  checked={statusFilter === opt.value}
+                  onCheckedChange={() => {
+                    setStatusFilter(opt.value)
+                    setPage(1)
+                  }}
+                >
+                  {opt.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <ArrowUpDown className="size-3.5" />
+                  排序
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'templateName' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('templateName')
+                  setSortDir('asc')
+                  setPage(1)
+                }}
+              >
+                名称 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'templateName' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('templateName')
+                  setSortDir('desc')
+                  setPage(1)
+                }}
+              >
+                名称 ↓
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'brand' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('brand')
+                  setSortDir('asc')
+                  setPage(1)
+                }}
+              >
+                品牌 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'brand' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('brand')
+                  setSortDir('desc')
+                  setPage(1)
+                }}
+              >
+                品牌 ↓
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="w-px h-4 bg-border" />
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            <Plus className="size-3.5" />
+            新建
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-md border border-border">
@@ -231,7 +313,7 @@ export default function TemplateListPage() {
                         className="size-8"
                         onClick={() => navigate(`/templates/${item.id}`)}
                       >
-                        <Search className="size-4" />
+                        <Eye className="size-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -242,25 +324,17 @@ export default function TemplateListPage() {
         </Table>
       </div>
 
-      {totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious onClick={() => setPage(p => Math.max(1, p - 1))} />
-            </PaginationItem>
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink isActive={page === i + 1} onClick={() => setPage(i + 1)}>
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext onClick={() => setPage(p => Math.min(totalPages, p + 1))} />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+      <TaskPaginationBar
+        page={page}
+        totalPages={totalPages}
+        pageSize={PAGE_SIZE}
+        onPageChange={setPage}
+        onPageSizeChange={() => {}}
+        total={filtered.length}
+        rangeStart={(page - 1) * PAGE_SIZE + 1}
+        rangeEnd={Math.min(page * PAGE_SIZE, filtered.length)}
+        selectedCount={0}
+      />
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent>
@@ -306,6 +380,6 @@ export default function TemplateListPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageShell>
   )
 }

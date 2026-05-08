@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { PageShell } from '@/components/page-shell'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import {
   Table,
@@ -22,13 +23,11 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu'
 import {
   Select,
   SelectContent,
@@ -37,7 +36,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { Search, Plus } from 'lucide-react'
+import { Search, Plus, Filter, ArrowUpDown } from 'lucide-react'
 import { getStandards, createStandard } from '@/services/api'
 import type { StandardItem } from '@/types/standard'
 import {
@@ -45,6 +44,7 @@ import {
   STANDARD_STATUS_OPTIONS,
   STANDARD_STATUS_STYLE,
 } from '@/types/standard'
+import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 
 const PAGE_SIZE = 10
 
@@ -54,6 +54,8 @@ export default function StandardListPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [sourceFilter, setSourceFilter] = useState('all')
+  const [sortKey, setSortKey] = useState<'name' | 'code'>('name')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [page, setPage] = useState(1)
 
   const [showCreate, setShowCreate] = useState(false)
@@ -79,14 +81,20 @@ export default function StandardListPage() {
     loadData()
   }, [loadData])
 
-  const filtered = allItems.filter(item => {
-    const matchSearch =
-      !search ||
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.code.toLowerCase().includes(search.toLowerCase())
-    const matchSource = sourceFilter === 'all' || item.sourceType === sourceFilter
-    return matchSearch && matchSource
-  })
+  const filtered = allItems
+    .filter(item => {
+      const matchSearch =
+        !search ||
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.code.toLowerCase().includes(search.toLowerCase())
+      const matchSource = sourceFilter === 'all' || item.sourceType === sourceFilter
+      return matchSearch && matchSource
+    })
+    .sort((a, b) => {
+      const av = String(a[sortKey] ?? '').toLowerCase()
+      const bv = String(b[sortKey] ?? '').toLowerCase()
+      return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
+    })
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -136,52 +144,134 @@ export default function StandardListPage() {
   }
 
   return (
-    <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
+    <PageShell>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold">标准管理</h1>
           <p className="text-sm text-muted-foreground mt-0.5">管理营建标准、条款和规则项</p>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus className="size-4 mr-1" /> 新建标准
-        </Button>
       </div>
 
       <SectionCards metrics={metrics} cardSize="lg" />
 
-      <div className="flex items-center gap-3">
-        <InputGroup className="flex-1">
-          <InputGroupAddon>
-            <Search className="size-4" />
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder="搜索标准名称或编码..."
-            value={search}
-            onChange={e => {
-              setSearch(e.target.value)
-              setPage(1)
-            }}
-          />
-        </InputGroup>
-        <Select
-          value={sourceFilter}
-          onValueChange={v => {
-            setSourceFilter(v ?? 'all')
-            setPage(1)
-          }}
-        >
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="来源类型" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部来源</SelectItem>
-            {SOURCE_TYPE_OPTIONS.map(opt => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex items-center justify-between gap-4">
+        <div />
+        <div className="flex items-center gap-2">
+          <InputGroup className="max-w-[180px]">
+            <InputGroupAddon align="inline-start">
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="搜索标准名称或编码..."
+              value={search}
+              onChange={e => {
+                setSearch(e.target.value)
+                setPage(1)
+              }}
+            />
+          </InputGroup>
+          <div className="w-px h-4 bg-border" />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <Filter className="size-3.5" />
+                  来源
+                  {sourceFilter !== 'all' &&
+                    ` (${SOURCE_TYPE_OPTIONS.find(o => o.value === sourceFilter)?.label ?? sourceFilter})`}
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={sourceFilter === 'all'}
+                onCheckedChange={() => {
+                  setSourceFilter('all')
+                  setPage(1)
+                }}
+              >
+                全部来源
+              </DropdownMenuCheckboxItem>
+              {SOURCE_TYPE_OPTIONS.map(opt => (
+                <DropdownMenuCheckboxItem
+                  key={opt.value}
+                  checked={sourceFilter === opt.value}
+                  onCheckedChange={() => {
+                    setSourceFilter(opt.value)
+                    setPage(1)
+                  }}
+                >
+                  {opt.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                >
+                  <ArrowUpDown className="size-3.5" />
+                  排序
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'name' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('name')
+                  setSortDir('asc')
+                  setPage(1)
+                }}
+              >
+                名称 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'name' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('name')
+                  setSortDir('desc')
+                  setPage(1)
+                }}
+              >
+                名称 ↓
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'code' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('code')
+                  setSortDir('asc')
+                  setPage(1)
+                }}
+              >
+                编码 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'code' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('code')
+                  setSortDir('desc')
+                  setPage(1)
+                }}
+              >
+                编码 ↓
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="w-px h-4 bg-border" />
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            <Plus className="size-3.5" />
+            新建
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-md border border-border">
@@ -241,25 +331,17 @@ export default function StandardListPage() {
         </Table>
       </div>
 
-      {totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious onClick={() => setPage(p => Math.max(1, p - 1))} />
-            </PaginationItem>
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink isActive={page === i + 1} onClick={() => setPage(i + 1)}>
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext onClick={() => setPage(p => Math.min(totalPages, p + 1))} />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+      <TaskPaginationBar
+        page={page}
+        totalPages={totalPages}
+        pageSize={PAGE_SIZE}
+        onPageChange={setPage}
+        onPageSizeChange={() => {}}
+        total={filtered.length}
+        rangeStart={(page - 1) * PAGE_SIZE + 1}
+        rangeEnd={Math.min(page * PAGE_SIZE, filtered.length)}
+        selectedCount={0}
+      />
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent>
@@ -324,6 +406,6 @@ export default function StandardListPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageShell>
   )
 }

@@ -24,23 +24,15 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { Search, Filter, ArrowUpDown, Layers, Settings, Plus } from 'lucide-react'
+import { TaskPaginationBar } from '@/pages/tasks/components/TaskPaginationBar'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -388,7 +380,7 @@ export default function PersonnelListPage() {
               }
             />
 
-            <div className="flex items-center justify-end gap-4">
+            <div className="flex items-center justify-between gap-2">
               <InputGroup className="max-w-[180px]">
                 <InputGroupAddon align="inline-start">
                   <Search />
@@ -402,7 +394,11 @@ export default function PersonnelListPage() {
               <div className="w-px h-4 bg-border" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-7 text-[11px] gap-0.5 px-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                  >
                     <Filter className="size-3.5" />
                     筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
                   </Button>
@@ -428,7 +424,11 @@ export default function PersonnelListPage() {
               </DropdownMenu>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-7 text-[11px] gap-0.5 px-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+                  >
                     <ArrowUpDown className="size-3.5" />
                     排序
                   </Button>
@@ -477,7 +477,7 @@ export default function PersonnelListPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`h-7 text-[11px] gap-0.5 px-2 ${groupBy ? 'text-primary font-medium' : ''}`}
+                    className={`h-7 text-xs gap-0.5 px-2 text-muted-foreground ${groupBy ? 'text-primary font-medium' : ''}`}
                   >
                     <Layers className="size-3.5" />
                     分组{groupBy ? ` (${groupOptions.find(g => g.id === groupBy)?.label})` : ''}
@@ -816,66 +816,17 @@ export default function PersonnelListPage() {
               </Table>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                {selected.size > 0 && (
-                  <span className="font-medium text-foreground">已选 {selected.size} 条 / </span>
-                )}
-                共 {filtered.length} 条，第 {(page - 1) * pageSize + 1}-
-                {Math.min(page * pageSize, filtered.length)} 条
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Label
-                    htmlFor="rows-per-page"
-                    className="text-sm text-muted-foreground whitespace-nowrap"
-                  >
-                    每页
-                  </Label>
-                  <Select value={String(pageSize)} onValueChange={v => setPageSize(Number(v))}>
-                    <SelectTrigger className="w-16 h-8" id="rows-per-page">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="10">10</SelectItem>
-                        <SelectItem value="20">20</SelectItem>
-                        <SelectItem value="50">50</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
-                        className={page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                      />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                      <PaginationItem key={p}>
-                        <PaginationLink
-                          onClick={() => setPage(p)}
-                          isActive={p === page}
-                          className="cursor-pointer"
-                        >
-                          {p}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                        className={
-                          page >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            </div>
+            <TaskPaginationBar
+              page={page}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              onPageChange={setPage}
+              onPageSizeChange={setPageSize}
+              total={filtered.length}
+              rangeStart={(page - 1) * pageSize + 1}
+              rangeEnd={Math.min(page * pageSize, filtered.length)}
+              selectedCount={selected.size}
+            />
           </div>
         </div>
       </div>
