@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useWBSStore } from '@/store/wbsStore'
-import { WBSTreeTable } from '@/pages/wbs/components/WBSTreeTable'
-import { WBSGanttSvar } from '@/pages/wbs/components/WBSGanttSvar'
+import { WBSTreeTable } from '@/components/wbs-tree-table'
+import { WBSGantt } from '@/components/wbs-gantt'
 import { WBSTreeSidePanel } from '@/pages/wbs/components/WBSTreeSidePanel'
 import { cn } from '@/lib/utils'
 
@@ -57,7 +57,7 @@ export function EmbeddableWBS({
         {view === 'tree' && <WBSTreeTable projectCode={projectCode} />}
         {view === 'gantt' && (
           <div className="h-[400px]">
-            <WBSGanttSvar />
+            <WBSGantt />
           </div>
         )}
       </div>

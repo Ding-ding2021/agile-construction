@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ExternalLink } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
-import { WBSGanttSvar } from '@/pages/wbs/components/WBSGanttSvar'
+import { WBSGantt } from '@/components/wbs-gantt'
 import { useWBSStore } from '@/store/wbsStore'
 import { api } from '@/services/api'
 import type { ProjectMilestone } from '@/types/project-detail'
@@ -19,6 +22,7 @@ const MILESTONE_STATUS_STYLE: Record<string, string> = {
 }
 
 export function TabProgress({ projectCode }: TabProgressProps) {
+  const navigate = useNavigate()
   const loadTree = useWBSStore(s => s.loadTree)
   const flatNodes = useWBSStore(s => s.flatNodes)
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
@@ -83,13 +87,23 @@ export function TabProgress({ projectCode }: TabProgressProps) {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>甘特图</CardTitle>
-          <CardDescription>WBS 任务时序与依赖</CardDescription>
+        <CardHeader className="flex-row items-center justify-between gap-2">
+          <div>
+            <CardTitle>甘特图</CardTitle>
+            <CardDescription>WBS 任务时序与依赖</CardDescription>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/projects/${projectCode}/gantt`)}
+          >
+            <ExternalLink className="size-3.5" />
+            查看完整甘特图
+          </Button>
         </CardHeader>
         <CardContent className="px-0">
           <div className="h-[400px]">
-            <WBSGanttSvar />
+            <WBSGantt />
           </div>
         </CardContent>
       </Card>
