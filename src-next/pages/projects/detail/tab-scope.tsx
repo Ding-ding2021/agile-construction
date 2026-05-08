@@ -1,4 +1,4 @@
-import { EmbeddableWBS } from '@/components/embeddable-wbs'
+import { ProjectTaskTree } from '@/pages/projects/components/ProjectTaskTree'
 
 interface TabScopeProps {
   projectCode: string
@@ -7,7 +7,7 @@ interface TabScopeProps {
 export function TabScope({ projectCode }: TabScopeProps) {
   return (
     <div className="space-y-4">
-      <EmbeddableWBS projectCode={projectCode} />
+      <ProjectTaskTree projectCode={projectCode} />
     </div>
   )
 }
