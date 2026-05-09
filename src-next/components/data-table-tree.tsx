@@ -251,48 +251,28 @@ function DragHandle({ id }: { id: string | number }) {
   )
 }
 
-const INDENT_PER_LEVEL = 28
-
-function TreeCheckboxCellSimple<TData extends TreeDataItem>({
-  row,
-  selectedIds,
-  onToggle,
-}: {
-  row: Row<TData>
-  selectedIds: Set<string>
-  onToggle: (row: Row<TData>) => void
-}) {
-  const subRows = (row.subRows ?? []) as Row<TData>[]
-  const childStates = subRows.map(sr => collectCheckboxState(sr, selectedIds))
-  const allChecked = childStates.every(s => s.checked)
-  const someChecked = childStates.some(s => s.checked || s.indeterminate)
-  const checked = subRows.length === 0 ? selectedIds.has(row.id) : allChecked
-  const indeterminate = !allChecked && someChecked
-
-  return (
-    <div className="flex items-center justify-center">
-      <Checkbox
-        checked={checked}
-        indeterminate={indeterminate}
-        onCheckedChange={() => onToggle(row)}
-        aria-label="选择行"
-      />
-    </div>
-  )
+type TreeRowMetaFull = TreeRowMeta & {
+  checked: boolean
+  indeterminate: boolean
+  lineColor: LineColor
 }
 
 function DraggableTreeRow<TData extends TreeDataItem>({
   row,
-  selectedIds,
   onToggle,
+  treeMeta,
 }: {
   row: Row<TData>
   selectedIds: Set<string>
   onToggle: (row: Row<TData>) => void
+  treeMeta?: TreeRowMetaFull
 }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.id,
   })
+
+  let hasRenderedTreeCell = false
+
   return (
     <TableRow
       data-state={row.getIsSelected() && 'selected'}
@@ -315,7 +295,51 @@ function DraggableTreeRow<TData extends TreeDataItem>({
         if (cell.column.id === 'select') {
           return (
             <TableCell key={cell.id}>
-              <TreeCheckboxCellSimple row={row} selectedIds={selectedIds} onToggle={onToggle} />
+              <div className="flex items-center justify-center">
+                <Checkbox
+                  checked={treeMeta?.checked ?? false}
+                  indeterminate={treeMeta?.indeterminate}
+                  onCheckedChange={() => onToggle(row)}
+                  aria-label="选择行"
+                />
+              </div>
+            </TableCell>
+          )
+        }
+        if (!hasRenderedTreeCell) {
+          hasRenderedTreeCell = true
+          const depth = row.depth
+          const subRows = (row.subRows ?? []) as Row<TData>[]
+          const arrowState =
+            subRows.length > 0 ? (row.getIsExpanded() ? 'expanded' : 'collapsed') : 'none'
+          const depthTextClass =
+            depth >= 3
+              ? 'text-xs text-neutral-300'
+              : depth === 2
+                ? 'text-xs text-neutral-400'
+                : depth === 1
+                  ? 'text-sm text-muted-foreground'
+                  : 'text-sm font-medium text-foreground'
+          const lineColor = treeMeta?.lineColor ?? 'default'
+          const arrowLineColor = lineColor
+
+          return (
+            <TableCell key={cell.id}>
+              <div className="flex items-center gap-1">
+                <TreeNodeLines
+                  ancestorHasNext={treeMeta?.ancestorHasNext ?? []}
+                  isLastChild={treeMeta?.isLastChild ?? true}
+                  lineColor={lineColor}
+                />
+                <TreeToggleArrow
+                  state={arrowState as ArrowState}
+                  lineColor={arrowLineColor}
+                  onClick={() => row.toggleExpanded()}
+                />
+                <span className={depthTextClass}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </span>
+              </div>
             </TableCell>
           )
         }
@@ -447,6 +471,32 @@ export function TreeDataTable<TData extends TreeDataItem>({
     () => table.getRowModel().rows.map(r => r.id),
     [table]
   )
+
+  const treeMetaMap: Map<string, TreeRowMetaFull> = React.useMemo(() => {
+    const expandedRows = table.getExpandedRowModel().rows
+    if (expandedRows.length === 0) {
+      return new Map()
+    }
+    const baseMeta = computeTreeMetadata(expandedRows as Row<TData>[])
+    const fullMeta = new Map<string, TreeRowMetaFull>()
+    for (const row of expandedRows) {
+      const base = baseMeta.get(row.id)
+      if (!base) continue
+      const { checked, indeterminate } = collectCheckboxState(row, selectedIds)
+      fullMeta.set(row.id, {
+        ...base,
+        checked,
+        indeterminate,
+        lineColor: checked
+          ? ('checked' as const)
+          : indeterminate
+            ? ('indeterminate' as const)
+            : ('default' as const),
+      })
+    }
+    return fullMeta
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table.getState().expanded, data, selectedIds])
 
   function handleToggleRow(row: Row<TData>) {
     setSelectedIds(prev => {
@@ -596,6 +646,7 @@ export function TreeDataTable<TData extends TreeDataItem>({
                         row={row as Row<TData>}
                         selectedIds={selectedIds}
                         onToggle={handleToggleRow}
+                        treeMeta={treeMetaMap.get(row.id) as TreeRowMetaFull | undefined}
                       />
                     ))}
                   </SortableContext>
