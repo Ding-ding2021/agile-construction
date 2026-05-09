@@ -13,6 +13,7 @@ import PersonnelDetailPage from './pages/personnel/PersonnelDetailPage'
 import ProjectListPage from './pages/projects/ProjectListPage'
 import ProjectDetailPage from './pages/projects/ProjectDetailPage'
 import { WBSView } from '@/pages/wbs/WBSView'
+import { GanttPage } from '@/pages/projects/detail/gantt-page'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
 import type { TaskItem } from '@/types/task'
@@ -76,8 +77,12 @@ function SiteHeaderWithTitle() {
     '/settings': '系统设置',
   }
 
-  // 详情页路径用 title 代替面包屑，详情页内部有自己的头部
+  // 详情页自身有完整头部，隐藏 SiteHeader 避免重复
   const segments = path.split('/').filter(Boolean)
+  if (segments[0] === 'projects' && segments.length >= 2 && segments[1] !== 'new') {
+    return null
+  }
+
   const basePath = '/' + segments.slice(0, 1).join('/')
   return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
 }
@@ -148,6 +153,7 @@ export default function App() {
                       <Route path="/projects/new" element={<ProjectDetailPage />} />
                       <Route path="/projects/:projectCode" element={<ProjectDetailPage />} />
                       <Route path="/projects/:projectCode/wbs" element={<WBSView />} />
+                      <Route path="/projects/:projectCode/gantt" element={<GanttPage />} />
                       <Route path="/templates" element={<TemplateListPage />} />
                       <Route path="/templates/:id" element={<TemplateDetailPage />} />
                       <Route path="/standards" element={<StandardListPage />} />
