@@ -253,7 +253,7 @@ function DragHandle({ id }: { id: string | number }) {
 
 const INDENT_PER_LEVEL = 28
 
-function TreeCheckboxCell<TData extends TreeDataItem>({
+function TreeCheckboxCellSimple<TData extends TreeDataItem>({
   row,
   selectedIds,
   onToggle,
@@ -262,28 +262,15 @@ function TreeCheckboxCell<TData extends TreeDataItem>({
   selectedIds: Set<string>
   onToggle: (row: Row<TData>) => void
 }) {
-  const { checked, indeterminate } = collectCheckboxState(row, selectedIds)
-  const depth = row.depth
+  const subRows = (row.subRows ?? []) as Row<TData>[]
+  const childStates = subRows.map(sr => collectCheckboxState(sr, selectedIds))
+  const allChecked = childStates.every(s => s.checked)
+  const someChecked = childStates.some(s => s.checked || s.indeterminate)
+  const checked = subRows.length === 0 ? selectedIds.has(row.id) : allChecked
+  const indeterminate = !allChecked && someChecked
 
   return (
-    <div className="flex items-center gap-1" style={{ paddingLeft: depth * INDENT_PER_LEVEL }}>
-      <button
-        type="button"
-        onClick={e => {
-          e.stopPropagation()
-          row.toggleExpanded()
-        }}
-        className="flex size-5 items-center justify-center rounded hover:bg-muted transition-colors"
-        aria-label={row.getIsExpanded() ? '折叠' : '展开'}
-      >
-        {row.getCanExpand() && (
-          <ChevronRightIcon
-            className={`size-4 text-muted-foreground transition-transform duration-200 ${
-              row.getIsExpanded() ? 'rotate-90' : ''
-            }`}
-          />
-        )}
-      </button>
+    <div className="flex items-center justify-center">
       <Checkbox
         checked={checked}
         indeterminate={indeterminate}
@@ -328,7 +315,7 @@ function DraggableTreeRow<TData extends TreeDataItem>({
         if (cell.column.id === 'select') {
           return (
             <TableCell key={cell.id}>
-              <TreeCheckboxCell row={row} selectedIds={selectedIds} onToggle={onToggle} />
+              <TreeCheckboxCellSimple row={row} selectedIds={selectedIds} onToggle={onToggle} />
             </TableCell>
           )
         }
