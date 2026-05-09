@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import { Checkbox } from '@/components/ui/checkbox'
+import { PageLayout } from '@/components/page-layout'
 import {
   Dialog,
   DialogContent,
@@ -341,441 +342,389 @@ export default function PersonnelListPage() {
 
   return (
     <>
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-auto">
-          <div className="p-6 space-y-4">
-            <SectionCards
-              className="px-0"
-              cardSize="lg"
-              metrics={
-                [
-                  {
-                    title: '总人数',
-                    value: String(persons.length),
-                    trend: 'neutral',
-                    description: '全部人员',
-                  },
-                  {
-                    title: '在岗',
-                    value: String(persons.filter(p => p.personStatus === 1).length),
-                    trend: 'up',
-                    trendLabel: '在岗率',
-                    description: '当前在岗',
-                  },
-                  {
-                    title: '可分配',
-                    value: String(persons.filter(p => p.availabilityStatus === 1).length),
-                    trend: 'up' as const,
-                    trendLabel: '可用',
-                    description: '可分配任务',
-                  },
-                  {
-                    title: '高负载',
-                    value: String(persons.filter(p => p.criticalTaskCount > 0).length),
-                    trend: 'down',
-                    trendLabel: '预警',
-                    description: '关键任务超载',
-                  },
-                ] as MetricCardData[]
-              }
+      <PageLayout>
+        <SectionCards
+          className="px-0"
+          cardSize="lg"
+          metrics={
+            [
+              {
+                title: '总人数',
+                value: String(persons.length),
+                trend: 'neutral',
+                description: '全部人员',
+              },
+              {
+                title: '在岗',
+                value: String(persons.filter(p => p.personStatus === 1).length),
+                trend: 'up',
+                trendLabel: '在岗率',
+                description: '当前在岗',
+              },
+              {
+                title: '可分配',
+                value: String(persons.filter(p => p.availabilityStatus === 1).length),
+                trend: 'up' as const,
+                trendLabel: '可用',
+                description: '可分配任务',
+              },
+              {
+                title: '高负载',
+                value: String(persons.filter(p => p.criticalTaskCount > 0).length),
+                trend: 'down',
+                trendLabel: '预警',
+                description: '关键任务超载',
+              },
+            ] as MetricCardData[]
+          }
+        />
+
+        <div className="flex items-center justify-between gap-2">
+          <InputGroup className="max-w-[180px]">
+            <InputGroupAddon align="inline-start">
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="搜索人员..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
             />
-
-            <div className="flex items-center justify-between gap-2">
-              <InputGroup className="max-w-[180px]">
-                <InputGroupAddon align="inline-start">
-                  <Search />
-                </InputGroupAddon>
-                <InputGroupInput
-                  placeholder="搜索人员..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-              </InputGroup>
-              <div className="w-px h-4 bg-border" />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
-                  >
-                    <Filter className="size-3.5" />
-                    筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-36">
-                  <DropdownMenuGroup>
-                    <DropdownMenuLabel>按状态</DropdownMenuLabel>
-                    {[1, 2, 3, 4].map(s => (
-                      <DropdownMenuCheckboxItem
-                        key={s}
-                        checked={statusFilter.includes(s)}
-                        onCheckedChange={c =>
-                          setStatusFilter(
-                            c ? [...statusFilter, s] : statusFilter.filter(x => x !== s)
-                          )
-                        }
-                      >
-                        {PERSON_STATUS_LABEL[s]}
-                      </DropdownMenuCheckboxItem>
-                    ))}
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
-                  >
-                    <ArrowUpDown className="size-3.5" />
-                    排序
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-36">
-                  <DropdownMenuCheckboxItem
-                    checked={sortKey === 'name' && sortDir === 'asc'}
-                    onCheckedChange={() => {
-                      setSortKey('name')
-                      setSortDir('asc')
-                    }}
-                  >
-                    姓名 ↑
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={sortKey === 'name' && sortDir === 'desc'}
-                    onCheckedChange={() => {
-                      setSortKey('name')
-                      setSortDir('desc')
-                    }}
-                  >
-                    姓名 ↓
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={sortKey === 'createdAt' && sortDir === 'asc'}
-                    onCheckedChange={() => {
-                      setSortKey('createdAt')
-                      setSortDir('asc')
-                    }}
-                  >
-                    创建时间 ↑
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={sortKey === 'createdAt' && sortDir === 'desc'}
-                    onCheckedChange={() => {
-                      setSortKey('createdAt')
-                      setSortDir('desc')
-                    }}
-                  >
-                    创建时间 ↓
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`h-7 text-xs gap-0.5 px-2 text-muted-foreground ${groupBy ? 'text-primary font-medium' : ''}`}
-                  >
-                    <Layers className="size-3.5" />
-                    分组{groupBy ? ` (${groupOptions.find(g => g.id === groupBy)?.label})` : ''}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-36">
-                  <DropdownMenuCheckboxItem
-                    checked={groupBy === null}
-                    onCheckedChange={() => setGroupBy(null)}
-                  >
-                    不分组
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuSeparator />
-                  {groupOptions.map(opt => (
-                    <DropdownMenuCheckboxItem
-                      key={opt.id}
-                      checked={groupBy === opt.id}
-                      onCheckedChange={() => setGroupBy(opt.id)}
-                    >
-                      {opt.label}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div className="w-px h-4 bg-border" />
-              <Button size="sm" className="h-7 text-xs" onClick={openCreate}>
-                <Plus className="size-3.5" />
-                新增人员
+          </InputGroup>
+          <div className="w-px h-4 bg-border" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+              >
+                <Filter className="size-3.5" />
+                筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon-sm" className="size-7 text-muted-foreground">
-                    <Settings className="size-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-44">
-                  <DropdownMenuGroup>
-                    <DropdownMenuLabel>显示字段</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {columnDefs.map(col => (
-                      <DropdownMenuCheckboxItem
-                        key={col.id}
-                        checked={col.visible}
-                        onCheckedChange={() => toggleColumn(col.id)}
-                      >
-                        {col.label}
-                      </DropdownMenuCheckboxItem>
-                    ))}
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>按状态</DropdownMenuLabel>
+                {[1, 2, 3, 4].map(s => (
+                  <DropdownMenuCheckboxItem
+                    key={s}
+                    checked={statusFilter.includes(s)}
+                    onCheckedChange={c =>
+                      setStatusFilter(c ? [...statusFilter, s] : statusFilter.filter(x => x !== s))
+                    }
+                  >
+                    {PERSON_STATUS_LABEL[s]}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
+              >
+                <ArrowUpDown className="size-3.5" />
+                排序
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'name' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('name')
+                  setSortDir('asc')
+                }}
+              >
+                姓名 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'name' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('name')
+                  setSortDir('desc')
+                }}
+              >
+                姓名 ↓
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'createdAt' && sortDir === 'asc'}
+                onCheckedChange={() => {
+                  setSortKey('createdAt')
+                  setSortDir('asc')
+                }}
+              >
+                创建时间 ↑
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={sortKey === 'createdAt' && sortDir === 'desc'}
+                onCheckedChange={() => {
+                  setSortKey('createdAt')
+                  setSortDir('desc')
+                }}
+              >
+                创建时间 ↓
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`h-7 text-xs gap-0.5 px-2 text-muted-foreground ${groupBy ? 'text-primary font-medium' : ''}`}
+              >
+                <Layers className="size-3.5" />
+                分组{groupBy ? ` (${groupOptions.find(g => g.id === groupBy)?.label})` : ''}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuCheckboxItem
+                checked={groupBy === null}
+                onCheckedChange={() => setGroupBy(null)}
+              >
+                不分组
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuSeparator />
+              {groupOptions.map(opt => (
+                <DropdownMenuCheckboxItem
+                  key={opt.id}
+                  checked={groupBy === opt.id}
+                  onCheckedChange={() => setGroupBy(opt.id)}
+                >
+                  {opt.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="w-px h-4 bg-border" />
+          <Button size="sm" className="h-7 text-xs" onClick={openCreate}>
+            <Plus className="size-3.5" />
+            新增人员
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon-sm" className="size-7 text-muted-foreground">
+                <Settings className="size-3.5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>显示字段</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {columnDefs.map(col => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    checked={col.visible}
+                    onCheckedChange={() => toggleColumn(col.id)}
+                  >
+                    {col.label}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
-            <Dialog open={showDialog} onOpenChange={setShowDialog}>
-              <DialogContent className="sm:max-w-lg">
-                <DialogHeader>
-                  <DialogTitle>{editPerson ? '编辑人员' : '新增人员'}</DialogTitle>
-                  <DialogDescription>
-                    {editPerson ? `修改 ${editPerson.name} 的信息` : '填写人员基本信息'}
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto px-0.5">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <Label>
-                        姓名 <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        value={formData.name || ''}
-                        onChange={e => setFormData(f => ({ ...f, name: e.target.value }))}
-                        placeholder="请输入姓名"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label>
-                        手机号 <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        value={formData.mobile || ''}
-                        onChange={e => setFormData(f => ({ ...f, mobile: e.target.value }))}
-                        placeholder="请输入手机号"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <Label>邮箱</Label>
-                      <Input
-                        value={formData.email || ''}
-                        onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
-                        placeholder="可选"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label>岗位</Label>
-                      <Input
-                        value={formData.title || ''}
-                        onChange={e => setFormData(f => ({ ...f, title: e.target.value }))}
-                        placeholder="可选"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <Label>所属组织</Label>
-                      <Select
-                        value={String(formData.orgId)}
-                        onValueChange={v => setFormData(f => ({ ...f, orgId: Number(v) }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {orgs.map(o => (
-                            <SelectItem key={o.id} value={String(o.id)}>
-                              {o.orgName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label>用工类型</Label>
-                      <Select
-                        value={String(formData.employmentType)}
-                        onValueChange={v =>
-                          setFormData(f => ({ ...f, employmentType: Number(v) as 1 | 2 | 3 }))
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">内部</SelectItem>
-                          <SelectItem value="2">外包</SelectItem>
-                          <SelectItem value="3">供应商</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <Label>人员状态</Label>
-                      <Select
-                        value={String(formData.personStatus)}
-                        onValueChange={v =>
-                          setFormData(f => ({ ...f, personStatus: Number(v) as 1 | 2 | 3 | 4 }))
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">在岗</SelectItem>
-                          <SelectItem value="2">请假</SelectItem>
-                          <SelectItem value="3">离岗</SelectItem>
-                          <SelectItem value="4">禁用</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label>可分配状态</Label>
-                      <Select
-                        value={String(formData.availabilityStatus)}
-                        onValueChange={v =>
-                          setFormData(f => ({ ...f, availabilityStatus: Number(v) as 1 | 2 | 3 }))
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">可分配</SelectItem>
-                          <SelectItem value="2">忙碌</SelectItem>
-                          <SelectItem value="3">不可分配</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <Label>工作城市</Label>
-                      <Input
-                        value={formData.workCity || ''}
-                        onChange={e => setFormData(f => ({ ...f, workCity: e.target.value }))}
-                        placeholder="可选"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Label>备注</Label>
-                      <Input
-                        value={formData.remark || ''}
-                        onChange={e => setFormData(f => ({ ...f, remark: e.target.value }))}
-                        placeholder="可选"
-                      />
-                    </div>
-                  </div>
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>{editPerson ? '编辑人员' : '新增人员'}</DialogTitle>
+              <DialogDescription>
+                {editPerson ? `修改 ${editPerson.name} 的信息` : '填写人员基本信息'}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto px-0.5">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>
+                    姓名 <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    value={formData.name || ''}
+                    onChange={e => setFormData(f => ({ ...f, name: e.target.value }))}
+                    placeholder="请输入姓名"
+                  />
                 </div>
-                <DialogFooter>
-                  <DialogClose render={<Button variant="outline">取消</Button>} />
-                  <Button onClick={handleSave} disabled={!formData.name || !formData.mobile}>
-                    保存
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                <div className="flex flex-col gap-2">
+                  <Label>
+                    手机号 <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    value={formData.mobile || ''}
+                    onChange={e => setFormData(f => ({ ...f, mobile: e.target.value }))}
+                    placeholder="请输入手机号"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>邮箱</Label>
+                  <Input
+                    value={formData.email || ''}
+                    onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
+                    placeholder="可选"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label>岗位</Label>
+                  <Input
+                    value={formData.title || ''}
+                    onChange={e => setFormData(f => ({ ...f, title: e.target.value }))}
+                    placeholder="可选"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>所属组织</Label>
+                  <Select
+                    value={String(formData.orgId)}
+                    onValueChange={v => setFormData(f => ({ ...f, orgId: Number(v) }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {orgs.map(o => (
+                        <SelectItem key={o.id} value={String(o.id)}>
+                          {o.orgName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label>用工类型</Label>
+                  <Select
+                    value={String(formData.employmentType)}
+                    onValueChange={v =>
+                      setFormData(f => ({ ...f, employmentType: Number(v) as 1 | 2 | 3 }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">内部</SelectItem>
+                      <SelectItem value="2">外包</SelectItem>
+                      <SelectItem value="3">供应商</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>人员状态</Label>
+                  <Select
+                    value={String(formData.personStatus)}
+                    onValueChange={v =>
+                      setFormData(f => ({ ...f, personStatus: Number(v) as 1 | 2 | 3 | 4 }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">在岗</SelectItem>
+                      <SelectItem value="2">请假</SelectItem>
+                      <SelectItem value="3">离岗</SelectItem>
+                      <SelectItem value="4">禁用</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label>可分配状态</Label>
+                  <Select
+                    value={String(formData.availabilityStatus)}
+                    onValueChange={v =>
+                      setFormData(f => ({ ...f, availabilityStatus: Number(v) as 1 | 2 | 3 }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">可分配</SelectItem>
+                      <SelectItem value="2">忙碌</SelectItem>
+                      <SelectItem value="3">不可分配</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>工作城市</Label>
+                  <Input
+                    value={formData.workCity || ''}
+                    onChange={e => setFormData(f => ({ ...f, workCity: e.target.value }))}
+                    placeholder="可选"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label>备注</Label>
+                  <Input
+                    value={formData.remark || ''}
+                    onChange={e => setFormData(f => ({ ...f, remark: e.target.value }))}
+                    placeholder="可选"
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose render={<Button variant="outline">取消</Button>} />
+              <Button onClick={handleSave} disabled={!formData.name || !formData.mobile}>
+                保存
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-            <div className="rounded-md border border-border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-10 bg-muted/60">
-                      <Checkbox
-                        checked={allSelected ? true : someSelected ? 'indeterminate' : false}
-                        onCheckedChange={toggleAll}
-                        aria-label="全选"
-                      />
-                    </TableHead>
-                    {visibleColumns.map(col => (
-                      <ResizableHead key={col.id} defaultWidth={col.defaultWidth}>
-                        {col.label}
-                      </ResizableHead>
-                    ))}
-                    <TableHead className="w-24 bg-muted/60">操作</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell
-                        colSpan={visibleColumns.length + 2}
-                        className="text-center py-12 text-muted-foreground"
-                      >
-                        加载中...
+        <div className="rounded-md border border-border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10 bg-muted/60">
+                  <Checkbox
+                    checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+                    onCheckedChange={toggleAll}
+                    aria-label="全选"
+                  />
+                </TableHead>
+                {visibleColumns.map(col => (
+                  <ResizableHead key={col.id} defaultWidth={col.defaultWidth}>
+                    {col.label}
+                  </ResizableHead>
+                ))}
+                <TableHead className="w-24 bg-muted/60">操作</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={visibleColumns.length + 2}
+                    className="text-center py-12 text-muted-foreground"
+                  >
+                    加载中...
+                  </TableCell>
+                </TableRow>
+              ) : grouped ? (
+                grouped.map(([groupValue, groupItems]) => (
+                  <Fragment key={groupValue}>
+                    <TableRow className="bg-muted/30">
+                      <TableCell colSpan={visibleColumns.length + 2} className="py-1.5 px-3">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          {groupValue}
+                          <span className="ml-2 font-normal text-[10px] opacity-60">
+                            ({groupItems.length})
+                          </span>
+                        </span>
                       </TableCell>
                     </TableRow>
-                  ) : grouped ? (
-                    grouped.map(([groupValue, groupItems]) => (
-                      <Fragment key={groupValue}>
-                        <TableRow className="bg-muted/30">
-                          <TableCell colSpan={visibleColumns.length + 2} className="py-1.5 px-3">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                              {groupValue}
-                              <span className="ml-2 font-normal text-[10px] opacity-60">
-                                ({groupItems.length})
-                              </span>
-                            </span>
-                          </TableCell>
-                        </TableRow>
-                        {groupItems.map(person => (
-                          <TableRow key={person.id}>
-                            <TableCell className="h-10">
-                              <Checkbox
-                                checked={selected.has(person.id)}
-                                onCheckedChange={() => toggleOne(person.id)}
-                                aria-label={person.name}
-                              />
-                            </TableCell>
-                            {visibleColumns.map(col => (
-                              <TableCell key={col.id} className="h-10">
-                                {renderCell(person, col.id)}
-                              </TableCell>
-                            ))}
-                            <TableCell className="h-10">
-                              <div className="flex items-center justify-end gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 text-xs"
-                                  onClick={() => openEdit(person)}
-                                >
-                                  编辑
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 text-xs text-red-500 hover:text-red-400"
-                                  onClick={() => handleDelete(person)}
-                                >
-                                  禁用
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </Fragment>
-                    ))
-                  ) : paged.length === 0 ? (
-                    <TableRow>
-                      <TableCell
-                        colSpan={visibleColumns.length + 2}
-                        className="text-center py-12 text-muted-foreground"
-                      >
-                        无匹配人员
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    paged.map(person => (
+                    {groupItems.map(person => (
                       <TableRow key={person.id}>
                         <TableCell className="h-10">
                           <Checkbox
@@ -810,26 +759,72 @@ export default function PersonnelListPage() {
                           </div>
                         </TableCell>
                       </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-
-            <TaskPaginationBar
-              page={page}
-              totalPages={totalPages}
-              pageSize={pageSize}
-              onPageChange={setPage}
-              onPageSizeChange={setPageSize}
-              total={filtered.length}
-              rangeStart={(page - 1) * pageSize + 1}
-              rangeEnd={Math.min(page * pageSize, filtered.length)}
-              selectedCount={selected.size}
-            />
-          </div>
+                    ))}
+                  </Fragment>
+                ))
+              ) : paged.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={visibleColumns.length + 2}
+                    className="text-center py-12 text-muted-foreground"
+                  >
+                    无匹配人员
+                  </TableCell>
+                </TableRow>
+              ) : (
+                paged.map(person => (
+                  <TableRow key={person.id}>
+                    <TableCell className="h-10">
+                      <Checkbox
+                        checked={selected.has(person.id)}
+                        onCheckedChange={() => toggleOne(person.id)}
+                        aria-label={person.name}
+                      />
+                    </TableCell>
+                    {visibleColumns.map(col => (
+                      <TableCell key={col.id} className="h-10">
+                        {renderCell(person, col.id)}
+                      </TableCell>
+                    ))}
+                    <TableCell className="h-10">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => openEdit(person)}
+                        >
+                          编辑
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs text-red-500 hover:text-red-400"
+                          onClick={() => handleDelete(person)}
+                        >
+                          禁用
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-      </div>
+
+        <TaskPaginationBar
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          total={filtered.length}
+          rangeStart={(page - 1) * pageSize + 1}
+          rangeEnd={Math.min(page * pageSize, filtered.length)}
+          selectedCount={selected.size}
+        />
+      </PageLayout>
       <PersonnelDetailSheet person={detailPerson} onClose={() => setDetailPerson(null)} />
     </>
   )

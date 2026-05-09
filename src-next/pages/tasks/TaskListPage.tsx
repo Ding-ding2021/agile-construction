@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { PageLayout } from '@/components/page-layout'
 import { api } from '@/services/api'
 import { NewTaskDialog } from './components/NewTaskDialog'
 import { TaskList } from '@/components/task-list'
@@ -104,7 +105,7 @@ export default function TaskListPage({ onSelectTask, refreshTrigger }: TaskListP
   }
 
   return (
-    <>
+    <PageLayout>
       <TaskList
         tasks={tasks}
         loading={loading}
@@ -130,6 +131,6 @@ export default function TaskListPage({ onSelectTask, refreshTrigger }: TaskListP
         availableExtraFields={availableExtraFields as never}
         onCreate={handleCreateTask}
       />
-    </>
+    </PageLayout>
   )
 }

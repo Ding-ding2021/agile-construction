@@ -11,7 +11,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { PageShell } from '@/components/page-shell'
+import { PageLayout } from '@/components/page-layout'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import {
   Dialog,
@@ -126,7 +126,7 @@ export default function TemplateListPage() {
   }
 
   return (
-    <PageShell>
+    <PageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold">模板中心</h1>
@@ -380,6 +380,6 @@ export default function TemplateListPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </PageShell>
+    </PageLayout>
   )
 }

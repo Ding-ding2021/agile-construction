@@ -16,6 +16,7 @@ import { WBSView } from '@/pages/wbs/WBSView'
 import { GanttPage } from '@/pages/projects/detail/gantt-page'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
+import { useDetailTitle } from '@/store/detailTitle'
 import type { TaskItem } from '@/types/task'
 import TemplateListPage from './pages/templates/TemplateListPage'
 import TemplateDetailPage from './pages/templates/TemplateDetailPage'
@@ -66,6 +67,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
 
 function SiteHeaderWithTitle() {
   const path = useLocation().pathname
+  const detailTitle = useDetailTitle(s => s.title)
   const titles: Record<string, string> = {
     '/tasks': '任务管理',
     '/projects': '项目管理',
@@ -77,14 +79,29 @@ function SiteHeaderWithTitle() {
     '/settings': '系统设置',
   }
 
-  // 详情页自身有完整头部，隐藏 SiteHeader 避免重复
   const segments = path.split('/').filter(Boolean)
-  if (segments[0] === 'projects' && segments.length >= 2 && segments[1] !== 'new') {
-    return null
+
+  // 一级页面 → 单一面包屑项
+  if (segments.length <= 1) {
+    return <SiteHeader breadcrumbs={[{ label: titles[path] || '数字营建' }]} />
   }
 
-  const basePath = '/' + segments.slice(0, 1).join('/')
-  return <SiteHeader title={titles[path] || titles[basePath] || '数字营建'} />
+  // 子页面 → 面包屑：上级 / 当前页
+  const basePath = '/' + segments[0]
+  const detailLabels: Record<string, string> = {
+    new: '新建',
+    wbs: 'WBS 视图',
+    gantt: '甘特图',
+  }
+  const currentLabel = detailTitle || detailLabels[segments[segments.length - 1]] || '详情'
+  return (
+    <SiteHeader
+      breadcrumbs={[
+        { label: titles[basePath] || '数字营建', to: basePath },
+        { label: currentLabel },
+      ]}
+    />
+  )
 }
 
 function LayoutWithSettings({ children }: { children: ReactNode }) {
@@ -122,7 +139,7 @@ export default function App() {
               element={
                 <LayoutWithSettings>
                   <SiteHeader title="仪表盘" />
-                  <main className="@container/main flex flex-1 flex-col gap-4 p-6 md:gap-6">
+                  <main className="flex flex-1 flex-col">
                     <DashboardPage />
                   </main>
                 </LayoutWithSettings>
@@ -133,7 +150,7 @@ export default function App() {
               element={
                 <LayoutWithSettings>
                   <SiteHeaderWithTitle />
-                  <main className="@container/main flex flex-1 flex-col gap-4 p-6 md:gap-6">
+                  <main className="flex flex-1 flex-col">
                     <Routes>
                       <Route path="/" element={<Navigate to="/tasks" replace />} />
                       <Route path="/tasks/:code" element={<TaskDetailPage />} />

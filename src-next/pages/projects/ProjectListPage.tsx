@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PageShell } from '@/components/page-shell'
+import { PageLayout } from '@/components/page-layout'
 import { SectionCards } from '@/components/section-cards'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
@@ -92,7 +92,7 @@ export default function ProjectListPage() {
   const isEmpty = !loading && filtered.length === 0
 
   return (
-    <PageShell>
+    <PageLayout>
       <SectionCards className="px-0" cardSize="lg" metrics={metrics} />
 
       <div className="flex items-center justify-between gap-4">
@@ -212,6 +212,6 @@ export default function ProjectListPage() {
           selectedCount={0}
         />
       )}
-    </PageShell>
+    </PageLayout>
   )
 }
