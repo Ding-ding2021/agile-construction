@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { TreeDataTable } from '@/components/data-table-tree'
 import type { ColumnDef } from '@tanstack/react-table'
 
@@ -39,6 +39,9 @@ describe('TreeDataTable', () => {
 
     expect(screen.getByText('根节点 1')).toBeInTheDocument()
     expect(screen.getByText('根节点 2')).toBeInTheDocument()
+
+    const expandButtons = screen.getAllByLabelText('展开')
+    expect(expandButtons.length).toBe(1)
   })
 
   it('shows empty state when no data', () => {
@@ -61,5 +64,35 @@ describe('TreeDataTable', () => {
     )
 
     expect(screen.getByText('Parent')).toBeInTheDocument()
+  })
+
+  it('renders checkboxes in select column', () => {
+    render(
+      <TreeDataTable data={treeData} columns={columns} getSubRows={item => item.subRows ?? []} />
+    )
+
+    const checkboxes = screen.getAllByLabelText('选择行')
+    expect(checkboxes.length).toBe(2)
+  })
+
+  it('toggles expand when arrow is clicked', () => {
+    render(
+      <TreeDataTable data={treeData} columns={columns} getSubRows={item => item.subRows ?? []} />
+    )
+
+    expect(screen.queryByText('子节点 1-1')).not.toBeInTheDocument()
+
+    const expandBtn = screen.getByLabelText('展开')
+    fireEvent.click(expandBtn)
+
+    expect(screen.getByText('子节点 1-1')).toBeInTheDocument()
+  })
+
+  it('shows selected count in footer', () => {
+    render(
+      <TreeDataTable data={treeData} columns={columns} getSubRows={item => item.subRows ?? []} />
+    )
+
+    expect(screen.getByText(/已选 0 项/)).toBeInTheDocument()
   })
 })
