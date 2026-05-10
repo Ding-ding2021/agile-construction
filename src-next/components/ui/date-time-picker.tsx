@@ -1,25 +1,21 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { format } from "date-fns"
-import { zhCN } from "date-fns/locale"
-import { CalendarIcon, X } from "lucide-react"
+import * as React from 'react'
+import { format } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
+import { CalendarIcon, X } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select'
 
 interface DateTimePickerProps {
   value?: Date
@@ -31,7 +27,7 @@ interface DateTimePickerProps {
 export function DateTimePicker({
   value,
   onChange,
-  placeholder = "选择日期和时间",
+  placeholder = '选择日期和时间',
   disabled = false,
 }: DateTimePickerProps) {
   const [open, setOpen] = React.useState(false)
@@ -56,10 +52,10 @@ export function DateTimePicker({
     onChange?.(newDate)
   }
 
-  const handleTimeChange = (type: "hour" | "minute", val: string) => {
+  const handleTimeChange = (type: 'hour' | 'minute', val: string) => {
     const currentDate = value ? new Date(value) : new Date()
 
-    if (type === "hour") {
+    if (type === 'hour') {
       currentDate.setHours(parseInt(val))
     } else {
       currentDate.setMinutes(parseInt(val))
@@ -75,50 +71,40 @@ export function DateTimePicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="w-full">
+      <PopoverTrigger className="w-full">
         <Button
           variant="outline"
           disabled={disabled}
           className={cn(
-            "flex items-center gap-2 h-7 w-full rounded-md border border-input bg-transparent px-2.5 text-xs font-normal justify-start disabled:pointer-events-none disabled:opacity-50",
-            value ? "text-foreground" : "text-muted-foreground"
+            'flex items-center gap-2 h-7 w-full rounded-md border border-input bg-transparent px-2.5 text-xs font-normal justify-start disabled:pointer-events-none disabled:opacity-50',
+            value ? 'text-foreground' : 'text-muted-foreground'
           )}
         >
           <CalendarIcon className="size-3.5 shrink-0" />
           <span className="flex-1 truncate text-left">
-            {value
-              ? format(value, "yyyy/MM/dd HH:mm", { locale: zhCN })
-              : placeholder}
+            {value ? format(value, 'yyyy/MM/dd HH:mm', { locale: zhCN }) : placeholder}
           </span>
           {value && (
-            <X
-              className="size-3.5 shrink-0 opacity-50 hover:opacity-100"
-              onClick={handleClear}
-            />
+            <X className="size-3.5 shrink-0 opacity-50 hover:opacity-100" onClick={handleClear} />
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={value}
-          onSelect={handleDateSelect}
-          initialFocus
-        />
+        <Calendar mode="single" selected={value} onSelect={handleDateSelect} initialFocus />
         <div className="border-t border-border p-3">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">时间：</span>
             <Select
               value={value ? value.getHours().toString() : undefined}
-              onValueChange={(val) => handleTimeChange("hour", val)}
+              onValueChange={val => handleTimeChange('hour', val ?? '')}
             >
               <SelectTrigger className="w-20 h-8">
                 <SelectValue placeholder="时" />
               </SelectTrigger>
               <SelectContent>
-                {hours.map((hour) => (
+                {hours.map(hour => (
                   <SelectItem key={hour} value={hour.toString()}>
-                    {hour.toString().padStart(2, "0")}
+                    {hour.toString().padStart(2, '0')}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -126,15 +112,15 @@ export function DateTimePicker({
             <span className="text-muted-foreground">:</span>
             <Select
               value={value ? value.getMinutes().toString() : undefined}
-              onValueChange={(val) => handleTimeChange("minute", val)}
+              onValueChange={val => handleTimeChange('minute', val ?? '')}
             >
               <SelectTrigger className="w-20 h-8">
                 <SelectValue placeholder="分" />
               </SelectTrigger>
               <SelectContent>
-                {minutes.map((minute) => (
+                {minutes.map(minute => (
                   <SelectItem key={minute} value={minute.toString()}>
-                    {minute.toString().padStart(2, "0")}
+                    {minute.toString().padStart(2, '0')}
                   </SelectItem>
                 ))}
               </SelectContent>

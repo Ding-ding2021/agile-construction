@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
   CardAction,
@@ -9,8 +9,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { TrendingUpIcon, TrendingDownIcon, MinusIcon } from "lucide-react"
+} from '@/components/ui/card'
+import { TrendingUpIcon, TrendingDownIcon, MinusIcon } from 'lucide-react'
 
 export interface MetricCardData {
   title: string
@@ -23,14 +23,19 @@ export interface MetricCardData {
 interface SectionCardsProps {
   metrics: MetricCardData[]
   className?: string
-  cardSize?: "default" | "sm" | "lg"
+  cardSize?: 'default' | 'sm' | 'lg'
 }
 
-export function SectionCards({ metrics, className, cardSize = "default" }: SectionCardsProps) {
+export function SectionCards({ metrics, className, cardSize = 'default' }: SectionCardsProps) {
   return (
-    <div className={cn("grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4", className)}>
+    <div className={cn('flex flex-row gap-4 items-start', className)}>
       {metrics.map((m, i) => (
-        <Card key={i} size={cardSize} className="@container/card">
+        <Card
+          key={i}
+          size={cardSize}
+          className="@container/card flex-1 min-w-0"
+          style={{ paddingBottom: 0 }}
+        >
           <CardHeader>
             <CardDescription>{m.title}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -39,19 +44,23 @@ export function SectionCards({ metrics, className, cardSize = "default" }: Secti
             {m.trend && (
               <CardAction>
                 <Badge variant="outline">
-                  {m.trend === 'up' ? <TrendingUpIcon /> : m.trend === 'down' ? <TrendingDownIcon /> : <MinusIcon />}
+                  {m.trend === 'up' ? (
+                    <TrendingUpIcon />
+                  ) : m.trend === 'down' ? (
+                    <TrendingDownIcon />
+                  ) : (
+                    <MinusIcon />
+                  )}
                   {m.trendLabel}
                 </Badge>
               </CardAction>
             )}
           </CardHeader>
-          {m.description && (
-            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-              <div className="line-clamp-1 flex gap-2 font-medium">
-                {m.description}
-              </div>
-            </CardFooter>
-          )}
+          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+            {m.description && (
+              <div className="line-clamp-1 flex gap-2 font-medium">{m.description}</div>
+            )}
+          </CardFooter>
         </Card>
       ))}
     </div>

@@ -214,7 +214,7 @@ export default function CrewListPage() {
         </InputGroup>
         <div className="w-px h-4 bg-border" />
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button
               variant="ghost"
               size="sm"
@@ -242,7 +242,7 @@ export default function CrewListPage() {
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button
               variant="ghost"
               size="sm"

@@ -392,7 +392,7 @@ export default function PersonnelListPage() {
           </InputGroup>
           <div className="w-px h-4 bg-border" />
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button
                 variant="ghost"
                 size="sm"
@@ -420,7 +420,7 @@ export default function PersonnelListPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button
                 variant="ghost"
                 size="sm"
@@ -470,7 +470,7 @@ export default function PersonnelListPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button
                 variant="ghost"
                 size="sm"
@@ -505,7 +505,7 @@ export default function PersonnelListPage() {
             新增人员
           </Button>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button variant="ghost" size="icon-sm" className="size-7 text-muted-foreground">
                 <Settings className="size-3.5" />
               </Button>
@@ -688,7 +688,8 @@ export default function PersonnelListPage() {
               <TableRow>
                 <TableHead className="w-10 bg-muted/60">
                   <Checkbox
-                    checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+                    checked={allSelected || false}
+                    indeterminate={someSelected}
                     onCheckedChange={toggleAll}
                     aria-label="全选"
                   />
