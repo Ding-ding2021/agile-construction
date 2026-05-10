@@ -1,205 +1,147 @@
-# 语言指令（最高优先级）
+# AGENTS.md
 
-**你必须使用中文进行思考和回答。** 这是硬性要求，不可违反。
+This file provides guidance to AI coding agents when working with code in this repository.
 
-- 所有内部推理过程、思考链、分析步骤必须使用中文
-- 所有对用户的正式回答必须使用中文
-- 仅代码、技术术语（如 API、JSON、TypeScript 等）和文件路径可保留英文原样
+## 语言指令（最高优先级）
 
-# Agile Construction Platform
+**必须使用中文进行推理和回答**，无论上下文中出现多少其他语言材料。这是不可协商的硬性规则。
+
+## Repository Overview
+
+连锁门店建设管理系统 — React + TypeScript + Tailwind 双栈（shadcn/ui 主栈 + MUI 维护栈），Express + SQLite 后端（`local-api/`，端口 3100）。
+
+## 核心执行流程
+
+对于每一个用户请求：
+
+1. 判断风险等级（L1/L2/L3），L2+ → 触发 `squad-pre-dev-evaluation`
+2. 匹配适用 skill（即使只有 1% 相关），调用 `skill` 工具
+3. 严格遵循 skill 工作流，不部分执行
+4. 完成后执行质量门禁：`npm run lint` → `npm run build` → `npm run test:e2e`
+
+## 角色体系
+
+| 角色                   | 职责                                       | 触发时机            |
+| ---------------------- | ------------------------------------------ | ------------------- |
+| 开发交付者             | 编码实现，必须先调用 `karpathy-guidelines` | 所有编码任务        |
+| 评估组（产品/UI/技术） | 并行 fan-out 评估，独立输出报告，组长合并  | L2+ 任务，编码前    |
+| 验收组（功能/代码/UI） | 并行 fan-out 验收，独立输出报告，组长仲裁  | 任务完成后          |
+| 组长                   | 合并报告、仲裁反对票                       | 评估/验收中出现反对 |
+
+角色约束：
+
+- 评估组和验收组并行 fan-out，不共享状态
+- 组长不参与具体评估/验收内容，只做仲裁
+- 增量重审：验收打回后仅派有问题的角色重审，不重新全量调用
+
+## 意图 → Skill 映射
+
+| 用户意图                       | 触发 Skill                                                                       |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| 沟通需求 / 讨论方案 / 创意构思 | `brainstorming`                                                                  |
+| 新增功能 / 页面 / 组件         | `karpathy-guidelines` → `frontend-ui-engineering` → `incremental-implementation` |
+| 修复 Bug / 异常行为            | `debugging-and-error-recovery`                                                   |
+| 重构 / 简化代码                | `code-simplification`                                                            |
+| 代码审查                       | `code-review-and-quality`                                                        |
+| API / 接口设计                 | `api-and-interface-design`                                                       |
+| UI 布局 / 样式调整             | `ui-layout-rules`                                                                |
+| 性能优化                       | `performance-optimization`                                                       |
+| E2E 测试 / 浏览器验证          | `browser-testing-with-devtools`                                                  |
+| **任务开始前（L2+）**          | `squad-pre-dev-evaluation`                                                       |
+| **任务完成后**                 | `squad-post-dev-review`                                                          |
+| **任何编码前**                 | `karpathy-guidelines`                                                            |
+
+## 开发阶段 → Skill 串联
+
+```
+评估 → 计划 → 编码 → 验证 → 验收 → 交付
+  ↓      ↓      ↓      ↓      ↓      ↓
+squad-  plan-  karpa-  lint  squad-  lint +
+pre-    ning-  thy-    +    post-   build +
+dev-    and-   guide-  build dev-    test:e2e
+eval    task-  lines   +    review
+(L2+)   break- +incr-  test
+        down   emental
+```
+
+## 硬性规则
+
+- 所有推理和回答必须使用中文（代码、术语、路径除外）
+- **禁止**在 `src/`（MUI）中新增功能 — 新功能一律在 `src-next/`
+- **禁止**绕过 `canTransition` 守卫直接修改 `project.status`
+- **禁止**在组件中直接 `localStorage.setItem` — 统一通过 `useProjectStore`
+- 前端功能必须有 Playwright E2E 测试覆盖，`npm run test:e2e` 未通过不得交付
+- 修改前先 `npm run lint`
+- 新增文件前先看同级目录现有文件的模式，模仿其写法
+
+## 反作弊检查
+
+以下想法是错误的，必须忽略：
+
+- "这个改动太小，不需要 skill"
+- "L1 任务不需要 karpathy-guidelines"
+- "我先直接改 `src/` 里的旧代码，只是修一下"
+- "lint 报错只是 warning，没关系"
+- "代码写完了就算完成"
+
+正确行为：
+
+- 任何编码前先调用 `karpathy-guidelines`
+- L2+ 任务编码前先通过 `squad-pre-dev-evaluation`
+- 新功能永远在 `src-next/`，不动 `src/`
+- 完成的标志是 `lint` + `build` + `test:e2e` 全通过，而非代码写完
+- 任务完成后必须调用 `squad-post-dev-review`
 
 ## 常用命令
 
-- `npm install` — 安装依赖
-- `npm run dev` — 启动 shadcn 开发服务器（src-next/，端口 5173）
-- `npm run dev:legacy` — 启动 MUI 开发服务器（src/，端口 5174）
-- `npm run dev:local` — shadcn + 本地 API 服务（`local-api/`，端口 3100）同时启动
-- `npm run build` — 构建 shadcn 生产版本
-- `npm run build:legacy` — 构建 MUI 生产版本（`tsc -b && vite build`）
-- `npm run lint` — ESLint 全仓库检查
-- `npm run test` — Vitest watch 模式（根目录，旧 src/ 测试）
-- `npm run test:run` — Vitest 单次运行（根目录）
-- `npm run test -w src-next` — Vitest watch（src-next shadcn 测试，8 文件 31 用例）
-- `npm run test:run -w src-next` — 单次运行 src-next 测试
-- `npx eslint <file>` — 单文件快速验证（替代单测）
-- `BROWSER=chrome npm run ladle` — Ladle 组件预览（src-next/，端口 61000，Chrome 打开）
-- `npm run ladle:build` — 构建 Ladle 静态站点
-- Ladle 页面预览：`src-next/src/stories/pages.stories.tsx`，包含 Personnel/Settings/Dashboard 三个真实页面（内置 API mock，无需启动后端）
-- Ladle 组件预览：`src-next/src/stories/*.stories.tsx`（button/card/badge 等 shadcn 组件）
-- `npm run test:e2e` — Playwright E2E 功能测试（chromium，自动启动 dev server）
-- `npm run test:e2e:ui` — Playwright UI 模式（可视化选择/录制测试）
+| 用途                  | 命令                                                |
+| --------------------- | --------------------------------------------------- |
+| 开发（shadcn）        | `npm run dev`                                       |
+| 开发（MUI，仅修 bug） | `npm run dev:legacy`                                |
+| 本地全栈              | `npm run dev:local`                                 |
+| 构建                  | `npm run build` / `npm run build:legacy`            |
+| 代码检查              | `npm run lint`                                      |
+| 单元测试              | `npm run test:run` / `npm run test:run -w src-next` |
+| E2E 测试              | `npm run test:e2e` / `npm run test:e2e:ui`          |
+| 单文件检查            | `npx eslint <file>`                                 |
 
-## Pre-commit 流水线
-
-`.husky/pre-commit` 执行：
-
-1. `lint-staged` — ESLint + Prettier（仅暂存文件）
-2. `tsc --noEmit` — 类型检查
-
-Prettier 配置：`semi: false`, `singleQuote: true`, `printWidth: 100`, `arrowParens: avoid`
+Pre-commit：`.husky/pre-commit` 自动执行 `lint-staged` + `tsc --noEmit`
+Prettier：`semi: false, singleQuote: true, printWidth: 100, arrowParens: avoid`
 
 ## 架构速查
 
-| 做什么             | 找这里                                                                        |
-| ------------------ | ----------------------------------------------------------------------------- |
-| 改路由 / 加页面    | `src-next/App.tsx` → BrowserRouter `<Routes>`                                 |
-| 改导航跳转         | `src-next/components/app-sidebar.tsx` → nav items                             |
-| 改项目状态流转     | `src/domain/projectStatusMachine.ts` → `canTransition` / `allowedTransitions` |
-| 改项目数据模型     | `src/data/projects.ts` → `ProjectItem`                                        |
-| 改 shadcn 组件     | `src-next/components/ui/` → 对应组件                                          |
-| 改业务组件         | `src-next/components/` → domain 子目录                                        |
-| 改任务页面         | `src-next/pages/tasks/`                                                       |
-| 改全局样式与 Token | `src-next/index.css` → `@theme` + CSS 变量                                    |
-| 改数据层           | `src-next/services/api.ts`                                                    |
-| 改类型定义         | `src-next/types/`                                                             |
-| 查 UI 设计规范     | `docs/01-product/design-spec-v2-shadcn.md`                                    |
-| 查编码规范         | `docs/00-governance/coding-standards.md`                                      |
-| 查完整文档索引     | `docs/README.md`                                                              |
-| 查项目计划         | `docs/PLAN.md`                                                                |
+| 做什么          | 找这里                                        |
+| --------------- | --------------------------------------------- |
+| 改路由 / 加页面 | `src-next/App.tsx` → BrowserRouter `<Routes>` |
+| 改导航跳转      | `src-next/components/app-sidebar.tsx`         |
+| 改状态流转规则  | `src/domain/projectStatusMachine.ts`          |
+| 改项目数据模型  | `src/data/projects.ts` → `ProjectItem`        |
+| 改 shadcn 组件  | `src-next/components/ui/`                     |
+| 改业务组件      | `src-next/components/` 对应 domain 子目录     |
+| 改全局样式      | `src-next/index.css` → `@theme` + CSS 变量    |
+| 改数据层        | `src-next/services/api.ts`                    |
+| 改类型定义      | `src-next/types/`                             |
 
-## 项目约定
+关键信息：
 
-- **UI 主栈**: shadcn/ui (base-nova) + @base-ui/react（`src-next/`）
-- **UI 副栈（维护模式）**: MUI v9 + Emotion（`src/`），仅修 bug，不新增功能
-- **文件组织**: 页面组件 `src-next/components/{domain}/`，共享组件 `src-next/components/ui/`
-- **数据流**: `data/` → `store/`（Zustand）→ `domain/` → `components/`，组件不直接操作 storage
-- **路由**: BrowserRouter（`/tasks`, `/projects`, `/personnel` 等）
-- **状态管理**: `src/store/projectStore.ts`（Zustand + `persist` 中间件），localStorage key `pm-projects-state-v1`
-- **后端**: `local-api/`（Node.js + Express + better-sqlite3 + Prisma schema），端口 3100
-- **样式**: Tailwind CSS v4 oklch 色值，`@theme` 指令
-- **新增文件前**先看同级目录现有文件的模式，模仿其写法
-
-## 红线约束
-
-- **禁止**在 `src/`（MUI）中新增功能代码 — 新功能一律在 `src-next/` 开发
-- **禁止**直接修改 `src-next/node_modules/` 下的任何文件
-- **禁止**在子组件中直接 `localStorage.setItem` 修改状态 — 统一通过 `useProjectStore`
-- **禁止**绕过 `canTransition` 守卫直接修改 `project.status`
-- **禁止**在组件中重复实现状态机逻辑
-- **禁止**修改 `src/data/` 中类型定义不同步更新 UI 消费方
-- **修改前**先 `npm run lint`
-
-## 测试约束
-
-- **前端功能必须有 Playwright E2E 测试覆盖**，覆盖核心用户流程
-- E2E 测试是验收前置条件，`npm run test:e2e` 未通过不得交付
-
-## Squad 小组协作约束
-
-- **强制评估**：任何开发任务先评估风险等级，L2/L3 自动触发 `squad-pre-dev-evaluation`（L1 豁免）
-- **强制验收**：开发完成后必须调用 `squad-post-dev-review` skill（L1 低风险任务可豁免）
-- **全票通过制**：评估/验收组中任一角色投反对票则流程中止（组长可仲裁）
-- **独立输出**：子代理各自输出独立评估/验收报告，不得共享状态
-- **先评估后计划**：评估组全票通过后方可编写实现计划
-- **Karpathy 准则**：开发交付者编码前必须调用 `karpathy-guidelines` skill，四项准则贯穿编码全程（Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven Execution）
-- **增量重审**：验收打回后仅派有问题的角色重审，避免全量重新调用
-
-## 模型分配约束
-
-- **强推理任务**（组长/技术评估员/开发交付者/代码质量验收员）→ v4-pro
-- **模式化检查任务**（产品/UI评估员、功能/UI验收员）→ v4-flash
-- **L1 极简任务** → v4-flash 或 opencode go
-
-## 项目管理
-
-完整流程见 `docs/00-governance/project-management-guide.md`
-
-### 常用 gh CLI 命令
-
-```bash
-# 列出当前阶段任务
-gh issue list --label "phase:1-foundation" --state open --json number,title,labels
-
-# 查看 Issue
-gh issue view <number>
-
-# 创建 Issue
-gh issue create --title "[Px-Tx] 任务名" --label "type:feature,phase:2-standards" \
-  --milestone "Phase 2" --project "敏捷建店管理平台"
-
-# 关闭 Issue（验收通过后）
-gh issue close <number> --comment "验收通过，build/lint/test 通过"
-```
-
-### 工作流概览
-
-```
-Backlog → Ready → In Progress → AI Completed → In Review → Done
-```
-
-- **同一时间只有一个 In Progress**
-- **质量门禁**: build/lint/test 通过 → Human 验收 → 关闭
-- **Python 脚本**: `python scripts/gh-sync.py` 查看今日日志
-- **全景扫描**: `python scripts/scan-tools.py` 查看 Skills/Agents/MCP 统计
-- **保存报告**: `python scripts/scan-tools.py --md --save` 生成 `docs/SCAN-REPORT.md`
-- **质量仪表盘**: `python scripts/scan-tools.py --report` 查看 KPI 和 Skill 使用率
-- **保存仪表盘**: `python scripts/scan-tools.py --report --md --save` 生成 `docs/DASHBOARD.md`
-
-### 标签体系（20 个）
-
-- type: feature / bug / refactor / docs / test / infra / release
-- phase: 1-foundation / 1.5-base-finish / 2-standards / 3-tasks / 4-procurement / 5-agent / 6-e2e
-- priority: P0(阻塞) / P1(当前迭代) / P2(下次) / P3(排期外)
-- status: blocked / in-review
+- 状态管理：`src/store/projectStore.ts`（Zustand + `persist`），localStorage key `pm-projects-state-v1`
+- 样式：Tailwind CSS v4，oklch 色值
+- 路由：BrowserRouter（`/tasks`, `/projects`, `/personnel` 等）
 
 ## 任务结束协议
 
-每次完成开发任务后，执行：
+每次完成开发任务后：
 
-### A. 写入每日日志（含 Issue 引用）
+1. 调用 `task-memory` 工具写入 `.workbuddy/memory/YYYY-MM-DD.md`（模板见 `docs/00-governance/project-management-guide.md`）
+2. 质量数据写入 `.workbuddy/stats/YYYY-MM-DD.json`
+3. 运行 `python scripts/scan-tools.py --report` 更新仪表盘
 
-将任务内容写入 `.workbuddy/memory/YYYY-MM-DD.md`，格式：
+## 按需查阅文档
 
-```markdown
-## {任务简述}
+规范文档不预加载，用 Read 工具在需要时查阅：
 
-### 关联 Issue
-
-- #{number}: {issue title}
-
-### 问题/需求
-
-{描述}
-
-### 修改内容
-
-- {逐条列出}
-
-### 验证
-
-- lint: {结果}
-- build: {结果}
-- test: {结果}
-```
-
-### B. 更新长期记忆（如有以下情况）
-
-如有架构决策（ADR 级）、技术债务变化、关键文档索引变化，同步更新 `.workbuddy/memory/MEMORY.md`。
-
-### C. 写入质量评价（新增）
-
-将本次任务的质量数据写入 `.workbuddy/stats/YYYY-MM-DD.json`：
-
-```json
-{
-  "task": "{任务简述}",
-  "date": "{YYYY-MM-DD}",
-  "risk_level": "L1/L2/L3",
-  "human_interventions": 0,
-  "requirement_deviation": 0.0,
-  "spec_changes": 0,
-  "rework_rounds": 0,
-  "bugs_found_post_delivery": 0,
-  "skills_called": ["skill1", "skill2"],
-  "notes": ""
-}
-```
-
-填写后运行 `python scripts/scan-tools.py --report` 确认仪表盘已更新。
-
-## 深度引用
-
-- 设计规范: @docs/01-product/design-spec-v2-shadcn.md
-- 编码规范: @docs/00-governance/coding-standards.md
-- 开发指南: @docs/03-engineering/development-guide.md
-- 完整文档索引: @docs/README.md
+- 编码规范: `docs/00-governance/coding-standards.md`
+- 开发指南: `docs/03-engineering/development-guide.md`
+- 设计规范: `docs/01-product/design-spec-v2-shadcn.md`
+- 项目管理: `docs/00-governance/project-management-guide.md`
+- 完整索引: `docs/README.md`
