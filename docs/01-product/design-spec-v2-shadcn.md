@@ -1,9 +1,9 @@
 ---
-id: DOC-01-PRODUCT-DESIGN-SPEC-V2-SHADCN
+id: DOC-05-DESIGN-DESIGN-SPEC-V2
 title: 前端设计规范 V2 — shadcn Neutral Light
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-05
+last_updated: 2026-05-11
 source_of_truth: true
 template: dashboard-01 + sidebar-07
 related_code:
