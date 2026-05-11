@@ -183,3 +183,31 @@
 - **CI 门禁**: 全量 lint `src/**/*.{ts,tsx}`
 - **注释规则**: 统一为"关键逻辑注释"（工程模式）
 - **文档一致性**: AGENTS.md 同步更新反映实际状态
+
+## 2026-05-06 更新
+
+- shadcn 设为主栈 (dev/build 默认入口), MUI 退为 dev:legacy/build:legacy
+- MUI 旧栈 3 份 draft 文档标记 archived 移至 99-archive
+
+## 2026-05-06 更新
+
+- WBSNode 独立模型（不耦合 ProjectTask/WorkPackage），状态枚举英文
+- 采用三组模式：Pre-dev Squad → 开发交付者 → Post-dev Squad，全票通过，L1/L2/L3 分级
+- v4-pro 推理型角色，v4-flash 检查型角色
+
+## 2026-05-07 更新
+
+- 开发计划 V2.0 发布，V1.2 标记 superseded
+- 甘特图 SVG 自绘替代 @svar-ui/react-gantt，网络图基于 React Flow + dagre
+- 日历系统通过 Squad 评估（L2），MVP 剔除管理 UI
+
+## 2026-05-11 更新
+
+- 确立三层文档架构 + AI 合约层 + 知识引擎自驱动飞轮
+- document-sync 技能强制执行合约同步
+- H4/H9/H10/H11 Hook 接入 opencode run 实现全自动提炼
+- AGENTS.md 新增进化铁律，CLAUDE.md 废弃
+- 飞书 Webhook 链路打通
+- 日志统一存储到 `memory/`，`.workbuddy/memory/` 改为符号链接
+
+> 最后同步: 2026-05-11（合并 .workbuddy/memory/ 后统一到 memory/）
