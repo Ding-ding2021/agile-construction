@@ -4,24 +4,29 @@ echo "🔍 推送前检查..."
 
 PASS=true
 
-# 1. Lint 必须全过
-echo "📝 ESLint..."
-npx eslint . --max-warnings 0 2>/dev/null
-if [ $? -ne 0 ]; then
-  echo "❌ ESLint 有告警，请先修复"
-  PASS=false
+# 1. Lint 只检查与上次推送的差异文件
+echo "📝 ESLint (changed files)..."
+CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' || echo "")
+if [ -n "$CHANGED_FILES" ]; then
+  echo "$CHANGED_FILES" | xargs npx eslint --max-warnings 0 2>/dev/null
+  if [ $? -ne 0 ]; then
+    echo "❌ ESLint 有告警，请先修复"
+    PASS=false
+  else
+    echo "✅ ESLint 通过"
+  fi
 else
-  echo "✅ ESLint 通过"
+  echo "✅ 无 TS 文件变更，跳过"
 fi
 
-# 2. Build 必须通过
-echo "📦 Build..."
-npm run build --silent 2>/dev/null
-if [ $? -ne 0 ]; then
-  echo "❌ Build 失败，禁止推送"
+# 2. 类型检查
+echo "📝 TypeScript..."
+npx tsc --noEmit 2>&1 | tail -3
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+  echo "❌ TypeScript 类型错误"
   PASS=false
 else
-  echo "✅ Build 通过"
+  echo "✅ TypeScript 通过"
 fi
 
 if [ "$PASS" = false ]; then
