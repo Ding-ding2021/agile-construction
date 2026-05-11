@@ -7,6 +7,9 @@
 - [ ] `agentmemory_memory_sessions` — 检查上次会话状态
 - [ ] `agentmemory_memory_recall` — 搜索"最近工作" "未完成任务" "关键决策"
 - [ ] 读 `MEMORY.md` 前 80 行（如存在）
+- [ ] 读 `memory/USER.md` — 了解用户习惯和避坑清单
+- [ ] 读 `memory/checkpoint.md` — 获取会话消息基线和自检状态
+- [ ] 查询 `opencode DB` 获取当前会话消息总数
 
 ## 语言铁律
 
@@ -27,33 +30,35 @@
 
 ## 进化铁律（不可跳过）
 
-### 会话级自检（每 ~15 次工具调用执行一次）
+### 会话级自检（每 15 条用户消息执行一次）
 
 这是四阶段学习的**阶段 1（观察）**，不等 cron，在会话内实时执行。
 
-- [ ] 用 `session_id` 和 `checkpoint_number` 在 `memory/checkpoint.md` 中维护计数器
-- [ ] 每次完成一组相关工作后（约 5-10 轮对话），**暂停**并估算自上次检查点后的工具调用数
-- [ ] 满足以下任一条件触发自检：
-  - 估算工具调用数 ≥ 15 次
-  - 自上次 checkpoint 后过去了 30 分钟
-  - 完成了一个完整的子任务（如创建完一个文件、做完一次 search）
-- [ ] 自检内容：用 `agentmemory_memory_save` 记录以下结构：
+- [ ] 每次回答前，查 opencode DB 获取当前会话消息总数：
+      `sqlite3 ~/.local/share/opencode/opencode.db "SELECT COUNT(*) FROM session_message WHERE session_id = '当前会话ID'"`
+- [ ] 与 `memory/checkpoint.md` 的 `last_checkpoint_msg_count` 对比：
+  - 差值 < 15 → 正常回答
+  - 差值 ≥ 15 → **先执行自检，再回答**
+- [ ] 自检内容：
+  - **消息分类统计**：类型（需求/纠正/指令/讨论/问题/确认/反馈）+ 领域（治理/产品/架构/工程/设计/文档/运维）+ 风险（L1/L2/L3）
+  - **技能稽查**：强制技能（`chinese-language` / `brainstorming` / `karpathy-guidelines` / `document-sync`）是否都加载了？遗漏 → 补加载并在"失败"字段记录
+  - **避坑检查**：对照 `memory/USER.md` 的避坑清单，这 15 条消息里踩了几个？
+  - **情绪分析**：纠正类消息次数 → 评估不满指数
+- [ ] 自检输出写入 `memory/YYYY-MM-DD.md`，格式：
 
 ```
-type: checkpoint
-完成：<这 15 次调用完成了什么>
-成功：<哪些做法有效>
-失败：<哪些做法出错或无效>
-纠正：<用户指出了什么错误，说了什么>
-模式：<是否发现重复出现的模式或反模式>
+## 自检块 #{n}
+| 消息范围 | #{start} ~ #{end} |
+| 类型 | 需求 N / 纠正 N / 指令 N / 讨论 N / 问题 N / 确认 N / 反馈 N |
+| 领域 | 治理 N / 产品 N / 架构 N / 工程 N / 设计 N / 文档 N / 运维 N |
+| 风险 | L1 N / L2 N / L3 N |
+| 技能稽查 | chinese ✅/❌ brainstorming ✅/❌ karpathy ✅/❌ doc-sync ✅/❌ |
+| 避坑 | 英文思考 N次 / 不问需求 N次 / 规则不遵守 N次 / 跳skill N次 |
+| 情绪 | 满意 N / 中立 N / 不满 N |
 ```
 
-- [ ] 自检时追加**强制技能稽查**：
-  - 自上次 checkpoint 后加载了哪些 skill？
-  - 强制 skill（`chinese-language`、`brainstorming`、`karpathy-guidelines`、`document-sync`）是否都加载了？
-  - 有遗漏 → 立即补加载，并在 checkpoint 的"失败"字段记录
-
-- [ ] 自检后更新 `memory/checkpoint.md`：`last_checkpoint`、`checkpoint_number`、写入 `memory/YYYY-MM-DD.md`（标记 `type: checkpoint`）
+- [ ] 自检后用 `agentmemory_memory_save` 保存自检结果（`type: checkpoint`）
+- [ ] 更新 `memory/checkpoint.md`：`last_checkpoint_msg_count`、`checkpoint_number`、`last_checkpoint_time`
 - [ ] 如果同模式出现 ≥ 3 次 → 写入 `docs/ai/knowledge/patterns.md`
 - [ ] 如果同错误出现 ≥ 2 次 → 写入 `docs/ai/knowledge/rules.md` 作为反模式
 
@@ -92,7 +97,8 @@ type: checkpoint
 | ... | | | |
 ```
 
-- 遗漏项 → `agentmemory_memory_save` 标记 `type: violation`，下次会话 `memory_recall` 自动提醒
+  - 遗漏项 → `agentmemory_memory_save` 标记 `type: violation`，下次会话 `memory_recall` 自动提醒
+  - 同会话自检块的统计数据汇总 → 提炼为 USER.md 候选更新
 - [ ] 确认 lint/build/test:e2e 三关（如适用）
 
 ## 项目信息
