@@ -1,0 +1,761 @@
+# Harness 工程框架 — 全量注册表
+# 本文件是 AI 可读的框架索引，映射所有要素之间的关系
+
+# ============================================================
+# 1. 工作流
+# ============================================================
+workflows:
+  phases:
+    - id: define
+      name: 定义
+      en: DEFINE
+      input: 原始需求
+      output: docs/superpowers/specs/
+      exit_condition: 规格文档已签署 + 评审小组通过
+      steps:
+        - 需求澄清
+        - 风险定级
+        - 评审小组审议
+        - 规格定稿
+
+    - id: plan
+      name: 规划
+      en: PLAN
+      input: 已签署 spec
+      output: docs/superpowers/plans/
+      exit_condition: 实现计划已审批
+      steps:
+        - karpathy-guidelines
+        - 任务分解
+        - 计划评审
+        - 计划定稿
+
+    - id: build
+      name: 构建
+      en: BUILD
+      input: 实现计划
+      output: 代码 + 测试
+      exit_condition: 代码完成 + verification-before-completion 自检通过
+      steps:
+        - 增量实现
+        - TDD 开发
+        - 领域技能调用
+        - 自检
+
+    - id: test
+      name: 测试
+      en: TEST
+      input: 已完成代码
+      output: 测试报告
+      exit_condition: lint + build + test + e2e 全绿
+      steps:
+        - lint 检查
+        - 构建检查
+        - 单元/组件测试
+        - E2E 测试
+
+    - id: review
+      name: 评审
+      en: REVIEW
+      input: 通过测试的代码
+      output: 验收报告
+      exit_condition: 验收小组全票通过
+      steps:
+        - 功能验收
+        - 代码质量验收
+        - UI 验收
+        - 组长裁定
+
+    - id: ship
+      name: 交付
+      en: SHIP
+      input: 验收通过
+      output: 日志 + 统计 + 提交 + PR
+      exit_condition: CI 绿灯
+      steps:
+        - 写日志
+        - 写统计
+        - 提交代码
+        - 推送 PR
+
+    - id: evolve
+      name: 进化
+      en: EVOLVE
+      input: 已交付经验
+      output: 模式 + 知识库更新 + 框架迭代
+      exit_condition: 模式已记录 + 知识库已更新
+      steps:
+        - 模式提取
+        - 知识入库
+        - 技能迭代
+        - 框架版本
+
+  depth_adjustment:
+    L1_简单:
+      定义: 产品直接定稿
+      规划: 轻量计划
+      构建: 单文件修改
+      测试: lint + build
+      评审: 产品单人
+      交付: 日志 + 提交
+    L2_中等:
+      定义: 组长 + 2 评估员
+      规划: 完整任务分解
+      构建: 增量实现 + TDD
+      测试: lint + build + 单元/组件
+      评审: 组长 + 2 验收员
+      交付: 日志 + 统计 + 提交
+    L3_复杂:
+      定义: 全量 4 人评估组
+      规划: 完整计划 + 架构评审
+      构建: 多文件 + TDD + 多重技能
+      测试: lint + build + 单元/组件 + e2e
+      评审: 全量 4 人验收组
+      交付: 日志 + 统计 + PR + CI
+
+# ============================================================
+# 2. 角色
+# ============================================================
+roles:
+  - id: product
+    name: 产品经理
+    person_name: 林墨
+    model: deepseek-v4-flash
+    phases: [define, plan, test, review, ship, evolve]
+    skills: 26
+    role_file: docs/harness/roles/产品.md
+    squad_leader: true
+
+  - id: design
+    name: UI设计师
+    person_name: 苏染
+    model: kimi-k2.6
+    model_note: 多模态
+    phases: [define, plan, build, test, review]
+    skills: 33
+    role_file: docs/harness/roles/设计.md
+
+  - id: developer
+    name: 开发工程师
+    person_name: 陈锋
+    model: deepseek-v4-flash
+    phases: [plan, build, test]
+    skills: 35
+    role_file: docs/harness/roles/开发.md
+
+  - id: qa
+    name: 测试工程师
+    person_name: 周严
+    model: deepseek-v4-pro
+    phases: [define, plan, test, review]
+    skills: 12
+    role_file: docs/harness/roles/测试.md
+
+# ============================================================
+# 3. 临时组织
+# ============================================================
+temporary_orgs:
+  - id: eval_squad
+    name: 评审小组
+    phase: define
+    seats:
+      - role: 产品
+        title: 组长
+        review: [商业价值, 优先级, 范围边界]
+      - role: 设计
+        title: 设计评审
+        review: [UI/UX可行性, 交互合理性]
+      - role: 开发
+        title: 技术评审
+        review: [技术可行性, 影响范围, 架构风险]
+      - role: 测试
+        title: 测试评审
+        review: [可测试性, 验收标准清晰度]
+    decision: 人类
+
+  - id: plan_review
+    name: 计划评审
+    phase: plan
+    seats:
+      - role: 产品
+        title: 组长
+        review: [计划对齐spec, 任务优先级]
+      - role: 设计
+        title: 设计评审
+        review: [UI/UX实现方案, 设计交付物]
+      - role: 开发
+        title: 技术评审
+        review: [技术方案, 依赖顺序, 模块拆分, 风险]
+      - role: 测试
+        title: 测试评审
+        review: [测试策略充分性, E2E场景覆盖]
+    decision: 人类
+
+  - id: accept_squad
+    name: 验收小组
+    phase: review
+    seats:
+      - role: 产品
+        title: 组长
+        review: [功能与规格一致性, 需求覆盖]
+      - role: 设计
+        title: 设计验收
+        review: [设计还原度, Token一致性, 暗色/响应式/可访问性]
+      - role: 开发
+        title: 代码验收
+        review: [编码规范, 架构合规, 死代码, 性能]
+      - role: 测试
+        title: 测试验收
+        review: [测试覆盖, 边界条件, 设计还原度]
+    decision: 人类
+
+# ============================================================
+# 4. 技能
+# ============================================================
+skills:
+  产品:
+    exclusive:
+      - brainstorming
+      - spec-driven-development
+      - idea-refine
+      - using-superpowers
+      - using-agent-skills
+      - find-skills-x
+      - skill-creator
+      - writing-skills
+      - planning-and-task-breakdown
+      - writing-plans
+      - executing-plans
+      - verification-before-completion
+      - squad-pre-dev-evaluation
+      - squad-post-dev-review
+      - code-review-and-quality
+      - receiving-code-review
+      - requesting-code-review
+      - shipping-and-launch
+      - ci-cd-and-automation
+      - git-workflow-and-versioning
+      - finishing-a-development-branch
+      - context-engineering
+      - website-audit
+      - code-comprehension
+    shared:
+      - documentation-and-adrs
+      - customer-journey
+      - verification-before-completion
+
+  设计:
+    exclusive:
+      - frontend-design
+      - ui-layout-rules
+      - frontend-ui-animator
+      - frontend-ui-engineering
+      - shadcn-ui
+      - shadcn-management
+      - clone-website
+      - web-artifacts-builder
+      - ui-design
+      - ux-design
+      - design-process
+      - design-trends
+      - visual-direction
+      - color-theory
+      - web-typography
+      - responsive-design
+      - component-patterns
+      - ui-patterns
+      - navigation-design
+      - branding-identity
+      - images-media
+      - accessibility
+      - usability
+      - ai-design-workflow
+      - landing-pages
+      - agent-ui-design
+      - webdesign-review
+      - customer-journey
+    shared:
+      - browser-testing-with-devtools
+      - shadcn-ui
+      - shadcn-management
+      - frontend-ui-engineering
+      - clone-website
+      - squad-pre-dev-evaluation
+      - squad-post-dev-review
+
+  开发:
+    exclusive:
+      - karpathy-guidelines
+      - incremental-implementation
+      - test-driven-development
+      - subagent-driven-development
+      - source-driven-development
+      - code-simplification
+      - frontend-ui-integration
+      - api-and-interface-design
+      - doubt-driven-development
+      - security-and-hardening
+      - performance-optimization
+      - deprecation-and-migration
+      - documentation-and-adrs
+      - rsc-data-optimizer
+      - using-git-worktrees
+      - gitnexus-cli
+      - gitnexus-debugging
+      - gitnexus-exploring
+      - gitnexus-guide
+      - gitnexus-impact-analysis
+      - gitnexus-refactoring
+    shared:
+      - frontend-ui-engineering
+      - shadcn-ui
+      - shadcn-management
+      - clone-website
+      - test-driven-development
+      - context-engineering
+      - documentation-and-adrs
+      - squad-pre-dev-evaluation
+      - squad-post-dev-review
+
+  测试:
+    exclusive:
+      - browser-testing-with-devtools
+      - debugging-and-error-recovery
+      - systematic-debugging
+      - dispatching-parallel-agents
+      - usability
+    shared:
+      - test-driven-development
+      - code-review-and-quality
+      - verification-before-completion
+      - browser-testing-with-devtools
+      - squad-pre-dev-evaluation
+      - squad-post-dev-review
+
+# ============================================================
+# 5. 知识库
+# ============================================================
+knowledge:
+  产品:
+    - docs/00-governance/agent-squad-protocol.md
+    - docs/00-governance/project-management-guide.md
+    - docs/00-governance/quality-metrics.md
+    - docs/00-governance/document-governance.md
+    - docs/00-governance/reasoning-language.md
+    - docs/01-product/product-roadmap-v1.2-draft.md
+    - docs/01-product/project-management-prd.md
+    - docs/01-product/task-center-prd.md
+    - docs/01-product/standard-management-prd.md
+    - docs/01-product/personnel-management-prd.md
+    - docs/01-product/workteam-management-prd.md
+    - docs/01-product/procurement-management-prd.md
+    - docs/01-product/digital-employee-prd.md
+    - docs/01-product/multi-agent-v1-prd.md
+    - docs/01-product/settings-prd.md
+    - docs/01-product/gantt-benchmark-research.md
+    - docs/01-product/ai-coding-knowledge-base.md
+    - docs/04-operations/
+
+  设计:
+    - docs/00-governance/design-checklist.md
+    - docs/00-governance/component-implementation-spec.md
+    - docs/00-governance/component-development-contract.md
+    - docs/01-product/design-spec-v2-shadcn.md
+
+  开发:
+    - docs/00-governance/coding-standards.md
+    - docs/00-governance/code-review-checklist.md
+    - docs/02-architecture/project-rules.md
+    - docs/02-architecture/state-machine-design.md
+    - docs/02-architecture/task-tree-modeling.md
+    - docs/02-architecture/template-data-contract.md
+    - docs/02-architecture/structured-standard-library.md
+    - docs/02-architecture/wbs-framework-design.md
+    - docs/02-architecture/task-entity-relationship.md
+    - docs/02-architecture/multi-agent-v1-technical-design.md
+    - docs/02-architecture/data-layer-decision-record.md
+    - docs/02-architecture/adr-002-feature-registry.md
+    - docs/02-architecture/routing-state-migration-plan.md
+    - docs/03-engineering/development-plan-v2.0.md
+    - docs/03-engineering/development-guide.md
+    - docs/03-engineering/integration-guide.md
+    - docs/03-engineering/component-refactoring-plan.md
+    - docs/03-engineering/phase1-handoff.md
+    - docs/03-engineering/phase1.5/phase1.5-tech-debt-plan.md
+    - docs/03-engineering/plans/2026-05-07-wbs-phase1-implementation.md
+
+  测试:
+    - docs/00-governance/code-review-checklist.md
+    - docs/00-governance/mvp-code-quality-plan-v2.md
+    - docs/03-engineering/ai-testing-guide.md
+    - docs/03-engineering/regression-checklist.md
+
+  参考层:
+    superseded:
+      - docs/knowledge-base/01-product-development/
+      - docs/knowledge-base/02-technical-architecture/
+      - docs/knowledge-base/03-project-specific/
+
+# ============================================================
+# 6. 上下文
+# ============================================================
+context:
+  entry_point: opencode.json
+  instructions:
+    - AGENTS.md
+    - docs/harness/roles/{role}.md
+  memory:
+    long_term: MEMORY.md
+    patterns: patterns/*.md
+    daily: .workbuddy/memory/YYYY-MM-DD.md
+  load_on_start:
+    - AGENTS.md
+    - MEMORY.md
+    - docs/harness/roles/{role}.md
+  load_on_demand:
+    - skills
+    - knowledge-base-index
+
+  role_files:
+    产品: docs/harness/roles/产品.md
+    设计: docs/harness/roles/设计.md
+    开发: docs/harness/roles/开发.md
+    测试: docs/harness/roles/测试.md
+
+# ============================================================
+# 7. 工具
+# ============================================================
+tools:
+  cli:
+    - npm run dev
+    - npm run dev:legacy
+    - npm run dev:local
+    - npm run build
+    - npm run build:legacy
+    - npm run lint
+    - npm run test:run
+    - npm run test:e2e
+    - npm run test:e2e:ui
+    - npx eslint
+    - npx tsc --noEmit
+
+  git:
+    hooks: .husky/
+    ci: .github/workflows/ci.yml
+
+  github:
+    cli: gh
+    issues: GitHub Issues + Labels + Milestones
+    release: .github/release.sh
+
+  code_analysis:
+    - GitNexus CLI
+    - GitNexus MCP
+
+  memory:
+    - task-memory
+    - agentmemory_memory_save
+    - agentmemory_memory_recall
+
+  browser:
+    - chrome-devtools MCP
+
+mcp:
+  servers:
+    - name: chrome-devtools
+      roles: [设计, 开发, 测试]
+      capabilities: [snapshot, screenshot, console, network, performance]
+    - name: GitNexus
+      roles: [产品, 开发]
+      capabilities: [query, context, impact, refactor, detect_changes]
+    - name: agentmemory
+      roles: [产品]
+      capabilities: [memory_save, memory_recall, memory_smart_search]
+
+# ============================================================
+# 8. Hooks
+# ============================================================
+hooks:
+  - id: H1
+    path: .husky/pre-commit
+    trigger: git commit 前
+    action: lint-staged + tsc --noEmit
+    phase: ship
+
+  - id: H2
+    path: .husky/commit-msg
+    trigger: commit 消息写入时
+    action: Conventional Commits 校验
+    phase: ship
+
+  - id: H3
+    path: .opencode/hooks/pre-commit
+    trigger: git commit 前
+    action: 同步记忆
+    phase: ship
+
+  - id: H4
+    path: .opencode/hooks/post-commit
+    trigger: git commit 后
+    action: 采集 stats + 异步写日志
+    phase: ship
+
+  - id: H5
+    path: .husky/pre-push
+    trigger: git push 前
+    action: 质量门禁预检
+    phase: ship
+
+  - id: H6
+    path: .github/workflows/ci.yml
+    trigger: git push
+    action: ESLint
+    phase: test
+
+  - id: H7
+    path: .github/workflows/ci.yml
+    trigger: git push
+    action: tsc + vite build
+    phase: test
+
+  - id: H8
+    path: .github/workflows/ci.yml
+    trigger: git push
+    action: vitest + playwright
+    phase: test
+
+  - id: H9
+    path: .github/workflows/daily-summary.yml
+    trigger: "cron: 0 18 * * 1-5"
+    action: 聚合日报 + 飞书推送
+    phase: evolve
+
+  - id: H10
+    path: .github/workflows/weekly-review.yml
+    trigger: "cron: 0 17 * * 5"
+    action: 44 指标聚合 + 周报 + 飞书推送
+    phase: evolve
+
+  - id: H11
+    path: .github/workflows/monthly-review.yml
+    trigger: "cron: 0 9 1 * *"
+    action: 趋势分析 + 框架迭代建议 + 飞书推送
+    phase: evolve
+
+  - id: H12
+    path: .github/workflows/ci.yml (on tags)
+    trigger: tag push
+    action: 44 指标全量 + 发布质量报告
+    phase: ship
+
+# ============================================================
+# 9. 治理
+# ============================================================
+governance:
+  schedule:
+    per_task:
+      trigger: post-commit hook
+      script: scripts/collect-stats.sh
+      output: .workbuddy/stats/YYYY-MM-DD.json
+      owner: 自动化
+
+    daily:
+      trigger: "cron: 0 18 * * 1-5"
+      workflow: .github/workflows/daily-summary.yml
+      output: .workbuddy/stats/daily/YYYY-MM-DD.md
+      notify:
+        channel: feishu
+        method: webhook
+      owner: 产品
+
+    weekly:
+      trigger: "cron: 0 17 * * 5"
+      workflow: .github/workflows/weekly-review.yml
+      output: .workbuddy/stats/weekly/YYYY-Www.json
+      notify:
+        channel: feishu
+        method: webhook
+      owner: 产品
+
+    monthly:
+      trigger: "cron: 0 9 1 * *"
+      workflow: .github/workflows/monthly-review.yml
+      output: .workbuddy/stats/trends/YYYY-Qq.json
+      notify:
+        channel: feishu
+        method: webhook
+      owner: 产品
+
+    on_release:
+      trigger: "push tags v*"
+      workflow: .github/workflows/ci.yml (metrics step)
+      output: .workbuddy/stats/release/vX.Y.Z.json
+      owner: 产品
+
+  alerts:
+    levels:
+      green: all metrics in range
+      yellow: "> 20% deviation, 2 consecutive weeks"
+      orange: "> 50% deviation OR > 3 metrics simultaneously"
+      red: "core metric fail -> freeze release"
+    core_metrics:
+      - e2e_pass_rate
+      - build_pass_rate
+      - leak_rate
+
+  metrics:
+    产品:
+      - id: clarification_rounds
+        target: "<= 3"
+        source: agent_self
+      - id: requirement_deviation
+        target: "<= 1"
+        source: agent_self
+      - id: rework_rounds
+        target: "<= 1"
+        source: agent_self
+      - id: plan_accuracy
+        target: ">= 80%"
+        source: agent_self
+      - id: doc_completeness
+        target: "100%"
+        source: auto
+      - id: eval_pass_rate
+        target: ">= 70%"
+        source: agent_self
+      - id: evolution_output
+        target: ">= 1 / week"
+        source: human_audit
+
+    设计:
+      - id: design_fidelity
+        target: ">= 8"
+        source: human_audit
+      - id: design_first_pass
+        target: ">= 60%"
+        source: agent_self
+      - id: token_compliance
+        target: "0 violations"
+        source: auto
+      - id: component_reuse
+        target: ">= 80%"
+        source: auto
+      - id: accessibility_score
+        target: "0 blockers"
+        source: auto
+      - id: responsive_coverage
+        target: "100%"
+        source: auto
+      - id: dark_mode_coverage
+        target: ">= 90%"
+        source: auto
+
+    开发:
+      - id: lint_pass_rate
+        target: "100%"
+        source: auto
+      - id: ts_strictness
+        target: "0 any"
+        source: auto
+      - id: test_coverage
+        target: ">= 70%"
+        source: auto
+      - id: build_pass_rate
+        target: ">= 95%"
+        source: auto
+      - id: code_first_pass
+        target: ">= 60%"
+        source: agent_self
+      - id: rework_per_task
+        target: "<= 0.5"
+        source: agent_self
+      - id: tdd_adherence
+        target: ">= 70%"
+        source: agent_self
+      - id: dead_code
+        target: "0"
+        source: auto
+
+    测试:
+      - id: e2e_pass_rate
+        target: "100%"
+        source: auto
+      - id: defect_discovery
+        target: "> 0 (monitor)"
+        source: agent_self
+      - id: leak_rate
+        target: "<= 5%"
+        source: human_audit
+      - id: test_requirement_coverage
+        target: ">= 90%"
+        source: agent_self
+      - id: boundary_coverage
+        target: ">= 80%"
+        source: human_audit
+      - id: design_issue_accuracy
+        target: ">= 80%"
+        source: human_audit
+      - id: automation_stability
+        target: "<= 5% flaky"
+        source: auto
+
+    general:
+      chinese_rate:
+        target: ">= 95%"
+        source: human_audit
+        reviewer: all
+      skill_hit_rate:
+        target: ">= 80%"
+        source: auto
+        reviewer: 产品
+      tool_utilization:
+        target: "100%"
+        source: auto
+        reviewer: all
+      suggestion_rate:
+        target: ">= 1 / task"
+        source: agent_self
+        reviewer: all
+      objection_rate:
+        target: ">= 0.3 / task"
+        source: agent_self
+        reviewer: all
+      alternative_rate:
+        target: ">= 50%"
+        source: agent_self
+        reviewer: all
+      blind_obedience:
+        target: "0"
+        source: agent_self
+        reviewer: all
+
+# ============================================================
+# 10. 进化
+# ============================================================
+evolution:
+  triggers:
+    per_task: [task-memory, quality-metrics]
+    per_batch: [pattern-extraction, error-analysis]
+    on_demand: [knowledge-update, skill-update]
+    on_version: [framework-iteration]
+
+  learning_loops:
+    l1_metrics:
+      input: [quality-KPI, test-results, review-report]
+      output: [task-log, stats-json]
+      owner: 产品
+
+    l2_patterns:
+      input: [l1-aggregated-data]
+      output: [MEMORY.md patterns, 避坑指南]
+      owner: 产品
+
+    l3_knowledge:
+      input: [l2-patterns, document-gap-analysis]
+      output: [updated docs, new ADRs, deprecated marks]
+      owner: 产品
+
+    l4_framework:
+      input: [l3-gaps, structural-issues]
+      output: [bumped version, updated harness docs, updated registry]
+      owner: 产品

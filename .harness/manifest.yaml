@@ -1,0 +1,51 @@
+# Harness 工程框架 — 元描述
+framework:
+  name: opencode-harness
+  version: 1.0.0
+  audience:
+    - human
+    - ai
+
+phases:
+  - define
+  - plan
+  - build
+  - test
+  - review
+  - ship
+  - evolve
+
+professions:
+  - name: 产品经理
+    person: 林墨
+    model: deepseek-v4-flash
+    skills: 26
+  - name: UI设计师
+    person: 苏染
+    model: kimi-k2.6 (多模态)
+    skills: 33
+  - name: 开发工程师
+    person: 陈锋
+    model: deepseek-v4-flash
+    skills: 35
+  - name: 测试工程师
+    person: 周严
+    model: deepseek-v4-pro
+    skills: 12
+
+temporary_orgs:
+  - 评审小组
+  - 计划评审
+  - 验收小组
+
+skills_total: 106
+docs_total: 71
+metrics_total: 51
+
+governance:
+  schedule:
+    - 每任务
+    - 每日 18:00
+    - 每周五 17:00
+    - 每月 1 号 09:00
+    - 每发布

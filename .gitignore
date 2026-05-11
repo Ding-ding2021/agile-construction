@@ -27,10 +27,17 @@ dist-ssr
 coverage/
 
 # SQLite
+*.db
 *.db-shm
 *.db-wal
 *.snapshot-backup
+data/state_store.db/
+
+# Worktrees
 .claude/worktrees/
+
+# Temp files
+.workbuddy/tmp/
 
 # API key config files
 deepseek-models.json
