@@ -30,3 +30,11 @@
 ## 2026-05-07 更新
 
 - 日历系统通过 Squad 评估（L2），MVP 剔除管理 UI 页面。甘特图集成仅改动 3 行核心计算逻辑。
+
+## 2026-05-11 更新
+
+- 确立三层文档架构：人类文档层(docs/)、AI 合约层(docs/ai/)、记忆进化层(memory/)。每份人类文档变更后通过 document-sync 技能自动同步 AI 合约。合约 ≤200 行、纯表格/清单、零叙事段落为硬性红线。CLAUDE.md 已废弃，AGENTS.md 为唯一入口。
+
+## 2026-05-11 更新
+
+- 采用 opencode run 命令嵌入 GitHub Actions cron 实现全自动知识提炼飞轮。H9 每日提炼、H10 每周精炼、H11 每月审计。所有提炼任务签署 harness-bot，输出写入 docs/ai/knowledge/ + memory/MEMORY.md。如果 opencode CLI 不可用则跳过（非阻塞）。

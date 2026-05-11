@@ -1,5 +1,15 @@
 # 知识库
 
+> **⚠️ 已 superseded — 2026-05-11**
+> 本文档描述的六层文档结构已被**五层知识架构**替代，新架构定义见：
+>
+> - `docs/superpowers/specs/2026-05-11-knowledge-engine.md`（知识引擎总纲）
+> - `docs/ai/README.md`（AI 合约层索引）
+> - `docs/ai/knowledge/patterns.md` `decisions.md` `rules.md`（可复用知识）
+> - `docs/ai/context/state.md`（项目当前状态）
+>
+> 本文档保留作为历史参考，其描述的 `docs/knowledge-base/` 目录已全量归档至 `docs/99-archive/knowledge-base/`。
+
 ## 概述
 
 71+ 份文档按六层分布，每层按四专业索引。知识库为 Agent 提供项目上下文。

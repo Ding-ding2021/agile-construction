@@ -17,6 +17,21 @@
 - [ ] 有匹配 → 调用 `skill` 工具加载。加载后声明"已加载 <skill名>"
 - [ ] 无匹配 → 声明"未匹配对应 skill，直接执行"
 
+## 文档铁律（文档变更后不可跳过）
+
+- [ ] 任何 `docs/` 下文档变更后：调用 `skill` 工具加载 `document-sync`
+- [ ] `document-sync` 完成后：确认对应 AI 合约已更新到 `docs/ai/contracts/`
+- [ ] 合约自检通关：≤200 行、零叙事段落、frontmatter 完整、双向链接有效
+
+## 进化铁律（不可跳过）
+
+- [ ] 会话启动时检查 `docs/ai/context/state.md` 的 `last_distill` 和 `last_lint` 时间
+- [ ] 自上次提炼后累积 ≥ 5 篇新 daily log → 先执行提炼，再处理用户任务
+- [ ] 上次 Lint > 7 天 → 先执行精炼，再处理用户任务
+- [ ] 提炼动作：读日志 → 聚类 → 写 `docs/ai/knowledge/patterns.md` → 更新 `memory/MEMORY.md` → 更新 `docs/ai/context/state.md`
+- [ ] 精炼动作：全量 Lint → 标记过期文档 → 修复断裂引用 → 建议归档死页 → 更新 `docs/ai/context/state.md`
+- [ ] 提炼/精炼完成后 `git add + commit + push`，发布者署名 `harness-bot`
+
 ## 编码铁律（不可跳过）
 
 - [ ] 任何代码修改前：调用 `skill` 工具加载 `karpathy-guidelines`

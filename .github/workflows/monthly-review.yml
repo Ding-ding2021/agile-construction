@@ -13,40 +13,28 @@ jobs:
           fetch-depth: 100
 
       - name: 生成月报
+        shell: bash
         run: |
           MONTH=$(date '+%Y-%m')
           QUARTER=$(date '+%Y-Q%q')
-
           FIRST_DAY=$(date '+%Y-%m-01')
           COMMIT_COUNT=$(git log --since="$FIRST_DAY" --format="%s" | wc -l | tr -d ' ')
           UNIQUE_AUTHORS=$(git log --since="$FIRST_DAY" --format="%an" | sort -u | wc -l | tr -d ' ')
+          TOP_COMMITS=$(git log --since="$FIRST_DAY" --format="- %s" | head -20)
+          FREQ=$(echo "scale=2; ${COMMIT_COUNT} / $(date '+%d' | sed 's/^0//')" | bc 2>/dev/null || echo "N/A")
 
-          REPORT="# 月报 — $MONTH
+          TOTAL_SKILLS=$(find .agents/skills/ -name 'SKILL.md' | wc -l | tr -d ' ')
+          STALE_SKILLS=$(find .agents/skills/ -name 'SKILL.md' -mtime +30 | wc -l | tr -d ' ')
+          SKILL_LIST=$(find .agents/skills/ -name 'SKILL.md' -mtime +30 | sed 's/^/- /' | head -10)
+          if [ "${STALE_SKILLS}" -gt 0 ]; then SKILL_ALERT="🟡 以上 skills 超过 30 天未更新"; else SKILL_ALERT="✅ 所有 skills 均在 30 天内更新"; fi
 
-## 本月概览
-- 提交数：$COMMIT_COUNT
-- 贡献者：$UNIQUE_AUTHORS
-
-## 本月关键提交
-$(git log --since="$FIRST_DAY" --format='- %s' | head -20)
-
-## 趋势分析
-- 提交频率：$(echo "scale=2; $COMMIT_COUNT / $(date '+%d' | sed 's/^0//')" | bc 2>/dev/null || echo "N/A") 次/天
-- 如需详细 44 指标审计，请执行手动 workflow_dispatch
-
-## Skills 时效检查
-$(find .agents/skills/ -name 'SKILL.md' -mtime +30 | sed 's/^/- /' | head -10)
-$(if [ $(find .agents/skills/ -name 'SKILL.md' -mtime +30 | wc -l) -gt 0 ]; then echo '🟡 以上 skills 超过 30 天未更新'; else echo '✅ 所有 skills 均在 30 天内更新'; fi)
-
-## 文档冲突扫描
-$(grep -rl 'status: active' docs/ | cut -d/ -f3 | sort | uniq -c | sort -rn | head -5)
-
----
-发布者：产品（林墨）
-季度：$QUARTER"
+          DOC_DIST=$(grep -rl 'status: active' docs/ 2>/dev/null | cut -d/ -f2 | sort | uniq -c | sort -rn | head -5)
 
           mkdir -p .workbuddy/stats/trends
-          echo "$REPORT" > .workbuddy/stats/trends/$MONTH.md
+          printf "# 月报 — %s\n\n## 本月概览\n- 提交数：%s\n- 贡献者：%s\n\n## 本月关键提交\n%s\n\n## 趋势分析\n- 提交频率：%s 次/天\n- 如需详细审计，执行手动 workflow_dispatch\n\n## Skills 时效检查\n- 总计：%s 个，过期：%s 个\n%s\n%s\n\n## 文档 active 分布\n%s\n\n---\n发布者：harness-bot\n季度：%s\n" \
+            "$MONTH" "$COMMIT_COUNT" "$UNIQUE_AUTHORS" "$TOP_COMMITS" "$FREQ" \
+            "$TOTAL_SKILLS" "$STALE_SKILLS" "$SKILL_LIST" "$SKILL_ALERT" "$DOC_DIST" "$QUARTER" \
+            > ".workbuddy/stats/trends/${MONTH}.md"
 
       - name: 飞书推送
         env:
@@ -56,8 +44,14 @@ $(grep -rl 'status: active' docs/ | cut -d/ -f3 | sort | uniq -c | sort -rn | he
             MONTH=$(date '+%Y-%m')
             python3 scripts/notify-feishu.py "月报 $MONTH" "$(cat .workbuddy/stats/trends/$MONTH.md)"
           else
-            echo "⚠️ 飞书未配置，跳过推送"
+            echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
+
+      - name: 执行每月审计（opencode agent）
+        continue-on-error: true
+        run: |
+          echo "🔄 启动每月审计 Agent..."
+          opencode run "执行每月审计任务：全量 Lint 扫描矛盾检测死页检测缺失引用检测 Frontmatter 完整性，标记过期文档，评估 Skill 效果统计调用频率和成功率提案 patch，检查是否需要 bump harness manifest version，生成月度报告，记录 log.md，git add commit push" --model deepseek/deepseek-v4-flash --agent product --dangerously-skip-permissions 2>/dev/null || echo "⚠️ opencode CLI 不可用，每月审计跳过（非阻塞）"
 
       - name: 提交报告
         run: |

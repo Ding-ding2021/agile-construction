@@ -1,0 +1,18 @@
+{
+  "date": "2026-05-11",
+  "total_commits": 2,
+  "commits": [
+    {
+      "time": "17:33:04",
+      "hash": "266a449",
+      "message": "docs(spec): Harness 知识引擎 — 融合 OpenClaw+Hermes+LLM Wiki 的统一知识管理框架",
+      "files": 1
+    },
+    {
+      "time": "17:44:32",
+      "hash": "266a449",
+      "message": "docs(spec): Harness 知识引擎 — 融合 OpenClaw+Hermes+LLM Wiki 的统一知识管理框架",
+      "files": 1
+    }
+  ]
+}

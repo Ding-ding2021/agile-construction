@@ -13,42 +13,20 @@ jobs:
           fetch-depth: 50
 
       - name: 生成周报
+        shell: bash
         run: |
           WEEK=$(date '+%Y-W%V')
-          MONDAY=$(date -v-mon '+%Y-%m-%d' 2>/dev/null || date -d "last monday" '+%Y-%m-%d')
+          MONDAY=$(date -d "last monday" '+%Y-%m-%d' 2>/dev/null || date -v-mon '+%Y-%m-%d')
           TODAY=$(date '+%Y-%m-%d')
-
           COMMIT_COUNT=$(git log --since="$MONDAY" --format="%s" | wc -l | tr -d ' ')
           UNIQUE_FILES=$(git log --since="$MONDAY" --name-only --format="" | sort -u | wc -l | tr -d ' ')
-
-          REPORT="# 周报 — $WEEK ($MONDAY ~ $TODAY)
-
-## 本周概览
-- 提交数：$COMMIT_COUNT
-- 文件变更：$UNIQUE_FILES
-
-## 提交列表
-$(git log --since="$MONDAY" --format='- %s')
-
-## 指标汇总
-| 指标 | 本周值 | 状态 |
-|---|---|---|
-| 提交次数 | $COMMIT_COUNT | — |
-| 文件变更 | $UNIQUE_FILES | — |
-
-## 告警
-$(if [ $COMMIT_COUNT -eq 0 ]; then echo '🟡 本周无提交'; else echo '无'; fi)
-
-## 下周关注
-- 检查文档 frontmatter 同步
-- 检查 skills 时效
-
----
-发布者：产品（林墨）
-发布渠道：.workbuddy/stats/weekly/$WEEK.json"
+          ALERT=$(if [ ${COMMIT_COUNT:-0} -eq 0 ]; then echo "🟡 本周无提交"; else echo "无"; fi)
+          COMMIT_LIST=$(git log --since="$MONDAY" --format='- %s')
 
           mkdir -p .workbuddy/stats/weekly
-          echo "$REPORT" > .workbuddy/stats/weekly/$WEEK.md
+          printf "# 周报 — %s (%s ~ %s)\n\n## 本周概览\n- 提交数：%s\n- 文件变更：%s\n\n## 提交列表\n%s\n\n## 指标汇总\n| 指标 | 本周值 | 状态 |\n|---|---|---|\n| 提交次数 | %s | — |\n| 文件变更 | %s | — |\n\n## 告警\n%s\n\n---\n发布者：harness-bot\n" \
+            "$WEEK" "$MONDAY" "$TODAY" "$COMMIT_COUNT" "$UNIQUE_FILES" "$COMMIT_LIST" "$COMMIT_COUNT" "$UNIQUE_FILES" "$ALERT" \
+            > ".workbuddy/stats/weekly/${WEEK}.md"
 
       - name: 飞书推送
         env:
@@ -58,8 +36,14 @@ $(if [ $COMMIT_COUNT -eq 0 ]; then echo '🟡 本周无提交'; else echo '无';
             WEEK=$(date '+%Y-W%V')
             python3 scripts/notify-feishu.py "周报 $WEEK" "$(cat .workbuddy/stats/weekly/$WEEK.md)"
           else
-            echo "⚠️ 飞书未配置，跳过推送"
+            echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
+
+      - name: 执行每周精炼（opencode agent）
+        continue-on-error: true
+        run: |
+          echo "🔄 启动每周精炼 Agent..."
+          opencode run "执行每周精炼任务：读本周所有 daily log，聚类同类任务，提取 3+ 次重复模式写入 patterns.md，扫描 docs/ 全部 active 文档 Frontmatter 标记过期文档，检查双向链接有效性修复断裂引用，查找死页建议归档，更新 state.md last_lint 时间戳，记录 log.md，git add commit push" --model deepseek/deepseek-v4-flash --agent product --dangerously-skip-permissions 2>/dev/null || echo "⚠️ opencode CLI 不可用，每周精炼跳过（非阻塞）"
 
       - name: 提交报告
         run: |

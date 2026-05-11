@@ -12,38 +12,30 @@ jobs:
         with:
           fetch-depth: 20
 
-      - name: 生成每日报告
+      - name: 生成每日统计
+        shell: bash
         run: |
           TODAY=$(date '+%Y-%m-%d')
           WEEKDAY=$(date '+%u')
-          WEEKDAY_CN=$(case $WEEKDAY in 1) echo "一";; 2) echo "二";; 3) echo "三";; 4) echo "四";; 5) echo "五";; esac)
+          case $WEEKDAY in
+            1) WEEKDAY_CN="一" ;;
+            2) WEEKDAY_CN="二" ;;
+            3) WEEKDAY_CN="三" ;;
+            4) WEEKDAY_CN="四" ;;
+            5) WEEKDAY_CN="五" ;;
+            *) WEEKDAY_CN="?" ;;
+          esac
 
           COMMITS=$(git log --since="midnight" --format="- %s" 2>/dev/null || echo "无提交")
-          FILES_CHANGED=$(git log --since="midnight" --name-only --format="" | sort -u | head -20 | sed 's/^/- /' || echo "无变更")
-
-          REPORT="# 日报 — $TODAY (周$WEEKDAY_CN)
-
-## 今日提交
-$COMMITS
-
-## 涉及文件
-$FILES_CHANGED
-
-## 今日指标
-| 指标 | 值 | 状态 |
-|---|---|---|
-| 提交次数 | $(echo "$COMMITS" | grep -c "^-" || echo 0) | — |
-| 文件变更 | $(echo "$FILES_CHANGED" | grep -c "^-" || echo 0) | — |
-
-## 告警
-无
-
----
-发布者：产品（林墨）
-发布渠道：.workbuddy/stats/daily/$TODAY.md"
+          COMMIT_COUNT=$(echo "$COMMITS" | grep -c "^- " || echo 0)
+          FILE_COUNT=$(git log --since="midnight" --name-only --format="" | sort -u | wc -l | tr -d ' ')
 
           mkdir -p .workbuddy/stats/daily
-          echo "$REPORT" > .workbuddy/stats/daily/$TODAY.md
+          ALERT=$(if [ "${COMMIT_COUNT}" -eq 0 ]; then echo "无提交"; else echo "无"; fi)
+
+          printf "# 日报 — %s (周%s)\n\n## 今日提交\n%s\n\n## 今日指标\n| 指标 | 值 | 状态 |\n|---|---|---|\n| 提交次数 | %s | — |\n| 文件变更 | %s | — |\n\n## 告警\n%s\n\n---\n发布者：harness-bot\n" \
+            "$TODAY" "$WEEKDAY_CN" "$COMMITS" "$COMMIT_COUNT" "$FILE_COUNT" "$ALERT" \
+            > ".workbuddy/stats/daily/${TODAY}.md"
 
       - name: 飞书推送
         env:
@@ -53,8 +45,14 @@ $FILES_CHANGED
             TODAY=$(date '+%Y-%m-%d')
             python3 scripts/notify-feishu.py "日报 $TODAY" "$(cat .workbuddy/stats/daily/$TODAY.md)"
           else
-            echo "⚠️ 飞书未配置（FEISHU_WEBHOOK_URL 未设置），跳过推送"
+            echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
+
+      - name: 执行每日提炼（opencode agent）
+        continue-on-error: true
+        run: |
+          echo "🔄 启动知识提炼 Agent..."
+          opencode run "执行每日提炼任务：读取今日统计文件，检查自上次提炼后累积任务数，若达阈值则提取模式写入 docs/ai/knowledge/patterns.md，更新 MEMORY.md 和 state.md，记录 log.md，git add commit push" --model deepseek/deepseek-v4-flash --agent product --dangerously-skip-permissions 2>/dev/null || echo "⚠️ opencode CLI 不可用，每日提炼跳过（非阻塞）"
 
       - name: 提交报告
         run: |
@@ -62,4 +60,4 @@ $FILES_CHANGED
           git config user.email "harness@agile-construction.dev"
           git add .workbuddy/stats/daily/
           git diff --cached --quiet || git commit -m "docs(stats): 每日总结 $(date '+%Y-%m-%d')"
-          git push || echo "⚠️ 推送失败（可能网络不通）"
+          git push || echo "⚠️ 推送失败"

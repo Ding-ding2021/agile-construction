@@ -3,16 +3,17 @@ id: DOC-00-GOVERNANCE-DOCUMENT-GOVERNANCE
 title: 文档治理规范
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-06
+last_updated: 2026-05-11
 source_of_truth: true
 related_code:
-  - CLAUDE.md
+  - AGENTS.md
   - memory/MEMORY.md
   - .agents/skills/
   - src-next/
 related_docs:
   - docs/README.md
   - docs/PLAN.md
+  - docs/ai/README.md
 ---
 
 # 文档治理规范
@@ -22,16 +23,22 @@ related_docs:
 - 建立 `docs/` 作为项目文档唯一源
 - 建立 `memory/` 作为项目记忆唯一源（各工具通过 symlink 引用）
 - 建立 `.agents/skills/` 作为 AI 技能唯一源
-- 建立 **CLAUDE.md + memory/ + docs/** 三层分工体系，避免内容重复
+- 建立 **AGENTS.md（入口）+ 三层文档架构**（见 §2），避免内容重复
 
-## 2. 信息分层
+## 2. 三层文档架构
 
-| 层       | 位置                   | 职责                           | 更新频率     |
-| -------- | ---------------------- | ------------------------------ | ------------ |
-| 持久规则 | `CLAUDE.md`            | 架构、命令、不可变规则         | 架构变更时   |
-| 当前状态 | `memory/MEMORY.md`     | 活跃 Phase、技术债务、决策记录 | Phase 切换时 |
-| 增量日志 | `memory/YYYY-MM-DD.md` | 每日开发记录                   | 每日结束时   |
-| 完整文档 | `docs/`                | 设计规范、PRD、架构、工程指南  | 按需         |
+项目文档按读者分为三个层次：
+
+| 层             | 位置        | 读者           | 格式          | 职责                         |
+| -------------- | ----------- | -------------- | ------------- | ---------------------------- |
+| **入口**       | `AGENTS.md` | AI（启动必读） | 清单式        | 角色、规则、启动流程         |
+| **记忆层**     | `memory/`   | AI（跨会话）   | 键值对 + 日志 | 关键决策、模式、每日任务记录 |
+| **AI 合约层**  | `docs/ai/`  | AI（按需加载） | 表格 + 清单   | 模块规则、实体定义、API 骨架 |
+| **人类文档层** | `docs/`     | 人类 + AI 参考 | 段落 + 叙事   | PRD、架构、工程指南          |
+
+**数据流**：人类写 `docs/` → `document-sync` 技能提取合约 → `docs/ai/` → AI 读合约执行 → 完成 → 模式反哺 `docs/ai/knowledge/` + `memory/`
+
+> 详见 `.agents/skills/document-sync/SKILL.md`
 
 ## 3. 目录与职责
 
@@ -42,6 +49,7 @@ related_docs:
 | `02-architecture` | 架构与设计             | 架构变更时更新   |
 | `03-engineering`  | 开发交付与发布         | 工程阶段更新     |
 | `04-operations`   | 运营指标与治理记录     | 运营阶段更新     |
+| `ai/`             | AI 合约、知识、上下文  | 随人类文档同步   |
 | `99-archive`      | 历史归档               | 不可作为执行依据 |
 
 ## 4. 状态模型
@@ -105,6 +113,16 @@ AI 技能（SKILL.md）统一管理规则：
 3. 删除技能时先删符号链接，再删 `.agents/skills/` 中的源目录
 4. `.claude/skills/` 中只保留有效链接和本地特定技能
 
+### 6.5 核心强制技能
+
+以下技能在特定场景**必须加载**，不可跳过：
+
+| 技能                             | 触发场景                  | 强制级别 |
+| -------------------------------- | ------------------------- | -------- |
+| `karpathy-guidelines`            | 任何代码修改前            | 硬性     |
+| `document-sync`                  | 任何 `docs/` 下文档变更后 | 硬性     |
+| `verification-before-completion` | 声称完成前                | 硬性     |
+
 ## 7. 单源真理（SSOT）原则
 
 | 信息类型 | 唯一源            | 禁止重复存放                                |
@@ -112,12 +130,12 @@ AI 技能（SKILL.md）统一管理规则：
 | 项目文档 | `docs/`           | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
 | 项目记忆 | `memory/`         | `.opencode/memory/`（已改 symlink）         |
 | AI 技能  | `.agents/skills/` | `.trae/skills/`、`.qoder/skills/`（已删除） |
-| 架构规则 | `CLAUDE.md`       | 其他工具根级说明文件                        |
+| 架构规则 | `AGENTS.md`       | 其他工具根级说明文件                        |
 
 ## 8. 引用规则
 
 - 文档引用统一使用 `docs/xxx` 相对路径
-- 根目录仅允许 `CLAUDE.md`、`README.md`、`AGENTS.md` 三个入口文件
+- 根目录仅允许 `AGENTS.md`、`README.md` 两个入口文件
 - 禁止在根目录新增业务规范文档
 
 ## 9. 变更流程
@@ -128,7 +146,7 @@ AI 技能（SKILL.md）统一管理规则：
 4. 通过 `docs/00-governance/pr-doc-checklist.md` 检查
 5. 合并后记录至审计文档
 
-## 7. 计划文档管理规则
+## 10. 计划文档管理规则
 
 ### 7.1 计划总览
 
@@ -162,6 +180,39 @@ AI 技能（SKILL.md）统一管理规则：
 
 - `docs/README.md` 状态与文档 frontmatter 一致
 - `docs/PLAN.md` 反映当前项目状态
-- 无新增散落计划信息
+  - 无新增散落计划信息
 
-5. 提交并记录变更
+## 11. 知识架构映射（五层→三层）
+
+项目存在两套互补的知识架构，它们不是对立关系：
+
+### 五层知识架构（知识引擎）
+
+| 层     | 位置                                  | 内容                    |
+| ------ | ------------------------------------- | ----------------------- |
+| Schema | AGENTS.md + harness 注册表 + 角色文件 | 告诉 AI 如何组织知识    |
+| Wiki   | docs/                                 | Markdown 文档，人类可读 |
+| Skill  | .agents/skills/                       | 可复用程序记忆          |
+| 记忆   | memory/ + docs/ai/knowledge/          | 跨会话持久事实          |
+| Raw    | docs/ai/contracts/                    | 从 PRD 提取的不可变规则 |
+
+### 三层文档架构（document-sync）
+
+| 层         | 位置          | 读者           |
+| ---------- | ------------- | -------------- |
+| 人类文档层 | docs/ (00-04) | 人类 + AI 参考 |
+| AI 合约层  | docs/ai/      | AI 消费        |
+| 记忆进化层 | memory/       | AI 跨会话      |
+
+### 映射关系
+
+```
+五层              三层
+Schema ──→ AGENTS.md（入口）
+Wiki   ──→ docs/（人类文档层）
+Skill  ──→ .agents/skills/（独立维）
+记忆    ──→ memory/ + docs/ai/knowledge/（记忆进化层）
+Raw    ──→ docs/ai/contracts/（AI 合约层）
+```
+
+> 详见 `docs/superpowers/specs/2026-05-11-knowledge-engine.md`

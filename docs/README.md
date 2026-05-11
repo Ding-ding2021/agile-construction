@@ -1,7 +1,7 @@
 ---
 title: 文档中心（统一入口）
 status: active
-last_updated: 2026-05-06（第二批归档完成）
+last_updated: 2026-05-11（新增 AI 合约层）
 ---
 
 # 文档中心（统一入口）
@@ -9,7 +9,7 @@ last_updated: 2026-05-06（第二批归档完成）
 > 本文件是仓库文档唯一导航入口（SSOT 索引）。
 > 所有 active 文档必须在本页登记。
 > 计划类文档的管理详见 [PLAN.md](docs/PLAN.md)。
-> 最后索引更新：2026-05-06（覆盖 70 个 .md 文件）
+> 最后索引更新：2026-05-11（新增 `docs/ai/` AI 合约层）
 
 ## 文档分层
 
@@ -18,7 +18,7 @@ last_updated: 2026-05-06（第二批归档完成）
 - `02-architecture`：架构与技术设计文档
 - `03-engineering`：开发、联调、回归、发布文档
 - `04-operations`：阶段运营与治理指标文档
-- `05-knowledge-base`：领域知识库（产品流程 + 架构专题 + 项目技术栈）
+- `ai/`：AI 合约层 — 模块合约、可复用知识、上下文（AI 消费，非人类阅读）
 - `99-archive`：历史归档（不作为执行依据）
 
 ## Active 文档索引
@@ -86,34 +86,32 @@ last_updated: 2026-05-06（第二批归档完成）
 - `docs/04-operations/phase4/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — Phase 3 回顾与 Phase 4 提案
 - `docs/04-operations/phase4/roadmap-v1.2-impact-assessment.md` — Roadmap V1.2 影响评估
 
-### 05-knowledge-base（领域知识库）
+### AI 合约层（docs/ai/）
 
-**产品开发流程：**
+> 面向 AI Agent 的结构化知识库。由 `document-sync` + 提炼任务自动维护，参见 `docs/ai/README.md`。
 
-- `docs/knowledge-base/01-product-development/01-development-overview.md`
-- `docs/knowledge-base/01-product-development/02-requirement-phase.md`
-- `docs/knowledge-base/01-product-development/03-design-phase.md`
-- `docs/knowledge-base/01-product-development/04-development-phase.md`
-- `docs/knowledge-base/01-product-development/05-testing-phase.md`
-- `docs/knowledge-base/01-product-development/06-release-phase.md`
-- `docs/knowledge-base/01-product-development/07-operation-phase.md`
+**合约：**
 
-**技术架构专题：**
+- `docs/ai/contracts/` — 模块合约（每模块一个文件，≤200 行）
 
-- `docs/knowledge-base/02-technical-architecture/01-architecture-overview.md`
-- `docs/knowledge-base/02-technical-architecture/02-layered-architecture.md`
-- `docs/knowledge-base/02-technical-architecture/03-state-management.md`
-- `docs/knowledge-base/02-technical-architecture/04-domain-driven-design.md`
-- `docs/knowledge-base/02-technical-architecture/05-performance-optimization.md`
-- `docs/knowledge-base/02-technical-architecture/06-testing-strategy.md`
-- `docs/knowledge-base/02-technical-architecture/07-deployment-architecture.md`
+**知识：**
 
-**项目特定知识：**
+- `docs/ai/knowledge/patterns.md` — 可复用代码模式
+- `docs/ai/knowledge/decisions.md` — 架构决策记录
+- `docs/ai/knowledge/rules.md` — 不可违背规则
 
-- `docs/knowledge-base/03-project-specific/01-current-tech-stack.md`
-- `docs/knowledge-base/03-project-specific/02-code-patterns.md`
-- `docs/knowledge-base/03-project-specific/03-development-standards.md`
-- `docs/knowledge-base/03-project-specific/04-opencode-platform-reference.md` — OpenCode 模式与代理体系参考
+**上下文：**
+
+- `docs/ai/context/state.md` — 当前项目状态与飞轮状态
+
+**操作日志：**
+
+- `docs/log.md` — Wiki 操作日志（只追加）
+
+### 已归档：knowledge-base（→ 99-archive/knowledge-base/）
+
+> `docs/knowledge-base/` 18 个文件已于 2026-05-11 全量迁入 `docs/99-archive/knowledge-base/`。
+> 被五层知识架构替代，详见 `docs/superpowers/specs/2026-05-11-knowledge-engine.md`。
 
 ### 99-archive（历史归档）
 

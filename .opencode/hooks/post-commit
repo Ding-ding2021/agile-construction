@@ -1,4 +1,52 @@
 #!/bin/bash
-# 提交后钩子：记录同步
+# H4: 提交后钩子 — 采集结构化统计数据
+# 触发: git commit 后自动运行
 
-echo "✅ 记忆已同步到 OpenCode"
+TODAY=$(date '+%Y-%m-%d')
+COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+COMMIT_MSG=$(git log -1 --format="%s" 2>/dev/null || echo "无")
+FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null | wc -l | tr -d ' ')
+STATS_FILE=".workbuddy/stats/${TODAY}.json"
+
+mkdir -p .workbuddy/stats
+
+# 读取现有数据或创建新文件
+if [ -f "$STATS_FILE" ]; then
+    # 追加新条目
+    python3 -c "
+import json, sys
+with open('$STATS_FILE') as f:
+    data = json.load(f)
+data['commits'].append({
+    'time': '$(date '+%H:%M:%S')',
+    'hash': '$COMMIT_HASH',
+    'message': '$COMMIT_MSG',
+    'files': $FILES_CHANGED
+})
+data['total_commits'] = len(data['commits'])
+with open('$STATS_FILE', 'w') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+" 2>/dev/null || {
+        # Python 不可用时的回退：追加文本行
+        echo "$(date '+%H:%M:%S') | $COMMIT_HASH | $COMMIT_MSG | $FILES_CHANGED files" >> "${TODAY}.log"
+    }
+else
+    # 创建新文件
+    python3 -c "
+import json
+data = {
+    'date': '$TODAY',
+    'total_commits': 1,
+    'commits': [{
+        'time': '$(date '+%H:%M:%S')',
+        'hash': '$COMMIT_HASH',
+        'message': '$COMMIT_MSG',
+        'files': $FILES_CHANGED
+    }]
+}
+with open('$STATS_FILE', 'w') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+" 2>/dev/null || echo "$TODAY | $(date '+%H:%M:%S') | $COMMIT_HASH | $COMMIT_MSG" > "${TODAY}.log"
+fi
+
+echo "✅ 统计数据已采集: $TODAY ($COMMIT_HASH)"

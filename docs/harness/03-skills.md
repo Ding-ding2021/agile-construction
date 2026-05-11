@@ -19,7 +19,7 @@
 
 ---
 
-## 林墨 · 产品经理（26 个技能）
+## 林墨 · 产品经理（27 个技能）
 
 ### 流程控制（12）
 
@@ -57,13 +57,14 @@
 | `git-workflow-and-versioning`    | 分支管理、提交规范 | 交付 |
 | `finishing-a-development-branch` | 开发完成、决定合入 | 交付 |
 
-### 基础支撑（3）
+### 基础支撑（4）
 
-| 技能                  | 触发时机          | 阶段      |
-| --------------------- | ----------------- | --------- |
-| `context-engineering` | 优化 Agent 上下文 | 全程      |
-| `website-audit`       | 网站系统分析      | 定义      |
-| `code-comprehension`  | 非技术化理解代码  | 定义/评审 |
+| 技能                  | 触发时机               | 阶段      |
+| --------------------- | ---------------------- | --------- |
+| `context-engineering` | 优化 Agent 上下文      | 全程      |
+| `website-audit`       | 网站系统分析           | 定义      |
+| `code-comprehension`  | 非技术化理解代码       | 定义/评审 |
+| `document-sync`       | 文档变更后同步 AI 合约 | 全程      |
 
 ### 共享技能（3）
 
@@ -234,6 +235,7 @@
 | `code-review-and-quality`        | ●    |      |      | ●    |
 | `context-engineering`            | ●    |      | ●    |      |
 | `documentation-and-adrs`         | ●    |      | ●    |      |
+| `document-sync`                  | ●    |      |      |      |
 | `verification-before-completion` | ●    |      |      | ●    |
 | `customer-journey`               | ●    | ●    |      |      |
 | `usability`                      |      | ●    |      | ●    |
