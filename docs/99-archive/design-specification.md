@@ -2,15 +2,9 @@
 id: DOC-00-GOVERNANCE-DESIGN-SPECIFICATION
 title: 项目设计规范 V1 — MUI 品牌暗色（已废弃）
 owner: docs-maintainer
-<<<<<<< Updated upstream:docs/99-archive/design-specification.md
 status: deprecated
 deprecated_reason: 已被 docs/01-product/design-spec-v2-shadcn.md 替代，UI 方向切换为 shadcn Neutral Light
 last_updated: 2026-05-06
-=======
-status: superseded
-superseded_by: docs/01-product/design-spec-v2-shadcn.md
-last_updated: 2026-05-05
->>>>>>> Stashed changes:docs/00-governance/design-specification.md
 source_of_truth: false
 related_code:
   - src/theme.ts

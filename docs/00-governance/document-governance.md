@@ -3,11 +3,7 @@ id: DOC-00-GOVERNANCE-DOCUMENT-GOVERNANCE
 title: 文档治理规范
 owner: docs-maintainer
 status: active
-<<<<<<< Updated upstream
 last_updated: 2026-05-06
-=======
-last_updated: 2026-05-05
->>>>>>> Stashed changes
 source_of_truth: true
 related_code:
   - CLAUDE.md
@@ -16,12 +12,7 @@ related_code:
   - src-next/
 related_docs:
   - docs/README.md
-<<<<<<< Updated upstream
   - docs/PLAN.md
-=======
-  - docs/01-product/design-spec-v2-shadcn.md
-  - memory/MEMORY.md
->>>>>>> Stashed changes
 ---
 
 # 文档治理规范
@@ -35,23 +26,23 @@ related_docs:
 
 ## 2. 信息分层
 
-| 层 | 位置 | 职责 | 更新频率 |
-|----|------|------|----------|
-| 持久规则 | `CLAUDE.md` | 架构、命令、不可变规则 | 架构变更时 |
-| 当前状态 | `memory/MEMORY.md` | 活跃 Phase、技术债务、决策记录 | Phase 切换时 |
-| 增量日志 | `memory/YYYY-MM-DD.md` | 每日开发记录 | 每日结束时 |
-| 完整文档 | `docs/` | 设计规范、PRD、架构、工程指南 | 按需 |
+| 层       | 位置                   | 职责                           | 更新频率     |
+| -------- | ---------------------- | ------------------------------ | ------------ |
+| 持久规则 | `CLAUDE.md`            | 架构、命令、不可变规则         | 架构变更时   |
+| 当前状态 | `memory/MEMORY.md`     | 活跃 Phase、技术债务、决策记录 | Phase 切换时 |
+| 增量日志 | `memory/YYYY-MM-DD.md` | 每日开发记录                   | 每日结束时   |
+| 完整文档 | `docs/`                | 设计规范、PRD、架构、工程指南  | 按需         |
 
 ## 3. 目录与职责
 
-| 子目录 | 内容 | 状态 |
-|--------|------|------|
-| `00-governance` | 规则与标准（含本文件） | 长期有效 |
-| `01-product` | 产品与需求 | 按版本迭代 |
-| `02-architecture` | 架构与设计 | 架构变更时更新 |
-| `03-engineering` | 开发交付与发布 | 工程阶段更新 |
-| `04-operations` | 运营指标与治理记录 | 运营阶段更新 |
-| `99-archive` | 历史归档 | 不可作为执行依据 |
+| 子目录            | 内容                   | 状态             |
+| ----------------- | ---------------------- | ---------------- |
+| `00-governance`   | 规则与标准（含本文件） | 长期有效         |
+| `01-product`      | 产品与需求             | 按版本迭代       |
+| `02-architecture` | 架构与设计             | 架构变更时更新   |
+| `03-engineering`  | 开发交付与发布         | 工程阶段更新     |
+| `04-operations`   | 运营指标与治理记录     | 运营阶段更新     |
+| `99-archive`      | 历史归档               | 不可作为执行依据 |
 
 ## 4. 状态模型
 
@@ -68,14 +59,14 @@ related_docs:
 
 ```yaml
 ---
-id:                  # 唯一标识，如 DOC-01-PRODUCT-DESIGN-SPEC-V2-SHADCN
-title:               # 文档标题
-owner:               # 维护者
-status: active       # active / superseded / draft / archived
-last_updated:        # 最后更新日期 YYYY-MM-DD
+id: # 唯一标识，如 DOC-01-PRODUCT-DESIGN-SPEC-V2-SHADCN
+title: # 文档标题
+owner: # 维护者
+status: active # active / superseded / draft / archived
+last_updated: # 最后更新日期 YYYY-MM-DD
 source_of_truth: true
-related_code: []     # 关联代码路径
-related_docs: []     # 关联文档路径
+related_code: [] # 关联代码路径
+related_docs: [] # 关联文档路径
 ---
 ```
 
@@ -116,12 +107,12 @@ AI 技能（SKILL.md）统一管理规则：
 
 ## 7. 单源真理（SSOT）原则
 
-| 信息类型 | 唯一源 | 禁止重复存放 |
-|----------|--------|-------------|
-| 项目文档 | `docs/` | `.qoder/repowiki/`、`.gitnexus/wiki/` |
-| 项目记忆 | `memory/` | `.opencode/memory/`（已改 symlink） |
-| AI 技能 | `.agents/skills/` | `.trae/skills/`、`.qoder/skills/`（已删除） |
-| 架构规则 | `CLAUDE.md` | 其他工具根级说明文件 |
+| 信息类型 | 唯一源            | 禁止重复存放                                |
+| -------- | ----------------- | ------------------------------------------- |
+| 项目文档 | `docs/`           | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
+| 项目记忆 | `memory/`         | `.opencode/memory/`（已改 symlink）         |
+| AI 技能  | `.agents/skills/` | `.trae/skills/`、`.qoder/skills/`（已删除） |
+| 架构规则 | `CLAUDE.md`       | 其他工具根级说明文件                        |
 
 ## 8. 引用规则
 
@@ -135,7 +126,6 @@ AI 技能（SKILL.md）统一管理规则：
 2. 更新 Frontmatter（`last_updated`）
 3. 更新 `docs/README.md` 索引（如新增文件）
 4. 通过 `docs/00-governance/pr-doc-checklist.md` 检查
-<<<<<<< Updated upstream
 5. 合并后记录至审计文档
 
 ## 7. 计划文档管理规则
@@ -143,6 +133,7 @@ AI 技能（SKILL.md）统一管理规则：
 ### 7.1 计划总览
 
 所有计划类信息在 `docs/PLAN.md` 集中管理，包括：
+
 - 项目当前阶段与方向
 - 活跃计划文档清单
 - 关键决策记录（时间线）
@@ -152,10 +143,10 @@ AI 技能（SKILL.md）统一管理规则：
 
 ### 7.2 评估报告生命周期
 
-| 类型 | 说明 | 保留策略 |
-|------|------|----------|
+| 类型       | 说明                                     | 保留策略                 |
+| ---------- | ---------------------------------------- | ------------------------ |
 | 一次性评估 | 针对某个时间点的评估（进度、审计、报告） | 完成后移入 `99-archive/` |
-| 持续跟踪 | 需要持续维护的指标或清单 | 保留在 `04-operations/` |
+| 持续跟踪   | 需要持续维护的指标或清单                 | 保留在 `04-operations/`  |
 
 判断标准：文档标题或内容包含具体日期（如 `2026-04-23`）且结论不随时间推移而更新的，属于一次性评估，完成后应归档。
 
@@ -168,9 +159,9 @@ AI 技能（SKILL.md）统一管理规则：
 ### 7.4 月度检查
 
 每月至少执行一次：
+
 - `docs/README.md` 状态与文档 frontmatter 一致
 - `docs/PLAN.md` 反映当前项目状态
 - 无新增散落计划信息
-=======
+
 5. 提交并记录变更
->>>>>>> Stashed changes
