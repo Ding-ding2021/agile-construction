@@ -61,3 +61,4 @@ jobs:
           git add .workbuddy/stats/daily/
           git diff --cached --quiet || git commit -m "docs(stats): 每日总结 $(date '+%Y-%m-%d')"
           git push || echo "⚠️ 推送失败"
+
