@@ -1,0 +1,33 @@
+#!/bin/bash
+# Harness H5 — 推送前质量门禁预检
+echo "🔍 推送前检查..."
+
+PASS=true
+
+# 1. Lint 必须全过
+echo "📝 ESLint..."
+npx eslint . --max-warnings 0 2>/dev/null
+if [ $? -ne 0 ]; then
+  echo "❌ ESLint 有告警，请先修复"
+  PASS=false
+else
+  echo "✅ ESLint 通过"
+fi
+
+# 2. Build 必须通过
+echo "📦 Build..."
+npm run build --silent 2>/dev/null
+if [ $? -ne 0 ]; then
+  echo "❌ Build 失败，禁止推送"
+  PASS=false
+else
+  echo "✅ Build 通过"
+fi
+
+if [ "$PASS" = false ]; then
+  echo ""
+  echo "❌ 推送前检查未通过。请修复后重试。"
+  exit 1
+fi
+
+echo "✅ 推送前检查全部通过"

@@ -12,27 +12,24 @@ This file provides guidance to AI coding agents when working with code in this r
 
 ## 核心执行流程
 
-对于每一个用户请求：
+所有任务遵循 **Harness 七阶段流水线**（详见 `docs/harness/01-workflows.md`）：
 
-1. 判断风险等级（L1/L2/L3），L2+ → 触发 `squad-pre-dev-evaluation`
-2. 匹配适用 skill（即使只有 1% 相关），调用 `skill` 工具
-3. 严格遵循 skill 工作流，不部分执行
-4. 完成后执行质量门禁：`npm run lint` → `npm run build` → `npm run test:e2e`
+```
+定义 → 规划 → 构建 → 测试 → 评审 → 交付 → 进化
+```
 
-## 角色体系
+角色体系、临时编组、技能分配、知识库索引、上下文管理、工具/MCP、Hook 生命周期、治理指标 —— 全部由 Harness 框架统一定义（`docs/harness/` + `.harness/`）。
 
-| 角色                   | 职责                                       | 触发时机            |
-| ---------------------- | ------------------------------------------ | ------------------- |
-| 开发交付者             | 编码实现，必须先调用 `karpathy-guidelines` | 所有编码任务        |
-| 评估组（产品/UI/技术） | 并行 fan-out 评估，独立输出报告，组长合并  | L2+ 任务，编码前    |
-| 验收组（功能/代码/UI） | 并行 fan-out 验收，独立输出报告，组长仲裁  | 任务完成后          |
-| 组长                   | 合并报告、仲裁反对票                       | 评估/验收中出现反对 |
+## 角色速览
 
-角色约束：
+| 角色       | 人物 | 模型              | 职责                                   |
+| ---------- | ---- | ----------------- | -------------------------------------- |
+| 产品经理   | 林墨 | deepseek-v4-flash | 接需求、拆意图、排程、委派、归档、进化 |
+| UI设计师   | 苏染 | kimi-k2.6         | 交互规范、视觉一致性、可访问性         |
+| 开发工程师 | 陈锋 | deepseek-v4-flash | 编码、架构、安全、性能、自检           |
+| 测试工程师 | 周严 | deepseek-v4-pro   | 测试策略、E2E、调试定位                |
 
-- 评估组和验收组并行 fan-out，不共享状态
-- 组长不参与具体评估/验收内容，只做仲裁
-- 增量重审：验收打回后仅派有问题的角色重审，不重新全量调用
+详见 `docs/harness/roles/` 各角色文件。
 
 ## 意图 → Skill 映射
 
@@ -53,16 +50,8 @@ This file provides guidance to AI coding agents when working with code in this r
 
 ## 开发阶段 → Skill 串联
 
-```
-评估 → 计划 → 编码 → 验证 → 验收 → 交付
-  ↓      ↓      ↓      ↓      ↓      ↓
-squad-  plan-  karpa-  lint  squad-  lint +
-pre-    ning-  thy-    +    post-   build +
-dev-    and-   guide-  build dev-    test:e2e
-eval    task-  lines   +    review
-(L2+)   break- +incr-  test
-        down   emental
-```
+按照 Harness 七阶段流水线（详见 `docs/harness/01-workflows.md`）：
+定义 → 规划 → 构建 → 测试 → 评审 → 交付 → 进化
 
 ## 硬性规则
 
@@ -145,3 +134,14 @@ Prettier：`semi: false, singleQuote: true, printWidth: 100, arrowParens: avoid`
 - 设计规范: `docs/01-product/design-spec-v2-shadcn.md`
 - 项目管理: `docs/00-governance/project-management-guide.md`
 - 完整索引: `docs/README.md`
+
+## Harness 框架
+
+本仓库遵循 Harness 工程框架。完整体系见：
+
+- 工作流: `docs/harness/01-workflows.md`
+- 角色: `docs/harness/02-roles.md`
+- 技能: `docs/harness/03-skills.md`
+- 知识库: `docs/harness/04-knowledge-base.md`
+- 治理: `docs/harness/09-governance.md`
+- 配置: `.harness/registry.yaml`
