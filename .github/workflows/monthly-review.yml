@@ -1,0 +1,68 @@
+name: 月考核
+on:
+  schedule:
+    - cron: "0 9 1 * *"
+  workflow_dispatch:
+
+jobs:
+  monthly-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+
+      - name: 生成月报
+        run: |
+          MONTH=$(date '+%Y-%m')
+          QUARTER=$(date '+%Y-Q%q')
+
+          FIRST_DAY=$(date '+%Y-%m-01')
+          COMMIT_COUNT=$(git log --since="$FIRST_DAY" --format="%s" | wc -l | tr -d ' ')
+          UNIQUE_AUTHORS=$(git log --since="$FIRST_DAY" --format="%an" | sort -u | wc -l | tr -d ' ')
+
+          REPORT="# 月报 — $MONTH
+
+## 本月概览
+- 提交数：$COMMIT_COUNT
+- 贡献者：$UNIQUE_AUTHORS
+
+## 本月关键提交
+$(git log --since="$FIRST_DAY" --format='- %s' | head -20)
+
+## 趋势分析
+- 提交频率：$(echo "scale=2; $COMMIT_COUNT / $(date '+%d' | sed 's/^0//')" | bc 2>/dev/null || echo "N/A") 次/天
+- 如需详细 44 指标审计，请执行手动 workflow_dispatch
+
+## Skills 时效检查
+$(find .agents/skills/ -name 'SKILL.md' -mtime +30 | sed 's/^/- /' | head -10)
+$(if [ $(find .agents/skills/ -name 'SKILL.md' -mtime +30 | wc -l) -gt 0 ]; then echo '🟡 以上 skills 超过 30 天未更新'; else echo '✅ 所有 skills 均在 30 天内更新'; fi)
+
+## 文档冲突扫描
+$(grep -rl 'status: active' docs/ | cut -d/ -f3 | sort | uniq -c | sort -rn | head -5)
+
+---
+发布者：产品（林墨）
+季度：$QUARTER"
+
+          mkdir -p .workbuddy/stats/trends
+          echo "$REPORT" > .workbuddy/stats/trends/$MONTH.md
+
+      - name: 飞书推送
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+        run: |
+          if [ -n "$FEISHU_WEBHOOK_URL" ]; then
+            MONTH=$(date '+%Y-%m')
+            bash scripts/notify-feishu.sh "月报 $MONTH" "$(cat .workbuddy/stats/trends/$MONTH.md)"
+          else
+            echo "⚠️ 飞书未配置，跳过推送"
+          fi
+
+      - name: 提交报告
+        run: |
+          git config user.name "harness-bot"
+          git config user.email "harness@agile-construction.dev"
+          git add .workbuddy/stats/trends/
+          git diff --cached --quiet || git commit -m "docs(stats): 月报 $(date '+%Y-%m')"
+          git push || echo "⚠️ 推送失败"

@@ -1,0 +1,70 @@
+name: 周考核
+on:
+  schedule:
+    - cron: "0 17 * * 5"
+  workflow_dispatch:
+
+jobs:
+  weekly-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+
+      - name: 生成周报
+        run: |
+          WEEK=$(date '+%Y-W%V')
+          MONDAY=$(date -v-mon '+%Y-%m-%d' 2>/dev/null || date -d "last monday" '+%Y-%m-%d')
+          TODAY=$(date '+%Y-%m-%d')
+
+          COMMIT_COUNT=$(git log --since="$MONDAY" --format="%s" | wc -l | tr -d ' ')
+          UNIQUE_FILES=$(git log --since="$MONDAY" --name-only --format="" | sort -u | wc -l | tr -d ' ')
+
+          REPORT="# 周报 — $WEEK ($MONDAY ~ $TODAY)
+
+## 本周概览
+- 提交数：$COMMIT_COUNT
+- 文件变更：$UNIQUE_FILES
+
+## 提交列表
+$(git log --since="$MONDAY" --format='- %s')
+
+## 指标汇总
+| 指标 | 本周值 | 状态 |
+|---|---|---|
+| 提交次数 | $COMMIT_COUNT | — |
+| 文件变更 | $UNIQUE_FILES | — |
+
+## 告警
+$(if [ $COMMIT_COUNT -eq 0 ]; then echo '🟡 本周无提交'; else echo '无'; fi)
+
+## 下周关注
+- 检查文档 frontmatter 同步
+- 检查 skills 时效
+
+---
+发布者：产品（林墨）
+发布渠道：.workbuddy/stats/weekly/$WEEK.json"
+
+          mkdir -p .workbuddy/stats/weekly
+          echo "$REPORT" > .workbuddy/stats/weekly/$WEEK.md
+
+      - name: 飞书推送
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+        run: |
+          if [ -n "$FEISHU_WEBHOOK_URL" ]; then
+            WEEK=$(date '+%Y-W%V')
+            bash scripts/notify-feishu.sh "周报 $WEEK" "$(cat .workbuddy/stats/weekly/$WEEK.md)"
+          else
+            echo "⚠️ 飞书未配置，跳过推送"
+          fi
+
+      - name: 提交报告
+        run: |
+          git config user.name "harness-bot"
+          git config user.email "harness@agile-construction.dev"
+          git add .workbuddy/stats/weekly/
+          git diff --cached --quiet || git commit -m "docs(stats): 周报 $(date '+%Y-W%V')"
+          git push || echo "⚠️ 推送失败"

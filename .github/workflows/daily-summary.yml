@@ -1,0 +1,65 @@
+name: 每日总结
+on:
+  schedule:
+    - cron: "0 18 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  daily-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+
+      - name: 生成每日报告
+        run: |
+          TODAY=$(date '+%Y-%m-%d')
+          WEEKDAY=$(date '+%u')
+          WEEKDAY_CN=$(case $WEEKDAY in 1) echo "一";; 2) echo "二";; 3) echo "三";; 4) echo "四";; 5) echo "五";; esac)
+
+          COMMITS=$(git log --since="midnight" --format="- %s" 2>/dev/null || echo "无提交")
+          FILES_CHANGED=$(git log --since="midnight" --name-only --format="" | sort -u | head -20 | sed 's/^/- /' || echo "无变更")
+
+          REPORT="# 日报 — $TODAY (周$WEEKDAY_CN)
+
+## 今日提交
+$COMMITS
+
+## 涉及文件
+$FILES_CHANGED
+
+## 今日指标
+| 指标 | 值 | 状态 |
+|---|---|---|
+| 提交次数 | $(echo "$COMMITS" | grep -c "^-" || echo 0) | — |
+| 文件变更 | $(echo "$FILES_CHANGED" | grep -c "^-" || echo 0) | — |
+
+## 告警
+无
+
+---
+发布者：产品（林墨）
+发布渠道：.workbuddy/stats/daily/$TODAY.md"
+
+          mkdir -p .workbuddy/stats/daily
+          echo "$REPORT" > .workbuddy/stats/daily/$TODAY.md
+
+      - name: 飞书推送
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+        run: |
+          if [ -n "$FEISHU_WEBHOOK_URL" ]; then
+            TODAY=$(date '+%Y-%m-%d')
+            bash scripts/notify-feishu.sh "日报 $TODAY" "$(cat .workbuddy/stats/daily/$TODAY.md)"
+          else
+            echo "⚠️ 飞书未配置（FEISHU_WEBHOOK_URL 未设置），跳过推送"
+          fi
+
+      - name: 提交报告
+        run: |
+          git config user.name "harness-bot"
+          git config user.email "harness@agile-construction.dev"
+          git add .workbuddy/stats/daily/
+          git diff --cached --quiet || git commit -m "docs(stats): 每日总结 $(date '+%Y-%m-%d')"
+          git push || echo "⚠️ 推送失败（可能网络不通）"
