@@ -29,10 +29,16 @@
 
 这是四阶段学习的**阶段 1（观察）**，不等 cron，在会话内实时执行。
 
-- [ ] 每完成约 15 次工具调用（读文件、写文件、编辑、搜索、bash），**暂停**并执行自检
-- [ ] 自检内容：用 `task-memory` 或 `agentmemory_memory_save` 记录以下结构：
+- [ ] 用 `session_id` 和 `checkpoint_number` 在 `.workbuddy/checkpoint.md` 中维护计数器
+- [ ] 每次完成一组相关工作后（约 5-10 轮对话），**暂停**并估算自上次检查点后的工具调用数
+- [ ] 满足以下任一条件触发自检：
+  - 估算工具调用数 ≥ 15 次
+  - 自上次 checkpoint 后过去了 30 分钟
+  - 完成了一个完整的子任务（如创建完一个文件、做完一次 search）
+- [ ] 自检内容：用 `agentmemory_memory_save` 记录以下结构：
 
 ```
+type: checkpoint
 完成：<这 15 次调用完成了什么>
 成功：<哪些做法有效>
 失败：<哪些做法出错或无效>
@@ -40,10 +46,9 @@
 模式：<是否发现重复出现的模式或反模式>
 ```
 
-- [ ] 自检记录写入 `memory/YYYY-MM-DD.md`（每日日志），标记 `type: checkpoint`
+- [ ] 自检后更新 `.workbuddy/checkpoint.md`：`last_checkpoint`、`checkpoint_number`、写入 `memory/YYYY-MM-DD.md`（标记 `type: checkpoint`）
 - [ ] 如果同模式出现 ≥ 3 次 → 写入 `docs/ai/knowledge/patterns.md`
 - [ ] 如果同错误出现 ≥ 2 次 → 写入 `docs/ai/knowledge/rules.md` 作为反模式
-- [ ] 如果发现公共陷阱 → 写入当前使用的 skill 同级目录的 `TRAPS.md`
 
 ### 跨会话进化（启动时 + 定时）
 
