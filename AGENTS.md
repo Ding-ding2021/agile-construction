@@ -29,7 +29,7 @@
 
 这是四阶段学习的**阶段 1（观察）**，不等 cron，在会话内实时执行。
 
-- [ ] 用 `session_id` 和 `checkpoint_number` 在 `.workbuddy/checkpoint.md` 中维护计数器
+- [ ] 用 `session_id` 和 `checkpoint_number` 在 `memory/checkpoint.md` 中维护计数器
 - [ ] 每次完成一组相关工作后（约 5-10 轮对话），**暂停**并估算自上次检查点后的工具调用数
 - [ ] 满足以下任一条件触发自检：
   - 估算工具调用数 ≥ 15 次
@@ -46,7 +46,7 @@ type: checkpoint
 模式：<是否发现重复出现的模式或反模式>
 ```
 
-- [ ] 自检后更新 `.workbuddy/checkpoint.md`：`last_checkpoint`、`checkpoint_number`、写入 `memory/YYYY-MM-DD.md`（标记 `type: checkpoint`）
+- [ ] 自检后更新 `memory/checkpoint.md`：`last_checkpoint`、`checkpoint_number`、写入 `memory/YYYY-MM-DD.md`（标记 `type: checkpoint`）
 - [ ] 如果同模式出现 ≥ 3 次 → 写入 `docs/ai/knowledge/patterns.md`
 - [ ] 如果同错误出现 ≥ 2 次 → 写入 `docs/ai/knowledge/rules.md` 作为反模式
 
