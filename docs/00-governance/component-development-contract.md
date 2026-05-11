@@ -2,7 +2,7 @@
 id: DOC-00-GOVERNANCE-COMPONENT-CONTRACT
 title: 组件开发契约模板（Component Development Contract）
 date: 2026-04-25
-status: draft
+status: active
 source_of_truth: true
 ---
 

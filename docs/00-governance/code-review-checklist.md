@@ -2,7 +2,7 @@
 id: DOC-00-GOVERNANCE-CODE-REVIEW
 title: Code Review Checklist
 owner: docs-maintainer
-status: draft
+status: active
 last_updated: 2026-05-05
 source_of_truth: true
 related_code: []
@@ -45,7 +45,7 @@ related_docs:
 
 - [ ] 未绕过状态机守卫直接修改状态
 - [ ] 未在子组件中直接操作 localStorage
-- [ ] 路由跳转使用 navigation.ts 的 goTo* 函数（非 window.location.hash 硬编码）
+- [ ] 路由跳转使用 navigation.ts 的 goTo\* 函数（非 window.location.hash 硬编码）
 - [ ] 数据操作通过 Repository/Store 层（非直接 fetch）
 
 ## 5. AI 产物检查

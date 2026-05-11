@@ -2,7 +2,7 @@
 id: DOC-02-ARCHITECTURE-WBS-FRAMEWORK
 title: WBS 框架设计方案
 owner: docs-maintainer
-status: draft
+status: active
 last_updated: 2026-05-07
 source_of_truth: true
 related_code:

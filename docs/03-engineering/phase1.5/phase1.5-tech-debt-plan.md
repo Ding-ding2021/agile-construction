@@ -2,7 +2,7 @@
 id: DOC-03-ENGINEERING-PHASE1-5-TECH-DEBT
 title: Phase 1.5 技术债务清偿计划
 date: 2026-04-25
-status: draft
+status: deprecated
 source_of_truth: true
 ---
 

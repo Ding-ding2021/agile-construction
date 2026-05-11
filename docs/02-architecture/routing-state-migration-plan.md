@@ -2,7 +2,7 @@
 id: DOC-02-ARCH-ROUTING-STATE-MIGRATION
 title: 路由渲染与状态管理优化方案
 date: 2026-04-25
-status: draft
+status: deprecated
 source_of_truth: true
 ---
 

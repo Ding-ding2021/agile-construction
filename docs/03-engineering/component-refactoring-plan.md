@@ -2,7 +2,7 @@
 id: DOC-00-COMPONENT-REFACTORING-PLAN
 title: 组件化重构实施计划
 owner: docs-maintainer
-status: draft
+status: active
 last_updated: 2026-04-19
 source_of_truth: true
 related_code: []
