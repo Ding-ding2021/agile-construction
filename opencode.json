@@ -1,7 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "instructions": ["AGENTS.md"],
-  "plugin": ["opencode-agent-memory", "superpowers@git+https://github.com/obra/superpowers.git"],
+  "plugin": [
+    "opencode-agent-memory",
+    "opencode-feishu",
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
   "agent": {
     "explore": {
       "description": "Fast codebase exploration",
