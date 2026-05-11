@@ -54,7 +54,7 @@ $(grep -rl 'status: active' docs/ | cut -d/ -f3 | sort | uniq -c | sort -rn | he
         run: |
           if [ -n "$FEISHU_WEBHOOK_URL" ]; then
             MONTH=$(date '+%Y-%m')
-            bash scripts/notify-feishu.sh "月报 $MONTH" "$(cat .workbuddy/stats/trends/$MONTH.md)"
+            python3 scripts/notify-feishu.py "月报 $MONTH" "$(cat .workbuddy/stats/trends/$MONTH.md)"
           else
             echo "⚠️ 飞书未配置，跳过推送"
           fi

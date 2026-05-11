@@ -56,7 +56,7 @@ $(if [ $COMMIT_COUNT -eq 0 ]; then echo '🟡 本周无提交'; else echo '无';
         run: |
           if [ -n "$FEISHU_WEBHOOK_URL" ]; then
             WEEK=$(date '+%Y-W%V')
-            bash scripts/notify-feishu.sh "周报 $WEEK" "$(cat .workbuddy/stats/weekly/$WEEK.md)"
+            python3 scripts/notify-feishu.py "周报 $WEEK" "$(cat .workbuddy/stats/weekly/$WEEK.md)"
           else
             echo "⚠️ 飞书未配置，跳过推送"
           fi
