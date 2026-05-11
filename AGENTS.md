@@ -2,6 +2,8 @@
 
 ## 启动清单（不可跳过，逐项执行）
 
+- [ ] 调用 `skill` 工具加载 `chinese-language`
+- [ ] 调用 `skill` 工具加载 `brainstorming`
 - [ ] `agentmemory_memory_sessions` — 检查上次会话状态
 - [ ] `agentmemory_memory_recall` — 搜索"最近工作" "未完成任务" "关键决策"
 - [ ] 读 `MEMORY.md` 前 80 行（如存在）
@@ -46,11 +48,14 @@ type: checkpoint
 模式：<是否发现重复出现的模式或反模式>
 ```
 
+- [ ] 自检时追加**强制技能稽查**：
+  - 自上次 checkpoint 后加载了哪些 skill？
+  - 强制 skill（`chinese-language`、`brainstorming`、`karpathy-guidelines`、`document-sync`）是否都加载了？
+  - 有遗漏 → 立即补加载，并在 checkpoint 的"失败"字段记录
+
 - [ ] 自检后更新 `memory/checkpoint.md`：`last_checkpoint`、`checkpoint_number`、写入 `memory/YYYY-MM-DD.md`（标记 `type: checkpoint`）
 - [ ] 如果同模式出现 ≥ 3 次 → 写入 `docs/ai/knowledge/patterns.md`
 - [ ] 如果同错误出现 ≥ 2 次 → 写入 `docs/ai/knowledge/rules.md` 作为反模式
-
-### 跨会话进化（启动时 + 定时）
 
 ### 跨会话进化（启动时 + 定时）
 
@@ -71,6 +76,23 @@ type: checkpoint
 
 - [ ] `task-memory` 工具写入日志
 - [ ] `agentmemory_memory_save` — 保存关键架构决策和用户偏好
+- [ ] 会话技能统计：
+  - 列出本次会话加载的所有 skill（名称、加载时机）
+  - 对比强制清单（`chinese-language` / `brainstorming` / `karpathy-guidelines` / `document-sync`）
+  - 写入 `memory/YYYY-MM-DD.md`，格式：
+
+```
+## 技能统计
+| 技能 | 是否加载 | 触发时机 | 状态 |
+|------|----------|----------|------|
+| chinese-language | ✅/❌ | 启动时 | 合规/遗漏 |
+| brainstorming | ✅/❌ | 启动时 | 合规/遗漏 |
+| karpathy-guidelines | ✅/❌ | 编码前 | 合规/遗漏 |
+| document-sync | ✅/❌ | 文档变更后 | 合规/遗漏 |
+| ... | | | |
+```
+
+- 遗漏项 → `agentmemory_memory_save` 标记 `type: violation`，下次会话 `memory_recall` 自动提醒
 - [ ] 确认 lint/build/test:e2e 三关（如适用）
 
 ## 项目信息
