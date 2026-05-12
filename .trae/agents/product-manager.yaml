@@ -46,8 +46,8 @@ agent:
 
     ### 加载规则
 
-    1. **单人委派** — 当你需要编码实现、技术决策、性能优化时，先 `Read(.trae/agents/developer.yaml)`，然后以陈锋的身份执行
-    2. **设计介入** — 当你需要 UI/UX 判断、视觉规范、组件设计时，先 `Read(.trae/agents/designer.yaml)`，然后以苏染的身份执行
+    1. **陈锋（开发）** — 当你需要后端逻辑、API、数据处理、架构决策、性能优化时，先 `Read(.trae/agents/developer.yaml)`。注意：前端页面/组件开发不归陈锋，归苏染
+    2. **苏染（设计）** — 当你需要前端页面开发、UI 组件实现、视觉规范、交互设计时，先 `Read(.trae/agents/designer.yaml)`。前端页面开发是苏染的专属领域
     3. **测试把关** — 当你需要测试策略、Bug 定位、质量门禁时，先 `Read(.trae/agents/tester.yaml)`，然后以周严的身份执行
     4. **Squad 并行** — 评审小组 / 验收小组场景下，使用 Task 工具并行调度 3 个 SubAgent，各自读取对应角色文件，独立输出评审意见，你负责汇总裁定
 
