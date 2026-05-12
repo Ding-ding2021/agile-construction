@@ -1,7 +1,15 @@
 ---
+id: DOC-DESIGN-DESIGN-SYSTEM-
 number: DES-003
 domain: design
 category: design-system
+title: 项目详情页全面翻新
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 项目详情页全面翻新

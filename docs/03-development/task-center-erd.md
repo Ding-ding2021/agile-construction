@@ -1,10 +1,15 @@
 ---
-title: 任务中心 ERD
+id: DOC-DEVELOPMENT-ARCHITECTURE-ERD
 number: DEV-011
 domain: development
 category: architecture
+title: 任务中心 ERD
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 任务中心实体关系图

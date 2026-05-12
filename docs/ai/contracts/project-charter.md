@@ -3,6 +3,8 @@ id: AI-PROJECT-CHARTER
 human_source: docs/00-governance/project-charter.md
 status: active
 last_synced: 2026-05-12
+title: AI 合约：Project Charter
+last_updated: 2026-05-12
 ---
 
 # AI 合约：Project Charter

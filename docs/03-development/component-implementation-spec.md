@@ -8,7 +8,6 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-05-03
 source_of_truth: true
-parent_doc: docs/00-governance/design-specification.md
 related_code:
   - src/index.css
   - src/components/ui/
@@ -18,6 +17,8 @@ related_code:
   - src/components/shared/PmCardHeader.tsx
   - src/components/shared/PmSelect.tsx
   - src/components/shared/PmDatePicker.tsx
+related_docs: []
+parent_doc: docs/00-governance/design-specification.md
 ---
 
 # 组件实现规范（开发执行标准）

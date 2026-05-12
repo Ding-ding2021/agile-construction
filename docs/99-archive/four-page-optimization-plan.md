@@ -4,10 +4,11 @@ number: ARC-006
 domain: archive
 category: archived
 title: 四页面优化计划（以项目管理列表为基准）
-date: 2026-04-25
 status: archived
-archived_reason: MUI 旧栈优化方案，UI 已切换为 shadcn，不再适用
+last_updated: 2026-05-12
 archived_at: 2026-05-06
+archived_reason: MUI 旧栈优化方案，UI 已切换为 shadcn，不再适用
+date: 2026-04-25
 source_of_truth: true
 ---
 

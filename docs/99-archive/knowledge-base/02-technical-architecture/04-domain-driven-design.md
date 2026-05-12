@@ -1,10 +1,13 @@
 ---
-title: 04 Domain Driven Design
+id: ARC-019
 number: ARC-019
 domain: archive
 category: archived
+title: 04 Domain Driven Design
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

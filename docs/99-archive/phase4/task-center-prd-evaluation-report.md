@@ -1,10 +1,13 @@
 ---
-title: Task Center Prd Evaluation Report
+id: ARC-049
 number: ARC-049
 domain: archive
 category: archived
+title: Task Center Prd Evaluation Report
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 任务中心 PRD 文档评估报告

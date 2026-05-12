@@ -436,7 +436,16 @@ context:
   memory:
     long_term: MEMORY.md
     patterns: patterns/*.md
-    daily: .workbuddy/memory/YYYY-MM-DD.md
+    daily: memory/YYYY-MM-DD.md
+  mcp_memory:
+    service: memory
+    status: enabled
+    strategy: 双轨（Markdown 真相源 + MCP 增强层）
+    details: docs/00-governance/memory-dual-track-strategy.md
+    note: |
+      MCP Memory Service 采用 sqlite_vec 本地后端运行。
+      自动从 Markdown 记忆文件建立语义索引，AI Agent 可在此自动检索历史会话。
+      重要决策仍需写入 MEMORY.md / memory/ 文件并提交 Git，MCP 仅为召回增强层。
   load_on_start:
     - AGENTS.md
     - MEMORY.md
@@ -586,13 +595,13 @@ governance:
     per_task:
       trigger: post-commit hook
       script: scripts/collect-stats.sh
-      output: .workbuddy/stats/YYYY-MM-DD.json
+      output: memory/stats/YYYY-MM-DD.json
       owner: 自动化
 
     daily:
       trigger: "cron: 0 18 * * 1-5"
       workflow: .github/workflows/daily-summary.yml
-      output: .workbuddy/stats/daily/YYYY-MM-DD.md
+      output: memory/stats/daily/YYYY-MM-DD.md
       notify:
         channel: feishu
         method: webhook
@@ -601,7 +610,7 @@ governance:
     weekly:
       trigger: "cron: 0 17 * * 5"
       workflow: .github/workflows/weekly-review.yml
-      output: .workbuddy/stats/weekly/YYYY-Www.json
+      output: memory/stats/weekly/YYYY-Www.json
       notify:
         channel: feishu
         method: webhook
@@ -610,7 +619,7 @@ governance:
     monthly:
       trigger: "cron: 0 9 1 * *"
       workflow: .github/workflows/monthly-review.yml
-      output: .workbuddy/stats/trends/YYYY-Qq.json
+      output: memory/stats/trends/YYYY-Qq.json
       notify:
         channel: feishu
         method: webhook
@@ -619,7 +628,7 @@ governance:
     on_release:
       trigger: "push tags v*"
       workflow: .github/workflows/ci.yml (metrics step)
-      output: .workbuddy/stats/release/vX.Y.Z.json
+      output: memory/stats/release/vX.Y.Z.json
       owner: 产品
 
   alerts:

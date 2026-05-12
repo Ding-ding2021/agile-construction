@@ -8,6 +8,7 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-05-06
 source_of_truth: true
+related_code: []
 related_docs:
   - docs/01-product/product-roadmap-v1.2-draft.md
   - docs/03-engineering/component-refactoring-plan.md

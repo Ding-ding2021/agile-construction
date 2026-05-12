@@ -119,7 +119,7 @@ related_docs:
 4. TDD → 先写测试后写实现
 5. 按需调辅助技能（shadcn-*, frontend-*, gitnexus-* 等）
 6. verification-before-completion → 自检
-7. 写日志到 .workbuddy/memory/YYYY-MM-DD.md
+7. 写日志到 memory/YYYY-MM-DD.md
 8. 更新 MEMORY.md（如有架构决策）
 9. finishing-a-development-branch → 合并/PR
 ```

@@ -8,7 +8,6 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-05-11
 source_of_truth: true
-template: dashboard-01 + sidebar-07
 related_code:
   - src-next/index.css
   - src-next/components.json
@@ -18,6 +17,8 @@ related_code:
   - src-next/components/section-cards.tsx
   - src-next/components/chart-area-interactive.tsx
   - src-next/components/data-table.tsx
+related_docs: []
+template: dashboard-01 + sidebar-07
 ---
 
 # 前端设计规范 V2 — shadcn Neutral Light

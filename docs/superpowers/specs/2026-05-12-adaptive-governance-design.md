@@ -1,7 +1,16 @@
 ---
+id: DOC-DESIGN-TECHNICAL-DESIGN-L2-5
+number: DES-000
+domain: design
+category: technical-design
 title: 自适应治理（L2.5 行为调节层）设计文档
+owner: docs-maintainer
 status: draft
+last_updated: 2026-05-12
+source_of_truth: true
 ai_contract: docs/ai/contracts/adaptive-governance.md
+related_code: []
+related_docs: []
 ---
 
 # 自适应治理（L2.5 行为调节层）设计文档

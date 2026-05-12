@@ -3,6 +3,8 @@ id: AI-PRODUCT-ROADMAP
 human_source: docs/01-product/product-roadmap-v1.2.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：产品规划路线图
+last_updated: 2026-05-12
 ---
 
 # AI 合约：产品规划路线图

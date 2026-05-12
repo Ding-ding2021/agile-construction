@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
+number: GOV-000
+domain: governance
+category: harness
 title: 架构决策记录
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-11
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 架构决策记录
@@ -70,7 +78,7 @@ last_updated: 2026-05-11
 
 **决策**：GitHub Issues + Projects 作为任务状态追踪中枢，保留 WorkBuddy 日志系统。
 
-**三层体系**：状态追踪（Issues+Projects）→ 执行记录（.workbuddy/memory/）→ 知识沉淀（docs/）
+**三层体系**：状态追踪（Issues+Projects）→ 执行记录（memory/）→ 知识沉淀（docs/）
 
 ---
 

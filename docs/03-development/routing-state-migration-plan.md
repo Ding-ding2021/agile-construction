@@ -4,9 +4,13 @@ number: DEV-008
 domain: development
 category: technical-design
 title: 路由渲染与状态管理优化方案
-date: 2026-04-25
+owner: docs-maintainer
 status: deprecated
+last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
+related_docs: []
+date: 2026-04-25
 ---
 
 # 路由渲染与状态管理优化方案

@@ -1,10 +1,15 @@
 ---
-title: 工单团队管理 PRD
+id: DOC-PRODUCT-PRD-PRD
 number: PRD-010
 domain: product
 category: prd
+title: 工单团队管理 PRD
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 工队资源管理模块 PRD

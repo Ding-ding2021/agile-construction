@@ -1,7 +1,15 @@
 ---
+id: DOC-PROJECT-PLAN-WBS--1
 number: PRJ-007
 domain: project
 category: plan
+title: WBS 框架阶段 1 实施计划
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # WBS 框架阶段 1 实施计划

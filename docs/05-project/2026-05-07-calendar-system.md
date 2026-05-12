@@ -1,7 +1,15 @@
 ---
+id: DOC-PROJECT-PLAN-
 number: PRJ-005
 domain: project
 category: plan
+title: 项目日历系统实施计划
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 项目日历系统实施计划

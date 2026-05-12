@@ -1,3 +1,17 @@
+---
+id: DOC-GOVERNANCE-DOC-GOVERNANCE-
+number: GOV-000
+domain: governance
+category: doc-governance
+title: 记忆双轨策略
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
+---
+
 # 双轨记忆策略：Markdown + MCP Memory Service
 
 ## 概述
@@ -8,12 +22,12 @@
 
 ## 双轨策略详情
 
-| 记忆类型     | Markdown 文件（真相源）                                 | MCP Memory Service（增强层）          |
-| ------------ | ------------------------------------------------------- | ------------------------------------- |
-| **作用**     | 长期事实存储、架构决策、团队共享                        | 临时会话记忆、语义搜索、跨 Agent 共享 |
-| **路径**     | `MEMORY.md`、`.workbuddy/memory/`、`docs/ai/knowledge/` | 本地 SQLite + Cloudflare              |
-| **管理方式** | Git 版本控制、团队协作                                  | 自动同步、语义索引                    |
-| **启用状态** | ✅ 永久启用                                             | ⚙️ 可选启用（默认 disabled）          |
+| 记忆类型     | Markdown 文件（真相源）                      | MCP Memory Service（增强层）          |
+| ------------ | -------------------------------------------- | ------------------------------------- |
+| **作用**     | 长期事实存储、架构决策、团队共享             | 临时会话记忆、语义搜索、跨 Agent 共享 |
+| **路径**     | `MEMORY.md`、`memory/`、`docs/ai/knowledge/` | 本地 SQLite + Cloudflare              |
+| **管理方式** | Git 版本控制、团队协作                       | 自动同步、语义索引                    |
+| **启用状态** | ✅ 永久启用                                  | ✅ 已启用（sqlite_vec 本地模式）      |
 
 ---
 
@@ -25,7 +39,7 @@
 - 项目进展、里程碑记录
 - 用户习惯和避坑清单
 - 模式、反模式和经验总结
-- 每日操作日志（`.workbuddy/memory/YYYY-MM-DD.md`）
+- 每日操作日志（`memory/YYYY-MM-DD.md`）
 
 ### MCP Memory Service 负责（增强层）
 
@@ -74,19 +88,17 @@ uv pip install mcp-memory-service
 
 ## 当前配置文件
 
-- `.mcp.json`：已配置 memory 服务（默认 disabled）
-- `.harness/registry.yaml`：已添加 agentmemory 说明
+- `.mcp.json`：已配置 memory 服务（`disabled: false`，已启用）
+- `.harness/registry.yaml`：已记录 MCP Memory 集成详情
 - `AGENTS.md`：已适配 Trae 环境的自检机制
 
 ---
 
 ## 演进路线
 
-| 阶段   | 状态      | 说明                            |
-| ------ | --------- | ------------------------------- |
-| 阶段 1 | ✅ 完成   | 仅 Markdown（当前模式）         |
-| 阶段 2 | ⏳ 进行中 | 双轨并行（Markdown + MCP 可选） |
-| 阶段 3 | ⏳ 待定   | 根据使用情况决定是否深度整合    |
+| 阶段 1 | ✅ 完成 | 仅 Markdown（历史模式） |
+| 阶段 2 | ✅ 完成 | 双轨并行（Markdown + MCP 已启用） |
+| 阶段 3 | ⏳ 待定 | Cloudflare 混合后端同步（如需跨设备共享） |
 
 ---
 

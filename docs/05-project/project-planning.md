@@ -1,4 +1,5 @@
 ---
+id: DOC-PROJECT-PLAN-
 number: PRJ-017
 domain: project
 category: plan
@@ -7,6 +8,7 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
 related_docs:
   - docs/00-governance/project-charter.md
   - docs/00-governance/agent-squad-protocol.md

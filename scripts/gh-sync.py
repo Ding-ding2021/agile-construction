@@ -11,7 +11,7 @@ Usage:
 
 Requires:
   - gh CLI authenticated
-  - .workbuddy/memory/YYYY-MM-DD.md for today's date
+  - memory/YYYY-MM-DD.md for today's date
 """
 
 import json
@@ -30,7 +30,7 @@ def run_gh(cmd: list[str]) -> str:
 def show_today():
     """Show today's log and suggest status updates."""
     today = date.today().strftime("%Y-%m-%d")
-    log_path = f".workbuddy/memory/{today}.md"
+    log_path = f"memory/{today}.md"
     try:
         with open(log_path, "r", encoding="utf-8") as f:
             content = f.read()
@@ -60,7 +60,7 @@ def show_issue(number: str):
 def add_comment(number: str):
     """Add a completion comment to an issue."""
     today = date.today().strftime("%Y-%m-%d")
-    comment = f"Progress update ({today}): Task implementation complete. See `.workbuddy/memory/{today}.md` for details."
+    comment = f"Progress update ({today}): Task implementation complete. See `memory/{today}.md` for details."
     result = run_gh(["issue", "comment", number, "--body", comment])
     print(f"Comment added to #{number}")
 
@@ -72,7 +72,7 @@ def close_issue(number: str):
         f"Verified ({today}).\n"
         f"- `npm run build` ✓\n"
         f"- `npm run lint` ✓\n"
-        f"- `.workbuddy/memory/{today}.md` ✓"
+        f"- `memory/{today}.md` ✓"
     )
     result = run_gh(["issue", "close", number, "--comment", comment])
     print(f"Issue #{number} closed")

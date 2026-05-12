@@ -1,10 +1,13 @@
 ---
-title: 设计规范 V2.0 原始版
+id: ARC-001
 number: ARC-001
 domain: archive
 category: archived
+title: 设计规范 V2.0 原始版
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 🎨 连锁门店建设管理系统 - 完整设计规范

@@ -4,9 +4,13 @@ number: GOV-010
 domain: governance
 category: component-contract
 title: 组件开发契约模板（Component Development Contract）
-date: 2026-04-25
+owner: docs-maintainer
 status: active
+last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
+related_docs: []
+date: 2026-04-25
 ---
 
 # 组件开发契约模板

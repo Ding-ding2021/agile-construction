@@ -1,10 +1,15 @@
 ---
-title: Phase 1 交接文档
+id: DOC-DEVELOPMENT-GUIDE-PHASE-1
 number: DEV-014
 domain: development
 category: guide
+title: Phase 1 交接文档
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Phase 1 冷启动交接文档

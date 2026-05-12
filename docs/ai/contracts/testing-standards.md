@@ -3,6 +3,8 @@ id: AI-TESTING-STANDARDS
 human_source: docs/00-governance/testing-standards.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：测试规范
+last_updated: 2026-05-12
 ---
 
 # AI 合约：测试规范

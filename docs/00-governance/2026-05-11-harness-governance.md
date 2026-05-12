@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-QUALITY-PLAN-HARNESS
 number: GOV-012
 domain: governance
 category: quality-plan
+title: Harness 框架 — 后续治理实施计划
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Harness 框架 — 后续治理实施计划
@@ -25,7 +33,7 @@ category: quality-plan
 - 扫描: `.agents/skills/` (含 gitnexus/ + superpowers/)
 - 扫描: `~/.config/opencode/skills/`
 - 扫描: `~/.claude/skills/`
-- 输出: `.workbuddy/reports/skills-inventory.md`
+- 输出: `memory/reports/skills-inventory.md`
 
 - [ ] 生成完整 skills 清单（按来源/专业/命名/触发条件）
 - [ ] 标记重复 skills（如 test-driven-development 在项目根和 superpowers/ 各有一份）
@@ -66,7 +74,7 @@ category: quality-plan
 
 - 扫描: `docs/00-governance/` `01-product/` `02-architecture/` `03-engineering/` `04-operations/`
 - 扫描: `docs/knowledge-base/` `docs/99-archive/`
-- 输出: `.workbuddy/reports/docs-inventory.md`
+- 输出: `memory/reports/docs-inventory.md`
 
 - [ ] 统计所有文档的 frontmatter status
 - [ ] 标记冲突文档（同主题多份 active）

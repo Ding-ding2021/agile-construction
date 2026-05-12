@@ -1,10 +1,13 @@
 ---
-title: 多Agent建店管理平台_V1_PRD
+id: ARC-031
 number: ARC-031
 domain: archive
 category: archived
+title: 多Agent建店管理平台_V1_PRD
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 多Agent建店管理平台 V1 PRD

@@ -4,10 +4,11 @@ number: ARC-058
 domain: archive
 category: archived
 title: 视觉一致性审计报告与改进计划
-date: 2026-04-25
 status: archived
-archived_reason: MUI 旧栈视觉审计，UI 已切换为 shadcn，不再适用
+last_updated: 2026-05-12
 archived_at: 2026-05-06
+archived_reason: MUI 旧栈视觉审计，UI 已切换为 shadcn，不再适用
+date: 2026-04-25
 source_of_truth: true
 ---
 

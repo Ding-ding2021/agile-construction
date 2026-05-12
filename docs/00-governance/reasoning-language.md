@@ -1,12 +1,14 @@
 ---
-title: AI 推理语言规范
+id: DOC-GOVERNANCE-LANGUAGE-CONFIG-AI
 number: GOV-009
 domain: governance
 category: language-config
+title: AI 推理语言规范
 owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
 source_of_truth: true
+related_code: []
 related_docs: [docs/00-governance/document-governance.md]
 ---
 

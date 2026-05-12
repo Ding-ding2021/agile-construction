@@ -1,7 +1,15 @@
 ---
+id: DOC-PRODUCT-ROADMAP-
 number: PRD-012
 domain: product
 category: roadmap
+title: 甘特图排期计划
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 甘特图排期计划

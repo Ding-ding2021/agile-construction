@@ -10,7 +10,7 @@ last_updated: 2026-05-07
 source_of_truth: true
 related_code:
   - scripts/scan-tools.py
-  - .workbuddy/stats/
+  - memory/stats/
   - AGENTS.md
 related_docs:
   - docs/00-governance/agent-squad-protocol.md
@@ -64,7 +64,7 @@ related_docs:
 
 ## 3. JSON 记录格式
 
-文件路径：`.workbuddy/stats/YYYY-MM-DD.json`
+文件路径：`memory/stats/YYYY-MM-DD.json`
 
 ```json
 {
@@ -169,10 +169,10 @@ L3 任务的历史记录有 10 条：
 
 ## 6. 与现有流程的关系
 
-| 现有流程                   | 本体系对应                            |
-| -------------------------- | ------------------------------------- |
-| 任务结束协议 A（日志）     | 不变                                  |
-| 任务结束协议 B（长期记忆） | 不变                                  |
-| **任务结束协议 C（新增）** | **写入 `.workbuddy/stats/` 质量评价** |
-| scan-tools.py 全景扫描     | 新增 `--report` 模式                  |
-| squad 验收                 | 验收通过后触发评价填写                |
+| 现有流程                   | 本体系对应                        |
+| -------------------------- | --------------------------------- |
+| 任务结束协议 A（日志）     | 不变                              |
+| 任务结束协议 B（长期记忆） | 不变                              |
+| **任务结束协议 C（新增）** | **写入 `memory/stats/` 质量评价** |
+| scan-tools.py 全景扫描     | 新增 `--report` 模式              |
+| squad 验收                 | 验收通过后触发评价填写            |

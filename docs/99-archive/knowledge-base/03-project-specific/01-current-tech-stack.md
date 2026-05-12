@@ -1,10 +1,13 @@
 ---
-title: 01 Current Tech Stack
+id: ARC-023
 number: ARC-023
 domain: archive
 category: archived
+title: 01 Current Tech Stack
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

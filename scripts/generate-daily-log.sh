@@ -2,14 +2,14 @@
 # ============================================================
 # 每日项目日志生成脚本
 # 工作区: /Users/dylan/CodeBuddy/agile-construction
-# 输出目录: .codebuddy/daily-logs/
+# 输出目录: memory/（已从 .codebuddy/daily-logs/ 迁移）
 # ============================================================
 
 set -e
 
 WORKSPACE="/Users/dylan/CodeBuddy/agile-construction"
-LOG_DIR="$WORKSPACE/.codebuddy/daily-logs"
-MEMORY_DIR="$WORKSPACE/.workbuddy/memory"
+LOG_DIR="$WORKSPACE/memory"
+MEMORY_DIR="$WORKSPACE/memory"
 DATE=$(date +%Y-%m-%d)
 YESTERDAY=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
 LOG_FILE="$LOG_DIR/$DATE.md"

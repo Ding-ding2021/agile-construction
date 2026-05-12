@@ -8,6 +8,8 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-04-24
 source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # AI 测试覆盖操作指南

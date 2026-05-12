@@ -1,10 +1,13 @@
 ---
-title: Gradient Token Migration Plan
+id: ARC-008
 number: ARC-008
 domain: archive
 category: archived
+title: Gradient Token Migration Plan
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 渐变色 Token 化迁移方案

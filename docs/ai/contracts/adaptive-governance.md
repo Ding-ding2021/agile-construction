@@ -3,6 +3,8 @@ id: AI-ADAPTIVE-GOVERNANCE
 human_source: docs/00-governance/harness/09-governance.md
 status: active
 last_synced: 2026-05-12
+title: AI 合约：自适应治理（L2.5 行为调节）
+last_updated: 2026-05-12
 ---
 
 # AI 合约：自适应治理（L2.5 行为调节）

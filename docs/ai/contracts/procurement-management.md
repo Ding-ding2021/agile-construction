@@ -3,6 +3,8 @@ id: AI-PROCUREMENT-MANAGEMENT
 human_source: docs/01-product/procurement-management-prd.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：采购管理
+last_updated: 2026-05-12
 ---
 
 # AI 合约：采购管理

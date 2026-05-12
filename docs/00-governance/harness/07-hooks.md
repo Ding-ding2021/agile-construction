@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-HOOKS
 number: GOV-020
 domain: governance
 category: harness
+title: Hooks 生命周期
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Hooks 生命周期

@@ -1,10 +1,13 @@
 ---
-title: Development Progress Assessment 2026 04 25
+id: ARC-039
 number: ARC-039
 domain: archive
 category: archived
+title: Development Progress Assessment 2026 04 25
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # P1-P1.5 任务完成状态评估报告

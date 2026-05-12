@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-DOC-GOVERNANCE-
+number: GOV-000
+domain: governance
+category: doc-governance
 title: 文档中心（统一入口）
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-12（领域分类重组：新增设计/测试/项目，治理/文档合并）
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 文档中心（统一入口）

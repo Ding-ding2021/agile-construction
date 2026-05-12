@@ -1,10 +1,13 @@
 ---
-title: 02 Layered Architecture
+id: ARC-017
 number: ARC-017
 domain: archive
 category: archived
+title: 02 Layered Architecture
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

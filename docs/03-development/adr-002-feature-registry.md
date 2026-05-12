@@ -1,10 +1,15 @@
 ---
-title: Adr 002 Feature Registry
+id: DOC-DEVELOPMENT-ARCHITECTURE-ADR-002-FEATURE-REGISTRY
 number: DEV-009
 domain: development
 category: architecture
+title: Adr 002 Feature Registry
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # ADR-002: FeatureRegistry — 统一页面注册模式

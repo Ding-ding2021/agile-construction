@@ -3,6 +3,8 @@ id: AI-CODE-REVIEW-CHECKLIST
 human_source: docs/00-governance/code-review-checklist.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：Code Review Checklist
+last_updated: 2026-05-12
 ---
 
 # AI 合约：Code Review Checklist

@@ -1,7 +1,15 @@
 ---
+id: DOC-PROJECT-METRICS-AI
 number: PRJ-009
 domain: project
 category: metrics
+title: AI 开发质量仪表盘
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # AI 开发质量仪表盘

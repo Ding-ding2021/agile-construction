@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-AI
+number: GOV-000
+domain: governance
+category: harness
 title: AI 合约索引
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # AI 合约索引

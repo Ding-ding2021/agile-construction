@@ -1,12 +1,12 @@
 #!/bin/bash
 # Harness 每任务指标采集脚本
 # 被 .opencode/hooks/post-commit 调用
-# 产出: .workbuddy/stats/$(date +%Y-%m-%d).json
+# 产出: memory/stats/$(date +%Y-%m-%d).json
 
 set -eo pipefail
 
 TODAY=$(date +%Y-%m-%d)
-STATS_DIR=".workbuddy/stats"
+STATS_DIR="memory/stats"
 STATS_FILE="$STATS_DIR/$TODAY.json"
 
 mkdir -p "$STATS_DIR"

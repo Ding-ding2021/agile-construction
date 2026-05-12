@@ -1,10 +1,13 @@
 ---
-title: 03 State Management
+id: ARC-018
 number: ARC-018
 domain: archive
 category: archived
+title: 03 State Management
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

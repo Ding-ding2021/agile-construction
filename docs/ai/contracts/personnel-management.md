@@ -3,6 +3,8 @@ id: AI-PERSONNEL-MANAGEMENT
 human_source: docs/01-product/personnel-management-prd.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：人员管理
+last_updated: 2026-05-12
 ---
 
 # AI 合约：人员管理

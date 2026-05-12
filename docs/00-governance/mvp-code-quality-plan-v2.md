@@ -8,6 +8,8 @@ owner: docs-maintainer
 status: active
 last_updated: 2026-04-24
 source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # MVP 代码质量保证方案 V2（全 AI 编码版）

@@ -1,3 +1,17 @@
+---
+id: DOC-GOVERNANCE-GUIDE-CLOUDFLARE
+number: GOV-000
+domain: governance
+category: guide
+title: Cloudflare 设置指南
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
+---
+
 # Cloudflare 注册和配置指南
 
 ## 🚀 步骤 1：注册 Cloudflare 账号

@@ -1,10 +1,13 @@
 ---
-title: Ui Ux Improvement Proposal 2026 04 24
+id: ARC-056
 number: ARC-056
 domain: archive
 category: archived
+title: Ui Ux Improvement Proposal 2026 04 24
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 页面与交互改进建议报告

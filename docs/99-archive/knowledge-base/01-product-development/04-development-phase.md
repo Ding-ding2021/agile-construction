@@ -1,10 +1,13 @@
 ---
-title: 04 Development Phase
+id: ARC-012
 number: ARC-012
 domain: archive
 category: archived
+title: 04 Development Phase
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

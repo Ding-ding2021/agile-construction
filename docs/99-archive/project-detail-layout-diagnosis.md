@@ -4,10 +4,11 @@ number: ARC-055
 domain: archive
 category: archived
 title: 项目详情页布局混乱问题诊断与修复方案
-date: 2026-04-25
 status: archived
-archived_reason: MUI 旧栈布局诊断，UI 已切换为 shadcn，不再适用
+last_updated: 2026-05-12
 archived_at: 2026-05-06
+archived_reason: MUI 旧栈布局诊断，UI 已切换为 shadcn，不再适用
+date: 2026-04-25
 source_of_truth: true
 ---
 

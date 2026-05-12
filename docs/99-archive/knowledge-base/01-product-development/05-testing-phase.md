@@ -1,10 +1,13 @@
 ---
-title: 05 Testing Phase
+id: ARC-013
 number: ARC-013
 domain: archive
 category: archived
+title: 05 Testing Phase
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

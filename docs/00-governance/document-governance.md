@@ -68,35 +68,123 @@ related_docs:
 
 同主题仅允许一个 `active` 文档，其余必须标记 `superseded` 或进入 `99-archive`。
 
-## 5. Frontmatter 最低要求
+## 5. Frontmatter 标准（2026-05-12 统一）
 
-所有文档（含归档）必须包含以下字段：
+所有文档必须严格按照文档类型选用以下四套模板之一。
+
+### 5.1 模板 A：标准文档（活跃/草稿/被取代）
+
+适用于 `docs/00-governance/` ~ `docs/05-project/` 下的全部活跃文档、草稿、被取代文档。
 
 ```yaml
 ---
-id: DOC-00-GOVERNANCE-CODING-STANDARDS # 历史 ID，保留不变
+id: DOC-00-GOVERNANCE-CODING-STANDARDS # 唯一 ID（历史兼容）
 number: GOV-002 # 简化编号
-domain: governance # 一级领域
-category: code-standards # 二级分类（kebab-case）
-title: 代码规范
-owner: docs-maintainer
-status: active # active / superseded / draft / archived
-last_updated: 2026-05-12
-source_of_truth: true
-ai_contract: docs/ai/contracts/coding-standards.md
-related_code: []
-related_docs: []
+domain: governance # 一级领域（枚举值）
+category: code-standards # 二级分类（kebab-case 枚举值）
+title: 代码规范 # 文档标题
+owner: docs-maintainer # 负责人
+status: active # active / draft / superseded
+last_updated: 2026-05-12 # 最后更新日期
+source_of_truth: true # true / false
+related_code: # 关联代码路径
+  - src-next/
+related_docs: # 关联文档路径
+  - docs/00-governance/xxx.md
 ---
 ```
 
-### 5.1 编号规则
+必填字段（11 个）：`id`、`number`、`domain`、`category`、`title`、`owner`、`status`、`last_updated`、`source_of_truth`、`related_code`、`related_docs`。
 
-| 字段       | 格式                       | 示例                                 | 必填           |
-| ---------- | -------------------------- | ------------------------------------ | -------------- |
-| `id`       | `DOC-{序号}-{领域}-{标题}` | `DOC-00-GOVERNANCE-CODING-STANDARDS` | 是（历史兼容） |
-| `number`   | `{领域代码}-{三位序号}`    | `GOV-002`                            | 是（新增）     |
-| `domain`   | 枚举值                     | `governance`                         | 是（新增）     |
-| `category` | kebab-case                 | `code-standards`                     | 是（新增）     |
+其中 `related_code` 和 `related_docs` 无关联时使用空数组 `[]`；`owner` 无特定负责人时统一为 `docs-maintainer`。
+
+### 5.2 模板 B：归档文档（`99-archive/`）
+
+仅限 `docs/99-archive/` 下的文档使用。
+
+```yaml
+---
+id: ARC-042
+number: ARC-042
+domain: archive
+category: archived
+title: 已归档文档标题
+status: archived
+last_updated: 2026-05-12
+archived_at: 2026-04-24 # 归档日期
+archived_reason: 已被 V1.2 整合替代 # 归档原因
+---
+```
+
+必填字段（9 个）：`id`、`number`、`domain`、`category`、`title`、`status`、`last_updated`、`archived_at`、`archived_reason`。`domain` 固定为 `archive`，`category` 固定为 `archived`。
+
+### 5.3 模板 C：AI 合约（`docs/ai/contracts/`）
+
+仅限 `docs/ai/contracts/` 下的文档使用。
+
+```yaml
+---
+id: AI-CODING-STANDARDS # 合约 ID
+human_source: docs/00-governance/xxx.md # 对应人类文档路径
+status: active # active / draft
+last_synced: 2026-05-12 # 最后同步时间
+---
+```
+
+必填字段（4 个）：`id`、`human_source`、`status`、`last_synced`。
+
+### 5.4 模板 D：报告（`docs/05-project/reports/`）
+
+仅限自动生成的报告使用。
+
+```yaml
+---
+title: 扫描报告
+domain: project
+category: report
+status: active
+last_updated: 2026-05-12
+generated_at: 2026-05-12 10:30
+---
+```
+
+必填字段（6 个）：`title`、`domain`、`category`、`status`、`last_updated`、`generated_at`。
+
+### 5.5 字段映射表
+
+| 字段              | 模板 A | 模板 B | 模板 C | 模板 D | 说明                           |
+| ----------------- | ------ | ------ | ------ | ------ | ------------------------------ |
+| `id`              | 必填   | 必填   | 必填   | —      | 唯一标识                       |
+| `number`          | 必填   | 必填   | —      | —      | 简化编号                       |
+| `domain`          | 必填   | 固定   | —      | 必填   | 一级领域                       |
+| `category`        | 必填   | 固定   | —      | 必填   | 二级分类                       |
+| `title`           | 必填   | 必填   | —      | 必填   | 文档标题                       |
+| `owner`           | 必填   | —      | —      | —      | 负责人                         |
+| `status`          | 必填   | 必填   | 必填   | 必填   | 文档状态                       |
+| `last_updated`    | 必填   | 必填   | —      | 必填   | 最后更新                       |
+| `source_of_truth` | 必填   | —      | —      | —      | 单源真理标记                   |
+| `related_code`    | 必填   | —      | —      | —      | 关联代码                       |
+| `related_docs`    | 必填   | —      | —      | —      | 关联文档                       |
+| `archived_at`     | —      | 必填   | —      | —      | 归档日期                       |
+| `archived_reason` | —      | 必填   | —      | —      | 归档原因                       |
+| `human_source`    | —      | —      | 必填   | —      | 人类文档源                     |
+| `last_synced`     | —      | —      | 必填   | —      | AI 合约同步时间                |
+| `generated_at`    | —      | —      | —      | 必填   | 生成时间戳                     |
+| `ai_contract`     | 可选   | —      | —      | —      | AI 合约路径（参见 §5.6）       |
+| `superseded_by`   | 可选   | —      | —      | —      | 仅 `status: superseded` 时使用 |
+
+### 5.6 特殊字段规则
+
+- **`ai_contract`**：仅当该文档已通过 `document-sync` 生成了 AI 合约时添加，指向 `docs/ai/contracts/` 下的合约文件。
+- **`superseded_by`**：仅当 `status: superseded` 时使用，指向取代当前文档的新文档路径。
+- **`supersedes`**：可选，指向被当前文档取代的旧文档路径。
+
+### 5.7 编号规则
+
+| 字段     | 格式                       | 示例                                 | 适用范围  |
+| -------- | -------------------------- | ------------------------------------ | --------- |
+| `id`     | `DOC-{序号}-{领域}-{标题}` | `DOC-00-GOVERNANCE-CODING-STANDARDS` | 模板 A    |
+| `number` | `{领域代码}-{三位序号}`    | `GOV-002`                            | 模板 A、B |
 
 #### 领域代码映射
 
@@ -109,8 +197,6 @@ related_docs: []
 | 测试 | TST  | TST-001 ~ TST-099 |
 | 项目 | PRJ  | PRJ-001 ~ PRJ-099 |
 | 归档 | ARC  | ARC-001 ~ ARC-099 |
-
-归档文档：`status: archived` 时，`domain` 统一为 `archive`，`category` 统一为 `archived`。
 
 #### 二级分类（category）枚举
 

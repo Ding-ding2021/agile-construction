@@ -1,8 +1,13 @@
 ---
-title: Skills / Agents / MCP 全景扫描报告
+id: ARC-002
 number: ARC-002
 domain: archive
 category: archived
+title: Skills / Agents / MCP 全景扫描报告
+status: active
+last_updated: 2026-05-12
+archived_at: 2026-05-12
+archived_reason: 历史归档
 generated_at: 2026-05-10 10:30
 source_of_truth: generated
 ---
@@ -221,13 +226,13 @@ source_of_truth: generated
 
 ## 📝 工作日志（5 天）
 
-| 日期       | 日志                              |
-| ---------- | --------------------------------- |
-| 2026-05-05 | `.workbuddy/memory/2026-05-05.md` |
-| 2026-05-06 | `.workbuddy/memory/2026-05-06.md` |
-| 2026-05-07 | `.workbuddy/memory/2026-05-07.md` |
-| 2026-05-10 | `.workbuddy/memory/2026-05-10.md` |
-| MEMORY     | `.workbuddy/memory/MEMORY.md`     |
+| 日期       | 日志                   |
+| ---------- | ---------------------- |
+| 2026-05-05 | `memory/2026-05-05.md` |
+| 2026-05-06 | `memory/2026-05-06.md` |
+| 2026-05-07 | `memory/2026-05-07.md` |
+| 2026-05-10 | `memory/2026-05-10.md` |
+| MEMORY     | `memory/MEMORY.md`     |
 
 ## 💡 常用命令
 

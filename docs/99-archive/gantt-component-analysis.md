@@ -1,10 +1,13 @@
 ---
-title: Gantt Component Analysis
+id: ARC-007
 number: ARC-007
 domain: archive
 category: archived
+title: Gantt Component Analysis
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 甘特图组件设计与外部库引入建议

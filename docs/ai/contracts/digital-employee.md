@@ -3,6 +3,8 @@ id: AI-DIGITAL-EMPLOYEE
 human_source: docs/01-product/digital-employee-prd.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：数字员工
+last_updated: 2026-05-12
 ---
 
 # AI 合约：数字员工

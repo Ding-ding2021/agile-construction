@@ -1,10 +1,15 @@
 ---
-title: Task Entity Relationship
+id: DOC-DEVELOPMENT-ARCHITECTURE-TASK-ENTITY-RELATIONSHIP
 number: DEV-010
 domain: development
 category: architecture
+title: Task Entity Relationship
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-05
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 任务模块实体关系图

@@ -3,6 +3,8 @@ id: AI-TASK-CENTER
 human_source: docs/01-product/task-center-prd.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：任务中心
+last_updated: 2026-05-12
 ---
 
 # AI 合约：任务中心

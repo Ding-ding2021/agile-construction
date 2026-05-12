@@ -1,9 +1,15 @@
 ---
-title: Wiki 操作日志
+id: DOC-PROJECT-REPORT-WIKI
 number: PRJ-010
 domain: project
 category: report
+title: Wiki 操作日志
+owner: docs-maintainer
 status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Wiki 操作日志

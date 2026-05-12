@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
 number: GOV-016
 domain: governance
 category: harness
+title: 技能体系
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 技能体系

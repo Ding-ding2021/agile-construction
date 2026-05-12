@@ -27,7 +27,7 @@ MCP_CONFIGS = [
     PROJECT_ROOT / "src-next" / ".mcp.json",
 ]
 AGENTS_DIR = PROJECT_ROOT / ".agents"
-WORKBUDDY_DIR = PROJECT_ROOT / ".workbuddy"
+WORKBUDDY_DIR = PROJECT_ROOT / "memory"
 STATS_DIR = WORKBUDDY_DIR / "stats"
 
 
@@ -230,9 +230,9 @@ def scan_agents() -> dict:
 
 
 def scan_workbuddy() -> dict:
-    """扫描 .workbuddy/memory/ 日志。"""
+    """扫描 memory/ 日志。"""
     result = {"log_count": 0, "logs": []}
-    mem_dir = WORKBUDDY_DIR / "memory"
+    mem_dir = WORKBUDDY_DIR
     if not mem_dir.exists():
         return result
     for f in sorted(mem_dir.glob("*.md")):
@@ -251,7 +251,7 @@ STATS_REQUIRED_FIELDS = {
 
 
 def scan_stats() -> list[dict]:
-    """读取 .workbuddy/stats/*.json，返回所有质量评价记录。"""
+    """读取 memory/stats/*.json，返回所有质量评价记录。"""
     records = []
     if not STATS_DIR.exists():
         return records
@@ -642,7 +642,7 @@ def generate_markdown(project_skills: list, global_skills: list, mcps: list, age
         lines.append("|------|------|")
         for log in workbuddy["logs"]:
             date_str = log.replace(".md", "")
-            lines.append(f"| {date_str} | `.workbuddy/memory/{log}` |")
+            lines.append(f"| {date_str} | `memory/{log}` |")
     lines.append("")
 
     # ── 推荐命令 ──

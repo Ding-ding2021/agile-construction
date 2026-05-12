@@ -1,10 +1,13 @@
 ---
-title: Task Missing Fields Report 2026 04 23
+id: ARC-051
 number: ARC-051
 domain: archive
 category: archived
+title: Task Missing Fields Report 2026 04 23
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 任务管理模块缺失字段核查报告

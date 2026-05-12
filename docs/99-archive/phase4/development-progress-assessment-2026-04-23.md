@@ -1,10 +1,13 @@
 ---
-title: Development Progress Assessment 2026 04 23
+id: ARC-046
 number: ARC-046
 domain: archive
 category: archived
+title: Development Progress Assessment 2026 04 23
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 连锁门店营建管理系统 - 开发进度评估与后续建议

@@ -3,6 +3,8 @@ id: AI-SETTINGS
 human_source: docs/01-product/settings-prd.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：系统设置
+last_updated: 2026-05-12
 ---
 
 # AI 合约：系统设置

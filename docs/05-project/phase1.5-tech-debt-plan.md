@@ -4,9 +4,13 @@ number: PRJ-016
 domain: project
 category: plan
 title: Phase 1.5 技术债务清偿计划
-date: 2026-04-25
+owner: docs-maintainer
 status: deprecated
+last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
+related_docs: []
+date: 2026-04-25
 ---
 
 # Phase 1.5 技术债务清偿计划

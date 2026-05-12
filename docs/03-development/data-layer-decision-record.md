@@ -4,9 +4,13 @@ number: DEV-001
 domain: development
 category: architecture
 title: 数据层架构决策记录（Data Layer Decision Record）
-date: 2026-04-25
+owner: docs-maintainer
 status: accepted
+last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
+related_docs: []
+date: 2026-04-25
 ---
 
 # 数据层架构决策记录

@@ -3,6 +3,8 @@ id: AI-AGENT-SQUAD-PROTOCOL
 human_source: docs/00-governance/agent-squad-protocol.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：三组协作协议
+last_updated: 2026-05-12
 ---
 
 # AI 合约：三组协作协议

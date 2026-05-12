@@ -2,7 +2,9 @@
 id: AI-DOCUMENT-GOVERNANCE
 human_source: docs/00-governance/document-governance.md
 status: active
-last_synced: 2026-05-12
+last_synced: 2026-05-12（同步：§5 统一为 4 模板体系）
+title: AI 合约：文档治理
+last_updated: 2026-05-12
 ---
 
 # AI 合约：文档治理
@@ -42,22 +44,78 @@ last_synced: 2026-05-12
 | `superseded` | 有明确的新版本替代，旧版本仍有参考价值          |
 | `archived`   | 无替代版本，或内容完全过时，仅保留法律/审计追溯 |
 
-## Frontmatter 最低要求
+## Frontmatter 模板（2026-05-12 统一）
 
-| 字段              | 说明                                                                    |
-| ----------------- | ----------------------------------------------------------------------- |
-| `id`              | 历史 ID，保留不变，如 DOC-00-GOVERNANCE-XXX                             |
-| `number`          | 简化编号，如 GOV-002（领域代码-三位序号）                               |
-| `domain`          | 一级领域：governance/product/design/development/testing/project/archive |
-| `category`        | 二级分类（kebab-case）                                                  |
-| `title`           | 文档标题                                                                |
-| `owner`           | 维护者                                                                  |
-| `status`          | active / superseded / draft / archived                                  |
-| `last_updated`    | 最后更新日期 YYYY-MM-DD                                                 |
-| `source_of_truth` | true（active 文档）                                                     |
-| `ai_contract`     | AI 合约路径（如 docs/ai/contracts/xxx.md）                              |
-| `related_code`    | 关联代码路径数组                                                        |
-| `related_docs`    | 关联文档路径数组                                                        |
+4 套模板，按文档所在目录选用。
+
+### 模板 A：标准文档
+
+适用 `00-governance/` ~ `05-project/`。必填 11 字段。
+
+| 字段              | 说明                                                  |
+| ----------------- | ----------------------------------------------------- |
+| `id`              | DOC-{领域}-{分类}-{标题}                              |
+| `number`          | {领域代码}-{三位序号}                                 |
+| `domain`          | governance/product/design/development/testing/project |
+| `category`        | kebab-case 枚举值                                     |
+| `title`           | 文档标题                                              |
+| `owner`           | 默认 docs-maintainer                                  |
+| `status`          | active/draft/superseded                               |
+| `last_updated`    | YYYY-MM-DD                                            |
+| `source_of_truth` | true/false                                            |
+| `related_code`    | 数组（空则 []）                                       |
+| `related_docs`    | 数组（空则 []）                                       |
+
+可选：`ai_contract`（合约路径）、`superseded_by`（仅 superseded 时）。
+
+### 模板 B：归档文档
+
+适用 `99-archive/`。必填 9 字段。domain=archive，category=archived，status=archived。
+
+| 字段              | 说明           |
+| ----------------- | -------------- |
+| `id`              | ARC-{三位序号} |
+| `number`          | ARC-{三位序号} |
+| `title`           | 文档标题       |
+| `last_updated`    | YYYY-MM-DD     |
+| `archived_at`     | 归档日期       |
+| `archived_reason` | 归档原因       |
+
+### 模板 C：AI 合约
+
+适用 `docs/ai/contracts/`。必填 4 字段。
+
+| 字段           | 说明             |
+| -------------- | ---------------- |
+| `id`           | AI-{模块名}      |
+| `human_source` | 对应人类文档路径 |
+| `status`       | active/draft     |
+| `last_synced`  | YYYY-MM-DD       |
+
+### 模板 D：报告
+
+适用 `docs/05-project/reports/`。必填 6 字段。
+
+| 字段           | 说明             |
+| -------------- | ---------------- |
+| `title`        | 报告标题         |
+| `domain`       | project          |
+| `category`     | report           |
+| `status`       | active           |
+| `last_updated` | YYYY-MM-DD       |
+| `generated_at` | YYYY-MM-DD HH:MM |
+
+### 领域代码
+
+| 领域        | 代码 | 范围        |
+| ----------- | ---- | ----------- |
+| governance  | GOV  | GOV-001~099 |
+| product     | PRD  | PRD-001~099 |
+| design      | DES  | DES-001~099 |
+| development | DEV  | DEV-001~099 |
+| testing     | TST  | TST-001~099 |
+| project     | PRJ  | PRJ-001~099 |
+| archive     | ARC  | ARC-001~099 |
 
 ## 强制技能
 

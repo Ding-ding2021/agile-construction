@@ -1,10 +1,13 @@
 ---
-title: 06 Testing Strategy
+id: ARC-021
 number: ARC-021
 domain: archive
 category: archived
+title: 06 Testing Strategy
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

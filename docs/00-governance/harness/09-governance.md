@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
 number: GOV-022
 domain: governance
 category: harness
+title: 治理与考核
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 ---
@@ -18,13 +26,13 @@ category: harness
 
 ## 一、考核节奏
 
-| 级别   | 时间           | 触发方式             | 负责人 | 产出                                                  |
-| ------ | -------------- | -------------------- | ------ | ----------------------------------------------------- |
-| 每任务 | 提交后立即     | post-commit hook     | 自动化 | `.workbuddy/stats/YYYY-MM-DD.json`                    |
-| 每日   | 周一至五 18:00 | cron: `0 18 * * 1-5` | 产品   | `.workbuddy/stats/daily/YYYY-MM-DD.md` + 飞书         |
-| 每周   | 周五 17:00     | cron: `0 17 * * 5`   | 产品   | `.workbuddy/stats/weekly/YYYY-Www.json` + 周报 + 飞书 |
-| 每月   | 1 号 09:00     | cron: `0 9 1 * *`    | 产品   | `.workbuddy/stats/trends/YYYY-Qq.json` + 月报 + 飞书  |
-| 每发布 | tag push       | `on.tags`            | 产品   | `.workbuddy/stats/release/vX.Y.Z.json`                |
+| 级别   | 时间           | 触发方式             | 负责人 | 产出                                              |
+| ------ | -------------- | -------------------- | ------ | ------------------------------------------------- |
+| 每任务 | 提交后立即     | post-commit hook     | 自动化 | `memory/stats/YYYY-MM-DD.json`                    |
+| 每日   | 周一至五 18:00 | cron: `0 18 * * 1-5` | 产品   | `memory/stats/daily/YYYY-MM-DD.md` + 飞书         |
+| 每周   | 周五 17:00     | cron: `0 17 * * 5`   | 产品   | `memory/stats/weekly/YYYY-Www.json` + 周报 + 飞书 |
+| 每月   | 1 号 09:00     | cron: `0 9 1 * *`    | 产品   | `memory/stats/trends/YYYY-Qq.json` + 月报 + 飞书  |
+| 每发布 | tag push       | `on.tags`            | 产品   | `memory/stats/release/vX.Y.Z.json`                |
 
 ---
 
@@ -166,7 +174,7 @@ category: harness
 ---
 
 发布者：产品
-发布渠道：.workbuddy/stats/daily/YYYY-MM-DD.md
+发布渠道：memory/stats/daily/YYYY-MM-DD.md
 通知：飞书 webhook
 ```
 
@@ -264,7 +272,7 @@ L1 复盘度量 → L2 模式沉淀 → [L2.5 行为调节] → L3 知识更新 
 ## 八、数据存储
 
 ```
-.workbuddy/stats/
+memory/stats/
 ├── YYYY-MM-DD.json          # 每任务
 ├── daily/YYYY-MM-DD.md      # 每日
 ├── weekly/YYYY-Www.json     # 每周

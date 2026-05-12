@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
+number: GOV-000
+domain: governance
+category: harness
 title: 可复用代码模式
+owner: docs-maintainer
 status: active
 last_updated: 2026-05-11
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 可复用代码模式

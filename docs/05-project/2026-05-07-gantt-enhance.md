@@ -1,7 +1,15 @@
 ---
+id: DOC-PROJECT-PLAN-A
 number: PRJ-006
 domain: project
 category: plan
+title: 甘特图增强（批次 A）实施计划
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 甘特图增强（批次 A）实施计划

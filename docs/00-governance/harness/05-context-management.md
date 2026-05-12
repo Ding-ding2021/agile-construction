@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
 number: GOV-018
 domain: governance
 category: harness
+title: 上下文管理
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 上下文管理
@@ -66,12 +74,12 @@ category: harness
 
 ## 记忆系统
 
-| 存储                               | 内容                 | 读写者                       |
-| ---------------------------------- | -------------------- | ---------------------------- |
-| `MEMORY.md`                        | 长期决策、偏好、模式 | 产品写，所有角色读           |
-| `.workbuddy/memory/YYYY-MM-DD.md`  | 每日任务日志         | 产品写                       |
-| `.workbuddy/stats/YYYY-MM-DD.json` | 每任务质量数据       | 自动 + 产品写                |
-| `agentmemory`                      | 跨会话语义记忆       | 产品写，`memory_recall` 检索 |
+| 存储                           | 内容                 | 读写者                       |
+| ------------------------------ | -------------------- | ---------------------------- |
+| `MEMORY.md`                    | 长期决策、偏好、模式 | 产品写，所有角色读           |
+| `memory/YYYY-MM-DD.md`         | 每日任务日志         | 产品写                       |
+| `memory/stats/YYYY-MM-DD.json` | 每任务质量数据       | 自动 + 产品写                |
+| `agentmemory`                  | 跨会话语义记忆       | 产品写，`memory_recall` 检索 |
 
 ---
 

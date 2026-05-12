@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
 number: GOV-014
 domain: governance
 category: harness
+title: 工作流 — 七阶段线性流水线
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 工作流 — 七阶段线性流水线
@@ -126,7 +134,7 @@ DEFINE     PLAN       BUILD      TEST       REVIEW     SHIP       EVOLVE
 | 步骤         | 内容                 | 角色 | 工具                       |
 | ------------ | -------------------- | ---- | -------------------------- |
 | 6a. 写日志   | 任务记录写入         | 林墨 | `task-memory`              |
-| 6b. 写统计   | 质量数据写入         | 林墨 | `.workbuddy/stats/`        |
+| 6b. 写统计   | 质量数据写入         | 林墨 | `memory/stats/`            |
 | 6c. 提交代码 | Conventional Commits | 林墨 | git commit                 |
 | 6d. 推送 PR  | 创建 PR / 直接合入   | 林墨 | git push / gh pr           |
 | 6e. CI 门禁  | Github Actions 检查  | 自动 | `.github/workflows/ci.yml` |
@@ -144,7 +152,7 @@ DEFINE     PLAN       BUILD      TEST       REVIEW     SHIP       EVOLVE
 
 | 层  | 名称     | 触发       | 内容                         | 产出                         |
 | --- | -------- | ---------- | ---------------------------- | ---------------------------- |
-| L1  | 复盘度量 | 每任务     | 记录 KPI、偏差分析           | `.workbuddy/stats/`          |
+| L1  | 复盘度量 | 每任务     | 记录 KPI、偏差分析           | `memory/stats/`              |
 | L2  | 模式沉淀 | 积累到阈值 | 提取成功模式、常见错误       | `MEMORY.md` patterns         |
 | L3  | 知识更新 | 按需       | 更新知识库、修正文档         | `docs/knowledge-base/` 更新  |
 | L4  | 框架迭代 | 结构性变化 | bump 版本、更新 harness 文档 | `manifest.yaml` version bump |

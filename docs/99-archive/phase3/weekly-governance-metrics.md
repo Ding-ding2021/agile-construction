@@ -4,9 +4,11 @@ number: ARC-045
 domain: archive
 category: archived
 title: weekly-governance-metrics
-owner: docs-maintainer
 status: archived
 last_updated: 2026-04-16
+archived_at: 2026-05-12
+archived_reason: 历史归档
+owner: docs-maintainer
 source_of_truth: true
 related_code: []
 related_docs: []

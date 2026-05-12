@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-MCP
 number: GOV-019
 domain: governance
 category: harness
+title: 工具链与 MCP
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 工具链与 MCP

@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-QUALITY-PLAN-HARNESS
 number: GOV-011
 domain: governance
 category: quality-plan
+title: Harness 知识引擎 — 统一知识管理框架
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Harness 知识引擎 — 统一知识管理框架
@@ -153,8 +161,10 @@ Raw ─(Ingest)─▶ Wiki ─(模式提取)─▶ Skill
 │   ├── memory/                  ← 跨会话知识
 │   ├── sessions/summary/        ← 会话桥接
 │   └── hooks/
-├── .workbuddy/
-│   ├── memory/YYYY-MM-DD.md     ← 任务日志
+├── memory/
+│   ├── MEMORY.md                ← 长期记忆
+│   ├── USER.md                  ← 用户画像
+│   ├── YYYY-MM-DD.md            ← 任务日志
 │   ├── stats/                   ← 质量数据
 │   └── reports/                 ← 定期报告
 ├── docs/                        ← Wiki

@@ -1,10 +1,13 @@
 ---
-title: View Components Evaluation
+id: ARC-057
 number: ARC-057
 domain: archive
 category: archived
+title: View Components Evaluation
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 日历/看板/卡片/地图视图组件评估与建议

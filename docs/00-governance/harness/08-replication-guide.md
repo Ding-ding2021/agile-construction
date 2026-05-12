@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-
 number: GOV-021
 domain: governance
 category: harness
+title: 复制到新项目
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # 复制到新项目

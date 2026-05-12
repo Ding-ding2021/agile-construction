@@ -1,10 +1,13 @@
 ---
-title: 07 Operation Phase
+id: ARC-015
 number: ARC-015
 domain: archive
 category: archived
+title: 07 Operation Phase
 status: superseded
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 superseded_by: docs/ (see docs/README.md for current docs)
 ---
 

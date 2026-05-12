@@ -4,10 +4,12 @@ number: ARC-005
 domain: archive
 category: archived
 title: 项目设计规范 V1 — MUI 品牌暗色（已废弃）
-owner: docs-maintainer
 status: deprecated
-deprecated_reason: 已被 docs/01-product/design-spec-v2-shadcn.md 替代，UI 方向切换为 shadcn Neutral Light
 last_updated: 2026-05-06
+archived_at: 2026-05-12
+archived_reason: 历史归档
+owner: docs-maintainer
+deprecated_reason: 已被 docs/01-product/design-spec-v2-shadcn.md 替代，UI 方向切换为 shadcn Neutral Light
 source_of_truth: false
 related_code:
   - src/theme.ts

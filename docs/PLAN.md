@@ -1,10 +1,14 @@
 ---
 id: DOC-PLAN
+number: PRJ-000
+domain: project
+category: plan
 title: 项目计划总览
 owner: docs-maintainer
 status: active
 last_updated: 2026-05-12
 source_of_truth: true
+related_code: []
 related_docs:
   - docs/README.md
   - docs/01-product/product-roadmap-v1.2-draft.md
@@ -98,5 +102,5 @@ related_docs:
 ## 相关外部产物
 
 - `scripts/plan-issues.json` — 43 个开发任务的 JSON 分解（基于 MUI 旧计划，已关闭并替换为 #45/#47）
-- `.workbuddy/memory/` — 每日工作日志
+- `memory/` — 每日工作日志
 - `memory/patterns/shadcn-workflow.md` — shadcn 工作流指南

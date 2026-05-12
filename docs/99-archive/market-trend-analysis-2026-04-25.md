@@ -1,10 +1,13 @@
 ---
-title: Market Trend Analysis 2026 04 25
+id: ARC-038
 number: ARC-038
 domain: archive
 category: archived
+title: Market Trend Analysis 2026 04 25
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 多Agent建店管理平台 — 行业趋势与竞争态势分析报告

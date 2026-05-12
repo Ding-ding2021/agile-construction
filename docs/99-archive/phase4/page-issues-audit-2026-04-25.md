@@ -1,10 +1,13 @@
 ---
-title: Page Issues Audit 2026 04 25
+id: ARC-047
 number: ARC-047
 domain: archive
 category: archived
+title: Page Issues Audit 2026 04 25
 status: archived
 last_updated: 2026-05-05
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 全站页面问题排查与修复计划

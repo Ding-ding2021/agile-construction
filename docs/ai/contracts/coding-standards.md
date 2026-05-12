@@ -3,6 +3,8 @@ id: AI-CODING-STANDARDS
 human_source: docs/00-governance/coding-standards.md
 status: active
 last_synced: 2026-05-11
+title: AI 合约：代码规范
+last_updated: 2026-05-12
 ---
 
 # AI 合约：代码规范

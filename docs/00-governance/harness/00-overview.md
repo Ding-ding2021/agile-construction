@@ -1,7 +1,15 @@
 ---
+id: DOC-GOVERNANCE-HARNESS-HARNESS
 number: GOV-013
 domain: governance
 category: harness
+title: Harness 工程框架 — 总纲
+owner: docs-maintainer
+status: active
+last_updated: 2026-05-12
+source_of_truth: true
+related_code: []
+related_docs: []
 ---
 
 # Harness 工程框架 — 总纲

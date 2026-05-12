@@ -1,7 +1,13 @@
 ---
+id: ARC-027
 number: ARC-027
 domain: archive
 category: archived
+title: 知识库参考层（已废弃）
+status: active
+last_updated: 2026-05-12
+archived_at: 2026-05-12
+archived_reason: 历史归档
 ---
 
 # 知识库参考层（已废弃）
