@@ -10,6 +10,7 @@ last_updated: 2026-05-12
 source_of_truth: true
 related_code: []
 related_docs: []
+registry_ref: .harness/registry.yaml#hooks
 ---
 
 # Hooks 生命周期

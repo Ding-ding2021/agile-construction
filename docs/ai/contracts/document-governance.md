@@ -2,7 +2,7 @@
 id: AI-DOCUMENT-GOVERNANCE
 human_source: docs/00-governance/document-governance.md
 status: active
-last_synced: 2026-05-12（同步：§5 统一为 4 模板体系）
+last_synced: 2026-05-12（同步：§7 新增 Harness 双源 SSOT 规则）
 title: AI 合约：文档治理
 last_updated: 2026-05-12
 ---
@@ -127,12 +127,13 @@ last_updated: 2026-05-12
 
 ## 单源真理（SSOT）
 
-| 信息类型 | 唯一源            | 禁止路径                                    |
-| -------- | ----------------- | ------------------------------------------- |
-| 项目文档 | `docs/`           | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
-| 项目记忆 | `memory/`         | `.opencode/memory/`（已改 symlink）         |
-| AI 技能  | `.agents/skills/` | `.trae/skills/`、`.qoder/skills/`（已删除） |
-| 架构规则 | `AGENTS.md`       | 其他工具根级说明文件                        |
+| 信息类型     | 唯一源                                    | 禁止路径                                    |
+| ------------ | ----------------------------------------- | ------------------------------------------- |
+| 项目文档     | `docs/`                                   | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
+| 项目记忆     | `memory/`                                 | `.opencode/memory/`（已改 symlink）         |
+| AI 技能      | `.agents/skills/`                         | `.trae/skills/`、`.qoder/skills/`（已删除） |
+| 架构规则     | `AGENTS.md`                               | 其他工具根级说明文件                        |
+| Harness 框架 | `docs/00-governance/harness/`（Markdown） | `.harness/registry.yaml` 为派生索引         |
 
 ## 变更流程
 

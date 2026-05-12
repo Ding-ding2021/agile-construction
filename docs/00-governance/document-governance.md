@@ -264,12 +264,19 @@ AI 技能（SKILL.md）统一管理规则：
 
 ## 7. 单源真理（SSOT）原则
 
-| 信息类型 | 唯一源            | 禁止重复存放                                |
-| -------- | ----------------- | ------------------------------------------- |
-| 项目文档 | `docs/`           | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
-| 项目记忆 | `memory/`         | `.opencode/memory/`（已改 symlink）         |
-| AI 技能  | `.agents/skills/` | `.trae/skills/`、`.qoder/skills/`（已删除） |
-| 架构规则 | `AGENTS.md`       | 其他工具根级说明文件                        |
+| 信息类型     | 唯一源                                    | 禁止重复存放                                |
+| ------------ | ----------------------------------------- | ------------------------------------------- |
+| 项目文档     | `docs/`                                   | `.qoder/repowiki/`、`.gitnexus/wiki/`       |
+| 项目记忆     | `memory/`                                 | `.opencode/memory/`（已改 symlink）         |
+| AI 技能      | `.agents/skills/`                         | `.trae/skills/`、`.qoder/skills/`（已删除） |
+| 架构规则     | `AGENTS.md`                               | 其他工具根级说明文件                        |
+| Harness 框架 | `docs/00-governance/harness/`（Markdown） | `.harness/registry.yaml` 为派生索引         |
+
+**Harness 双源执行规则**：
+
+- **Markdown 文档是真相源**：新增或修改 Harness 配置（角色、技能、工作流、Hook、指标等）时，先更新 `docs/00-governance/harness/` 下的 `.md` 文件
+- **registry.yaml 是派生索引**：Markdown 变更后同步更新 `.harness/registry.yaml`，两者通过 `source` 和 `registry_ref` 字段建立双向追溯
+- 验证：`grep -c "source:" .harness/registry.yaml` 应等于该文件中数据节的数量
 
 > 如发现上述禁止路径已存在内容，应评估迁移至对应唯一源或标记为 `deprecated`，**禁止新增内容**。
 
