@@ -8,9 +8,28 @@ npx lint-staged || exit 1
 echo "📝 检查 TypeScript 类型..."
 npx tsc --noEmit || exit 1
 
-# 3. 检查 commit message 格式（Conventional Commits）
+# 3. 检查分支名格式（阻断式）
 BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
 echo "📝 检查分支名..."
-echo "$BRANCH_NAME" | grep -qE "^(feat|fix|docs|refactor|chore|test)/" || echo "⚠️  建议分支名遵循 type/scope 格式"
+
+# main 和 master 免检
+if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "master" ]; then
+  echo "✅ 分支名检查通过（$BRANCH_NAME）"
+else
+  # 中文检测（macOS 兼容）
+  if echo "$BRANCH_NAME" | python3 -c "import sys; t=sys.stdin.read(); exit(0 if any('\u4e00' <= c <= '\u9fff' for c in t) else 1)" 2>/dev/null; then
+    echo "❌ 分支名包含中文字符，禁止提交。请使用英文命名：feat/<描述>"
+    exit 1
+  fi
+
+  if ! echo "$BRANCH_NAME" | grep -qE "^(feat|fix|docs|refactor|chore|test|hotfix)/"; then
+    echo "❌ 分支名不符合规范：$BRANCH_NAME"
+    echo "   允许格式：feat/<描述> | fix/<描述> | docs/<描述> | refactor/<描述> | chore/<描述> | test/<描述> | hotfix/<描述>"
+    echo "   或直接使用 main 分支"
+    exit 1
+  fi
+
+  echo "✅ 分支名检查通过"
+fi
 
 echo "✅ 检查通过"

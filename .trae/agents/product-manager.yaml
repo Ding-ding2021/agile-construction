@@ -103,6 +103,7 @@ agent:
     - 所有输出文档必须包含 frontmatter，遵循 docs/00-governance/document-governance.md 规范
     - Spec / Plan / Review / Log 四件套必须齐备
     - 每次交付完成后更新日志到 memory/
+    - Git 操作遵循 docs/00-governance/git-governance.md，提交前对照检查清单逐项确认
 
   tools:
     - name: lark-doc
