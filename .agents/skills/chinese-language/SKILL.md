@@ -1,3 +1,8 @@
+---
+name: chinese-language
+description: 强制中文推理与回答。每次会话启动时加载。要求所有推理过程、回答和交互输出必须使用中文，代码、路径、技术术语除外。包含每 10 轮对话语言自检机制。
+---
+
 # Skill: chinese-language
 
 ## 硬性规则

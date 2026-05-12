@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-CODE-REVIEW
+number: GOV-003
+domain: governance
+category: review-process
 title: Code Review Checklist
 owner: docs-maintainer
 status: active
@@ -9,7 +12,7 @@ related_code: []
 related_docs:
   - docs/00-governance/coding-standards.md
   - docs/00-governance/component-development-contract.md
-  - docs/00-governance/project-management-guide.md
+  - docs/00-governance/project-charter.md
 ---
 
 # Code Review Checklist

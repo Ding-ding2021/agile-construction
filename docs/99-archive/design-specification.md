@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-DESIGN-SPECIFICATION
+number: ARC-005
+domain: archive
+category: archived
 title: 项目设计规范 V1 — MUI 品牌暗色（已废弃）
 owner: docs-maintainer
 status: deprecated

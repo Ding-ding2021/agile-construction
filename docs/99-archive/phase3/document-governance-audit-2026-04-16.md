@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-PHASE3-DOCUMENT-GOVERNANCE-AUDIT-2026-04-16
+number: ARC-043
+domain: archive
+category: archived
 title: 文档治理首轮审计记录（2026-04-16）
 owner: docs-maintainer
 status: archived

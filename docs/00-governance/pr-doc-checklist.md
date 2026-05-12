@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-PR-DOC-CHECKLIST
+number: GOV-004
+domain: governance
+category: review-process
 title: 文档治理PR检查清单
 owner: docs-maintainer
 status: active

@@ -19,7 +19,7 @@ professions:
   - name: 产品经理
     person: 林墨
     model: deepseek-v4-flash
-    skills: 26
+    skills: 27
   - name: UI设计师
     person: 苏染
     model: kimi-k2.6 (多模态)
@@ -38,7 +38,7 @@ temporary_orgs:
   - 计划评审
   - 验收小组
 
-skills_total: 106
+skills_total: 107
 docs_total: 71
 metrics_total: 51
 

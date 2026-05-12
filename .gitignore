@@ -42,3 +42,6 @@ data/state_store.db/
 # API key config files
 deepseek-models.json
 .opencode/memory
+
+# Local env (contains secrets)
+.env

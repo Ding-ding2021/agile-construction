@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-PERSONNEL-MANAGEMENT-PRD
+number: PRD-004
+domain: product
+category: prd
 title: 人员管理需求文档
 owner: docs-maintainer
 status: active

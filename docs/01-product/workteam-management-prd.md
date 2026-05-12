@@ -1,5 +1,8 @@
 ---
 title: 工单团队管理 PRD
+number: PRD-010
+domain: product
+category: prd
 status: active
 last_updated: 2026-05-05
 ---

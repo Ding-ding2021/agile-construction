@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-COMMERCIALIZATION-ROADMAP
+number: ARC-003
+domain: archive
+category: archived
 title: 多Agent建店管理平台 — 商业化路线建议
 owner: docs-maintainer
 status: archived

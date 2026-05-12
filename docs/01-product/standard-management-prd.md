@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-STANDARD-MANAGEMENT-PRD
+number: PRD-006
+domain: product
+category: prd
 title: 标准管理需求文档
 owner: docs-maintainer
 status: active

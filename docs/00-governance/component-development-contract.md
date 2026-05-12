@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-COMPONENT-CONTRACT
+number: GOV-010
+domain: governance
+category: component-contract
 title: 组件开发契约模板（Component Development Contract）
 date: 2026-04-25
 status: active

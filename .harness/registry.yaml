@@ -10,7 +10,7 @@ workflows:
       name: 定义
       en: DEFINE
       input: 原始需求
-      output: docs/superpowers/specs/
+      output: docs/01-product/specs/
       exit_condition: 规格文档已签署 + 评审小组通过
       steps:
         - 需求澄清
@@ -22,7 +22,7 @@ workflows:
       name: 规划
       en: PLAN
       input: 已签署 spec
-      output: docs/superpowers/plans/
+      output: docs/02-architecture/plans/
       exit_condition: 实现计划已审批
       steps:
         - karpathy-guidelines
@@ -122,8 +122,8 @@ roles:
     person_name: 林墨
     model: deepseek-v4-flash
     phases: [define, plan, test, review, ship, evolve]
-    skills: 26
-    role_file: docs/harness/roles/产品.md
+    skills: 27
+    role_file: docs/00-governance/harness/roles/产品.md
     squad_leader: true
 
   - id: design
@@ -133,7 +133,7 @@ roles:
     model_note: 多模态
     phases: [define, plan, build, test, review]
     skills: 33
-    role_file: docs/harness/roles/设计.md
+    role_file: docs/00-governance/harness/roles/设计.md
 
   - id: developer
     name: 开发工程师
@@ -141,7 +141,7 @@ roles:
     model: deepseek-v4-flash
     phases: [plan, build, test]
     skills: 35
-    role_file: docs/harness/roles/开发.md
+    role_file: docs/00-governance/harness/roles/开发.md
 
   - id: qa
     name: 测试工程师
@@ -149,7 +149,7 @@ roles:
     model: deepseek-v4-pro
     phases: [define, plan, test, review]
     skills: 12
-    role_file: docs/harness/roles/测试.md
+    role_file: docs/00-governance/harness/roles/测试.md
 
 # ============================================================
 # 3. 临时组织
@@ -332,13 +332,42 @@ skills:
       - squad-pre-dev-evaluation
       - squad-post-dev-review
 
+  飞书（Lark）:
+    description: 飞书集成技能，位于 ~/.claude/skills/，尚未分配专业归属
+    pending_assignment:
+      - lark-approval
+      - lark-attendance
+      - lark-base
+      - lark-calendar
+      - lark-contact
+      - lark-doc
+      - lark-drive
+      - lark-event
+      - lark-im
+      - lark-mail
+      - lark-markdown
+      - lark-minutes
+      - lark-okr
+      - lark-openapi-explorer
+      - lark-shared
+      - lark-sheets
+      - lark-skill-maker
+      - lark-slides
+      - lark-task
+      - lark-vc
+      - lark-vc-agent
+      - lark-whiteboard
+      - lark-wiki
+      - lark-workflow-meeting-summary
+      - lark-workflow-standup-report
+
 # ============================================================
 # 5. 知识库
 # ============================================================
 knowledge:
   产品:
     - docs/00-governance/agent-squad-protocol.md
-    - docs/00-governance/project-management-guide.md
+    - docs/00-governance/project-charter.md
     - docs/00-governance/quality-metrics.md
     - docs/00-governance/document-governance.md
     - docs/00-governance/reasoning-language.md
@@ -403,7 +432,7 @@ context:
   entry_point: opencode.json
   instructions:
     - AGENTS.md
-    - docs/harness/roles/{role}.md
+    - docs/00-governance/harness/roles/{role}.md
   memory:
     long_term: MEMORY.md
     patterns: patterns/*.md
@@ -411,16 +440,16 @@ context:
   load_on_start:
     - AGENTS.md
     - MEMORY.md
-    - docs/harness/roles/{role}.md
+    - docs/00-governance/harness/roles/{role}.md
   load_on_demand:
     - skills
     - knowledge-base-index
 
   role_files:
-    产品: docs/harness/roles/产品.md
-    设计: docs/harness/roles/设计.md
-    开发: docs/harness/roles/开发.md
-    测试: docs/harness/roles/测试.md
+    产品: docs/00-governance/harness/roles/产品.md
+    设计: docs/00-governance/harness/roles/设计.md
+    开发: docs/00-governance/harness/roles/开发.md
+    测试: docs/00-governance/harness/roles/测试.md
 
 # ============================================================
 # 7. 工具
@@ -471,6 +500,7 @@ mcp:
     - name: agentmemory
       roles: [产品]
       capabilities: [memory_save, memory_recall, memory_smart_search]
+      note: "双轨策略：Markdown 为主（真相源），MCP Memory Service 为增强（可选启用）"
 
 # ============================================================
 # 8. Hooks
@@ -729,6 +759,43 @@ governance:
         source: agent_self
         reviewer: all
 
+  adjustments:
+    engine: scripts/evaluate-adjustments.py
+    schedule: weekly (周五 17:00 cron, H10 step)
+    storage: .harness/adjustments.yaml
+    sync_target: AGENTS.md
+    auto_levels: [L1, L2]
+    human_gate_levels: [L3, L4]
+    safety_rules:
+      - expires_after: 7 天
+      - human_override: status=overridden
+      - never_punish_human: true
+    trigger_rules:
+      - id: TR-001
+        metric: 技能遗漏率
+        threshold: 3
+        window: avg_per_task_7d
+        action: force_skill
+        severity: L2
+      - id: TR-002
+        metric: 需求偏差度
+        threshold: 3
+        window: cumulative_7d
+        action: escalate_depth
+        severity: L2
+      - id: TR-003
+        metric: karpathy遗漏
+        threshold: 3
+        window: cumulative_7d
+        action: force_skill
+        severity: L2
+      - id: TR-008
+        metric: e2e_pass_rate
+        threshold: 100
+        window: cumulative_7d
+        action: freeze_autopilot
+        severity: L4
+
 # ============================================================
 # 10. 进化
 # ============================================================
@@ -749,6 +816,14 @@ evolution:
       input: [l1-aggregated-data]
       output: [MEMORY.md patterns, 避坑指南]
       owner: 产品
+
+    l2_5_adjustment:
+      input: [l2-patterns, self-check-blocks, rules-anti-patterns]
+      output: [.harness/adjustments.yaml, AGENTS.md 矫正块]
+      trigger: weekly-review CI step
+      action: scripts/evaluate-adjustments.py
+      owner: harness-bot
+      human_gate: L3-L4 adjustments require human approval
 
     l3_knowledge:
       input: [l2-patterns, document-gap-analysis]

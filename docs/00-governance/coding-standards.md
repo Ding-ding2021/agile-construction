@@ -1,92 +1,63 @@
 ---
 id: DOC-00-GOVERNANCE-CODING-STANDARDS
-title: 📝 连锁门店建设管理系统 - 代码规范
+number: GOV-002
+domain: governance
+category: code-standards
+title: 代码规范
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-05
+last_updated: 2026-05-11
 source_of_truth: true
+ai_contract: docs/ai/contracts/coding-standards.md
 related_code:
   - eslint.config.js
   - .prettierrc
   - tsconfig.app.json
 related_docs:
-  - docs/00-governance/design-specification.md
+  - docs/00-governance/testing-standards.md
+  - docs/00-governance/code-review-checklist.md
   - docs/00-governance/component-development-contract.md
-  - docs/03-engineering/development-guide.md
 ---
 
-# 📝 连锁门店建设管理系统 - 代码规范
+# 代码规范
 
-> **版本**: v2.0.0  
-> **最后更新**: 2026-05-05  
-> **基于设计规范**: docs/01-product/design-spec-v2-shadcn.md v2.1.0
-> **执行补充（2026-03-31）**: 注释规则采用工程模式，关键逻辑/边界条件/复杂状态流需中文注释，不执行“每一行代码都注释”。
-
----
-
-## 📋 目录
-
-1. [代码风格](#1-代码风格)
-2. [TypeScript 规范](#2-typescript-规范)
-3. [React 组件规范](#3-react-组件规范)
-4. [样式规范](#4-样式规范)
-5. [文件组织](#5-文件组织)
-6. [命名规范](#6-命名规范)
-7. [注释规范](#7-注释规范)
-8. [性能优化](#8-性能优化)
-9. [Git 提交规范](#9-git-提交规范)
-10. [双栈编码规范](#10-双栈编码规范)
+> 版本: v3.0.0
+> 最后更新: 2026-05-11
+> 工具链: TypeScript strict + ESLint flat config + Prettier + Tailwind CSS v4
 
 ---
 
-## 1. 代码风格
+## 1. 铁律
 
-### 1.1 ESLint 配置
+| #   | 规则                                                             | 强制 |
+| --- | ---------------------------------------------------------------- | ---- |
+| 1.1 | 禁止使用 `any` 类型（必须 `eslint-disable` + 注释理由）          | 强制 |
+| 1.2 | 禁止硬编码色值/间距/圆角（全部使用设计 Token 或 Tailwind class） | 强制 |
+| 1.3 | 禁止绕过状态机守卫直接修改状态                                   | 强制 |
+| 1.4 | 禁止在子组件中直接操作 `localStorage`                            | 强制 |
+| 1.5 | 路由跳转使用 `navigation.ts` 的 `goTo*` 函数                     | 强制 |
+| 1.6 | 数据操作通过 Repository / Store 层                               | 强制 |
+| 1.7 | 禁止 `console.log`（仅允许 `warn` / `error` / `info`）           | 强制 |
+| 1.8 | 禁止 `@ts-ignore` / `@ts-expect-error`（除非有关联 Issue）       | 强制 |
 
-项目使用 ESLint flat config（`eslint.config.js`），基于 `typescript-eslint` + `eslint-plugin-react-hooks` + `eslint-plugin-react-refresh`：
+---
+
+## 2. 工具配置
+
+### 2.1 ESLint（`eslint.config.js`）
 
 ```javascript
-// eslint.config.js — 实际配置（flat config）
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
-
-export default defineConfig([
-  globalIgnores(['dist', 'src/generated/prisma']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-    rules: {
-      // 质量防线
-      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-      'no-debugger': 'error',
-
-      // React 规范
-      'react-hooks/exhaustive-deps': 'warn',
-      'react-hooks/immutability': 'off',
-      'react-hooks/set-state-in-render': 'off',
-
-      // TypeScript 严格
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    },
-  },
-])
+// 关键规则（非完整配置）
+'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+'no-debugger': 'error',
+'react-hooks/exhaustive-deps': 'warn',
+'@typescript-eslint/no-explicit-any': 'warn',        // 目标：改为 error
+'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],  // 目标：改为 error
 ```
 
-### 1.2 Prettier 配置
+忽略目录：`dist`, `src/generated/prisma`
+
+### 2.2 Prettier（`.prettierrc`）
 
 ```json
 {
@@ -99,656 +70,278 @@ export default defineConfig([
 }
 ```
 
-### 1.3 代码格式示例
+### 2.3 TypeScript（`tsconfig.app.json`）
 
-```tsx
-// ✅ 推荐：无分号、箭头参数无括号
-function MyComponent({ prop1, prop2 }: MyComponentProps) {
-  const [state, setState] = useState(initialValue)
-
-  useEffect(() => {
-    // 副作用逻辑
-  }, [dependency])
-
-  const handleClick = useCallback(() => {
-    // 处理逻辑
-  }, [])
-
-  return (
-    <div className="container">
-      <h1>Title</h1>
-      <p>Content</p>
-    </div>
-  )
-}
-
-// ❌ 避免：使用分号、箭头参数加括号、缺少类型标注
-function myComponent({ prop1, prop2 }) {
-  const [state, setState] = useState(initialValue);
-  return (
-    <div className="container">
-      <h1>Title</h1>
-      <p>Content</p>
-    </div>
-  );
-}
-```
+| 配置                 | 值                                          | 说明                             |
+| -------------------- | ------------------------------------------- | -------------------------------- |
+| `strict`             | `true`                                      | 严格模式                         |
+| `noUnusedLocals`     | `true`                                      | 禁止未使用的局部变量             |
+| `noUnusedParameters` | `true`                                      | 禁止未使用的参数（`_` 前缀豁免） |
+| path alias           | `@/*` → `src/*` 和 `@next/*` → `src-next/*` | 双栈别名                         |
 
 ---
 
-## 2. TypeScript 规范
+## 3. TypeScript 规范
 
-### 2.1 类型定义原则
+### 3.1 类型定义
+
+| 用途          | 方式                 | 示例                        |
+| ------------- | -------------------- | --------------------------- |
+| 对象类型      | `interface`          | `interface Project { ... }` |
+| 联合/工具类型 | `type`               | `type Status = 'a' \| 'b'`  |
+| 常量枚举      | `enum` 或 `as const` | `enum Priority { ... }`     |
+
+### 3.2 Props 类型
 
 ```typescript
-// ✅ 推荐：使用 interface 定义对象类型
-interface User {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-}
-
-// ✅ 推荐：使用 type 定义联合类型和工具类型
-type Status = 'pending' | 'active' | 'completed'
-type PartialUser = Partial<User>
-type UserWithId = Pick<User, 'id' | 'name'>
-
-// ✅ 推荐：使用 enum 定义常量枚举
-enum Priority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent',
-}
-
-// ❌ 避免：使用 any 类型
-const data: any = fetchData() // 不推荐
-```
-
-### 2.2 Props 类型定义
-
-```tsx
-// ✅ 推荐：清晰的 Props 接口
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   children: React.ReactNode
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-  disabled?: boolean
-  loading?: boolean
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   className?: string
-}
-
-// ✅ 推荐：使用 React 内置类型
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string
-  error?: string
-}
-
-// ✅ 推荐：默认值解构
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  children,
-  onClick,
-  disabled = false,
-  loading = false,
-  className,
-}: ButtonProps) {
-  // 组件逻辑
 }
 ```
 
-### 2.3 类型守卫
+- Props 必须显式定义接口（禁止 `React.FC`）
+- 默认值通过解构赋值，不在函数体内赋值
+- 回调命名统一为 `onXxx` 格式
+
+### 3.3 类型守卫
 
 ```typescript
-// ✅ 推荐：类型守卫函数
-interface Project {
-  type: 'project';
-  name: string;
-  progress: number;
-}
-
-interface Task {
-  type: 'task';
-  title: string;
-  completed: boolean;
-}
-
-type Item = Project | Task;
-
+// 推荐：使用 discriminated union + 类型守卫
 function isProject(item: Item): item is Project {
-  return item.type === 'project';
-}
-
-function isTask(item: Item): item is Task {
-  return item.type === 'task';
-}
-
-// 使用
-function renderItem(item: Item) {
-  if (isProject(item)) {
-    return <ProjectCard project={item} />;
-  }
-  if (isTask(item)) {
-    return <TaskCard task={item} />;
-  }
+  return item.type === 'project'
 }
 ```
 
 ---
 
-## 3. React 组件规范
+## 4. React 组件规范
 
-### 3.1 组件结构
+### 4.1 组件结构
 
-```tsx
-// ✅ 推荐：标准组件结构
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+```
+1. imports（外部 → 内部）
+2. interface Props
+3. export function Component({ prop1, prop2 }: Props)
+4.   hooks（useState → useMemo → useCallback → useEffect）
+5.   事件处理（handleXxx）
+6.   渲染辅助函数（renderXxx）
+7.   return JSX
+```
+
+### 4.2 自定义 Hook
+
+- 命名：`use<功能>`，返回对象或元组
+- 职责：封装有状态逻辑，不包含 JSX
+
+### 4.3 组件组合
+
+- 使用复合组件模式（`Card.Header`、`Card.Content`）
+- 组合优于继承
+- 单个组件超过 300 行必须拆分
+
+---
+
+## 5. 样式规范
+
+### 5.1 Tailwind CSS
+
+```typescript
+// 推荐：使用 cn() 合并类名
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-
-interface MyComponentProps {
-  id: string
-  title: string
-  onUpdate?: (id: string) => void
-}
-
-export function MyComponent({ id, title, onUpdate }: MyComponentProps) {
-  // 1. Hooks
-  const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
-  const [data, setData] = useState<Data | null>(null)
-
-  // 2. 计算属性 (useMemo)
-  const formattedTitle = useMemo(() => {
-    return title.toUpperCase()
-  }, [title])
-
-  // 3. 副作用 (useEffect)
-  useEffect(() => {
-    loadData()
-  }, [id])
-
-  // 4. 事件处理 (useCallback)
-  const loadData = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      const result = await fetchData(id)
-      setData(result)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [id])
-
-  const handleClick = useCallback(() => {
-    onUpdate?.(id)
-    navigate(`/items/${id}`)
-  }, [id, navigate, onUpdate])
-
-  // 5. 渲染辅助函数
-  const renderContent = () => {
-    if (isLoading) return <LoadingSpinner />
-    if (!data) return <EmptyState />
-    return <DataView data={data} />
-  }
-
-  // 6. 返回 JSX
-  return (
-    <div className="rounded-2xl bg-white/[0.04] border border-white/8 p-6">
-      <h2 className="text-xl font-bold text-white">{formattedTitle}</h2>
-      {renderContent()}
-      <Button onClick={handleClick} disabled={isLoading}>
-        查看详情
-      </Button>
-    </div>
-  )
-}
-```
-
-### 3.2 自定义 Hook
-
-```tsx
-// ✅ 推荐：use 前缀，返回数组或对象
-import { useState, useEffect, useCallback } from 'react'
-
-interface UseDataOptions {
-  autoFetch?: boolean
-}
-
-interface UseDataResult<T> {
-  data: T | null
-  isLoading: boolean
-  error: Error | null
-  refetch: () => Promise<void>
-}
-
-export function useData<T>(
-  fetchFn: () => Promise<T>,
-  dependencies: any[] = [],
-  options: UseDataOptions = {}
-): UseDataResult<T> {
-  const { autoFetch = true } = options
-  const [data, setData] = useState<T | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
-
-  const fetchData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const result = await fetchFn()
-      setData(result)
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Unknown error'))
-    } finally {
-      setIsLoading(false)
-    }
-  }, [fetchFn])
-
-  useEffect(() => {
-    if (autoFetch) {
-      fetchData()
-    }
-  }, [...dependencies, autoFetch, fetchData])
-
-  return { data, isLoading, error, refetch: fetchData }
-}
-```
-
-### 3.3 组件组合
-
-```tsx
-// ✅ 推荐：组合优于继承
-interface CardProps {
-  children: React.ReactNode
-  className?: string
-}
-
-function Card({ children, className }: CardProps) {
-  return (
-    <div className={cn('rounded-2xl bg-white/[0.04] border border-white/8 p-6', className)}>
-      {children}
-    </div>
-  )
-}
-
-Card.Header = function CardHeader({ children, className }: CardProps) {
-  return <div className={cn('mb-4', className)}>{children}</div>
-}
-
-Card.Title = function CardTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-lg font-semibold text-white">{children}</h3>
-}
-
-Card.Content = function CardContent({ children, className }: CardProps) {
-  return <div className={cn('space-y-4', className)}>{children}</div>
-}
-
-// 使用
-;<Card>
-  <Card.Header>
-    <Card.Title>项目信息</Card.Title>
-  </Card.Header>
-  <Card.Content>
-    <p>内容...</p>
-  </Card.Content>
-</Card>
-```
-
----
-
-## 4. 样式规范
-
-### 4.1 Tailwind CSS 使用规范
-
-```tsx
-// ✅ 推荐：配合设计规范的样式
-function GlassCard() {
-  return (
-    <div className="rounded-2xl bg-white/[0.04] border border-white/8 p-6 hover:bg-white/[0.06] hover:border-white/12 transition-all duration-200">
-      内容
-    </div>
-  )
-}
-
-// ✅ 推荐：使用 cn 合并类名
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 function Button({ variant = 'primary', className }: ButtonProps) {
-  const baseStyles = 'rounded-xl h-10 px-6 font-medium transition-all duration-200'
-
+  const base = 'rounded-xl h-10 px-6 font-medium transition-all'
   const variants = {
-    primary: 'bg-[#154DD9] hover:bg-[#1a5ae8] text-white shadow-lg shadow-blue-900/30',
-    secondary: 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10',
+    primary: 'bg-[#154DD9] hover:bg-[#1a5ae8] text-white',
+    secondary: 'bg-white/5 hover:bg-white/10 text-white/70',
   }
-
-  return <button className={cn(baseStyles, variants[variant], className)} />
+  return <button className={cn(base, variants[variant], className)} />
 }
 ```
 
-### 4.2 响应式设计
+- 所有色值/间距/圆角使用 Tailwind class 或设计 Token
+- 禁止在 className 中硬编码 `rgba()`、`#` 色值（除非是极少数无法映射的例外）
+- 使用 `cn()` 函数合并类名
 
-```tsx
-// ✅ 推荐：移动端优先的响应式
-function ResponsiveGrid() {
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* 移动端 2 列，桌面端 4 列 */}
-      {items.map(item => (
-        <Card key={item.id} item={item} />
-      ))}
-    </div>
-  )
-}
+### 5.2 响应式
 
-// ✅ 推荐：渐进式响应
-function ResponsiveLayout() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {/* 渐进式增加列数 */}
-    </div>
-  )
-}
-```
+- 移动端优先：`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- 断点：sm(640) / md(768) / lg(1024) / xl(1280)
+
+### 5.3 暗色模式
+
+- 使用 `dark:` 前缀覆盖所有表层颜色
+- 当前主题为深色，后续支持 light 切换
 
 ---
 
-## 5. 文件组织
+## 6. 文件组织
 
-### 5.1 目录结构
+### 6.1 目录结构
 
 ```
 src/
 ├── config/           # 路由、导航、特性注册表
-│   ├── routes.ts    # 路由配置 + AppRoute 类型
-│   └── navigation.ts # 统一导航函数
 ├── components/       # 页面组件 + 共享组件
-│   ├── project/     # 项目管理域
-│   ├── task/        # 任务管理域
-│   ├── shared/      # 共享组件（AppSidebar, PageHeader, StatsCards 等）
-│   │   ├── navigation/
-│   │   ├── data-display/
-│   │   └── mui/
-│   └── router/      # AppRouter
+│   ├── project/      # 项目管理域
+│   ├── task/         # 任务管理域
+│   ├── shared/       # 共享组件
+│   └── router/       # AppRouter
 ├── domain/           # 纯领域逻辑（状态机、守卫）
-│   ├── projectStatusMachine.ts
-│   └── taskStateMachine.guards.ts
 ├── data/             # 静态/mock 数据
-│   ├── projects.ts
-│   └── taskManagement.data.ts
 ├── services/         # API 客户端、Repository
 │   ├── repositories/
 │   ├── api/
-│   └── prisma.ts
+│   └── errors/
 ├── store/            # Zustand 状态管理
-│   └── projectStore.ts
-├── config/           # 路由、导航
-├── App.tsx           # 主应用编排
-└── main.tsx          # 入口
+├── App.tsx
+└── main.tsx
 ```
 
-### 5.2 文件命名
+### 6.2 文件命名
 
-```
-// ✅ 推荐
-components/ui/button.tsx
-components/features/projects/ProjectCard.tsx
-pages/ProjectsPage.tsx
-hooks/useProjects.ts
-types/project.ts
-lib/utils.ts
+| 类型      | 格式           | 示例              |
+| --------- | -------------- | ----------------- |
+| 组件文件  | PascalCase     | `ProjectCard.tsx` |
+| Hook 文件 | useXxx         | `useProjects.ts`  |
+| 工具文件  | camelCase      | `utils.ts`        |
+| 类型文件  | camelCase      | `types.ts`        |
+| 样式文件  | 与被测文件同名 | `ProjectCard.css` |
 
-// ❌ 避免
-components/Button.js
-pages/projects.js
-hooks/use_projects.ts
+---
+
+## 7. 命名规范
+
+### 7.1 标识符
+
+| 类型      | 格式                           | 示例                            |
+| --------- | ------------------------------ | ------------------------------- |
+| 变量/函数 | `camelCase`                    | `userName`, `fetchData()`       |
+| 组件/类型 | `PascalCase`                   | `ProjectCard`, `interface User` |
+| 常量      | `UPPER_SNAKE_CASE`             | `MAX_PAGE_SIZE`                 |
+| 枚举      | PascalCase 值 UPPER            | `enum Status { ACTIVE }`        |
+| 布尔变量  | `is`/`has`/`should`/`can` 前缀 | `isActive`, `hasPermission`     |
+
+### 7.2 文件名与组件名一致
+
+```typescript
+// ✅
+// ProjectDetail.tsx
+export function ProjectDetail() {}
+
+// ❌
+// index.tsx
+// 或文件名与组件名不一致
 ```
 
 ---
 
-## 6. 命名规范
+## 8. 注释规范
 
-### 6.1 变量与函数
+### 8.1 执行原则
+
+**仅对关键逻辑、业务边界、复杂状态流转写中文注释。** 不要求以下内容注释：
+
+- `import` 语句
+- 简单变量声明
+- 普通 JSX
+- 明显的循环/条件
+
+### 8.2 何时注释
 
 ```typescript
-// ✅ 推荐：camelCase
-const userName = '张三'
-const isLoading = false
-const projectList = []
+// 需要注释的场景：
 
-function fetchData() {}
-function handleClick() {}
-function formatDate() {}
+// 1. 复杂计算逻辑
+// 计算已完成任务占比，权重按任务优先级调整
+const progress = (completedWeight / totalWeight) * 100
 
-// ✅ 推荐：布尔值前缀
-const isActive = true
-const hasPermission = true
-const shouldUpdate = true
-const canEdit = true
+// 2. 边界条件
+// 空任务列表直接返回，避免除零
+if (tasks.length === 0) return 0
 
-// ❌ 避免
-const UserName = '张三'
-const fetch_data = () => {}
+// 3. 非显而易见的业务规则
+// 状态"已归档"不可再流转——业务要求
+if (status === 'archived') return false
+
+// 4. JSDoc 对外接口
+/** 根据项目状态返回对应的颜色配置 */
+function getStatusColors(status: Status): ColorConfig
 ```
 
-### 6.2 组件与类型
+### 8.3 禁止事项
 
-```typescript
-// ✅ 推荐：PascalCase
-function ProjectCard() {}
-function UserAvatar() {}
+- 禁止行末注释（`const x = 1 // x 是 1`）
+- 禁止逐行注释（每行都加注释）
+- 禁止中英混写注释（全中文或全英文）
 
-interface Project {}
-interface User {}
+---
 
-type Status = 'active' | 'inactive'
+## 9. 架构约束
 
-// ✅ 推荐：组件名包含功能
-function ProjectList() {}
-function ProjectDetail() {}
-function ProjectForm() {}
+### 9.1 分层依赖规则
 
-// ❌ 避免
-function projectCard() {}
-function PCard() {}
+```
+components/ → store/ → services/ → domain/
+      ↓                          ↓
+  共享组件不可引用           数据/领域层
+  服务层或领域层              禁止引用组件
 ```
 
-### 6.3 常量
+### 9.2 状态管理
 
-```typescript
-// ✅ 推荐：UPPER_SNAKE_CASE
-const API_BASE_URL = 'https://api.example.com'
-const MAX_PAGE_SIZE = 50
-const DEFAULT_THEME = 'dark'
+- 组件内部状态：`useState`
+- 跨组件共享：Zustand Store
+- 禁止 Props drilling 超过 2 层
+- 动画状态：CSS transition，禁止 `useEffect` + `setTimeout`
 
-// ✅ 推荐：枚举
-enum Status {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  PENDING = 'pending',
-}
+### 9.3 数据流
 
-// ✅ 推荐：配置对象
-const CONFIG = {
-  api: {
-    baseUrl: 'https://api.example.com',
-    timeout: 10000,
-  },
-  pagination: {
-    defaultSize: 10,
-    maxSize: 50,
-  },
-} as const
+```
+用户操作 → Store/Repository（写本地 + 远程同步）
+   ↓
+组件通过 Store selector 订阅变更
+   ↓
+状态机守卫验证操作合法性
 ```
 
 ---
 
-## 7. 注释规范
+## 10. 双栈编码规范
 
-### 7.1 注释执行规则
+项目有两条独立的开发线：
 
-**执行标准：关键逻辑注释（工程模式）**
+### 10.1 src/（MUI 版 — 维护模式）
 
-仅在边界条件、复杂流程、状态变更、关键业务逻辑处加注释，不要求每行都注释。
+| 维度  | 规范                                               |
+| ----- | -------------------------------------------------- |
+| UI 库 | MUI v9 + Emotion                                   |
+| 样式  | CSS 变量 `var(--pm-*)`，深色玻璃态                 |
+| 路由  | Hash 路由，`readRouteFromHash()` + `navigation.ts` |
+| 状态  | Zustand + persist（`projectStore.ts`）             |
+| 数据  | Repository 模式（API 优先 + localStorage 降级）    |
+| CSS   | 同文件 `.css`，不使用 CSS Modules                  |
 
-> **统一原则**：仅对**关键逻辑、业务边界、复杂状态流转**写中文注释。不要求 import 语句、简单变量声明、普通 JSX 的注释。
+### 10.2 src-next/（shadcn 版 — 活跃开发）
 
-### 7.2 传统项目注释规范（参考）
-
-```typescript
-// ✅ 推荐：复杂逻辑注释
-function calculateProgress(tasks: Task[]): number {
-  if (tasks.length === 0) return 0
-
-  // 计算已完成任务占比，权重按任务优先级调整
-  const completedTasks = tasks.filter(t => t.completed)
-  const totalWeight = tasks.reduce((sum, t) => sum + getTaskWeight(t), 0)
-  const completedWeight = completedTasks.reduce((sum, t) => sum + getTaskWeight(t), 0)
-
-  return Math.round((completedWeight / totalWeight) * 100)
-}
-
-// ✅ 推荐：JSDoc 文档
-/**
- * 根据项目状态返回对应的颜色配置
- * @param status - 项目状态
- * @returns 颜色配置对象
- */
-function getStatusColors(status: Status) {
-  const colors = {
-    [Status.PREPARATION]: { bg: 'bg-amber-500/10', dot: 'bg-amber-400', bar: 'bg-amber-500' },
-    [Status.IN_PROGRESS]: { bg: 'bg-blue-500/10', dot: 'bg-blue-400', bar: 'bg-blue-500' },
-    [Status.COMPLETED]: { bg: 'bg-emerald-500/10', dot: 'bg-emerald-400', bar: 'bg-emerald-500' },
-  }
-  return colors[status] || colors[Status.PREPARATION]
-}
-```
-
-### 7.3 组件注释
-
-````tsx
-/**
- * 项目统计卡片组件
- *
- * @description 显示项目关键指标，支持点击筛选
- * @example
- * ```tsx
- * <StatCard
- *   label="进行中"
- *   value="85"
- *   change="+5"
- *   trend="up"
- *   icon={TrendingUp}
- *   color="blue"
- *   onClick={() => setFilter('active')}
- * />
- * ```
- */
-interface StatCardProps {
-  label: string
-  value: string
-  change: string
-  trend: 'up' | 'down'
-  icon: LucideIcon
-  color: 'blue' | 'emerald' | 'violet' | 'amber'
-  onClick?: () => void
-  isActive?: boolean
-}
-
-export function StatCard({
-  label,
-  value,
-  change,
-  trend,
-  icon: Icon,
-  color,
-  onClick,
-  isActive = false,
-}: StatCardProps) {
-  // 组件实现
-}
-````
+| 维度     | 规范                                                              |
+| -------- | ----------------------------------------------------------------- |
+| UI 库    | shadcn/ui (base-nova) + @base-ui/react                            |
+| 样式     | Tailwind CSS v4，oklch 色值                                       |
+| 路由     | React Router v7 BrowserRouter                                     |
+| 图标     | lucide-react（通过 `icon.tsx` 适配层统一 16px）                   |
+| 组件来源 | 必须来自 shadcn 官方 registry                                     |
+| 禁止事项 | `--pm-*` 旧品牌色、MUI `sx`/`style` prop、`bg-white/X` 透明度色值 |
 
 ---
 
-## 8. 性能优化
+## 11. Git 提交规范
 
-### 8.1 React 性能优化
-
-```tsx
-// ✅ 推荐：使用 useMemo 缓存计算结果
-const sortedProjects = useMemo(() => {
-  return [...projects].sort((a, b) => a.name.localeCompare(b.name))
-}, [projects])
-
-// ✅ 推荐：使用 useCallback 缓存函数
-const handleProjectClick = useCallback(
-  (projectId: string) => {
-    navigate(`/projects/${projectId}`)
-  },
-  [navigate]
-)
-
-// ✅ 推荐：组件懒加载
-const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'))
-
-// ✅ 推荐：虚拟滚动（长列表）
-import { FixedSizeList as List } from 'react-window'
-
-function LongList({ items }: { items: Item[] }) {
-  return (
-    <List height={600} itemCount={items.length} itemSize={100} width="100%">
-      {({ index, style }) => (
-        <div style={style}>
-          <ItemCard item={items[index]} />
-        </div>
-      )}
-    </List>
-  )
-}
-```
-
-### 8.2 避免常见问题
-
-```tsx
-// ❌ 避免：在 render 中创建新对象/数组
-function BadComponent() {
-  // 每次渲染都创建新数组
-  const items = [{ id: 1 }, { id: 2 }]
-
-  // 每次渲染都创建新函数
-  const handleClick = () => {
-    console.log('clicked')
-  }
-
-  return <Child items={items} onClick={handleClick} />
-}
-
-// ✅ 推荐：使用 useMemo 和 useCallback
-function GoodComponent() {
-  const items = useMemo(() => [{ id: 1 }, { id: 2 }], [])
-
-  const handleClick = useCallback(() => {
-    console.log('clicked')
-  }, [])
-
-  return <Child items={items} onClick={handleClick} />
-}
-```
-
----
-
-## 9. Git 提交规范
-
-### 9.1 Commit Message 格式
+### 11.1 格式
 
 ```
 <type>(<scope>): <subject>
@@ -758,87 +351,62 @@ function GoodComponent() {
 <footer>
 ```
 
-### 9.2 Type 类型
+### 11.2 Type
 
-| 类型       | 说明                                   |
-| ---------- | -------------------------------------- |
-| `feat`     | 新功能                                 |
-| `fix`      | 修复 bug                               |
-| `docs`     | 文档更新                               |
-| `style`    | 代码格式（不影响代码运行）             |
-| `refactor` | 重构（既不是新增功能，也不是修复 bug） |
-| `perf`     | 性能优化                               |
-| `test`     | 测试相关                               |
-| `chore`    | 构建过程或辅助工具的变动               |
+| 类型       | 说明          |
+| ---------- | ------------- |
+| `feat`     | 新功能        |
+| `fix`      | Bug 修复      |
+| `docs`     | 文档更新      |
+| `refactor` | 重构          |
+| `style`    | 代码格式      |
+| `perf`     | 性能优化      |
+| `test`     | 测试相关      |
+| `chore`    | 构建/工具变动 |
 
-### 9.3 示例
+### 11.3 示例
 
 ```bash
-# ✅ 推荐
+# ✅
 feat(projects): 添加项目看板视图
-- 实现看板拖拽功能
-- 添加状态列配置
-- 完善动画效果
-
 fix(tasks): 修复任务进度计算错误
-- 更新计算逻辑
-- 添加边界测试
-
 docs: 更新技术栈文档
-- 添加 Supabase 配置说明
-- 补充数据库表设计
-
-style: 统一代码格式
-- 应用 Prettier 格式化
-- 修复 ESLint 警告
-
 refactor(auth): 重构认证逻辑
-- 提取 useAuth hook
-- 简化登录流程
 
-# ❌ 避免
+# ❌
 git commit -m "修复"
 git commit -m "update"
-git commit -m "add feature"
+git commit -m "add stuff"
+```
+
+### 11.4 分支命名
+
+```
+<type>/<scope>-<description>
+# 示例：feat/projects-kanban-view
+# 示例：fix/task-progress-calculation
 ```
 
 ---
 
-## 10. 双栈编码规范
+## 12. 附则
 
-项目有两条独立的开发线，共享 `node_modules/prisma/local-api`：
+### 12.1 自检清单
 
-### 10.1 src/（MUI 版 — 维护模式）
+提交前确认：
 
-| 维度 | 规范 |
-|------|------|
-| UI 库 | MUI v9 + Emotion |
-| 样式 | CSS 变量 `var(--pm-*)`，深色玻璃态 |
-| 路由 | Hash 路由，`readRouteFromHash()` + `navigation.ts` |
-| 状态 | Zustand + persist（`projectStore.ts`） |
-| 数据 | Repository 模式（API 优先 + localStorage 降级） |
-| CSS | 同文件 `.css`，不使用 CSS Modules |
+- [ ] 无 `any` 类型（或有 `eslint-disable` 注释说明理由）
+- [ ] 无硬编码色值/尺寸
+- [ ] 命名符合规范
+- [ ] 无 `console.log`
+- [ ] 无死代码（定义了但未使用）
+- [ ] 无过度抽象
+- [ ] `npm run lint` 0 errors
+- [ ] `npm run build` 0 errors
 
-### 10.2 src-next/（shadcn 版 — 活跃开发）
+### 12.2 相关文档
 
-| 维度 | 规范 |
-|------|------|
-| UI 库 | shadcn/ui (base-nova) + @base-ui/react |
-| 样式 | Tailwind CSS v4，oklch 色值 |
-| 路由 | React Router v7 BrowserRouter |
-| 图标 | lucide-react（通过 icon.tsx 适配层统一 16px） |
-| 组件来源 | 必须来自 shadcn 官方 registry |
-| 禁止事项 | `--pm-*` 旧品牌色、MUI `sx/style` prop、`bg-white/X` 透明度色值 |
-
----
-
-## 📚 相关文档
-
-- [设计规范](./docs/01-product/design-spec-v2-shadcn.md)
-- [编码规范](./docs/00-governance/coding-standards.md)
-- [开发指南](./docs/03-engineering/development-guide.md)
-
----
-
-**维护者**: 技术团队  
-**下次评审**: 2026-06-14
+- [代码规范](./coding-standards.md)（本文）
+- [测试规范](./testing-standards.md)
+- [Code Review Checklist](./code-review-checklist.md)
+- [组件开发契约](./component-development-contract.md)

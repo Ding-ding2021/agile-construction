@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-PRODUCT-ROADMAP-V1-2
+number: PRD-001
+domain: product
+category: roadmap
 title: 连锁门店营建管理系统 - 产品规划文档 V1.2
 owner: docs-maintainer
 status: active

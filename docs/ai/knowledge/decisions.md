@@ -28,7 +28,7 @@ last_updated: 2026-05-11
 
 **决策**：采用 `opencode run` 嵌入 GitHub Actions cron 实现全自动知识提炼。H9 每日提炼、H10 每周精炼、H11 每月审计。零人工指令。
 
-**来源**：`docs/superpowers/specs/2026-05-11-knowledge-engine.md`
+**来源**：`docs/01-product/specs/2026-05-11-knowledge-engine.md`
 
 ---
 

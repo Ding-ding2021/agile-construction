@@ -63,7 +63,7 @@ In sections, getting approval after each. Cover:
 
 ### Step 5: Write Design Doc
 
-Save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit.
+Save to `docs/01-product/specs/YYYY-MM-DD-<topic>-design.md` and commit.
 
 ### Step 6: Spec Self-Review
 

@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPS-VISUAL-AUDIT-2026-04-25
+number: ARC-058
+domain: archive
+category: archived
 title: 视觉一致性审计报告与改进计划
 date: 2026-04-25
 status: archived

@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPS-PROJECT-DETAIL-DIAGNOSIS
+number: ARC-055
+domain: archive
+category: archived
 title: 项目详情页布局混乱问题诊断与修复方案
 date: 2026-04-25
 status: archived

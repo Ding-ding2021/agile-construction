@@ -1,11 +1,10 @@
-name: 每日总结
+name: 每日总结  # 已禁用：由 Trae Schedule「harness-晚间技能进化总结」替代
 on:
-  schedule:
-    - cron: "0 10 * * 1-5"
   workflow_dispatch:
 
 jobs:
   daily-report:
+    if: false  # 已禁用，所有功能已迁移至 Trae Schedule
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

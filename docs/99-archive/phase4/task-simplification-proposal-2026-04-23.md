@@ -1,5 +1,8 @@
 ---
 title: Task Simplification Proposal 2026 04 23
+number: ARC-052
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

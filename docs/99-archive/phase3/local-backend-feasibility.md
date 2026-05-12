@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-PHASE3-LOCAL-BACKEND-FEASIBILITY
+number: ARC-044
+domain: archive
+category: archived
 title: 本地后端联调指南
 owner: docs-maintainer
 status: archived

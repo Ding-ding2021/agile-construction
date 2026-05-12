@@ -1,5 +1,8 @@
 ---
 title: Development Progress Assessment 2026 04 23
+number: ARC-046
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

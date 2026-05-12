@@ -1,5 +1,8 @@
 ---
 title: 02 Code Patterns
+number: ARC-024
+domain: archive
+category: archived
 status: superseded
 last_updated: 2026-05-05
 superseded_by: docs/ (see docs/README.md for current docs)

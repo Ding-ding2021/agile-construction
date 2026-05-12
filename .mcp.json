@@ -11,6 +11,15 @@
     "pixso": {
       "url": "http://127.0.0.1:3667/mcp",
       "disabled": false
+    },
+    "memory": {
+      "command": "/opt/homebrew/bin/python3.11",
+      "args": ["-m", "mcp_memory_service.server"],
+      "env": {
+        "MCP_MEMORY_BASE_DIR": "/Users/dylan/CodeBuddy/agile-construction/.memory",
+        "MCP_MEMORY_STORAGE_BACKEND": "sqlite_vec"
+      },
+      "disabled": false
     }
   }
 }

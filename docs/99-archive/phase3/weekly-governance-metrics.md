@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-PHASE3-WEEKLY-GOVERNANCE-METRICS
+number: ARC-045
+domain: archive
+category: archived
 title: weekly-governance-metrics
 owner: docs-maintainer
 status: archived

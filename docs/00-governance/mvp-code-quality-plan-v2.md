@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-MVP-CODE-QUALITY-V2
+number: GOV-008
+domain: governance
+category: quality-plan
 title: MVP 代码质量保证方案 V2（全 AI 编码版）
 owner: docs-maintainer
 status: active

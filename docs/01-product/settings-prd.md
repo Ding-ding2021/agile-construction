@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-SETTINGS-PRD
+number: PRD-008
+domain: product
+category: prd
 title: 系统设置需求文档
 owner: docs-maintainer
 status: active

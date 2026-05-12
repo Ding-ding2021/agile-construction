@@ -1,5 +1,8 @@
 ---
 title: Phase15 Assessment 2026 04 25
+number: ARC-048
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

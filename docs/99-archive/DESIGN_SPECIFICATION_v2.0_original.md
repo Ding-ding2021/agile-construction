@@ -1,5 +1,8 @@
 ---
 title: 设计规范 V2.0 原始版
+number: ARC-001
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

@@ -1,5 +1,8 @@
 ---
 title: Ui Ux Improvement Proposal 2026 04 24
+number: ARC-056
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

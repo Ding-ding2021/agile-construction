@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-TASK-CENTER-PRD
+number: PRD-003
+domain: product
+category: prd
 title: 任务中心需求文档
 owner: docs-maintainer
 status: active

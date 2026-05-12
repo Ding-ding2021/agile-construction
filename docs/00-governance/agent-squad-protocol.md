@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-SQUAD-PROTOCOL
+number: GOV-005
+domain: governance
+category: collaboration
 title: Agent Squad 小组协作协议
 owner: docs-maintainer
 status: active
@@ -10,7 +13,7 @@ related_code:
   - .agents/skills/squad-post-dev-review/SKILL.md
   - AGENTS.md
 related_docs:
-  - docs/00-governance/project-management-guide.md
+  - docs/00-governance/project-charter.md
   - docs/00-governance/code-review-checklist.md
   - docs/00-governance/coding-standards.md
 ---

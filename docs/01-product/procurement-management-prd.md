@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-PROCUREMENT-MANAGEMENT-PRD
+number: PRD-005
+domain: product
+category: prd
 title: 采购管理需求文档
 owner: docs-maintainer
 status: active

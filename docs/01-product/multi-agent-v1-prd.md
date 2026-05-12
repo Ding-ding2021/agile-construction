@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-MULTI-AGENT-V1-PRD
+number: PRD-009
+domain: product
+category: prd
 title: 多Agent建店管理平台 V1 PRD
 owner: docs-maintainer
 status: active

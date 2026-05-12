@@ -1,5 +1,8 @@
 ---
 title: Task Center Prd Evaluation Report
+number: ARC-049
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

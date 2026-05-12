@@ -1,5 +1,8 @@
 ---
 title: Page Issues Audit 2026 04 25
+number: ARC-047
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

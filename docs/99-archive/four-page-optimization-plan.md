@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPS-4-PAGE-OPTIMIZATION
+number: ARC-006
+domain: archive
+category: archived
 title: 四页面优化计划（以项目管理列表为基准）
 date: 2026-04-25
 status: archived

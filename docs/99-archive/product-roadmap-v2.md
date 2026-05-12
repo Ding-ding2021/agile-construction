@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-PRODUCT-ROADMAP-V2
+number: ARC-053
+domain: archive
+category: archived
 title: 连锁门店营建管理系统 - 产品规划文档 V2.3
 owner: docs-maintainer
 status: archived

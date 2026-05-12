@@ -345,12 +345,12 @@ Wave P2（周三 — 流程建设，2 任务）:
   related_docs:
     - docs/00-governance/coding-standards.md
     - docs/00-governance/component-development-contract.md
-    - docs/00-governance/project-management-guide.md
+    - docs/00-governance/project-charter.md
   ---
   ```
 
   **References**:
-  - `docs/00-governance/project-management-guide.md:22-27` — 七阶段工作流，"In Review"阶段
+  - `docs/00-governance/project-charter.md` — 七阶段工作流，"In Review"阶段
   - `docs/00-governance/mvp-code-quality-plan-v2.md:48-60` — 三层防线模型
 
 - [x] P2-2. 配置 commitlint + pre-commit hook

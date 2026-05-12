@@ -28,6 +28,15 @@ jobs:
             "$WEEK" "$MONDAY" "$TODAY" "$COMMIT_COUNT" "$UNIQUE_FILES" "$COMMIT_LIST" "$COMMIT_COUNT" "$UNIQUE_FILES" "$ALERT" \
             > ".workbuddy/stats/weekly/${WEEK}.md"
 
+      - name: 自适应评估（L2.5 行为调节）
+        shell: bash
+        run: |
+          echo "🔄 执行自适应评估..."
+          python3 scripts/evaluate-adjustments.py \
+            --days 14 \
+            --output .harness/adjustments.yaml \
+            --agfile AGENTS.md || echo "⚠️ 评估失败（非阻塞）"
+
       - name: 飞书推送
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
@@ -49,6 +58,6 @@ jobs:
         run: |
           git config user.name "harness-bot"
           git config user.email "harness@agile-construction.dev"
-          git add .workbuddy/stats/weekly/
+          git add .workbuddy/stats/weekly/ .harness/adjustments.yaml AGENTS.md
           git diff --cached --quiet || git commit -m "docs(stats): 周报 $(date '+%Y-W%V')"
           git push || echo "⚠️ 推送失败"

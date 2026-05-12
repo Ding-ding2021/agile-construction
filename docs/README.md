@@ -1,7 +1,7 @@
 ---
 title: 文档中心（统一入口）
 status: active
-last_updated: 2026-05-11（新增 AI 合约层）
+last_updated: 2026-05-12（领域分类重组：新增设计/测试/项目，治理/文档合并）
 ---
 
 # 文档中心（统一入口）
@@ -13,151 +13,124 @@ last_updated: 2026-05-11（新增 AI 合约层）
 
 ## 文档分层
 
-- `00-governance`：治理规则、设计规范、编码规范
-- `01-product`：产品规划与需求文档
-- `02-architecture`：架构与技术设计文档
-- `03-engineering`：开发、联调、回归、发布文档
-- `04-operations`：阶段运营与治理指标文档
-- `ai/`：AI 合约层 — 模块合约、可复用知识、上下文（AI 消费，非人类阅读）
-- `99-archive`：历史归档（不作为执行依据）
+| 目录             | 领域 | 内容                                 |
+| ---------------- | ---- | ------------------------------------ |
+| `00-governance`  | 治理 | 规则、标准、流程、框架（含 Harness） |
+| `01-product`     | 产品 | 需求、PRD、路线图、调研              |
+| `02-design`      | 设计 | 视觉系统、组件规范、交互             |
+| `03-development` | 开发 | 架构设计、技术方案、编码、重构       |
+| `04-testing`     | 测试 | 测试规范、策略、指南                 |
+| `05-project`     | 项目 | 计划、报告、运营指标、发布           |
+| `ai/`            | —    | AI 合约层（跨域基础设施）            |
+| `99-archive`     | 归档 | 历史归档（不作为执行依据）           |
 
-## Active 文档索引
+## Active 文档索引（按领域）
 
-- `docs/PLAN.md` — 项目计划总览（计划类文档集中管理入口）
+### 治理（00-governance）
 
-### 00-governance（治理规则）
+- `docs/00-governance/document-governance.md` — `GOV-001` 文档治理规则
+- `docs/00-governance/coding-standards.md` — `GOV-002` 编码规范
+- `docs/00-governance/code-review-checklist.md` — `GOV-003` Code Review 检查清单
+- `docs/00-governance/pr-doc-checklist.md` — `GOV-004` PR 文档检查清单
+- `docs/00-governance/agent-squad-protocol.md` — `GOV-005` Squad 小组协作协议
+- `docs/00-governance/project-charter.md` — `GOV-006` Project Charter（治理宪法）
+- `docs/00-governance/quality-metrics.md` — `GOV-007` 质量指标体系
+- `docs/00-governance/mvp-code-quality-plan-v2.md` — `GOV-008` MVP 代码质量方案
+- `docs/00-governance/reasoning-language.md` — `GOV-009` 推理语言规范
+- `docs/00-governance/component-development-contract.md` — `GOV-010` 组件开发契约
+- `docs/00-governance/2026-05-11-knowledge-engine.md` — `GOV-011` 知识引擎规格
+- `docs/00-governance/2026-05-11-harness-governance.md` — `GOV-012` Harness 治理
+- `docs/00-governance/harness/*.md` — `GOV-013~022` Harness 框架文档
+- `docs/00-governance/harness/roles/*.md` — `GOV-023~026` Harness 角色文件
 
-- `docs/00-governance/coding-standards.md` — 编码规范
-- `docs/00-governance/component-development-contract.md` — 组件开发合同规范
-- `docs/00-governance/design-checklist.md` — 设计检查清单
-- `docs/00-governance/document-governance.md` — 文档治理规则
-- `docs/00-governance/mvp-code-quality-plan-v2.md` — MVP 代码质量方案（质量红线）
-- `docs/00-governance/code-review-checklist.md` — Code Review Checklist
-- `docs/00-governance/pr-doc-checklist.md` — PR 文档检查清单
+### 产品（01-product）
 
-### 01-product（产品规划与需求）
+- `docs/01-product/product-roadmap-v1.2-draft.md` — `PRD-001` 产品路线图 V1.2
+- `docs/01-product/project-management-prd.md` — `PRD-002` 项目管理 PRD
+- `docs/01-product/task-center-prd.md` — `PRD-003` 任务中心 PRD
+- `docs/01-product/personnel-management-prd.md` — `PRD-004` 人员管理 PRD
+- `docs/01-product/procurement-management-prd.md` — `PRD-005` 采购管理 PRD
+- `docs/01-product/standard-management-prd.md` — `PRD-006` 标准管理 PRD
+- `docs/01-product/digital-employee-prd.md` — `PRD-007` 数字员工 PRD
+- `docs/01-product/settings-prd.md` — `PRD-008` 设置 PRD
+- `docs/01-product/multi-agent-v1-prd.md` — `PRD-009` 多 Agent V1 PRD
+- `docs/01-product/workteam-management-prd.md` — `PRD-010` 班组管理 PRD
+- `docs/01-product/gantt-benchmark-research.md` — `PRD-011` 甘特图调研
+- `docs/01-product/gantt-roadmap.md` — `PRD-012` 甘特图路线图
+- `docs/01-product/ai-coding-knowledge-base.md` — `PRD-013` AI 编码知识库
 
-- `docs/01-product/product-roadmap-v1.2-draft.md` — 产品路线图 V1.2（活跃，当前 SSOT）
-- `docs/01-product/project-management-prd.md` — 项目管理 PRD
-- `docs/01-product/design-spec-v2-shadcn.md` — 前端设计规范 V2 shadcn Neutral Light ⬅ UI 设计 SSOT
-- `docs/01-product/task-center-prd.md` — 任务中心 PRD
-- `docs/01-product/task-center-erd.md` — 任务中心 ER 图
-- `docs/01-product/personnel-management-prd.md` — 人员管理 PRD
-- `docs/01-product/procurement-management-prd.md` — 采购管理 PRD
-- `docs/01-product/standard-management-prd.md` — 标准管理 PRD
-- `docs/01-product/digital-employee-prd.md` — 数字员工 PRD
-- `docs/01-product/settings-prd.md` — 设置 PRD
-- `docs/01-product/multi-agent-v1-prd.md` — 多 Agent V1 PRD
-- `docs/01-product/workteam-management-prd.md` — 班组管理 PRD
+### 设计（02-design）
 
-### 02-architecture（架构与技术设计）
+- `docs/02-design/design-spec-v2-shadcn.md` — `DES-001` 前端设计规范 V2 shadcn
+- `docs/02-design/design-checklist.md` — `DES-002` UI 开发检查清单
+- `docs/02-design/2026-05-08-project-detail-redesign.md` — `DES-003` 项目详情重设计
 
-- `docs/02-architecture/data-layer-decision-record.md` — 数据层策略决策记录（P1-T4）
-- `docs/02-architecture/multi-agent-v1-technical-design.md` — 多 Agent V1 技术设计
-- `docs/02-architecture/project-rules.md` — 项目规则
-- `docs/02-architecture/routing-state-migration-plan.md` — 路由状态迁移方案
-- `docs/02-architecture/state-machine-design.md` — 状态机设计
-- `docs/02-architecture/structured-standard-library.md` — 结构化标准库
-- `docs/02-architecture/task-tree-modeling.md` — 任务树建模
-- `docs/02-architecture/wbs-framework-design.md` — WBS 框架设计方案（draft）
-- `docs/02-architecture/template-data-contract.md` — 模板数据契约
+### 开发（03-development）
 
-### 03-engineering（工程实施）
+- `docs/03-development/data-layer-decision-record.md` — `DEV-001` 数据层决策记录
+- `docs/03-development/multi-agent-v1-technical-design.md` — `DEV-002` 多 Agent 技术设计
+- `docs/03-development/state-machine-design.md` — `DEV-003` 状态机设计
+- `docs/03-development/structured-standard-library.md` — `DEV-004` 结构化标准库
+- `docs/03-development/task-tree-modeling.md` — `DEV-005` 任务树建模
+- `docs/03-development/wbs-framework-design.md` — `DEV-006` WBS 框架设计
+- `docs/03-development/template-data-contract.md` — `DEV-007` 模板数据契约
+- `docs/03-development/routing-state-migration-plan.md` — `DEV-008` 路由状态迁移方案
+- `docs/03-development/adr-002-feature-registry.md` — `DEV-009` ADR 特性注册表
+- `docs/03-development/task-entity-relationship.md` — `DEV-010` 任务实体关系
+- `docs/03-development/task-center-erd.md` — `DEV-011` 任务中心 ER 图
+- `docs/03-development/development-guide.md` — `DEV-012` 开发指南
+- `docs/03-development/integration-guide.md` — `DEV-013` 集成指南
+- `docs/03-development/phase1-handoff.md` — `DEV-014` Phase 1 交接
+- `docs/03-development/component-refactoring-plan.md` — `DEV-015` 组件重构计划
+- `docs/03-development/component-implementation-spec.md` — `DEV-016` 组件实现规范
 
-- `docs/03-engineering/ai-testing-guide.md` — AI 测试指南
-- `docs/03-engineering/component-refactoring-plan.md` — 组件重构计划（T1 方案）
-- `docs/03-engineering/development-guide.md` — 开发指南
-- `docs/03-engineering/development-plan-v1.2.md` — 开发计划 V1.2（6 Phase 33 任务）
-- `docs/03-engineering/integration-guide.md` — 集成指南
-- `docs/03-engineering/phase1-handoff.md` — Phase 1 交接（冷启动文档）
-- `docs/03-engineering/regression-checklist.md` — 回归检查清单
-- `docs/03-engineering/phase1.5/phase1.5-tech-debt-plan.md` — Phase 1.5 技术债清理计划
-- `docs/03-engineering/release/launch-checklist.md` — 发布检查清单
-- `docs/03-engineering/release/feishu-publish-runbook.md` — 飞书发布 Runbook
+### 测试（04-testing）
 
-### 04-operations（阶段运营与治理）
+- `docs/04-testing/testing-standards.md` — `TST-001` 测试规范
+- `docs/04-testing/ai-testing-guide.md` — `TST-002` AI 测试指南
+- `docs/04-testing/regression-checklist.md` — `TST-003` 回归检查清单
 
-**当前运营：**
+### 项目（05-project）
 
-- `docs/04-operations/development-issues-summary-2026-05-02.md` — 开发问题汇总
-
-**Phase 4：**
-
-- `docs/04-operations/phase4/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — Phase 3 回顾与 Phase 4 提案
-- `docs/04-operations/phase4/roadmap-v1.2-impact-assessment.md` — Roadmap V1.2 影响评估
+- `docs/05-project/project-rules.md` — `PRJ-001` 项目规则
+- `docs/05-project/development-plan-v1.2.md` — `PRJ-002` 开发计划 V1.2
+- `docs/05-project/development-plan-v2.0.md` — `PRJ-003` 开发计划 V2.0
+- `docs/05-project/2026-05-07-P2-T1.md` — `PRJ-004` P2-T1 实现计划
+- `docs/05-project/2026-05-07-calendar-system.md` — `PRJ-005` 日历系统计划
+- `docs/05-project/2026-05-07-gantt-enhance.md` — `PRJ-006` 甘特图增强计划
+- `docs/05-project/2026-05-07-wbs-phase1-implementation.md` — `PRJ-007` WBS Phase1 实现
+- `docs/05-project/2026-05-07-squad-eval-45-47.md` — `PRJ-008` Squad 评估报告
+- `docs/05-project/DASHBOARD.md` — `PRJ-009` 质量仪表盘
+- `docs/05-project/log.md` — `PRJ-010` Wiki 操作日志
+- `docs/05-project/development-issues-summary-2026-05-02.md` — `PRJ-011` 开发问题汇总
+- `docs/05-project/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — `PRJ-012` Phase 3 回顾
+- `docs/05-project/roadmap-v1.2-impact-assessment.md` — `PRJ-013` V1.2 影响评估
+- `docs/05-project/launch-checklist.md` — `PRJ-014` 发布检查清单
+- `docs/05-project/feishu-publish-runbook.md` — `PRJ-015` 飞书发布 Runbook
+- `docs/05-project/phase1.5-tech-debt-plan.md` — `PRJ-016` Phase 1.5 技术债清理
 
 ### AI 合约层（docs/ai/）
 
 > 面向 AI Agent 的结构化知识库。由 `document-sync` + 提炼任务自动维护，参见 `docs/ai/README.md`。
 
-**合约：**
-
-- `docs/ai/contracts/` — 模块合约（每模块一个文件，≤200 行）
-
-**知识：**
-
-- `docs/ai/knowledge/patterns.md` — 可复用代码模式
-- `docs/ai/knowledge/decisions.md` — 架构决策记录
-- `docs/ai/knowledge/rules.md` — 不可违背规则
-
-**上下文：**
-
-- `docs/ai/context/state.md` — 当前项目状态与飞轮状态
-
-**操作日志：**
-
-- `docs/log.md` — Wiki 操作日志（只追加）
-
-### 已归档：knowledge-base（→ 99-archive/knowledge-base/）
-
-> `docs/knowledge-base/` 18 个文件已于 2026-05-11 全量迁入 `docs/99-archive/knowledge-base/`。
-> 被五层知识架构替代，详见 `docs/superpowers/specs/2026-05-11-knowledge-engine.md`。
+**合约：** `docs/ai/contracts/` — 模块合约（每模块一个文件，≤200 行）
+**知识：** `docs/ai/knowledge/` — 可复用模式 + 决策记录 + 规则
+**上下文：** `docs/ai/context/state.md` — 当前项目状态
 
 ### 99-archive（历史归档）
 
-- `docs/99-archive/文档索引.md` — 旧版中文文档索引（已废弃，由本 README 替代）
-- `docs/99-archive/product-roadmap.md` — 产品规划 V1.0（已归档，被 V1.2 替代）
-- `docs/99-archive/product-roadmap-v2.md` — 产品规划 V2.3（已归档，被 V1.2 替代）
-- `docs/99-archive/design-specification.md` — 设计规范 MUI 版（已废弃，由 shadcn V2 替代）
-- `docs/99-archive/component-system-proposal-mui.md` — MUI 组件系统提案（已归档）
-- `docs/99-archive/gradient-token-migration-plan.md` — 渐变 Token 迁移方案（已归档）
-- `docs/99-archive/commercialization-roadmap-2026-04-25.md` — 商业化路线图（已归档，内容纳入 V1.2）
-- `docs/99-archive/four-page-optimization-plan.md` — 四页面优化方案（已归档，MUI 旧栈）
-- `docs/99-archive/gantt-component-analysis.md` — 甘特图组件分析（已归档，MUI 旧栈）
-- `docs/99-archive/market-trend-analysis-2026-04-25.md` — 市场趋势分析（已归档）
-- `docs/99-archive/project-detail-layout-diagnosis.md` — 项目详情布局诊断（已归档，MUI 旧栈）
-- `docs/99-archive/ui-ux-improvement-proposal-2026-04-24.md` — UI/UX 改进提案（已归档，MUI 旧栈）
-- `docs/99-archive/view-components-evaluation.md` — 视图组件评估（已归档）
-- `docs/99-archive/visual-audit-report-2026-04-25.md` — 视觉审计报告（已归档，MUI 旧栈）
-- `docs/99-archive/DESIGN_SPECIFICATION_v2.0_original.md` — 设计规范 V2.0 原始完整版（已归档）
-- `docs/99-archive/phase1/` — Phase 1 评估与治理文档（已归档）
-  - `development-progress-assessment-2026-04-25.md` — P1-P1.5 进度评估
-  - `p1-p1.5-fix-plan-2026-04-25.md` — P1-P1.5 修复计划
-- `docs/99-archive/phase3/` — Phase 3 评估与治理文档（已归档）
-  - `cloudbase-e2e-checklist.md` — CloudBase E2E 检查清单
-  - `collaboration-matrix.md` — 协作矩阵
-  - `local-backend-feasibility.md` — 本地后端可行性
-  - `weekly-governance-metrics.md` — 周度治理指标
-  - `document-governance-audit-2026-04-16.md` — 文档治理审计
-- `docs/99-archive/phase4/` — Phase 4 一次性评估报告（已归档）
-  - `development-progress-assessment-2026-04-23.md` — Phase 4 进度评估
-  - `page-issues-audit-2026-04-25.md` — 页面问题审计
-  - `phase15-assessment-2026-04-25.md` — Phase 1.5 评估
-  - `task-center-prd-evaluation-report.md` — 任务中心 PRD 评估
-  - `task-management-assessment-2026-04-23.md` — 任务管理评估
-  - `task-missing-fields-report-2026-04-23.md` — 任务缺失字段报告
-  - `task-simplification-proposal-2026-04-23.md` — 任务简化提案
-- `docs/99-archive/legacy-chinese/` — 10 篇中文原始文档（已迁移到 `docs/` 英文版）
-  - `产品规划文档.md` → `99-archive/product-roadmap.md`
-  - `任务中心需求文档.md` → `01-product/task-center-prd.md`
-  - `任务树建模说明.md` → `02-architecture/task-tree-modeling.md`
-  - `多Agent建店管理平台_V1_PRD.md` → `01-product/multi-agent-v1-prd.md`
-  - `多Agent建店管理平台_V1_技术方案.md` → `02-architecture/multi-agent-v1-technical-design.md`
-  - `标准库结构化说明.md` → `02-architecture/structured-standard-library.md`
-  - `标准管理需求文档.md` → `01-product/standard-management-prd.md`
-  - `状态机设计说明.md` → `02-architecture/state-machine-design.md`
-  - `采购管理需求文档.md` → `01-product/procurement-management-prd.md`
-  - `项目管理需求文档.md` → `01-product/project-management-prd.md`
+> `docs/99-archive/` 下所有已标记 `archived` 状态的文档。不作为执行依据。
+
+- `docs/99-archive/文档索引.md` — `ARC-059` 旧版中文文档索引（已废弃，由本 README 替代）
+- `docs/99-archive/design-specification.md` — `ARC-005` 设计规范 MUI 版（已废弃，由 shadcn V2 替代）
+- `docs/99-archive/product-roadmap.md` — `ARC-054` 产品规划 V1.0（已归档，被 V1.2 替代）
+- `docs/99-archive/product-roadmap-v2.md` — `ARC-053` 产品规划 V2.3（已归档，被 V1.2 替代）
+- `docs/99-archive/phase1/` — Phase 1 评估与治理文档（`ARC-039~040`）
+- `docs/99-archive/phase3/` — Phase 3 评估与治理文档（`ARC-041~045`）
+- `docs/99-archive/phase4/` — Phase 4 一次性评估报告（`ARC-046~052`）
+- `docs/99-archive/knowledge-base/` — 知识库（`ARC-009~027`）
+- `docs/99-archive/legacy-chinese/` — 中文原始文档（`ARC-028~037`）
+- 其他独立归档文档（`ARC-001~008, ARC-038, ARC-055~058`）
 
 ## 维护要求
 

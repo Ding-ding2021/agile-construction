@@ -5,7 +5,7 @@ scan-tools.py: 扫描 Skills / Agents / MCP 全景并生成统计报告。
 用法:
   python scripts/scan-tools.py                  # 打印 CLI 摘要
   python scripts/scan-tools.py --md              # 输出 Markdown 报告到 stdout
-  python scripts/scan-tools.py --md --save       # 保存 Markdown 到 docs/SCAN-REPORT.md
+  python scripts/scan-tools.py --md --save       # 保存 Markdown 到 docs/99-archive/SCAN-REPORT.md
 
 依赖: Python 3.9+, 无外部依赖
 """

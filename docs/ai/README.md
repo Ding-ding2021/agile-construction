@@ -1,7 +1,7 @@
 ---
 title: AI 合约索引
 status: active
-last_updated: 2026-05-11
+last_updated: 2026-05-12
 ---
 
 # AI 合约索引
@@ -19,12 +19,31 @@ last_updated: 2026-05-11
 
 ## 合约清单
 
-> 待从人类文档首次提取后登记在此。
+| 文件                                  | 来源                                            | 状态   |
+| ------------------------------------- | ----------------------------------------------- | ------ |
+| `contracts/adaptive-governance.md`    | `docs/00-governance/harness/09-governance.md`   | active |
+| `contracts/agent-squad-protocol.md`   | `docs/00-governance/agent-squad-protocol.md`    | active |
+| `contracts/code-review-checklist.md`  | `docs/00-governance/code-review-checklist.md`   | active |
+| `contracts/coding-standards.md`       | `docs/00-governance/coding-standards.md`        | active |
+| `contracts/digital-employee.md`       | `docs/01-product/digital-employee-prd.md`       | active |
+| `contracts/document-governance.md`    | `docs/00-governance/document-governance.md`     | active |
+| `contracts/personnel-management.md`   | `docs/01-product/personnel-management-prd.md`   | active |
+| `contracts/procurement-management.md` | `docs/01-product/procurement-management-prd.md` | active |
+| `contracts/product-roadmap.md`        | `docs/01-product/product-roadmap-v1.2.md`       | active |
+| `contracts/project-charter.md`        | `docs/00-governance/project-charter.md`         | active |
+| `contracts/project-management.md`     | `docs/01-product/project-management-prd.md`     | active |
+| `contracts/settings.md`               | `docs/01-product/settings-prd.md`               | active |
+| `contracts/task-center.md`            | `docs/01-product/task-center-prd.md`            | active |
+| `contracts/testing-standards.md`      | `docs/04-testing/testing-standards.md`          | active |
+| `contracts/workteam-management.md`    | `docs/01-product/workteam-management-prd.md`    | active |
 
 ## knowledge/ 清单
 
-| 文件 | 来源 | 内容 |
-| ---- | ---- | ---- |
+| 文件                     | 内容说明            | 读者       |
+| ------------------------ | ------------------- | ---------- |
+| `knowledge/decisions.md` | 架构决策记录（ADR） | 开发、架构 |
+| `knowledge/patterns.md`  | 可复用代码模式      | 开发       |
+| `knowledge/rules.md`     | 不可违背规则        | 全体       |
 
 ## 维护规则
 

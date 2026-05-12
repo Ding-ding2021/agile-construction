@@ -1,7 +1,7 @@
 ---
 title: 项目状态
 status: active
-last_updated: 2026-05-11
+last_updated: 2026-05-12
 ---
 
 # 项目状态
@@ -13,7 +13,9 @@ last_updated: 2026-05-11
 
 - 项目：连锁门店建设管理系统 V1 / MVP
 - 路线图：`docs/01-product/product-roadmap-v1.2-draft.md`
-- 开发计划：`docs/03-engineering/development-plan-v2.0.md`
+- 开发计划：`docs/05-project/development-plan-v2.0.md` (V2.1)
+- 阶段状态：Phase 1~5 已完成（底座 / WBS三视图 / 标准 / 模板 / 采购 / 工队）
+- 当前目标：Phase 6 Agent 与工作台（待开发）
 
 ## 活跃任务
 
@@ -24,12 +26,13 @@ last_updated: 2026-05-11
 
 | 指标                    | 值                   |
 | ----------------------- | -------------------- |
-| last_distill            | 2026-05-11（今天）   |
-| last_lint               | 2026-05-11（今天）   |
+| last_distill            | 2026-05-11           |
+| last_lint               | 2026-05-11           |
 | 未提炼日志数            | 0                    |
-| 活跃文档数              | 70+                  |
+| 活跃文档数              | 71                   |
 | 过期文档（>30天未更新） | 待首次 Lint 扫描     |
 | 上次 harness bump       | 2026-05-11（v0.1.0） |
+| 技能治理（P1）          | 2026-05-12（已完成） |
 
 ## 告警
 

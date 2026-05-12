@@ -1,5 +1,8 @@
 ---
 title: View Components Evaluation
+number: ARC-057
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

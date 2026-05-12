@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-AI-CODING-KNOWLEDGE-BASE
+number: PRD-013
+domain: product
+category: research
 title: 🤖 AI 编程知识库（2026 年最新）
 owner: docs-maintainer
 status: active

@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-PHASE3-COLLABORATION-MATRIX
+number: ARC-042
+domain: archive
+category: archived
 title: collaboration-matrix
 owner: docs-maintainer
 status: archived

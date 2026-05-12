@@ -1,3 +1,9 @@
+---
+number: ARC-027
+domain: archive
+category: archived
+---
+
 # 知识库参考层（已废弃）
 
 > ⚠️ 本目录下所有文档已于 2026-05-05 标记为 `status: superseded`，不再作为活跃知识源。

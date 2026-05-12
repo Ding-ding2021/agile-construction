@@ -1,5 +1,8 @@
 ---
 id: DOC-00-GOVERNANCE-QUALITY-METRICS
+number: GOV-007
+domain: governance
+category: metrics
 title: AI 开发质量指标体系
 owner: docs-maintainer
 status: active

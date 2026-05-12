@@ -1,5 +1,8 @@
 ---
 id: DOC-04-OPERATIONS-PHASE3-CLOUDBASE-E2E-CHECKLIST
+number: ARC-041
+domain: archive
+category: archived
 title: cloudbase-e2e-checklist
 owner: docs-maintainer
 status: archived

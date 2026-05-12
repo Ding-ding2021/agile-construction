@@ -1,5 +1,8 @@
 ---
 title: Market Trend Analysis 2026 04 25
+number: ARC-038
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

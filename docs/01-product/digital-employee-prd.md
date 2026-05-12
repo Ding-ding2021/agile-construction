@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-DIGITAL-EMPLOYEE-PRD
+number: PRD-007
+domain: product
+category: prd
 title: 数字员工需求文档
 owner: docs-maintainer
 status: active

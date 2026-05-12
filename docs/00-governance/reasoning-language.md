@@ -1,5 +1,8 @@
 ---
 title: AI 推理语言规范
+number: GOV-009
+domain: governance
+category: language-config
 owner: docs-maintainer
 status: active
 last_updated: 2026-05-05

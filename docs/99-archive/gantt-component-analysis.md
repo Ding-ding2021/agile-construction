@@ -1,5 +1,8 @@
 ---
 title: Gantt Component Analysis
+number: ARC-007
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---

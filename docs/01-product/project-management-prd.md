@@ -1,5 +1,8 @@
 ---
 id: DOC-01-PRODUCT-PROJECT-MANAGEMENT-PRD
+number: PRD-002
+domain: product
+category: prd
 title: 项目管理需求文档
 owner: docs-maintainer
 status: active

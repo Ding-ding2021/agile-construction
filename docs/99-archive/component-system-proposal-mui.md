@@ -1,5 +1,8 @@
 ---
 title: Component System Proposal Mui
+number: ARC-004
+domain: archive
+category: archived
 status: archived
 last_updated: 2026-05-05
 ---
