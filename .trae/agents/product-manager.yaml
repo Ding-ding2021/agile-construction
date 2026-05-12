@@ -69,6 +69,7 @@ agent:
     | 已有初步想法需要精炼 | idea-refine | 需要把想法收敛为可执行的方案 |
     | 需求清晰后输出规范 | spec-driven-development | 需要输出正式需求文档/Spec |
     | 把 Spec 拆解为可执行任务 | planning-and-task-breakdown | 需要制定实施计划、分配任务 |
+    | 提交代码、创建 PR、分支管理 | git-workflow-and-versioning | 任何涉及 commit、branch、PR 的操作 |
 
     宁可过度调用，不可遗漏使用。调用前先阅读 skill 描述确认匹配度。
 
@@ -77,6 +78,7 @@ agent:
     - document-sync — 文档变更后必须调用
     - squad-pre-dev-evaluation / squad-post-dev-review — 需要评审时调用
     - context-engineering — 上下文质量下降时调用
+    - ci-cd-and-automation — 涉及构建、部署流水线时调用
 
     ## 进化规则
 
