@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>组件查询表 · 全景目录</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: oklch(0.985 0 0);
+    --fg: oklch(0.205 0 0);
+    --muted: oklch(0.922 0 0);
+    --muted-fg: oklch(0.556 0 0);
+    --border: oklch(0.87 0 0);
+    --accent: oklch(0.5 0.2 250);
+    --accent-subtle: oklch(0.92 0.04 250);
+    --accent-fg: oklch(0.985 0 0);
+    --surface: oklch(0.97 0 0);
+    --surface-hover: oklch(0.95 0 0);
+    --radius: 12px;
+    --font-sans: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  }
+
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* ═══ Header ═══ */
+  .page-header {
+    background: linear-gradient(135deg, oklch(0.205 0 0) 0%, oklch(0.28 0.01 220) 100%);
+    color: oklch(0.985 0 0);
+    padding: 64px 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.5 0.18 200 / 0.12), transparent 60%);
+  }
+  .header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    background: oklch(1 0 0 / 0.15);
+    border: 1px solid oklch(1 0 0 / 0.2);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .page-header p {
+    font-size: 15px;
+    color: oklch(1 0 0 / 0.6);
+    max-width: 500px;
+    line-height: 1.7;
+  }
+  .header-stats {
+    display: flex;
+    gap: 28px;
+    margin-top: 24px;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: oklch(1 0 0 / 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ═══ Container ═══ */
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  /* ═══ Legend bar ═══ */
+  .legend-bar {
+    display: flex;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted-fg);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ═══ Category section ═══ */
+  .cat-section { padding: 36px 0; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .cat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .cat-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .cat-count {
+    font-size: 13px;
+    color: var(--muted-fg);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+  .cat-desc {
+    font-size: 13px;
+    color: var(--muted-fg);
+    margin-bottom: 16px;
+    max-width: 500px;
+  }
+
+  /* ═══ Component grid ═══ */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+  }
+  .comp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: background 0.15s, border-color 0.15s;
+    cursor: default;
+  }
+  .comp-card:hover {
+    background: var(--surface-hover);
+    border-color: oklch(0.78 0 0);
+  }
+  .comp-card .comp-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
+  }
+  .comp-card .comp-path {
+    font-size: 11px;
+    color: var(--muted-fg);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .comp-card .comp-tags {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .comp-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .tag-installed { background: oklch(0.92 0.04 160 / 0.4); color: oklch(0.4 0.16 160); }
+  .tag-custom { background: oklch(0.92 0.04 250 / 0.4); color: oklch(0.45 0.18 250); }
+  .tag-layout { background: oklch(0.95 0.04 50 / 0.4); color: oklch(0.5 0.12 50); }
+  .tag-active { background: oklch(0.92 0.04 160 / 0.5); color: oklch(0.35 0.14 160); }
+
+  /* ═══ Divider ═══ */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ═══ Footer ═══ */
+  .page-footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted-fg);
+  }
+  .page-footer a { color: var(--accent); text-decoration: none; }
+  .page-footer a:hover { text-decoration: underline; }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 720px) {
+    .page-header { padding: 44px 0 36px; }
+    .page-header h1 { font-size: 26px; }
+    .header-stats { gap: 16px; }
+    .stat-num { font-size: 22px; }
+    .comp-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  }
+  @media (max-width: 480px) {
+    .page-header { padding: 32px 0 28px; }
+    .page-header h1 { font-size: 20px; }
+    .header-stats { flex-wrap: wrap; gap: 12px; }
+    .comp-grid { grid-template-columns: 1fr 1fr; }
+    .legend-bar { gap: 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ Header ═══════════ -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="header-badge">DES-006 · Component Catalog</div>
+    <h1>组件查询表</h1>
+    <p>全量组件目录，包括 shadcn/ui 和自定义组件。格式化的组件列表，按功能分类排列。</p>
+    <div class="header-stats">
+      <div class="stat">
+        <span class="stat-num">36</span>
+        <span class="stat-label">shadcn 组件</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">21</span>
+        <span class="stat-label">自定义组件</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">6</span>
+        <span class="stat-label">组件分类</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">57</span>
+        <span class="stat-label">总计</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══ Legend ═══ -->
+  <div class="legend-bar">
+    <span class="legend-item"><span class="legend-dot" style="background:oklch(0.4 0.16 160);"></span> shadcn 已安装</span>
+    <span class="legend-item"><span class="legend-dot" style="background:oklch(0.45 0.18 250);"></span> 自定义组件</span>
+    <span class="legend-item"><span class="legend-dot" style="background:oklch(0.5 0.12 50);"></span> 布局 Layout</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--muted);width:10px;height:10px;border-radius:3px;"></span> 导入路径可点击复制</span>
+  </div>
+
+  <!-- ═══════════ A. Layout ═══════════ -->
+  <section class="cat-section">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.95 0.04 50 / 0.3);">⊞</div>
+      <h2>Layout <span class="cat-count">布局容器</span></h2>
+    </div>
+    <p class="cat-desc">页面骨架、区域划分、滚动与分割。</p>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">scroll-area</div><div class="comp-path">@/components/ui/scroll-area</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">separator</div><div class="comp-path">@/components/ui/separator</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">sidebar <span style="font-size:11px;font-weight:400;color:var(--muted-fg);font-family:var(--font-sans);">ui/</span></div><div class="comp-path">@/components/ui/sidebar</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">AppShell</div><div class="comp-path">@/components/layout/AppShell</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span><span class="comp-tag tag-layout">layout</span></div></div>
+      <div class="comp-card"><div class="comp-name">Sidebar (layout)</div><div class="comp-path">@/components/layout/Sidebar</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span><span class="comp-tag tag-layout">layout</span></div></div>
+      <div class="comp-card"><div class="comp-name">page-layout</div><div class="comp-path">@/components/page-layout</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">app-sidebar</div><div class="comp-path">@/components/app-sidebar</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span><span class="comp-tag tag-layout">layout</span></div></div>
+      <div class="comp-card"><div class="comp-name">site-header</div><div class="comp-path">@/components/site-header</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ B. Form ═══════════ -->
+  <section class="cat-section">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.92 0.04 250 / 0.3);">⌨</div>
+      <h2>Form <span class="cat-count">表单输入</span></h2>
+    </div>
+    <p class="cat-desc">输入控件、选择器、按钮组、日期与标签。</p>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">button</div><div class="comp-path">@/components/ui/button</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">input</div><div class="comp-path">@/components/ui/input</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">input-group</div><div class="comp-path">@/components/ui/input-group</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">textarea</div><div class="comp-path">@/components/ui/textarea</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">label</div><div class="comp-path">@/components/ui/label</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">checkbox</div><div class="comp-path">@/components/ui/checkbox</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">select</div><div class="comp-path">@/components/ui/select</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">native-select</div><div class="comp-path">@/components/ui/native-select</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">combobox</div><div class="comp-path">@/components/ui/combobox</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">calendar</div><div class="comp-path">@/components/ui/calendar</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">date-time-picker</div><div class="comp-path">@/components/ui/date-time-picker</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">toggle</div><div class="comp-path">@/components/ui/toggle</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">toggle-group</div><div class="comp-path">@/components/ui/toggle-group</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">avatar</div><div class="comp-path">@/components/ui/avatar</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">badge</div><div class="comp-path">@/components/ui/badge</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">tag-picker</div><div class="comp-path">@/components/ui/tag-picker</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">person-select</div><div class="comp-path">@/components/personnel/person-select</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ C. Overlay ═══════════ -->
+  <section class="cat-section">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.9 0.04 280 / 0.3);">◪</div>
+      <h2>Overlay <span class="cat-count">弹层与浮层</span></h2>
+    </div>
+    <p class="cat-desc">对话框、抽屉、菜单、弹窗、提示和工具提示。</p>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">dialog</div><div class="comp-path">@/components/ui/dialog</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">drawer</div><div class="comp-path">@/components/ui/drawer</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">sheet</div><div class="comp-path">@/components/ui/sheet</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">popover</div><div class="comp-path">@/components/ui/popover</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">command</div><div class="comp-path">@/components/ui/command</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">dropdown-menu</div><div class="comp-path">@/components/ui/dropdown-menu</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">tooltip</div><div class="comp-path">@/components/ui/tooltip</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">sonner</div><div class="comp-path">@/components/ui/sonner</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ D. Navigation ═══════════ -->
+  <section class="cat-section">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.95 0.04 160 / 0.3);">≡</div>
+      <h2>Navigation <span class="cat-count">导航与页面组织</span></h2>
+    </div>
+    <p class="cat-desc">侧边栏、面包屑、标签页、分页。</p>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">breadcrumb</div><div class="comp-path">@/components/ui/breadcrumb</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">tabs</div><div class="comp-path">@/components/ui/tabs</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">pagination</div><div class="comp-path">@/components/ui/pagination</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">collapsible</div><div class="comp-path">@/components/ui/collapsible</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">nav-main</div><div class="comp-path">@/components/nav-main</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">nav-user</div><div class="comp-path">@/components/nav-user</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">nav-documents</div><div class="comp-path">@/components/templates/nav-documents</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">nav-projects</div><div class="comp-path">@/components/templates/nav-projects</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">nav-secondary</div><div class="comp-path">@/components/templates/nav-secondary</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">team-switcher</div><div class="comp-path">@/components/templates/team-switcher</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ E. Data Display ═══════════ -->
+  <section class="cat-section">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.93 0.03 300 / 0.3);">▦</div>
+      <h2>Data Display <span class="cat-count">数据展示</span></h2>
+    </div>
+    <p class="cat-desc">表格、卡片、图表、进度、骨架屏。</p>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">table</div><div class="comp-path">@/components/ui/table</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">card</div><div class="comp-path">@/components/ui/card</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">progress</div><div class="comp-path">@/components/ui/progress</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">skeleton</div><div class="comp-path">@/components/ui/skeleton</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">chart</div><div class="comp-path">@/components/ui/chart</div><div class="comp-tags"><span class="comp-tag tag-installed">shadcn</span></div></div>
+      <div class="comp-card"><div class="comp-name">data-table</div><div class="comp-path">@/components/data-table</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span><span class="comp-tag tag-active">active</span></div></div>
+      <div class="comp-card"><div class="comp-name">data-table-tree</div><div class="comp-path">@/components/data-table-tree</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">task-list</div><div class="comp-path">@/components/task-list</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">section-cards</div><div class="comp-path">@/components/section-cards</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">chart-area-interactive</div><div class="comp-path">@/components/chart-area-interactive</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">wbs-tree-table</div><div class="comp-path">@/components/wbs-tree-table</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">wbs-gantt</div><div class="comp-path">@/components/wbs-gantt</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">wbs-network-diagram</div><div class="comp-path">@/components/wbs-network-diagram</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+      <div class="comp-card"><div class="comp-name">embeddable-wbs</div><div class="comp-path">@/components/embeddable-wbs</div><div class="comp-tags"><span class="comp-tag tag-custom">custom</span></div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ F. Skeleton ═══════════ -->
+  <section class="cat-section" style="padding-bottom:48px;">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:oklch(0.96 0.02 100 / 0.4);">☰</div>
+      <h2>Helpers <span class="cat-count">工具辅助</span></h2>
+    </div>
+    <p class="cat-desc">工具函数与共享模块。</p>
+    <div class="comp-grid" style="grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));">
+      <div class="comp-card"><div class="comp-name">cn()</div><div class="comp-path">@/lib/utils (clsx+twMerge)</div></div>
+      <div class="comp-card"><div class="comp-name">Icons</div><div class="comp-path">@/components/icons (Lucide)</div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ═══════════ 使用说明 ═══════════ -->
+  <section class="cat-section" style="padding-bottom:48px;">
+    <div class="cat-header">
+      <div class="cat-icon" style="background:var(--muted);">i</div>
+      <h2>使用说明</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));gap:12px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:6px;">导入 shadcn 组件</h3>
+        <p style="font-size:13px;color:var(--muted-fg);font-family:var(--font-mono);background:var(--bg);padding:8px 10px;border-radius:4px;line-height:1.5;">
+          import { Button } from "@/components/ui/button"
+        </p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:6px;">安装新组件</h3>
+        <p style="font-size:13px;color:var(--muted-fg);font-family:var(--font-mono);background:var(--bg);padding:8px 10px;border-radius:4px;line-height:1.5;">
+          npx shadcn@latest add button
+        </p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:6px;">复用优先级</h3>
+        <p style="font-size:13px;color:var(--muted-fg);line-height:1.6;">
+          P0 直接使用 ui/ →<br>
+          P1 CLI 安装 →<br>
+          P2 组合现有组件 →<br>
+          P3 手写自定义
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════ Footer ═══════════ -->
+<footer class="page-footer">
+  <p>DES-006 · 组件查询表 · 视觉版 v1.0.0 · <a href="component-catalog.md">AI 合约版</a> · <a href="../00-governance/design-standards.html">GOV-027 治理规范</a></p>
+</footer>
+
+</body>
+</html>

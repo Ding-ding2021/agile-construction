@@ -56,9 +56,9 @@ related_docs:
 | -------------------------------------------------------------------- | ---------- | ---------------------------------------------------- |
 | [产品路线图 V1.2](docs/01-product/product-roadmap-v1.2-draft.md)     | active     | 当前产品规划基线（SSOT）                             |
 | [前端设计规范 V2 — shadcn](docs/01-product/design-spec-v2-shadcn.md) | active     | 当前 UI 设计规范                                     |
-| [WBS 框架设计](docs/02-architecture/wbs-framework-design.md)         | draft      | 四视图集成方案（树/甘特/网络图/思维导图）            |
+| [WBS 框架设计](docs/03-development/wbs-framework-design.md)          | draft      | 四视图集成方案（树/甘特/网络图/思维导图）            |
 | [开发计划 V2.1](docs/05-project/development-plan-v2.0.md)            | active     | 工程任务分解，Phase 1~5 已完成，Phase 6 Agent 待开发 |
-| [开发计划 V1.2](docs/03-engineering/development-plan-v1.2.md)        | superseded | 已由 V2.0 替代，保留历史参考                         |
+| [开发计划 V1.2](docs/99-archive/development-plan-v1.2.md)            | superseded | 已由 V2.0 替代，保留历史参考                         |
 | [设计规范（MUI）](docs/00-governance/design-specification.md)        | deprecated | 已被 shadcn V2 替代                                  |
 | [文档治理规范](docs/00-governance/document-governance.md)            | active     | 文档管理规则                                         |
 | [编码规范](docs/00-governance/coding-standards.md)                   | active     | 代码风格与质量规则                                   |

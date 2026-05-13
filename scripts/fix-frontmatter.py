@@ -27,7 +27,7 @@ PATH_OVERRIDES = {
     "ai/knowledge/patterns.md": {"domain": "governance", "category": "harness", "status": "active", "title": "AI 知识模式库"},
     "ai/knowledge/rules.md": {"domain": "governance", "category": "harness", "status": "active", "title": "AI 规则库"},
     "ai/knowledge/decisions.md": {"domain": "governance", "category": "harness", "status": "active", "title": "AI 决策记录"},
-    "00-governance/memory-dual-track-strategy.md": {"domain": "governance", "category": "doc-governance", "title": "记忆双轨策略"},
+    "00-governance/human-ai-collaboration.md": {"domain": "governance", "category": "process-guide", "title": "人机协作双轨策略"},
     "00-governance/cloudflare-setup-guide.md": {"domain": "governance", "category": "guide", "title": "Cloudflare 设置指南"},
 }
 

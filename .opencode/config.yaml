@@ -1,28 +1,20 @@
 # OpenCode 记忆系统配置
 
 memory:
-  # 长期记忆文件
-  long_term: .opencode/memory/MEMORY.md
+  # 长期记忆文件（符号链接 → memory/）
+  long_term: memory/MEMORY.md
   
   # 每日日志目录
-  daily_logs: .opencode/memory/
+  daily_logs: memory/
   
   # 代码模式目录
-  patterns: .opencode/memory/patterns/
-  
-  # 同步配置
-  sync:
-    enabled: true
-    # 与 workbuddy 双向同步
-    workbuddy_path: .workbuddy/memory/
-    auto_sync_on_start: true
-    auto_sync_on_complete: true
+  patterns: memory/patterns/
     
   # 记忆加载顺序（启动时）
   load_order:
-    - .opencode/memory/MEMORY.md
-    - .opencode/memory/2026-*.md
-    - .opencode/memory/patterns/*.md
+    - memory/MEMORY.md
+    - memory/2026-*.md
+    - memory/patterns/*.md
 
 # OpenCode 行为配置
 behavior:

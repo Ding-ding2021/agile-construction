@@ -1,6 +1,0 @@
-
-> agile-construction@0.0.0 test:coverage
-> vitest run --coverage
-
- MISSING DEPENDENCY  Cannot find dependency '@vitest/coverage-v8'
-

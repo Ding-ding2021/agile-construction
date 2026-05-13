@@ -1,412 +1,237 @@
 ---
-id: DOC-00-GOVERNANCE-CODING-STANDARDS
+id: DOC-GOVERNANCE-CODING-STANDARDS
 number: GOV-002
 domain: governance
-category: code-standards
-title: 代码规范
+category: coding-standards
+title: 编码规范
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-11
+last_updated: 2026-05-13
 source_of_truth: true
-ai_contract: docs/ai/contracts/coding-standards.md
-related_code:
-  - eslint.config.js
-  - .prettierrc
-  - tsconfig.app.json
+related_code: []
 related_docs:
-  - docs/00-governance/testing-standards.md
-  - docs/00-governance/code-review-checklist.md
-  - docs/00-governance/component-development-contract.md
+  - quality-metrics.md
+  - git-governance.md
+  - code-review-checklist.md
 ---
 
-# 代码规范
+# 编码规范
 
-> 版本: v3.0.0
-> 最后更新: 2026-05-11
-> 工具链: TypeScript strict + ESLint flat config + Prettier + Tailwind CSS v4
+## Clause 1. 铁律
 
----
+### 1.1 [强制] 代码质量规则
 
-## 1. 铁律
-
-| #   | 规则                                                             | 强制 |
-| --- | ---------------------------------------------------------------- | ---- |
-| 1.1 | 禁止使用 `any` 类型（必须 `eslint-disable` + 注释理由）          | 强制 |
-| 1.2 | 禁止硬编码色值/间距/圆角（全部使用设计 Token 或 Tailwind class） | 强制 |
-| 1.3 | 禁止绕过状态机守卫直接修改状态                                   | 强制 |
-| 1.4 | 禁止在子组件中直接操作 `localStorage`                            | 强制 |
-| 1.5 | 路由跳转使用 `navigation.ts` 的 `goTo*` 函数                     | 强制 |
-| 1.6 | 数据操作通过 Repository / Store 层                               | 强制 |
-| 1.7 | 禁止 `console.log`（仅允许 `warn` / `error` / `info`）           | 强制 |
-| 1.8 | 禁止 `@ts-ignore` / `@ts-expect-error`（除非有关联 Issue）       | 强制 |
+| 编号  | 规则                        | 级别 |
+| ----- | --------------------------- | ---- |
+| 1.1.1 | 禁止 `console.log` 提交     | 强制 |
+| 1.1.2 | 禁止 `any` 类型             | 强制 |
+| 1.1.3 | 禁止死代码/未使用的 import  | 强制 |
+| 1.1.4 | 必须处理 async/await 的异常 | 强制 |
+| 1.1.5 | 变量/函数命名必须有意义     | 强制 |
+| 1.1.6 | 组件必须有明确的 props 接口 | 强制 |
 
 ---
 
-## 2. 工具配置
+## Clause 2. 命名规范
 
-### 2.1 ESLint（`eslint.config.js`）
+### 2.1 [强制] 通用规则
 
-```javascript
-// 关键规则（非完整配置）
-'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-'no-debugger': 'error',
-'react-hooks/exhaustive-deps': 'warn',
-'@typescript-eslint/no-explicit-any': 'warn',        // 目标：改为 error
-'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],  // 目标：改为 error
-```
+**2.1.1 [强制]** 文件名：`kebab-case`（短横线分隔），如 `user-profile.tsx`、`api-client.ts`。
 
-忽略目录：`dist`, `src/generated/prisma`
+### 2.2 [强制] 组件命名
 
-### 2.2 Prettier（`.prettierrc`）
+**2.2.1 [强制]** 组件名：`PascalCase`，如 `UserProfile`、`ApiClientProvider`。
 
-```json
-{
-  "semi": false,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "arrowParens": "avoid"
-}
-```
+### 2.3 [强制] 函数与变量
 
-### 2.3 TypeScript（`tsconfig.app.json`）
+**2.3.1 [强制]** 函数/变量名：`camelCase`，如 `getUserById`、`isLoading`。
 
-| 配置                 | 值                                          | 说明                             |
-| -------------------- | ------------------------------------------- | -------------------------------- |
-| `strict`             | `true`                                      | 严格模式                         |
-| `noUnusedLocals`     | `true`                                      | 禁止未使用的局部变量             |
-| `noUnusedParameters` | `true`                                      | 禁止未使用的参数（`_` 前缀豁免） |
-| path alias           | `@/*` → `src/*` 和 `@next/*` → `src-next/*` | 双栈别名                         |
+**2.3.2 [强制]** 布尔变量前缀：`is`、`has`、`should`，如 `isVisible`、`hasPermission`。
+
+### 2.4 [强制] 常量
+
+**2.4.1 [强制]** 常量名：`UPPER_SNAKE_CASE`，如 `MAX_RETRY_COUNT`、`API_BASE_URL`。
+
+### 2.5 [强制] 类型定义
+
+**2.5.1 [强制]** 接口/类型名：`PascalCase`，如 `UserProfile`、`ApiResponse`。
 
 ---
 
-## 3. TypeScript 规范
+## Clause 3. 代码风格
 
-### 3.1 类型定义
+### 3.1 [强制] 缩进与分号
 
-| 用途          | 方式                 | 示例                        |
-| ------------- | -------------------- | --------------------------- |
-| 对象类型      | `interface`          | `interface Project { ... }` |
-| 联合/工具类型 | `type`               | `type Status = 'a' \| 'b'`  |
-| 常量枚举      | `enum` 或 `as const` | `enum Priority { ... }`     |
+**3.1.1 [强制]** 使用 2 空格缩进。
 
-### 3.2 Props 类型
+**3.1.2 [强制]** 必须使用分号结尾。
 
-```typescript
-interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-  children: React.ReactNode
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
-  className?: string
-}
-```
+### 3.2 [强制] 引号
 
-- Props 必须显式定义接口（禁止 `React.FC`）
-- 默认值通过解构赋值，不在函数体内赋值
-- 回调命名统一为 `onXxx` 格式
+**3.2.1 [强制]** 字符串使用单引号 `' '`。
 
-### 3.3 类型守卫
+**3.2.2 [强制]** JSX 属性使用双引号 `" "`。
 
-```typescript
-// 推荐：使用 discriminated union + 类型守卫
-function isProject(item: Item): item is Project {
-  return item.type === 'project'
-}
-```
+### 3.3 [推荐] 尾逗号
 
----
+**3.3.1 [推荐]** 多行对象/数组使用尾逗号。
 
-## 4. React 组件规范
+### 3.4 [强制] 导入顺序
 
-### 4.1 组件结构
+**3.4.1 [强制]** 导入分组顺序：外部库 → 内部模块 → 样式文件，每组间空一行分隔。
 
-```
-1. imports（外部 → 内部）
-2. interface Props
-3. export function Component({ prop1, prop2 }: Props)
-4.   hooks（useState → useMemo → useCallback → useEffect）
-5.   事件处理（handleXxx）
-6.   渲染辅助函数（renderXxx）
-7.   return JSX
-```
+### 3.5 [强制] 组件导出
 
-### 4.2 自定义 Hook
+**3.5.1 [强制]** 组件使用命名导出（named export），不使用默认导出。
 
-- 命名：`use<功能>`，返回对象或元组
-- 职责：封装有状态逻辑，不包含 JSX
+### 3.6 [推荐] 代码长度
 
-### 4.3 组件组合
+**3.6.1 [推荐]** 单行不超过 100 字符。
 
-- 使用复合组件模式（`Card.Header`、`Card.Content`）
-- 组合优于继承
-- 单个组件超过 300 行必须拆分
+**3.6.2 [推荐]** 单个函数不超过 50 行。
+
+**3.6.3 [推荐]** 单个组件不超过 200 行。
+
+### 3.7 [强制] 注释
+
+**3.7.1 [强制]** 禁止提交注释掉的代码块。
+
+**3.7.2 [推荐]** 复杂逻辑必须写注释说明意图。
 
 ---
 
-## 5. 样式规范
+## Clause 4. TypeScript 规范
 
-### 5.1 Tailwind CSS
+### 4.1 [强制] 类型显式声明
 
-```typescript
-// 推荐：使用 cn() 合并类名
-import { cn } from '@/lib/utils'
+**4.1.1 [强制]** 函数参数和返回值必须显式声明类型。
 
-function Button({ variant = 'primary', className }: ButtonProps) {
-  const base = 'rounded-xl h-10 px-6 font-medium transition-all'
-  const variants = {
-    primary: 'bg-[#154DD9] hover:bg-[#1a5ae8] text-white',
-    secondary: 'bg-white/5 hover:bg-white/10 text-white/70',
-  }
-  return <button className={cn(base, variants[variant], className)} />
-}
-```
+**4.1.2 [强制]** 禁止隐式 `any`。
 
-- 所有色值/间距/圆角使用 Tailwind class 或设计 Token
-- 禁止在 className 中硬编码 `rgba()`、`#` 色值（除非是极少数无法映射的例外）
-- 使用 `cn()` 函数合并类名
+### 4.2 [强制] 严格模式
 
-### 5.2 响应式
+**4.2.1 [强制]** `tsconfig.json` 必须启用 `strict: true`。
 
-- 移动端优先：`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
-- 断点：sm(640) / md(768) / lg(1024) / xl(1280)
+**4.2.2 [强制]** 禁止使用 `as` 类型断言（如 `value as Type`），改用类型守卫或显式声明。
 
-### 5.3 暗色模式
+**4.2.3 [强制]** 禁止使用 `// @ts-ignore` 或 `// @ts-expect-error`。
 
-- 使用 `dark:` 前缀覆盖所有表层颜色
-- 当前主题为深色，后续支持 light 切换
+### 4.3 [强制] 接口与类型
+
+**4.3.1 [强制]** Props 必须定义接口，使用 `interface` 而非 `type`。
+
+**4.3.2 [强制]** React 组件 Props 接口命名以 `Props` 结尾，如 `UserProfileProps`。
+
+### 4.4 [推荐] 泛型
+
+**4.4.1 [推荐]** 复用逻辑优先使用泛型而非 `any`。
+
+### 4.5 [强制] Enum
+
+**4.5.1 [强制]** 使用 `const enum` 或联合类型替代普通 `enum`。
 
 ---
 
-## 6. 文件组织
+## Clause 5. React / Next.js 规范
 
-### 6.1 目录结构
+### 5.1 [强制] 组件定义
 
-```
-src/
-├── config/           # 路由、导航、特性注册表
-├── components/       # 页面组件 + 共享组件
-│   ├── project/      # 项目管理域
-│   ├── task/         # 任务管理域
-│   ├── shared/       # 共享组件
-│   └── router/       # AppRouter
-├── domain/           # 纯领域逻辑（状态机、守卫）
-├── data/             # 静态/mock 数据
-├── services/         # API 客户端、Repository
-│   ├── repositories/
-│   ├── api/
-│   └── errors/
-├── store/            # Zustand 状态管理
-├── App.tsx
-└── main.tsx
-```
+**5.1.1 [强制]** 使用函数组件 + Hooks，不使用 class 组件。
 
-### 6.2 文件命名
+### 5.2 [强制] 状态管理
 
-| 类型      | 格式           | 示例              |
-| --------- | -------------- | ----------------- |
-| 组件文件  | PascalCase     | `ProjectCard.tsx` |
-| Hook 文件 | useXxx         | `useProjects.ts`  |
-| 工具文件  | camelCase      | `utils.ts`        |
-| 类型文件  | camelCase      | `types.ts`        |
-| 样式文件  | 与被测文件同名 | `ProjectCard.css` |
+**5.2.1 [强制]** 优先使用 React Context + useReducer / Zustand，避免 prop drilling。
 
----
+### 5.3 [强制] 性能
 
-## 7. 命名规范
+**5.3.1 [强制]** 列表渲染必须有唯一 `key`。
 
-### 7.1 标识符
+**5.3.2 [推荐]** 消耗大的计算使用 `useMemo` / `useCallback`。
 
-| 类型      | 格式                           | 示例                            |
-| --------- | ------------------------------ | ------------------------------- |
-| 变量/函数 | `camelCase`                    | `userName`, `fetchData()`       |
-| 组件/类型 | `PascalCase`                   | `ProjectCard`, `interface User` |
-| 常量      | `UPPER_SNAKE_CASE`             | `MAX_PAGE_SIZE`                 |
-| 枚举      | PascalCase 值 UPPER            | `enum Status { ACTIVE }`        |
-| 布尔变量  | `is`/`has`/`should`/`can` 前缀 | `isActive`, `hasPermission`     |
+### 5.4 [强制] 数据获取
 
-### 7.2 文件名与组件名一致
+**5.4.1 [强制]** API 调用必须包装在 try/catch 中。
 
-```typescript
-// ✅
-// ProjectDetail.tsx
-export function ProjectDetail() {}
+**5.4.2 [推荐]** 优先使用 Server Component 获取数据，减少客户端请求。
 
-// ❌
-// index.tsx
-// 或文件名与组件名不一致
-```
+### 5.5 [强制] shadcn/ui
+
+**5.5.1 [强制]** UI 组件优先使用 shadcn/ui 内置组件。
+
+**5.5.2 [强制]** 自定义组件风格必须与 shadcn/ui 保持一致。
+
+### 5.6 [强制] App Router 约定
+
+**5.6.1 [强制]** 遵循 Next.js App Router 文件命名约定：`page.tsx`、`layout.tsx`、`loading.tsx`、`error.tsx`、`not-found.tsx`。
+
+**5.6.2 [强制]** 组件默认为 Server Component，仅在需要交互性（事件处理、状态、浏览器 API）时添加 `'use client'`。
+
+**5.6.3 [强制]** Server Component 禁止使用 Hooks、事件监听器或浏览器专属 API。
+
+**5.6.4 [推荐]** 数据获取优先在 Server Component 中完成，减少客户端请求次数。
 
 ---
 
-## 8. 注释规范
+## Clause 6. 错误处理规范
 
-### 8.1 执行原则
+> 统一的错误处理是系统健壮性的基础。本条款定义前后端共享的错误处理规范。
 
-**仅对关键逻辑、业务边界、复杂状态流转写中文注释。** 不要求以下内容注释：
+### 6.1 [强制] API 层错误处理
 
-- `import` 语句
-- 简单变量声明
-- 普通 JSX
-- 明显的循环/条件
+**6.1.1 [强制]** 所有 API 路由处理函数必须包裹在 try/catch 中，不遗漏异常路径。
 
-### 8.2 何时注释
+**6.1.2 [强制]** API 错误响应使用统一格式：`{ success: false, error: { code: string, message: string } }`。
 
-```typescript
-// 需要注释的场景：
+**6.1.3 [强制]** 错误处理逻辑集中在中间件或工具函数中，不在每个路由中重复编写。
 
-// 1. 复杂计算逻辑
-// 计算已完成任务占比，权重按任务优先级调整
-const progress = (completedWeight / totalWeight) * 100
+### 6.2 [强制] UI 层错误展示
 
-// 2. 边界条件
-// 空任务列表直接返回，避免除零
-if (tasks.length === 0) return 0
+**6.2.1 [强制]** 表单验证错误使用内联展示，关联到具体字段。
 
-// 3. 非显而易见的业务规则
-// 状态"已归档"不可再流转——业务要求
-if (status === 'archived') return false
+**6.2.2 [推荐]** 全局性错误（网络中断、服务器异常）使用 Toast 组件展示。
 
-// 4. JSDoc 对外接口
-/** 根据项目状态返回对应的颜色配置 */
-function getStatusColors(status: Status): ColorConfig
-```
+### 6.3 [推荐] 错误日志
 
-### 8.3 禁止事项
-
-- 禁止行末注释（`const x = 1 // x 是 1`）
-- 禁止逐行注释（每行都加注释）
-- 禁止中英混写注释（全中文或全英文）
+**6.3.1 [推荐]** `console.warn` 用于预期内的异常（如验证失败），`console.error` 用于非预期异常（如服务器错误）。
 
 ---
 
-## 9. 架构约束
+## Clause 7. 测试规范
 
-### 9.1 分层依赖规则
+> **完整测试规范详见 [testing-standards.md](../../04-testing/testing-standards.md)（TST-001）**。本条款仅列编码阶段必须遵守的核心规则。
 
-```
-components/ → store/ → services/ → domain/
-      ↓                          ↓
-  共享组件不可引用           数据/领域层
-  服务层或领域层              禁止引用组件
-```
+### 7.1 [强制] 核心规则
 
-### 9.2 状态管理
+**7.1.1 [强制]** 新增功能必须编写对应测试。
 
-- 组件内部状态：`useState`
-- 跨组件共享：Zustand Store
-- 禁止 Props drilling 超过 2 层
-- 动画状态：CSS transition，禁止 `useEffect` + `setTimeout`
+**7.1.2 [强制]** 修复 Bug 必须编写回归测试。
 
-### 9.3 数据流
+### 7.2 [推荐] 测试命名
 
-```
-用户操作 → Store/Repository（写本地 + 远程同步）
-   ↓
-组件通过 Store selector 订阅变更
-   ↓
-状态机守卫验证操作合法性
-```
+**7.2.1 [推荐]** 测试文件命名：`{target}.test.ts` 或 `{target}.spec.ts`。
+
+**7.2.2 [推荐]** 测试描述使用中文。
 
 ---
 
-## 10. 双栈编码规范
+## Clause 8. 样式规范
 
-项目有两条独立的开发线：
+### 8.1 [强制] 样式方案
 
-### 10.1 src/（MUI 版 — 维护模式）
+**8.1.1 [强制]** 使用 Tailwind CSS 作为主要样式方案。
 
-| 维度  | 规范                                               |
-| ----- | -------------------------------------------------- |
-| UI 库 | MUI v9 + Emotion                                   |
-| 样式  | CSS 变量 `var(--pm-*)`，深色玻璃态                 |
-| 路由  | Hash 路由，`readRouteFromHash()` + `navigation.ts` |
-| 状态  | Zustand + persist（`projectStore.ts`）             |
-| 数据  | Repository 模式（API 优先 + localStorage 降级）    |
-| CSS   | 同文件 `.css`，不使用 CSS Modules                  |
+**8.1.2 [强制]** 禁止使用内联样式（`style={{}}`），特殊情况需注释说明。
 
-### 10.2 src-next/（shadcn 版 — 活跃开发）
+### 8.2 [强制] 设计 Token
 
-| 维度     | 规范                                                              |
-| -------- | ----------------------------------------------------------------- |
-| UI 库    | shadcn/ui (base-nova) + @base-ui/react                            |
-| 样式     | Tailwind CSS v4，oklch 色值                                       |
-| 路由     | React Router v7 BrowserRouter                                     |
-| 图标     | lucide-react（通过 `icon.tsx` 适配层统一 16px）                   |
-| 组件来源 | 必须来自 shadcn 官方 registry                                     |
-| 禁止事项 | `--pm-*` 旧品牌色、MUI `sx`/`style` prop、`bg-white/X` 透明度色值 |
+**8.2.1 [强制]** 颜色/间距/圆角使用 Tailwind 预设 Token，不使用硬编码值。
+
+### 8.3 [推荐] CSS 类名管理
+
+**8.3.1 [推荐]** 优先使用 Tailwind 类名组合。仅在跨组件复用场景下谨慎使用 `@apply`，避免破坏 utility-first 的可维护性。
+
+**8.3.2 [推荐]** 避免深层嵌套的 Tailwind 类名（超过 5 个考虑提取为小组件）。
 
 ---
 
-## 11. Git 提交规范
-
-### 11.1 格式
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-### 11.2 Type
-
-| 类型       | 说明          |
-| ---------- | ------------- |
-| `feat`     | 新功能        |
-| `fix`      | Bug 修复      |
-| `docs`     | 文档更新      |
-| `refactor` | 重构          |
-| `style`    | 代码格式      |
-| `perf`     | 性能优化      |
-| `test`     | 测试相关      |
-| `chore`    | 构建/工具变动 |
-
-### 11.3 示例
-
-```bash
-# ✅
-feat(projects): 添加项目看板视图
-fix(tasks): 修复任务进度计算错误
-docs: 更新技术栈文档
-refactor(auth): 重构认证逻辑
-
-# ❌
-git commit -m "修复"
-git commit -m "update"
-git commit -m "add stuff"
-```
-
-### 11.4 分支命名
-
-```
-<type>/<scope>-<description>
-# 示例：feat/projects-kanban-view
-# 示例：fix/task-progress-calculation
-```
-
----
-
-## 12. 附则
-
-### 12.1 自检清单
-
-提交前确认：
-
-- [ ] 无 `any` 类型（或有 `eslint-disable` 注释说明理由）
-- [ ] 无硬编码色值/尺寸
-- [ ] 命名符合规范
-- [ ] 无 `console.log`
-- [ ] 无死代码（定义了但未使用）
-- [ ] 无过度抽象
-- [ ] `npm run lint` 0 errors
-- [ ] `npm run build` 0 errors
-
-### 12.2 相关文档
-
-- [代码规范](./coding-standards.md)（本文）
-- [测试规范](./testing-standards.md)
-- [Code Review Checklist](./code-review-checklist.md)
-- [组件开发契约](./component-development-contract.md)
+> **Git 规范详见 [git-governance.md](git-governance.md)（GOV-007）**。本编码规范不重复 Git 制度。

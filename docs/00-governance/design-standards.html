@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计治理规范 · 层级、门禁与工作流</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: oklch(0.985 0 0);
+    --fg: oklch(0.205 0 0);
+    --muted: oklch(0.922 0 0);
+    --muted-fg: oklch(0.556 0 0);
+    --border: oklch(0.87 0 0);
+    --accent: oklch(0.5 0.2 250);
+    --accent-subtle: oklch(0.92 0.04 250);
+    --accent-fg: oklch(0.985 0 0);
+    --success: oklch(0.45 0.18 160);
+    --success-bg: oklch(0.92 0.04 160);
+    --danger: oklch(0.55 0.23 25);
+    --danger-bg: oklch(0.95 0.06 25);
+    --warn: oklch(0.6 0.18 85);
+    --warn-bg: oklch(0.95 0.06 85);
+    --surface: oklch(0.97 0 0);
+    --radius: 12px;
+    --font-sans: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  }
+
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* ═══ Header ═══ */
+  .page-header {
+    background: linear-gradient(135deg, oklch(0.205 0 0) 0%, oklch(0.25 0.02 250) 100%);
+    color: oklch(0.985 0 0);
+    padding: 80px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.5 0.2 250 / 0.15), transparent 70%);
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.6 0.15 200 / 0.1), transparent 70%);
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: oklch(1 0 0 / 0.15);
+    border: 1px solid oklch(1 0 0 / 0.2);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 20px;
+  }
+  .page-header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .page-header p {
+    font-size: 16px;
+    color: oklch(1 0 0 / 0.65);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+  .header-meta {
+    margin-top: 28px;
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: oklch(1 0 0 / 0.5);
+  }
+
+  /* ═══ Container ═══ */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ═══ Section ═══ */
+  .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+  }
+  .section h2 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .section > .section-desc {
+    font-size: 14px;
+    color: var(--muted-fg);
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+
+  /* ═══ Cards ═══ */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .card-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 16px;
+  }
+  .gov-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .gov-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gov-card p, .gov-card li {
+    font-size: 13px;
+    color: var(--muted-fg);
+    line-height: 1.65;
+  }
+  .gov-card ul { list-style: none; padding: 0; }
+  .gov-card li {
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .gov-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    background: var(--border);
+  }
+  .gov-card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+  .tag-force { background: var(--danger-bg); color: var(--danger); }
+  .tag-rec { background: var(--warn-bg); color: var(--warn); }
+  .tag-ref { background: var(--accent-subtle); color: var(--accent); }
+
+  /* ═══ Flow Diagram ═══ */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .flow-step .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+  }
+  .flow-arrow {
+    color: var(--muted-fg);
+    font-size: 18px;
+    font-weight: 300;
+  }
+
+  /* ═══ Gate table ═══ */
+  .gate-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .gate-table th {
+    background: var(--surface);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted-fg);
+  }
+  .gate-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .gate-table tr:last-child td { border-bottom: none; }
+  .gate-pass {
+    display: inline-block;
+    background: var(--success-bg);
+    color: var(--success);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .gate-fail {
+    display: inline-block;
+    background: var(--danger-bg);
+    color: var(--danger);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* ═══ Layer diagram ═══ */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 500px;
+  }
+  .layer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid;
+  }
+  .layer .layer-label {
+    font-weight: 600;
+    min-width: 80px;
+  }
+  .layer-1 { background: oklch(0.92 0.04 250 / 0.3); border-color: oklch(0.5 0.2 250 / 0.2); }
+  .layer-2 { background: oklch(0.92 0.04 160 / 0.3); border-color: oklch(0.45 0.18 160 / 0.2); }
+  .layer-3 { background: oklch(0.95 0.06 25 / 0.3); border-color: oklch(0.55 0.23 25 / 0.2); }
+
+  /* ═══ Rule rows ═══ */
+  .rule-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .rule-row .rule-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .rule-row .rule-icon.pass { background: var(--success-bg); color: var(--success); }
+  .rule-row .rule-icon.fail { background: var(--danger-bg); color: var(--danger); }
+  .rule-row .rule-text { font-size: 13px; line-height: 1.6; }
+  .rule-row .rule-text strong { font-weight: 600; }
+  .rule-pass { background: var(--success-bg); border: 1px solid oklch(0.45 0.18 160 / 0.15); }
+  .rule-fail { background: var(--danger-bg); border: 1px solid oklch(0.55 0.23 25 / 0.15); }
+
+  /* ═══ Theme dots ═══ */
+  .theme-strip {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .theme-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .theme-chip .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ═══ HR ═══ */
+  .section-hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0 32px;
+  }
+
+  /* ═══ Footer ═══ */
+  .page-footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted-fg);
+  }
+  .page-footer a { color: var(--accent); text-decoration: none; }
+  .page-footer a:hover { text-decoration: underline; }
+  .footer-links { display: flex; justify-content: center; gap: 16px; margin-bottom: 8px; }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 720px) {
+    .page-header { padding: 50px 0 40px; }
+    .page-header h1 { font-size: 28px; }
+    .card-grid, .card-grid-2 { grid-template-columns: 1fr; }
+    .gate-table { font-size: 12px; }
+    .gate-table th, .gate-table td { padding: 8px 10px; }
+    .flow-row { flex-direction: column; align-items: stretch; }
+    .flow-arrow { transform: rotate(90deg); text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .page-header { padding: 36px 0 30px; }
+    .page-header h1 { font-size: 22px; }
+    .header-meta { flex-direction: column; gap: 4px; }
+    .section { padding: 36px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ Header ═══════════ -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="header-badge">GOV-027 · Design Governance</div>
+    <h1>设计治理规范</h1>
+    <p>定义设计 Token 的生命周期管理、组件准入门禁、主题色板治理和跨角色协作流程。确保设计体系在项目演进中保持一致性和可维护性。</p>
+    <div class="header-meta">
+      <span>版本 v1.0.0</span>
+      <span>更新 2026-05-13</span>
+      <span>状态 Active</span>
+      <span>关联 DES-001 · DES-002 · DES-004</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ I. 治理架构 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">I</div>
+    <h2>治理架构</h2>
+    <p class="section-desc">设计治理分为三个层级，逐层收敛，从原则到实现。</p>
+
+    <div class="layer-stack">
+      <div class="layer layer-1">
+        <span class="layer-label">L1 · 原则层</span>
+        <span>DES-001 设计哲学、「最少颜色、最少装饰、组件原生、语义间距」</span>
+      </div>
+      <div class="layer layer-2">
+        <span class="layer-label">L2 · 规范层</span>
+        <span>DES-004 VI 规范 · GOV-027 治理规范 · 组件查询表 · 开发合约</span>
+      </div>
+      <div class="layer layer-3">
+        <span class="layer-label">L3 · 执行层</span>
+        <span>themes.css · 组件代码 · DES-002 检查清单 · 审查门禁</span>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="card-grid">
+      <div class="gov-card">
+        <h3>🎯 治理目标</h3>
+        <ul>
+          <li>所有页面视觉一致，不依赖个人审美</li>
+          <li>Token 变更可追溯、有审批</li>
+          <li>组件复用最大化，零重复造轮</li>
+          <li>非设计师也能安全地扩展 UI</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🧭 治理范围</h3>
+        <ul>
+          <li>色彩系统（色板、语义色、暗色）</li>
+          <li>字体系统（层级、字重、字体栈）</li>
+          <li>间距与圆角 Token</li>
+          <li>shadcn 组件全生命周期</li>
+          <li>多主题色板注册与卸除</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>👤 角色职责</h3>
+        <ul>
+          <li><strong>设计师</strong> · 定义/维护 Token、审查视觉一致性</li>
+          <li><strong>开发者</strong> · 按 Token 实现、通过门禁</li>
+          <li><strong>AI Agent</strong> · 遵守合约、调用技能、不自作主张</li>
+          <li><strong>审查委员会</strong> · 验收门禁、裁定争议</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ II. 设计 Token 治理 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">II</div>
+    <h2>设计 Token 治理</h2>
+    <p class="section-desc">所有设计 Token 的变更必须遵循标准化流程，禁止直接修改代码中的硬编码值。</p>
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">色彩 Token 变更流程</h3>
+    <div class="flow-row">
+      <div class="flow-step"><span class="step-num">1</span> 提出变更</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="step-num">2</span> 更新 themes.css</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="step-num">3</span> 更新 VI 规范</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="step-num">4</span> 视觉审查</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="step-num">5</span> 全量回归</div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="card-grid-2">
+      <div class="gov-card">
+        <h3>🎨 色彩 Token 规则 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>所有色值统一使用 <code style="font-family:var(--font-mono);font-size:12px;background:var(--muted);padding:1px 4px;border-radius:3px;">oklch()</code> 色彩空间</li>
+          <li>禁止 HEX / RGB / HSL 色值进入代码</li>
+          <li>语义色变量优先于直接色阶：用 <code>text-muted-foreground</code> 而非 <code>text-neutral-500</code></li>
+          <li>新增色板必须在 <code>themes.css</code> 同时注册亮色/暗色两套变量</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>📐 间距 Token 规则 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>所有间距必须为 2px 整数倍，禁止 <code>p-2.5</code> <code>m-1.5</code> 等 0.5 步长</li>
+          <li>使用 Tailwind spacing scale，不自定义间距变量</li>
+          <li>shadcn 组件内部间距不受此限制</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🔤 字体 Token 规则 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>字体层级限制 L1-L5 五级，禁止跳级使用</li>
+          <li>字重仅限 400 / 500 / 600 三个权重</li>
+          <li>中英文混排必须使用 Inter + Noto Sans SC 组合</li>
+          <li>字体栈变更需设计师确认</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>⭕ 圆角 Token 规则 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>全局基准圆角 <code>--radius: 0.625rem</code>（shadcn 默认）</li>
+          <li>卡片圆角 <code>rounded-lg</code>，按钮遵循 shadcn variant</li>
+          <li>禁止引入新的圆角层级</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ III. 主题色板治理 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">III</div>
+    <h2>主题色板治理</h2>
+    <p class="section-desc">项目支持多套主题色板，通过 <code>html.theme-xxx</code> 类名切换。每套色板必须有完整的亮色/暗色变量集。</p>
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">已注册色板</h3>
+    <div class="theme-strip" style="margin-bottom:24px;">
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.205 0 0);"></span> neutral <span style="color:var(--muted-fg);font-size:12px;">默认</span></div>
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.5 0.2 250);"></span> blue</div>
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.45 0.18 160);"></span> green</div>
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.55 0.2 50);"></span> orange</div>
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.5 0.22 300);"></span> purple</div>
+      <div class="theme-chip"><span class="dot" style="background:oklch(0.3 0.02 80);"></span> stone</div>
+    </div>
+
+    <hr class="section-hr">
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">变量覆盖层级</h3>
+    <p style="font-size:13px;color:var(--muted-fg);margin-bottom:16px;max-width:600px;">CSS 变量按影响范围分为三层。L1 随主题色相显著变化，L2 带微弱色相提示，L3 所有主题保持一致。</p>
+
+    <div class="layer-stack" style="margin-bottom:24px;">
+      <div class="layer" style="background:oklch(0.92 0.04 250 / 0.3);border-color:oklch(0.5 0.2 250 / 0.2);">
+        <span class="layer-label" style="min-width:70px;">L1 品牌色</span>
+        <span style="font-size:12px;color:var(--muted-fg);">色相随主题变化 · 6 个变量</span>
+        <span style="font-size:12px;font-weight:500;margin-left:auto;"><code>--primary</code> <code>--accent</code> <code>--ring</code> <code>--chart-*</code></span>
+      </div>
+      <div class="layer" style="background:oklch(0.95 0.03 160 / 0.3);border-color:oklch(0.45 0.18 160 / 0.2);">
+        <span class="layer-label" style="min-width:70px;">L2 表面色</span>
+        <span style="font-size:12px;color:var(--muted-fg);">带微弱色相提示 · 6 个变量</span>
+        <span style="font-size:12px;font-weight:500;margin-left:auto;"><code>--bg</code> <code>--secondary</code> <code>--muted</code> <code>--border</code> <code>--input</code></span>
+      </div>
+      <div class="layer" style="background:oklch(0.95 0 0 / 0.5);border-color:var(--border);">
+        <span class="layer-label" style="min-width:70px;">L3 中性色</span>
+        <span style="font-size:12px;color:var(--muted-fg);">所有主题保持一致 · 12 个变量</span>
+        <span style="font-size:12px;font-weight:500;margin-left:auto;"><code>--card</code> <code>--popover</code> <code>--destructive</code> <code>--sidebar</code></span>
+      </div>
+    </div>
+
+    <h4 style="font-size:14px;font-weight:600;margin-bottom:10px;">组件受影响范围对照</h4>
+    <table class="gate-table" style="margin-bottom:24px;">
+      <thead>
+        <tr>
+          <th style="width:120px;">分类</th>
+          <th>组件</th>
+          <th style="width:100px;">改前</th>
+          <th style="width:100px;">改后</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;">按钮</td>
+          <td>Button default</td>
+          <td><span class="gate-pass">变化</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;"></td>
+          <td>Button secondary</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;"></td>
+          <td>Button ghost / outline</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;"></td>
+          <td>Button destructive</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-fail">不变</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">徽标</td>
+          <td>Badge default / secondary</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">导航</td>
+          <td>NavigationMenu / Tabs / Accordion</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">表单</td>
+          <td>Input / Select / Textarea / Combobox</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">浮层</td>
+          <td>DropdownMenu / Popover / HoverCard</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">面板</td>
+          <td>Skeleton / Alert / Table header</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">边框</td>
+          <td>Card / Dialog / Sheet / Separator</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">图表</td>
+          <td>所有 chart-* 颜色</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">侧栏</td>
+          <td>Sidebar hover / active</td>
+          <td><span class="gate-fail">不变</span></td>
+          <td><span class="gate-pass">变化</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card-grid-2">
+      <div class="gov-card">
+        <h3>➕ 新增色板流程 <span class="tag tag-force">强制</span></h3>
+        <div class="flow-row" style="padding:8px 0;">
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">1</span> 选色</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">2</span> 编码</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">3</span> 注册</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">4</span> 审查</div>
+        </div>
+        <p style="margin-top:8px;">步骤：① 选择色相基础色 → ② 在 themes.css 中添加亮色/暗色变量对 → ③ 在主题选择器中注册 → ④ 全量组件视觉回归</p>
+      </div>
+      <div class="gov-card">
+        <h3>🚫 色板准入标准 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li><code>--primary</code> 与文本背景对比度 ≥ 4.5:1</li>
+          <li>暗色模式下文字可读性通过 WCAG AA</li>
+          <li>20+ 个变量必须全部覆盖（亮色 + 暗色）</li>
+          <li>5 组 chart 色板内可辨识</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ IV. 组件治理 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">IV</div>
+    <h2>组件治理</h2>
+    <p class="section-desc">组件复用优先级和生命周期管理，确保代码库健康演进。</p>
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">复用优先级</h3>
+    <div class="flow-row">
+      <div class="flow-step" style="background:var(--success-bg);border-color:oklch(0.45 0.18 160 / 0.3);"><span class="step-num" style="background:var(--success);">P0</span> 直接使用 ui/ 已有</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="background:var(--accent-subtle);border-color:oklch(0.5 0.2 250 / 0.3);"><span class="step-num" style="background:var(--accent);">P1</span> shadcn CLI 安装新组件</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="background:var(--warn-bg);border-color:oklch(0.6 0.18 85 / 0.3);"><span class="step-num" style="background:var(--warn);">P2</span> 组合现有组件</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="background:var(--danger-bg);border-color:oklch(0.55 0.23 25 / 0.3);"><span class="step-num" style="background:var(--danger);">P3</span> 手写自定义组件</div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="card-grid-2">
+      <div class="gov-card">
+        <h3>📦 shadcn 组件管理 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>所有 shadcn 组件通过 CLI <code>npx shadcn@latest add</code> 安装</li>
+          <li>禁止手动复制 shadcn 源码</li>
+          <li>安装后必须检查自引用 bug 并修复</li>
+          <li>禁止直接修改 shadcn 生成的组件代码</li>
+          <li>36 个组件已安装，完整列表见组件查询表</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🏗️ 自定义组件准入 <span class="tag tag-rec">推荐</span></h3>
+        <ul>
+          <li>必须确认无现成 shadcn 组件可复用</li>
+          <li>必须使用 Tailwind + shadcn 组件组合实现</li>
+          <li>必须导出 TypeScript Props 接口</li>
+          <li>命名导出为主，禁止默认导出</li>
+          <li>注入 <code>cn()</code> className 支持外部样式覆盖</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🔄 组件生命周期 <span class="tag tag-ref">参考</span></h3>
+        <ul>
+          <li><strong>调研</strong> · 搜索 shadcn registry 确认存在性</li>
+          <li><strong>添加</strong> · CLI 安装或组合实现</li>
+          <li><strong>验收</strong> · 通过视觉 + 响应式 + 暗色 + a11y 门禁</li>
+          <li><strong>废弃</strong> · 标记 deprecated 而非直接删除</li>
+          <li><strong>移除</strong> · 确认无依赖后安全清理</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🚫 禁止行为 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>禁止引入 shadcn 外的第三方 UI 库</li>
+          <li>禁止内联 <code>style={{}}</code> prop（性能动画除外）</li>
+          <li>禁止 <code>bg-white/10</code> 等透明度色值</li>
+          <li>禁止 <code>--pm-*</code> 旧品牌体系变量</li>
+          <li>禁止纯黑 <code>#000</code> / 纯白 <code>#FFF</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ V. 审查门禁 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">V</div>
+    <h2>审查门禁</h2>
+    <p class="section-desc">每个组件或页面变更必须通过以下 4 道门禁方可合并。任何一道不通过，退回修改。</p>
+
+    <table class="gate-table">
+      <thead>
+        <tr>
+          <th style="width:140px;">门禁</th>
+          <th>审查内容</th>
+          <th style="width:80px;">结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;">🎨 视觉一致性</td>
+          <td>色彩使用语义变量不跳级 · 字体层级合规 · 间距 2px 倍数 · 无纯黑纯白 · 图标统一 16px</td>
+          <td><span class="gate-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">📱 响应式</td>
+          <td>1920 / 1360 / 1024 / 768 四断点 · 无溢出 · 表格横向滚动 · 表单字段自适应 · 移动端可操作</td>
+          <td><span class="gate-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">🌙 暗色模式</td>
+          <td>text/bg 使用语义变量 · 暗色下文字可读 · 边框色适配 · chart 色板正常 · 无 hardcode 亮色值</td>
+          <td><span class="gate-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">♿ 可访问性</td>
+          <td>颜色对比度 ≥ 4.5:1 · 按钮有 focus ring · 表单有关联 label · 图标有 aria-label · 键盘可导航</td>
+          <td><span class="gate-pass">PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">门禁不通过的典型案例</h3>
+
+    <div class="rule-row rule-fail">
+      <div class="rule-icon fail">✕</div>
+      <div class="rule-text"><strong>用了旧品牌变量</strong> · 页面中出现 <code>--pm-blue</code>、<code>--pm-shadow-*</code> 等旧体系变量 → 退回替换为 shadcn 语义变量</div>
+    </div>
+    <div class="rule-row rule-fail">
+      <div class="rule-icon fail">✕</div>
+      <div class="rule-text"><strong>暗色模式未适配</strong> · 组件在 <code>.dark</code> 下文字不可读或背景色错误 → 退回使用 <code>dark:</code> 前缀或语义变量</div>
+    </div>
+    <div class="rule-row rule-fail">
+      <div class="rule-icon fail">✕</div>
+      <div class="rule-text"><strong>间距不合规</strong> · 使用了 <code>p-1.5</code>、<code>m-2.5</code>、<code>style={{ marginTop: 13 }}</code> → 退回修正为 2px 倍数</div>
+    </div>
+    <div class="rule-row rule-fail">
+      <div class="rule-icon fail">✕</div>
+      <div class="rule-text"><strong>手写 shadcn 已有组件</strong> · 重新实现了 Button / Input / Select → 删除自定义代码，使用 CLI 安装</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ VI. 工作流与工具 ═══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-number">VI</div>
+    <h2>工作流与工具</h2>
+    <p class="section-desc">从需求到上线的完整设计交付工作流，以及各阶段使用的工具。</p>
+
+    <div class="card-grid-2">
+      <div class="gov-card">
+        <h3>🔄 设计交付工作流</h3>
+        <div class="flow-row" style="padding:6px 0;">
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">R</span> 调研</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">S</span> 规范确认</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">I</span> 实现</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">R</span> 审查</div>
+          <span class="flow-arrow" style="font-size:14px;">→</span>
+          <div class="flow-step" style="font-size:12px;padding:6px 10px;"><span class="step-num" style="width:18px;height:18px;font-size:10px;">D</span> 交付</div>
+        </div>
+        <p style="margin-top:8px;font-size:12px;color:var(--muted-fg);"><strong>R</strong> 搜索 shadcn registry · <strong>S</strong> 对照 DES-001/004 · GOV-027 · <strong>I</strong> 按合约开发 · <strong>R</strong> 过 4 道门禁 · <strong>D</strong> 合并</p>
+      </div>
+      <div class="gov-card">
+        <h3>🔧 工具链</h3>
+        <ul>
+          <li><strong>shadcn CLI</strong> · 组件安装与更新</li>
+          <li><strong>shadcn MCP</strong> · registry 搜索与审计</li>
+          <li><strong>Tailwind v4</strong> · 样式框架</li>
+          <li><strong>Lucide React</strong> · 图标库</li>
+          <li><strong>Recharts</strong> · 图表库</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>🤖 AI 行为约束 <span class="tag tag-force">强制</span></h3>
+        <ul>
+          <li>AI 不得在未确认 shadcn 存在性的情况下新建组件</li>
+          <li>AI 不得使用内联样式</li>
+          <li>AI 不得引入未在规范中定义的 CSS 变量</li>
+          <li>AI 不得跳过审查门禁自行合并</li>
+          <li>AI 必须使用 <code>cn()</code> 合并类名</li>
+        </ul>
+      </div>
+      <div class="gov-card">
+        <h3>📋 关联文档</h3>
+        <ul>
+          <li><a href="../02-design/design-spec-v2-shadcn.md" style="color:var(--accent);text-decoration:none;">DES-001 设计规范总纲</a></li>
+          <li><a href="../02-design/design-checklist.md" style="color:var(--accent);text-decoration:none;">DES-002 开发检查清单</a></li>
+          <li><a href="../02-design/vi-standards.html" style="color:var(--accent);text-decoration:none;">DES-004 VI 规范</a></li>
+          <li><a href="component-development-contract.md" style="color:var(--accent);text-decoration:none;">GOV-022 组件开发合约</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ Footer ═══════════ -->
+<footer class="page-footer">
+  <div class="footer-links">
+    <a href="../02-design/vi-standards.html">DES-004 VI 规范</a>
+    <span style="color:var(--border);">·</span>
+    <a href="../02-design/design-spec-v2-shadcn.md">DES-001 总纲</a>
+    <span style="color:var(--border);">·</span>
+    <a href="../02-design/design-checklist.md">DES-002 检查清单</a>
+  </div>
+  <p>GOV-027 · 设计治理规范 · 视觉版 v1.0.0</p>
+</footer>
+
+</body>
+</html>

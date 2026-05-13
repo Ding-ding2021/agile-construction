@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题色影响范围 · 变更前后对比</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: oklch(0.985 0 0);
+    --fg: oklch(0.205 0 0);
+    --muted: oklch(0.922 0 0);
+    --muted-fg: oklch(0.556 0 0);
+    --border: oklch(0.87 0 0);
+    --accent: oklch(0.5 0.2 250);
+    --accent-subtle: oklch(0.92 0.04 250);
+    --accent-fg: oklch(0.985 0 0);
+    --green: oklch(0.45 0.18 160);
+    --green-bg: oklch(0.92 0.04 160);
+    --red: oklch(0.55 0.23 25);
+    --red-bg: oklch(0.95 0.06 25);
+    --orange: oklch(0.6 0.18 85);
+    --orange-bg: oklch(0.95 0.06 85);
+    --surface: oklch(0.97 0 0);
+    --surface-hover: oklch(0.95 0 0);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font-sans: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  }
+
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, oklch(0.205 0 0) 0%, oklch(0.25 0.02 250) 100%);
+    color: oklch(0.985 0 0);
+    padding: 72px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.5 0.2 250 / 0.15), transparent 65%);
+  }
+  .header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    background: oklch(1 0 0 / 0.15);
+    border: 1px solid oklch(1 0 0 / 0.2);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 16px;
+  }
+  .page-header h1 {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .page-header p {
+    font-size: 15px;
+    color: oklch(1 0 0 / 0.6);
+    max-width: 560px;
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  section { margin-bottom: 72px; }
+  .section-title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted-fg);
+    margin-bottom: 28px;
+  }
+
+  /* ═══ Compare Header ═══ */
+  .compare-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .compare-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .compare-label.before {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid oklch(0.55 0.23 25 / 0.2);
+  }
+  .compare-label.after {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid oklch(0.45 0.18 160 / 0.2);
+  }
+  .compare-label .count {
+    margin-left: auto;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* ═══ Component Card Grid ═══ */
+  .component-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .cmp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .cmp-card:hover { box-shadow: 0 2px 12px oklch(0 0 0 / 0.06); }
+
+  .cmp-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .cmp-name { font-weight: 600; }
+  .cmp-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+    margin-left: auto;
+  }
+  .tag-affected { background: var(--green-bg); color: var(--green); }
+  .tag-unaffected { background: var(--red-bg); color: var(--red); }
+  .tag-new { background: var(--orange-bg); color: var(--orange); }
+
+  .cmp-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cmp-swatches {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--muted-fg);
+  }
+  .swatch-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid oklch(0 0 0 / 0.08);
+  }
+  .cmp-preview {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .cmp-preview .btn {
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-weight: 500;
+    cursor: default;
+    font-family: var(--font-sans);
+  }
+  .cmp-preview .btn-primary { background: var(--primary, oklch(0.5 0.2 250)); color: oklch(0.985 0 0); }
+  .cmp-preview .btn-secondary { background: var(--secondary, oklch(0.92 0 0)); color: var(--fg); border-color: var(--border, oklch(0.87 0 0)); }
+  .cmp-preview .btn-outline { background: transparent; color: var(--primary, oklch(0.5 0.2 250)); border-color: var(--primary, oklch(0.5 0.2 250)); }
+  .cmp-preview .btn-ghost { background: transparent; color: var(--fg); }
+  .cmp-preview .btn-destructive { background: oklch(0.55 0.23 25); color: oklch(0.985 0 0); }
+  .cmp-preview .badge {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .cmp-preview .badge-primary { background: var(--primary, oklch(0.5 0.2 250)); color: oklch(0.985 0 0); }
+  .cmp-preview .badge-secondary { background: var(--secondary, oklch(0.92 0 0)); color: var(--fg); }
+  .cmp-preview .badge-outline { background: transparent; border: 1px solid var(--border); }
+  .cmp-preview .input-demo {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--input, oklch(0.87 0 0));
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    width: 140px;
+  }
+  .cmp-preview .chip {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: var(--muted, oklch(0.92 0 0));
+  }
+  .cmp-preview .bar {
+    height: 6px;
+    border-radius: 3px;
+  }
+  .cmp-preview .bar-muted { background: var(--muted, oklch(0.92 0 0)); }
+  .cmp-preview .bar-primary { background: var(--primary, oklch(0.5 0.2 250)); width: 60%; }
+
+  .cmp-vars {
+    font-size: 11px;
+    color: var(--muted-fg);
+    font-family: var(--font-mono);
+    line-height: 1.8;
+  }
+  .cmp-vars code {
+    background: oklch(0 0 0 / 0.04);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted-fg);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .legend-dot.green { background: var(--green); }
+  .legend-dot.red { background: var(--red); }
+  .legend-dot.orange { background: var(--orange); }
+
+  .summary-box {
+    background: linear-gradient(135deg, oklch(0.95 0.03 250 / 0.3), oklch(0.95 0.03 160 / 0.3));
+    border: 1px solid oklch(0.5 0.2 250 / 0.15);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+  }
+  .summary-box h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .summary-box p {
+    font-size: 14px;
+    color: var(--muted-fg);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .summary-big {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 16px 0;
+    background: linear-gradient(135deg, var(--green), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .summary-big span { font-size: 20px; font-weight: 400; -webkit-text-fill-color: var(--muted-fg); }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  @media (max-width: 700px) {
+    .compare-bar,
+    .component-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-badge">DES-007</div>
+    <h1>主题色影响范围</h1>
+    <p>L1/L2/L3 变量分层改造前后对比 —— 从"只影响按钮"到"覆盖 30+ 组件"</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══ 变更概览 ═══ -->
+  <section>
+    <div class="compare-bar">
+      <div class="compare-label before">
+        <span>⬤</span> 改造前
+        <span class="count">2 组</span>
+      </div>
+      <div class="compare-label after">
+        <span>⬤</span> 改造后
+        <span class="count">12+ 组</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:-16px;margin-bottom:0;">
+      每个卡片展示一个组件组在主题切换时的表现。⚡ = 新增受影响
+    </p>
+  </section>
+
+  <!-- ═══ 组件对比网格 ═══ -->
+  <section>
+
+    <div class="component-grid">
+
+      <!-- 1. Button Primary -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Button</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <span class="btn btn-primary">主要</span>
+            <span class="btn btn-secondary">次要</span>
+            <span class="btn btn-outline">描边</span>
+            <span class="btn btn-ghost">幽灵</span>
+            <span class="btn btn-destructive">删除</span>
+          </div>
+          <div class="cmp-vars">
+            <code>--primary</code> ·
+            <code>--secondary</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--ring</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--destructive</code> ❌
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Badge -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Badge</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <span class="badge badge-primary">进行中</span>
+            <span class="badge badge-secondary">草稿</span>
+            <span class="badge badge-outline">已归档</span>
+          </div>
+          <div class="cmp-vars">
+            <code>--primary</code> ·
+            <code>--secondary</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--border</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Input / Select / Textarea -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Input · Select · Combobox</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <input class="input-demo" placeholder="请输入..." value="示例文本" readonly>
+            <span class="chip">下拉选项</span>
+          </div>
+          <div class="cmp-vars">
+            <code>--border</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--input</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--ring</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Tabs / NavigationMenu -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Tabs · NavMenu</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <span class="chip" style="background:var(--muted);font-weight:600;">概览</span>
+            <span class="chip" style="background:var(--bg);">项目</span>
+            <span class="chip" style="background:var(--bg);">设置</span>
+          </div>
+          <div class="cmp-vars">
+            <code>--muted</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--muted-foreground</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. DropdownMenu · Popover · HoverCard -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Dropdown · Popover</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <span class="chip" style="background:var(--bg);border:1px solid var(--border);">操作 ▼</span>
+            <div style="display:flex;flex-direction:column;gap:2px;padding:6px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:11px;">
+              <span style="padding:3px 8px;border-radius:4px;background:var(--accent-subtle,oklch(0.92 0.04 250));">编辑</span>
+              <span style="padding:3px 8px;">删除</span>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--popover</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--popover-foreground</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Card · Dialog · Sheet -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Card · Dialog · Sheet</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;gap:8px;align-items:center;width:100%;">
+              <div style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);">
+                <div style="font-size:11px;font-weight:600;">确认删除？</div>
+                <div style="font-size:10px;color:var(--muted-fg);">此操作不可撤销</div>
+              </div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--card</code> ·
+            <code>--border</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Alert · Skeleton -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Alert · Skeleton</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;flex-direction:column;gap:6px;width:100%;">
+              <div style="display:flex;gap:8px;align-items:start;">
+                <div style="width:16px;height:16px;border-radius:4px;background:var(--accent-subtle,oklch(0.92 0.04 250));flex-shrink:0;"></div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;">提示信息</div>
+                  <div class="bar bar-muted" style="width:140px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--muted</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--accent</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Table -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Table</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;flex-direction:column;gap:4px;width:100%;font-size:10px;">
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;padding:4px 8px;background:var(--muted);border-radius:4px;font-weight:600;">
+                <span>门店名称</span><span>状态</span><span>金额</span>
+              </div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;padding:4px 8px;">
+                <span>旗舰店</span><span class="badge badge-primary" style="font-size:9px;">运营中</span><span>¥12,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--muted</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--border</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Charts -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Charts (Recharts)</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;gap:8px;align-items:flex-end;height:50px;width:100%;padding:4px 0;">
+              <div style="flex:1;height:30px;border-radius:3px 3px 0 0;background:var(--chart-1,oklch(0.55 0.2 250));"></div>
+              <div style="flex:1;height:42px;border-radius:3px 3px 0 0;background:var(--chart-2,oklch(0.6 0.15 200));"></div>
+              <div style="flex:1;height:20px;border-radius:3px 3px 0 0;background:var(--chart-3,oklch(0.45 0.12 320));"></div>
+              <div style="flex:1;height:36px;border-radius:3px 3px 0 0;background:var(--chart-4,oklch(0.65 0.15 80));"></div>
+              <div style="flex:1;height:26px;border-radius:3px 3px 0 0;background:var(--chart-5,oklch(0.6 0.15 30));"></div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--chart-1</code> ~ <code>--chart-5</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Sidebar -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Sidebar (hover / active)</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;flex-direction:column;gap:4px;width:100%;font-size:11px;">
+              <div style="padding:6px 10px;border-radius:6px;background:var(--accent-subtle,oklch(0.92 0.04 250));font-weight:600;">仪表盘</div>
+              <div style="padding:6px 10px;border-radius:6px;">项目列表</div>
+              <div style="padding:6px 10px;border-radius:6px;background:var(--muted);">设置</div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--sidebar-accent</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--sidebar-ring</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Accordion · Separator -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">Accordion · Separator</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;flex-direction:column;gap:4px;width:100%;font-size:11px;">
+              <div style="display:flex;justify-content:space-between;padding:4px 0;">
+                <span>基本信息</span><span style="color:var(--muted-fg);">⌄</span>
+              </div>
+              <div style="height:1px;background:var(--border);width:100%;"></div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;">
+                <span>高级设置</span><span style="color:var(--muted-fg);">›</span>
+              </div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--border</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. ScrollArea · Command (Kbd) -->
+      <div class="cmp-card">
+        <div class="cmp-head">
+          <span class="cmp-name">ScrollArea · Command</span>
+          <span class="cmp-tag tag-unaffected">未受影响</span>
+          <span class="cmp-tag tag-affected">已受影响</span>
+          <span style="font-size:11px;color:var(--muted-fg);margin-left:auto;">before → after</span>
+        </div>
+        <div class="cmp-body">
+          <div class="cmp-preview">
+            <div style="display:flex;flex-direction:column;gap:4px;width:100%;font-size:11px;">
+              <div style="padding:6px 10px;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;">
+                <span style="color:var(--muted-fg);">搜索门店...</span>
+                <kbd style="font-size:9px;padding:1px 5px;border:1px solid var(--border);border-radius:4px;background:var(--muted);">⌘K</kbd>
+              </div>
+              <div style="padding:4px 10px;background:var(--accent-subtle,oklch(0.92 0.04 250));border-radius:4px;">
+                旗舰店
+              </div>
+            </div>
+          </div>
+          <div class="cmp-vars">
+            <code>--border</code><span style="color:var(--orange);">⚡</span> ·
+            <code>--muted</code><span style="color:var(--orange);">⚡</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot green"></span> 受影响（已有）</span>
+      <span class="legend-item"><span class="legend-dot orange"></span> 新增受影响（⚡）</span>
+      <span class="legend-item"><span class="legend-dot red"></span> 不受影响</span>
+    </div>
+  </section>
+
+  <!-- ═══ 汇总 ═══ -->
+  <section>
+    <div class="summary-box">
+      <h3>改造效果</h3>
+      <div>
+        <span class="summary-big">2 → 12+ <span>组件组</span></span>
+      </div>
+      <p>
+        从"只影响按钮"扩展到影响输入框、选择器、徽标、标签页、下拉菜单、弹出卡片、弹窗边框、图表色板、侧边栏悬停态等 <strong>30+ 组件</strong>。
+        每次主题切换将带来<strong>一致的品牌感知</strong>，而非只改一个按钮颜色。
+      </p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

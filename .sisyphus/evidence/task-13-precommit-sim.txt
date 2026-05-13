@@ -1,5 +1,0 @@
-Pre-commit simulation: lint-staged + tsc --noEmit
-error: unknown option '--dry-run'
-
-zsh:1: command not found: tsc
-Done

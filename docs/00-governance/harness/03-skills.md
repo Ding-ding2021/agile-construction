@@ -1,290 +1,249 @@
 ---
-id: DOC-GOVERNANCE-HARNESS-
-number: GOV-016
+id: DOC-00-GOVERNANCE-HARNESS-SKILLS
+number: GOV-013
 domain: governance
 category: harness
-title: 技能体系
+title: Harness 技能映射
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-12
+last_updated: 2026-05-13
 source_of_truth: true
-related_code: []
-related_docs: []
-registry_ref: .harness/registry.yaml#skills
+related_code:
+  - .agents/skills/
+  - .trae/agents/product-manager.yaml
+  - .trae/agents/designer.yaml
+  - .trae/agents/developer.yaml
+  - .trae/agents/tester.yaml
+related_docs:
+  - docs/00-governance/harness/00-overview.md
+  - docs/00-governance/harness/02-roles.md
+  - docs/artifacts/workflow-skill-mapping.md
+  - .agents/skills/README.md
 ---
 
-# 技能体系
+# Harness 技能映射
 
-## 概述
+## Clause 1. 技能体系总则
 
-79 个技能按四大专业分配（另含 24 个飞书集成技能）。技能分为本地文件（SKILL.md）和内置 IDE 技能（Skill tool）两类。
+**1.1 [强制]** 所有技能统一存放在 `.agents/skills/`，扁平结构（无子目录嵌套）。
 
----
+**1.2 [强制]** 每收到新用户意图，必须首先查阅本文档第 3 章（触发场景 → Skill）和第 4 章（角色 → Skill）映射表。
 
-## 技能分布
+**1.3 [强制]** 15-call 自检：强制检查核心技能是否加载。
 
-| 来源               | 路径 / 来源                  | 本地文件 | 备注                                  |
-| ------------------ | ---------------------------- | -------- | ------------------------------------- |
-| 项目技能           | `.agents/skills/`            | 34       | 14 顶层 + 6 GitNexus + 14 Superpowers |
-| 全局设计技能       | `~/.config/opencode/skills/` | 23       | 24 去重 chinese-language              |
-| Claude 技能        | `~/.claude/skills/`          | 1        | 仅 `code-comprehension`               |
-| **本地文件总计**   |                              | **58**   |                                       |
-| 内置 IDE 技能      | Skill tool                   | +21      | 分配到各专业的非文件技能              |
-| **总计（含内置）** |                              | **79**   |                                       |
-
----
-
-## 林墨 · 产品经理（27 个技能）
-
-### 流程控制（12）
-
-| 技能                             | 触发时机                 | 阶段 |
-| -------------------------------- | ------------------------ | ---- |
-| `brainstorming`                  | 需求不清晰、需要探索方案 | 定义 |
-| `spec-driven-development`        | 需要输出正式规格         | 定义 |
-| `idea-refine`                    | 模糊想法需要精炼         | 定义 |
-| `using-superpowers`              | 启动会话、技能入口       | 全程 |
-| `using-agent-skills`             | 不确定哪个 skill 适用    | 全程 |
-| `find-skills-x`                  | AI 驱动技能搜索          | 全程 |
-| `skill-creator`                  | 创建/修改/测试技能       | 进化 |
-| `writing-skills`                 | 编写技能的技能           | 进化 |
-| `planning-and-task-breakdown`    | spec 就绪，要拆任务      | 规划 |
-| `writing-plans`                  | 编写实现计划             | 规划 |
-| `executing-plans`                | 执行实现计划             | 构建 |
-| `verification-before-completion` | 声称完成前自检           | 构建 |
-
-### Squad 管理（5）
-
-| 技能                       | 触发时机     | 阶段 |
-| -------------------------- | ------------ | ---- |
-| `squad-pre-dev-evaluation` | 发起评审小组 | 定义 |
-| `squad-post-dev-review`    | 发起验收小组 | 评审 |
-| `code-review-and-quality`  | 代码质量审查 | 评审 |
-| `receiving-code-review`    | 接收审查反馈 | 评审 |
-| `requesting-code-review`   | 请求代码审查 | 评审 |
-
-### 交付运维（4）
-
-| 技能                             | 触发时机           | 阶段 |
-| -------------------------------- | ------------------ | ---- |
-| `shipping-and-launch`            | 准备上线           | 交付 |
-| `ci-cd-and-automation`           | 配置 CI/CD 流水线  | 交付 |
-| `git-workflow-and-versioning`    | 分支管理、提交规范 | 交付 |
-| `finishing-a-development-branch` | 开发完成、决定合入 | 交付 |
-
-### 基础支撑（4）
-
-| 技能                  | 触发时机               | 阶段      |
-| --------------------- | ---------------------- | --------- |
-| `context-engineering` | 优化 Agent 上下文      | 全程      |
-| `website-audit`       | 网站系统分析           | 定义      |
-| `code-comprehension`  | 非技术化理解代码       | 定义/评审 |
-| `document-sync`       | 文档变更后同步 AI 合约 | 全程      |
-
-### 共享技能（3）
-
-| 技能                             | 共享方 | 产品用来做什么 |
-| -------------------------------- | ------ | -------------- |
-| `documentation-and-adrs`         | 开发   | 管理文档体系   |
-| `customer-journey`               | 设计   | 分析用户旅程   |
-| `verification-before-completion` | 测试   | 完成确认       |
+**1.4 [强制]** 跳过 Skill 直接行动 = 违规，需在 memory/ 中记录。
 
 ---
 
-## 苏染 · UI设计师（33 个技能）
+## Clause 2. 技能分类与存储
 
-### 设计工程（8）
+**2.1 [参考]** 技能分类体系：
 
-| 技能                      | 触发时机              | 阶段      |
-| ------------------------- | --------------------- | --------- |
-| `frontend-design`         | 构建 UI 界面          | 构建      |
-| `ui-layout-rules`         | 布局/间距/色值检查    | 构建/评审 |
-| `frontend-ui-animator`    | 添加动效/过渡         | 构建      |
-| `frontend-ui-engineering` | UI 工程               | 构建      |
-| `shadcn-ui`               | shadcn 组件使用       | 构建      |
-| `shadcn-management`       | 安装/管理 shadcn 组件 | 构建      |
-| `clone-website`           | 复制网站设计          | 构建      |
-| `web-artifacts-builder`   | 原型/演示             | 定义/构建 |
+| 类型     | 说明                     | 示例                                                                          |
+| -------- | ------------------------ | ----------------------------------------------------------------------------- |
+| 核心强制 | 无论什么任务，必须调用   | `karpathy-guidelines`、`document-sync`、`verification-before-completion`      |
+| 角色专属 | 特定角色在特定场景下使用 | 产品经理：`brainstorming`、`find-skills-x`；开发：`deprecation-and-migration` |
+| 场景触发 | 特定场景自动触发         | `code-review-and-quality`、`debugging-and-error-recovery`                     |
 
-### 设计基础（11）
+**2.2 [强制]** 技能目录结构：
 
-| 技能                 | 触发时机                   |
-| -------------------- | -------------------------- |
-| `ui-design`          | 布局、组件、层次、设计令牌 |
-| `ux-design`          | 用户研究、交互、信息架构   |
-| `design-process`     | 简报→线框→原型→交接        |
-| `design-trends`      | 2026 设计趋势              |
-| `visual-direction`   | 调色板、字体配对、视觉语言 |
-| `color-theory`       | 60-30-10、语义色彩、WCAG   |
-| `web-typography`     | 字体、排版比例、行高       |
-| `responsive-design`  | 移动优先、断点、流体       |
-| `component-patterns` | 复合组件、变体系统         |
-| `ui-patterns`        | 英雄区/导航/卡片/CTA       |
-| `navigation-design`  | 菜单、面包屑、搜索         |
+```
+.agents/skills/
+  <skill-name>/
+    SKILL.md       # 技能定义
+    scripts/       # 可选辅助脚本
+```
 
-### 品牌与质量（6）
-
-| 技能                 | 触发时机           |
-| -------------------- | ------------------ |
-| `branding-identity`  | 品牌策略、视觉识别 |
-| `images-media`       | 图像策略、SVG      |
-| `accessibility`      | WCAG 2.1 AA        |
-| `usability`          | Nielsen 启发式     |
-| `ai-design-workflow` | AI 设计流程        |
-| `customer-journey`   | 用户旅程           |
-
-### 专项审查（3）
-
-| 技能               | 触发时机      |
-| ------------------ | ------------- |
-| `landing-pages`    | 转化优化      |
-| `agent-ui-design`  | Agent 聊天 UI |
-| `webdesign-review` | 元设计审查    |
-
-### 共享技能（5）
-
-| 技能                            | 共享方 |
-| ------------------------------- | ------ |
-| `browser-testing-with-devtools` | 测试   |
-| `shadcn-ui`                     | 开发   |
-| `frontend-ui-engineering`       | 开发   |
-| `squad-pre-dev-evaluation`      | 全专业 |
-| `squad-post-dev-review`         | 全专业 |
+详见 [document-governance.md §6.1](../document-governance.md#61-%E5%A4%AE%E5%A4%AE%E4%BB%93%E5%BA%93)。
 
 ---
 
-## 陈锋 · 开发工程师（35 个技能）
+## Clause 3. 触发场景映射
 
-### 编码实现（6）
+**3.1 [强制]** 以下场景必须调用对应的列出的技能（至少调用一个匹配的）：
 
-| 技能                          | 触发时机           | 阶段      |
-| ----------------------------- | ------------------ | --------- |
-| `karpathy-guidelines`         | 任何编码前（强制） | 规划/构建 |
-| `incremental-implementation`  | 多文件实现         | 构建      |
-| `test-driven-development`     | 测试先行           | 构建      |
-| `subagent-driven-development` | 子代理执行         | 构建      |
-| `source-driven-development`   | 权威文档引用       | 构建      |
-| `code-simplification`         | 重构简化           | 构建      |
+### 3.1 需求阶段
 
-### 前端工程（5）
+| 条款  | 场景                | 应调用 Skill                               |
+| ----- | ------------------- | ------------------------------------------ |
+| 3.1.1 | 需求模糊，需要澄清  | `brainstorming`、`spec-driven-development` |
+| 3.1.2 | 需要评估不同方案    | `doubt-driven-development`                 |
+| 3.1.3 | 设计 API 或接口契约 | `api-and-interface-design`                 |
+| 3.1.4 | 分析用户行为路径    | `customer-journey`                         |
+| 3.1.5 | 用户旅程、触点映射  | `customer-journey`                         |
+| 3.1.6 | 需要发现可用的技能  | `find-skills-x`、`using-agent-skills`      |
 
-| 技能                      | 触发时机         |
-| ------------------------- | ---------------- |
-| `frontend-ui-engineering` | UI 组件/页面     |
-| `frontend-ui-integration` | 前端对接后端 API |
-| `shadcn-ui`               | shadcn 组件      |
-| `shadcn-management`       | shadcn 安装管理  |
-| `clone-website`           | 网站克隆         |
+### 3.2 规划阶段
 
-### 架构与后端（7）
+| 条款  | 场景             | 应调用 Skill                       |
+| ----- | ---------------- | ---------------------------------- |
+| 3.2.1 | 将需求拆解为任务 | `planning-and-task-breakdown`      |
+| 3.2.2 | 制定实施计划     | `writing-plans`、`executing-plans` |
+| 3.2.3 | 需要 TDD 工作流  | `test-driven-development`          |
+| 3.2.4 | 需要增量交付     | `incremental-implementation`       |
 
-| 技能                        | 触发时机           |
-| --------------------------- | ------------------ |
-| `api-and-interface-design`  | API 设计           |
-| `doubt-driven-development`  | 高风险决策对抗审查 |
-| `security-and-hardening`    | 安全加固           |
-| `performance-optimization`  | 性能优化           |
-| `deprecation-and-migration` | 废弃迁移           |
-| `documentation-and-adrs`    | ADR 架构决策       |
-| `rsc-data-optimizer`        | RSC 数据优化       |
+### 3.3 编码阶段
 
-### 代码管理与分析（8）
+| 条款   | 场景              | 应调用 Skill                                                               |
+| ------ | ----------------- | -------------------------------------------------------------------------- |
+| 3.3.1  | 修改代码前        | `karpathy-guidelines`                                                      |
+| 3.3.2  | 任何代码修改前    | `karpathy-guidelines`（硬性强制）                                          |
+| 3.3.3  | 构建 Web UI       | `web-dev`、`frontend-design`、`frontend-ui-engineering`                    |
+| 3.3.4  | 基于 Figma 开发   | `frontend-developer`                                                       |
+| 3.3.5  | 添加动画效果      | `frontend-ui-animator`                                                     |
+| 3.3.6  | 安装 shadcn 组件  | `shadcn-management`、`shadcn-ui`                                           |
+| 3.3.7  | 克隆现有网站      | `clone-website`                                                            |
+| 3.3.8  | 重构代码          | `code-simplification`、`deprecation-and-migration`、`gitnexus-refactoring` |
+| 3.3.9  | 编写测试          | `test-driven-development`                                                  |
+| 3.3.10 | 写 Excel 处理代码 | `xlsx`                                                                     |
+| 3.3.11 | 写 PDF 处理代码   | `pdf`                                                                      |
 
-| 技能                       | 触发时机      |
-| -------------------------- | ------------- |
-| `using-git-worktrees`      | 工作树隔离    |
-| `context-engineering`      | 上下文配置    |
-| `gitnexus-cli`             | 代码索引      |
-| `gitnexus-debugging`       | 知识图谱调试  |
-| `gitnexus-exploring`       | 代码探索      |
-| `gitnexus-guide`           | GitNexus 参考 |
-| `gitnexus-impact-analysis` | 影响分析      |
-| `gitnexus-refactoring`     | 安全重构      |
+### 3.4 调试阶段
 
-### 共享技能（4）
+| 条款  | 场景            | 应调用 Skill                                                                 |
+| ----- | --------------- | ---------------------------------------------------------------------------- |
+| 3.4.1 | 遇到 Bug 或错误 | `debugging-and-error-recovery`、`systematic-debugging`、`gitnexus-debugging` |
+| 3.4.2 | 性能问题        | `performance-optimization`                                                   |
+| 3.4.3 | 浏览器端调试    | `browser-testing-with-devtools`                                              |
 
-| 技能                       | 共享方 |
-| -------------------------- | ------ |
-| `frontend-ui-engineering`  | 设计   |
-| `shadcn-ui`                | 设计   |
-| `test-driven-development`  | 测试   |
-| `squad-pre-dev-evaluation` | 全专业 |
+### 3.5 审查阶段
 
----
+| 条款  | 场景         | 应调用 Skill                                                                     |
+| ----- | ------------ | -------------------------------------------------------------------------------- |
+| 3.5.1 | 代码审查     | `code-review-and-quality`、`code-reviewer（代码审查）`、`requesting-code-review` |
+| 3.5.2 | 收到审查反馈 | `receiving-code-review`                                                          |
+| 3.5.3 | 安全审查     | `security-and-hardening`                                                         |
 
-## 周严 · 测试工程师（12 个技能）
+### 3.6 文档阶段
 
-| 技能                            | 触发时机     | 阶段 |
-| ------------------------------- | ------------ | ---- |
-| `browser-testing-with-devtools` | 浏览器验证   | 测试 |
-| `debugging-and-error-recovery`  | Bug 排查定位 | 测试 |
-| `systematic-debugging`          | 系统化调试   | 测试 |
-| `dispatching-parallel-agents`   | 并行测试     | 测试 |
-| `usability`                     | 可用性评估   | 评审 |
+| 条款  | 场景         | 应调用 Skill                |
+| ----- | ------------ | --------------------------- |
+| 3.6.1 | 文档变更后   | `document-sync`（硬性强制） |
+| 3.6.2 | 记录架构决策 | `documentation-and-adrs`    |
+| 3.6.3 | 编辑画板     | `lark-whiteboard`           |
 
-### 共享技能
+### 3.7 交付阶段
 
-| 技能                             | 共享方    | 测试用来做什么 |
-| -------------------------------- | --------- | -------------- |
-| `test-driven-development`        | 开发      | TDD 规范审查   |
-| `code-review-and-quality`        | 产品/开发 | 质量审查       |
-| `verification-before-completion` | 产品      | 完成验证       |
-| `browser-testing-with-devtools`  | 设计      | 浏览器测试     |
-| `squad-pre-dev-evaluation`       | 全专业    | 测试评审       |
-| `squad-post-dev-review`          | 全专业    | 测试验收       |
+| 条款  | 场景           | 应调用 Skill                                 |
+| ----- | -------------- | -------------------------------------------- |
+| 3.7.1 | 声称工作完成前 | `verification-before-completion`（硬性强制） |
+| 3.7.2 | 准备生产发布   | `shipping-and-launch`                        |
+| 3.7.3 | 最终验收       | `squad-post-dev-review`                      |
+| 3.7.4 | 提交代码       | `git-workflow-and-versioning`                |
 
----
+### 3.8 其他场景
 
-## 飞书集成技能（24 个，`~/.claude/skills/`）
-
-飞书（Lark）技能尚未分配专业归属，当前作为独立工具集存在，供需要飞书操作时按需加载。
-
-| 技能                            | 用途             | 建议归属  |
-| ------------------------------- | ---------------- | --------- |
-| `lark-approval`                 | 飞书审批 API     | 产品/测试 |
-| `lark-attendance`               | 飞书考勤打卡     | 产品      |
-| `lark-base`                     | 飞书多维表格     | 全专业    |
-| `lark-calendar`                 | 飞书日历日程     | 全专业    |
-| `lark-contact`                  | 飞书通讯录       | 全专业    |
-| `lark-doc`                      | 飞书云文档       | 全专业    |
-| `lark-drive`                    | 飞书云空间       | 全专业    |
-| `lark-event`                    | 飞书事件订阅     | 开发      |
-| `lark-im`                       | 飞书即时通讯     | 全专业    |
-| `lark-mail`                     | 飞书邮箱         | 全专业    |
-| `lark-markdown`                 | 飞书 Markdown    | 全专业    |
-| `lark-minutes`                  | 飞书妙记         | 全专业    |
-| `lark-okr`                      | 飞书 OKR         | 产品      |
-| `lark-openapi-explorer`         | 飞书原生 OpenAPI | 开发      |
-| `lark-shared`                   | 飞书 CLI 基础    | 开发      |
-| `lark-sheets`                   | 飞书电子表格     | 全专业    |
-| `lark-skill-maker`              | 飞书 Skill 制作  | 产品/开发 |
-| `lark-slides`                   | 飞书幻灯片       | 设计      |
-| `lark-task`                     | 飞书任务         | 产品      |
-| `lark-vc`                       | 飞书视频会议     | 全专业    |
-| `lark-vc-agent`                 | 飞书会议 Agent   | 开发/测试 |
-| `lark-whiteboard`               | 飞书画板         | 设计      |
-| `lark-wiki`                     | 飞书知识库       | 全专业    |
-| `lark-workflow-meeting-summary` | 飞书会议纪要     | 产品      |
-| `lark-workflow-standup-report`  | 飞书日程待办     | 产品      |
+| 条款  | 场景              | 应调用 Skill                                                                                                                                   |
+| ----- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| 3.8.1 | 优化 Agent 上下文 | `context-engineering`                                                                                                                          |
+| 3.8.2 | 设置或修改 CI/CD  | `ci-cd-and-automation`                                                                                                                         |
+| 3.8.3 | 需要 UI 设计      | `frontend-ui-integration`                                                                                                                      |
+| 3.8.4 | 需要主题设计      | `ui-layout-rules`                                                                                                                              |
+| 3.8.5 | 飞书相关操作      | `lark-base`、`lark-calendar`、`lark-doc`、`lark-drive`、`lark-im`、`lark-sheets`、`lark-task`、`lark-vc`、`lark-wiki`、`lark-openapi-explorer` |
+| 3.8.6 | 创建或修改技能    | `skill-creator`、`writing-skills`                                                                                                              |
 
 ---
 
-## 共享技能交叉表
+## Clause 4. 角色技能分配
 
-| 技能                             | 产品 | 设计 | 开发 | 测试 |
-| -------------------------------- | ---- | ---- | ---- | ---- |
-| `frontend-ui-engineering`        |      | ●    | ●    |      |
-| `shadcn-ui`                      |      | ●    | ●    |      |
-| `shadcn-management`              |      | ●    | ●    |      |
-| `clone-website`                  |      | ●    | ●    |      |
-| `browser-testing-with-devtools`  |      | ●    |      | ●    |
-| `squad-pre-dev-evaluation`       | ●    | ●    | ●    | ●    |
-| `squad-post-dev-review`          |      | ●    | ●    | ●    |
-| `test-driven-development`        |      |      | ●    | ●    |
-| `code-review-and-quality`        | ●    |      |      | ●    |
-| `context-engineering`            | ●    |      | ●    |      |
-| `documentation-and-adrs`         | ●    |      | ●    |      |
-| `document-sync`                  | ●    |      |      |      |
-| `verification-before-completion` | ●    |      |      | ●    |
-| `customer-journey`               | ●    | ●    |      |      |
-| `usability`                      |      | ●    |      | ●    |
+**4.1 [强制]** 每个角色必须加载对应技能库。以下为角色技能清单：
+
+### 4.1 产品经理（林墨）
+
+| 条款   | 技能                             | 用途               |
+| ------ | -------------------------------- | ------------------ |
+| 4.1.1  | `brainstorming`                  | 需求澄清、方案探索 |
+| 4.1.2  | `spec-driven-development`        | 规格说明编写       |
+| 4.1.3  | `customer-journey`               | 用户旅程分析       |
+| 4.1.4  | `doubt-driven-development`       | 对抗性审查         |
+| 4.1.5  | `planning-and-task-breakdown`    | 任务拆解           |
+| 4.1.6  | `writing-plans`                  | 制定计划           |
+| 4.1.7  | `executing-plans`                | 执行计划           |
+| 4.1.8  | `document-sync`                  | 文档同步           |
+| 4.1.9  | `documentation-and-adrs`         | 决策记录           |
+| 4.1.10 | `verification-before-completion` | 完成前验证         |
+| 4.1.11 | `code-review-and-quality`        | 代码审查           |
+| 4.1.12 | `api-and-interface-design`       | 接口设计           |
+| 4.1.13 | `find-skills-x`                  | 技能发现           |
+| 4.1.14 | `skill-creator`                  | 技能创建           |
+| 4.1.15 | `using-agent-skills`             | 技能调用           |
+| 4.1.16 | `shipping-and-launch`            | 发布管理           |
+| 4.1.17 | `idea-refine`                    | 想法精炼           |
+
+### 4.2 UI 设计师（苏染）
+
+| 条款  | 技能                      | 用途            |
+| ----- | ------------------------- | --------------- |
+| 4.2.1 | `frontend-design`         | 前端设计        |
+| 4.2.2 | `frontend-ui-engineering` | UI 工程         |
+| 4.2.3 | `shadcn-management`       | shadcn 组件管理 |
+| 4.2.4 | `shadcn-ui`               | shadcn UI       |
+| 4.2.5 | `frontend-ui-animator`    | 动画设计        |
+| 4.2.6 | `ui-layout-rules`         | 布局规则        |
+| 4.2.7 | `clone-website`           | 网站克隆        |
+| 4.2.8 | `web-artifacts-builder`   | Web 构建        |
+
+### 4.3 开发工程师（陈锋）
+
+| 条款   | 技能                            | 用途         |
+| ------ | ------------------------------- | ------------ |
+| 4.3.1  | `karpathy-guidelines`           | 编码前思考   |
+| 4.3.2  | `test-driven-development`       | 测试驱动开发 |
+| 4.3.3  | `incremental-implementation`    | 增量实现     |
+| 4.3.4  | `code-simplification`           | 代码简化     |
+| 4.3.5  | `deprecation-and-migration`     | 废弃迁移     |
+| 4.3.6  | `debugging-and-error-recovery`  | 调试         |
+| 4.3.7  | `systematic-debugging`          | 系统调试     |
+| 4.3.8  | `performance-optimization`      | 性能优化     |
+| 4.3.9  | `security-and-hardening`        | 安全加固     |
+| 4.3.10 | `rsc-data-optimizer`            | 数据获取优化 |
+| 4.3.11 | `browser-testing-with-devtools` | 浏览器调试   |
+| 4.3.12 | `git-workflow-and-versioning`   | Git 工作流   |
+
+### 4.4 测试工程师（周严）
+
+| 条款  | 技能                            | 用途         |
+| ----- | ------------------------------- | ------------ |
+| 4.4.1 | `test-driven-development`       | 测试驱动开发 |
+| 4.4.2 | `debugging-and-error-recovery`  | 调试         |
+| 4.4.3 | `systematic-debugging`          | 系统调试     |
+| 4.4.4 | `browser-testing-with-devtools` | 浏览器测试   |
+
+---
+
+## Clause 5. 执行规则
+
+**5.1 [强制]** 场景映射优先级：先查 Clause 3（触发场景 → Skill），再查 Clause 4（角色 → Skill）。
+
+**5.2 [强制]** 硬性强制技能不可跳过：
+
+| 条款  | 技能                             | 触发场景                  |
+| ----- | -------------------------------- | ------------------------- |
+| 5.2.1 | `karpathy-guidelines`            | 任何代码修改前            |
+| 5.2.2 | `document-sync`                  | 任何 `docs/` 下文档变更后 |
+| 5.2.3 | `verification-before-completion` | 声称完成前                |
+
+**5.3 [推荐]** 如果找不到匹配场景，使用 `find-skills-x` 或 `using-agent-skills` 进行技能发现。
+
+**5.4 [强制]** 技能加载失败时，不得绕行，必须记录到 `memory/`。
+
+---
+
+## Clause 6. 技能维护
+
+**6.1 [强制]** 产品经理（林墨）负责维护 Harness 框架及技能体系，包括：
+
+| 条款  | 职责                                              |
+| ----- | ------------------------------------------------- |
+| 6.1.1 | 新增技能时更新本文档 Clause 3 和 Clause 4         |
+| 6.1.2 | 删除废弃技能时从本文档去除                        |
+| 6.1.3 | 定期检查 `.agents/skills/` 目录与实际技能的一致性 |
+| 6.1.4 | 测试调用路径，确保映射关系有效                    |
+
+**6.2 [推荐]** 每月对技能体系做一次健康检查：
+
+| 条款  | 检查项                       |
+| ----- | ---------------------------- |
+| 6.2.1 | 是否有新增场景未映射到技能   |
+| 6.2.2 | 是否有废弃技能仍被引用       |
+| 6.2.3 | 是否有技能 SKILL.md 需要更新 |

@@ -1,178 +1,180 @@
 ---
-id: DOC-00-GOVERNANCE-QUALITY-METRICS
-number: GOV-007
+id: DOC-GOVERNANCE-QUALITY-METRICS
+number: GOV-008
 domain: governance
-category: metrics
-title: AI 开发质量指标体系
+category: quality
+title: 质量度量指标
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-07
+last_updated: 2026-05-13
 source_of_truth: true
-related_code:
-  - scripts/scan-tools.py
-  - memory/stats/
-  - AGENTS.md
+related_code: []
 related_docs:
-  - docs/00-governance/agent-squad-protocol.md
+  - coding-standards.md
+  - code-review-checklist.md
+  - component-development-contract.md
 ---
 
-# AI 开发质量指标体系
+# 质量度量指标
 
-> **版本**: v1.0
-> **最后更新**: 2026-05-07
+## Clause 1. 前端工程质量门禁
 
----
+### 1.1 [强制] 构建门禁
 
-## 1. 概述
+**1.1.1 [强制]** `npm run build` 零错误、零告警。
 
-每次开发任务完成后，填写一份结构化质量评价记录，持续追踪 AI 辅助开发的效率和质量趋势。
+**1.1.2 [强制]** TypeScript `strict: true` 下通过。
 
-数据驱动的三大用途：
+**1.1.3 [强制]** ESLint 零 error。
 
-| 用途           | 说明                                         |
-| -------------- | -------------------------------------------- |
-| **质量追踪**   | 人工干预率、Bug 率、返工率的变化趋势         |
-| **Skill 优化** | 哪些 skills 使用率高、哪些被遗忘、哪些被误用 |
-| **流程改进**   | 根据偏差检测结果调整 squad 协议和任务分级    |
+**1.1.4 [强制]** `npm run typecheck` 通过（若配置）。
 
----
+### 1.2 [参考] 构建门禁违规处理
 
-## 2. KPI 定义
-
-| 指标         | JSON 字段                  | 取值范围        | 说明                               |
-| ------------ | -------------------------- | --------------- | ---------------------------------- |
-| 人工干预次数 | `human_interventions`      | 0~N             | 你主动修改代码或评价数据的次数     |
-| 需求偏差度   | `requirement_deviation`    | 0.0~1.0         | 最终结果偏离最初想法的程度         |
-| 需求变更次数 | `spec_changes`             | 0~N             | 开发过程中需求或设计变更的次数     |
-| 返工轮次     | `rework_rounds`            | 0~N             | 验收打回后修复再审的轮次           |
-| 交付后 Bug   | `bugs_found_post_delivery` | 0~N             | 合并/交付后发现的 bug 数           |
-| Skill 调用   | `skills_called`            | `["name", ...]` | 本次任务实际调用的所有 skills 名称 |
-| 备注         | `notes`                    | 文本            | 可选，记录特殊情况                 |
-
-### 衍生指标
-
-| 指标             | 计算方式                                    |
-| ---------------- | ------------------------------------------- |
-| **人工干预率**   | 总干预次数 / 总任务数                       |
-| **平均偏差度**   | 所有任务 requirement_deviation 均值         |
-| **返工率**       | 有返工的任务数 / 总任务数                   |
-| **Bug 率**       | 有 bug 的任务数 / 总任务数                  |
-| **Skill 使用率** | 某个 skill 被调用的任务数 / 总任务数        |
-| **Skill 偏差**   | 应调未调 + 不应调却调，基于历史同类任务推断 |
+| 违例              | 处理方式             |
+| ----------------- | -------------------- |
+| 有 Error 声称完成 | 严重违规，必须修复   |
+| Warning > 5       | 警告，要求清理       |
+| Warning ≤ 5       | 可接受，建议逐步消除 |
 
 ---
 
-## 3. JSON 记录格式
+## Clause 2. 后端工程质量门禁
 
-文件路径：`memory/stats/YYYY-MM-DD.json`
+### 2.1 [强制] 构建门禁
 
-```json
-{
-  "task": "项目简述",
-  "date": "2026-05-07",
-  "risk_level": "L3",
-  "human_interventions": 2,
-  "requirement_deviation": 0.2,
-  "spec_changes": 1,
-  "rework_rounds": 1,
-  "bugs_found_post_delivery": 0,
-  "skills_called": [
-    "karpathy-guidelines",
-    "writing-plans",
-    "test-driven-development",
-    "shadcn-management",
-    "verification-before-completion",
-    "finishing-a-development-branch"
-  ],
-  "notes": ""
-}
-```
+**2.1.1 [强制]** `npm run build` 零错误。
 
-### 字段说明
+**2.1.2 [强制]** TypeScript `strict: true` 下通过。
 
-| 字段                       | 必填 | 填写说明                   |
-| -------------------------- | ---- | -------------------------- |
-| `task`                     | 是   | 一句话描述任务             |
-| `date`                     | 是   | 完成日期                   |
-| `risk_level`               | 是   | L1 / L2 / L3               |
-| `human_interventions`      | 是   | 默认 0，由 AI 引导人工确认 |
-| `requirement_deviation`    | 是   | 默认 0.0，偏差越大值越大   |
-| `spec_changes`             | 是   | 默认 0                     |
-| `rework_rounds`            | 是   | 默认 0                     |
-| `bugs_found_post_delivery` | 是   | 默认 0                     |
-| `skills_called`            | 是   | 实际调用的 skill 名称列表  |
-| `notes`                    | 否   | 特殊情况说明               |
+### 2.2 [强制] API 规范
+
+**2.2.1 [强制]** 所有 API 端点有类型定义。
+
+**2.2.2 [强制]** 请求/响应 DTO 类型显式声明。
+
+### 2.3 [强制] 数据库操作
+
+**2.3.1 [强制]** 所有查询使用参数化查询，禁止 SQL 拼接。
+
+### 2.4 [强制] 错误处理
+
+**2.4.1 [强制]** 所有 API 端点有统一错误响应格式。
 
 ---
 
-## 4. 偏差推断机制
+## Clause 3. 组件合规度量
 
-不是靠写死的规则矩阵，而是从**历史统计数据**中自动学习"某类任务应该调哪些 skills"。
+### 3.1 [强制] Props 接口
 
-### 推断逻辑
+**3.1.1 [强制]** 每个组件必须有显式的 Props TypeScript 接口。
 
-```
-对每个 risk_level（L1/L2/L3）：
-  1. 收集该等级所有历史记录的 skills_called
-  2. 计算每个 skill 的调用率 = 调用次数 / 总记录数
-  3. 调用率 > 50% 的 skills → "期望调用集"
-  4. 偏差 = (期望 - 实际) ∪ (实际 - 期望)
-     - 遗漏：在期望集中但未调用的
-     - 误用：调用了但不在期望集中的（且调用率 < 20%）
-```
+### 3.2 [强制] 命名导出
 
-### 示例
+**3.2.1 [强制]** 组件使用命名导出，禁止默认导出。
 
-```
-L3 任务的历史记录有 10 条：
-  karpathy-guidelines      调用率 100% → 期望
-  verification-before-comp 调用率 90%  → 期望
-  ui-layout-rules          调用率 70%  → 期望
-  writing-plans            调用率 60%  → 期望
-  shadcn-management        调用率 10%  → 非期望（偶尔用到）
+### 3.3 [强制] 组件粒度
 
-新 L3 任务实际调用了：
-  karpathy-guidelines ✅
-  verification-before-comp ✅
-  ui-layout-rules ❌ 未调 → 偏差：遗漏
-  writing-plans ✅
-  shadcn-management ❌ 未调 → 正常（非期望）
-  squad-pre-dev-evaluation ❌ 调了 → 偏差：误用（L1 任务才调）
-```
+**3.3.1 [强制]** 单个组件不超过 200 行。
 
----
+### 3.4 [强制] 状态管理
 
-## 5. 数据生命周期
+**3.4.1 [强制]** 跨组件共享状态优先使用 Context / 状态管理库。
 
-| 阶段            | 操作                                                  |
-| --------------- | ----------------------------------------------------- |
-| 任务完成        | AI 引导填写评价记录（默认值 + 人工确认）              |
-| 每周/每月       | 运行 `python scripts/scan-tools.py --report` 查看趋势 |
-| 每次 Phase 结束 | 将 `stats/` 数据纳入 phase 总结报告                   |
-| 长期            | 数据累积越多，偏差推断越准确                          |
+### 3.5 [强制] UI 一致性
 
-### 评价填写交互
+**3.5.1 [强制]** 颜色取值仅使用 Tailwind Token。
 
-任务完成后 AI 提示：
+**3.5.2 [强制]** 间距取值仅使用 Tailwind Token。
 
-```
-📋 任务质量评价（可全部回车接受默认值）：
-  - 人工干预次数 [0]:
-  - 需求偏差度 0~1 [0.0]:
-  - 需求变更次数 [0]:
-  - 返工轮次 [0]:
-  - 交付后 Bug 数 [0]:
-  - 备注（可选）:
-```
+**3.5.3 [强制]** 禁止硬编码色值或间距。
+
+### 3.6 [推荐] 组件复用
+
+**3.6.1 [推荐]** 复用已有组件，不重复造轮子。
+
+### 3.7 [强制] 样式规范
+
+**3.7.1 [强制]** 使用 Tailwind 类名，禁止内联 style。
 
 ---
 
-## 6. 与现有流程的关系
+## Clause 4. 文档与规范合规度量
 
-| 现有流程                   | 本体系对应                        |
-| -------------------------- | --------------------------------- |
-| 任务结束协议 A（日志）     | 不变                              |
-| 任务结束协议 B（长期记忆） | 不变                              |
-| **任务结束协议 C（新增）** | **写入 `memory/stats/` 质量评价** |
-| scan-tools.py 全景扫描     | 新增 `--report` 模式              |
-| squad 验收                 | 验收通过后触发评价填写            |
+### 4.1 [强制] 文档完整率
+
+**4.1.1 [强制]** 每个功能必须有对应的 spec/plan。
+
+### 4.2 [强制] Frontmatter 完整率
+
+**4.2.1 [强制]** 所有 active 文档 Frontmatter 字段完整。
+
+### 4.3 [强制] ADR 覆盖
+
+**4.3.1 [强制]** 涉及架构决策必须有 ADR。
+
+### 4.4 [强制] Git 提交规范
+
+**4.4.1 [强制]** 提交信息符合 `type(scope): description` 格式。
+
+**4.4.2 [强制]** 禁止直接向 main 分支提交。
+
+---
+
+## Clause 5. 全栈衡量指标
+
+### 5.1 [强制] 构建成功率
+
+**5.1.1 [强制]** `npm run build` 通过率 ≥ 95%。
+
+### 5.2 [强制] 测试通过率
+
+**5.2.1 [强制]** `npm test` 通过率 100%。
+
+### 5.3 [强制] 类型安全
+
+**5.3.1 [强制]** `any` 类型出现次数 = 0。
+
+### 5.4 [强制] Lint 质量
+
+**5.4.1 [强制]** ESLint error 次数 = 0。
+
+---
+
+## Clause 6. 性能指标
+
+### 6.1 [参考] 前端性能
+
+| 指标                | 目标    |
+| ------------------- | ------- |
+| 首屏加载时间        | ≤ 3s    |
+| Lighthouse 性能评分 | ≥ 90    |
+| 最大内容绘制（LCP） | ≤ 2.5s  |
+| 首次输入延迟（FID） | ≤ 100ms |
+| 累积布局偏移（CLS） | ≤ 0.1   |
+
+### 6.2 [参考] 后端性能
+
+| 指标                | 目标     |
+| ------------------- | -------- |
+| API 响应时间（P50） | ≤ 200ms  |
+| API 响应时间（P99） | ≤ 1000ms |
+| 数据库查询时间      | ≤ 100ms  |
+
+### 6.3 [参考] 性能回归检测
+
+**6.3.1 [推荐]** 关键页面/API 建立性能基线，对比检测回归。
+
+---
+
+## 附录 A：高回报实践
+
+### A.1 [推荐] 推荐优先实施
+
+| 优先级 | 实践                         | 预期收益          |
+| ------ | ---------------------------- | ----------------- |
+| 高     | 修正 ESLint / TS strict 警告 | 降低 40% 类型 Bug |
+| 高     | 消除 `any` 类型              | 提升代码可维护性  |
+| 中     | 添加 E2E 测试（Playwright）  | 捕获 60% 回归     |
+| 中     | 组件拆分到 ≤ 200 行          | 提升可测试性      |
+| 低     | 单元测试覆盖到 70%           | 长期质量保障      |

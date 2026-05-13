@@ -1,1 +1,0 @@
-YAML syntax validated: CI workflow updated with test execution and coverage steps.

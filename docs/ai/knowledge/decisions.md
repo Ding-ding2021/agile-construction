@@ -28,7 +28,7 @@ related_docs: []
 
 **决策**：确立三层文档架构——人类文档层（docs/）、AI 合约层（docs/ai/）、记忆进化层（memory/）。每份人类文档变更后通过 `document-sync` 技能自动同步 AI 合约。
 
-**约束**：AI 合约 ≤ 200 行、纯表格/清单、零叙事段落。CLAUDE.md 废弃，AGENTS.md 为唯一入口。
+**约束**：AI 合约 ≤ 200 行、纯表格/清单、零叙事段落。AGENTS.md 为唯一入口，CLAUDE.md 已删除。
 
 ---
 

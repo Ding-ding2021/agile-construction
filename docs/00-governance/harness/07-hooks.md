@@ -1,117 +1,66 @@
 ---
-id: DOC-GOVERNANCE-HARNESS-HOOKS
-number: GOV-020
+id: DOC-00-GOVERNANCE-HARNESS-HOOKS
+number: GOV-017
 domain: governance
 category: harness
-title: Hooks 生命周期
+title: Harness 钩子
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-12
+last_updated: 2026-05-13
 source_of_truth: true
-related_code: []
-related_docs: []
-registry_ref: .harness/registry.yaml#hooks
+related_code:
+  - .husky/
+  - .opencode/hooks/
+related_docs:
+  - docs/00-governance/harness/00-overview.md
+  - docs/00-governance/harness/01-workflows.md
+  - docs/00-governance/git-governance.md
 ---
 
-# Hooks 生命周期
+# Harness 钩子
 
-## 概述
+## Clause 1. 钩子体系
 
-12 个 Hook 分布在整个开发流程中，负责自动化检查和定时任务触发。
+**1.1 [参考]** 项目设两层钩子体系：
 
----
-
-## Hook 清单
-
-| #   | Hook          | 位置                                   | 触发时机             | 做什么                     | 阶段 |
-| --- | ------------- | -------------------------------------- | -------------------- | -------------------------- | ---- |
-| H1  | `pre-commit`  | `.husky/`                              | git commit 前        | lint-staged + tsc --noEmit | 交付 |
-| H2  | `commit-msg`  | `.husky/`                              | commit 消息写入时    | Conventional Commits 校验  | 交付 |
-| H3  | `pre-commit`  | `.opencode/hooks/`                     | git commit 前        | 同步记忆                   | 交付 |
-| H4  | `post-commit` | `.opencode/hooks/`                     | git commit 后        | 采集 stats + 异步写日志    | 交付 |
-| H5  | `pre-push`    | `.husky/`（新增）                      | git push 前          | 质量门禁预检               | 交付 |
-| H6  | CI lint       | `.github/workflows/ci.yml`             | git push             | ESLint                     | 测试 |
-| H7  | CI build      | `.github/workflows/ci.yml`             | git push             | tsc + vite build           | 测试 |
-| H8  | CI test       | `.github/workflows/ci.yml`             | git push             | vitest + playwright        | 测试 |
-| H9  | 每日总结      | `.github/workflows/daily-summary.yml`  | cron: 0 18 \* \* 1-5 | 聚合日报 + 飞书推送        | 进化 |
-| H10 | 周考核        | `.github/workflows/weekly-review.yml`  | cron: 0 17 \* \* 5   | 44 指标聚合 + 周报 + 飞书  | 进化 |
-| H11 | 月考核        | `.github/workflows/monthly-review.yml` | cron: 0 9 1 \* \*    | 趋势 + 框架迭代 + 飞书     | 进化 |
-| H12 | 发布门禁      | `.github/workflows/ci.yml` (on tags)   | tag push             | 全量 44 指标 + 冻结判断    | 交付 |
+| 层        | 实现               | 触发点             | 用途                 |
+| --------- | ------------------ | ------------------ | -------------------- |
+| Git Hooks | `.husky/`          | git commit、push   | 代码质量门禁         |
+| AI Hooks  | `.opencode/hooks/` | 会话启动、文件变更 | 上下文管理与文档同步 |
 
 ---
 
-## Hook 执行链路
+## Clause 2. Git Hooks
 
-```
-git commit 触发
-    │
-    ▼
-H1: .husky/pre-commit ──▶ lint-staged + tsc
-    │ 失败 → 中断提交
-    ▼
-H2: .husky/commit-msg ──▶ Conventional Commits 校验
-    │ 失败 → 中断提交
-    ▼
-H3: .opencode/hooks/pre-commit ──▶ 同步记忆
-    │
-    ▼
-commit 完成
-    │
-    ▼
-H4: .opencode/hooks/post-commit ──▶ stats 采集 + 日志写入
-    │
-    ▼
-git push 触发
-    │
-    ▼
-H5: .husky/pre-push ──▶ 质量门禁预检
-    │
-    ▼
-H6-H8: CI jobs (lint / build / test) 并行
-    │ 任何失败 → CI 红灯
-    ▼
-阶段 6 交付完成
-    │
-    ▼
-H9: 每日 18:00 cron ──▶ 日报 + 飞书
-H10: 周五 17:00 cron ──▶ 周报 + 飞书
-H11: 每月 1 号 cron ──▶ 月报 + 飞书
-```
+**2.1 [强制]** 核心 Git Hooks 配置：
+
+| 钩子       | 触发时机              | 执行动作                    | 阻断条件  |
+| ---------- | --------------------- | --------------------------- | --------- |
+| pre-commit | `git commit`          | lint-staged（受影响的文件） | lint 失败 |
+| commit-msg | commit message 输入后 | commit message 格式检查     | 格式不符  |
+| pre-push   | `git push` 前         | 运行测试                    | 测试失败  |
+
+**2.2 [强制]** 任何代码提交必须通过上述钩子检查。紧急情况下可提交 `--no-verify`，但需在 commit message 中说明原因。
 
 ---
 
-## 阶段 × Hook 映射
+## Clause 3. AI Hooks
 
-| 阶段   | Hook            |
-| ------ | --------------- |
-| 1 定义 | — 无 hook       |
-| 2 规划 | — 无 hook       |
-| 3 构建 | — 开发手动 lint |
-| 4 测试 | H6-H8：CI 自动  |
-| 5 评审 | — 无 hook       |
-| 6 交付 | H1-H5, H12      |
-| 7 进化 | H9-H11 定时触发 |
+**3.1 [参考]** AI Hooks 当前配置：
+
+| 钩子          | 触发时机   | 执行动作     |
+| ------------- | ---------- | ------------ |
+| pre-commit    | AI 提交前  | 同步记忆文件 |
+| session-start | 新会话启动 | 加载项目规则 |
 
 ---
 
-## 新增 Hook：H5 pre-push
+## Clause 4. 钩子维护
 
-```bash
-#!/bin/bash
-echo "🔍 推送前检查..."
+**4.1 [推荐]** 钩子维护规则：
 
-# 1. lint 必须全过
-npx eslint . --max-warnings 0 || {
-    echo "❌ ESLint 有告警，请先修复"
-    exit 1
-}
-
-# 2. build 必须通过
-npm run build || {
-    echo "❌ Build 失败，禁止推送"
-    exit 1
-}
-
-# 3. 检查当前阶段是否需要 e2e
-echo "✅ 推送前检查通过"
-```
+| 条款  | 规则                                |
+| ----- | ----------------------------------- |
+| 4.1.1 | 新增钩子时更新本文档                |
+| 4.1.2 | 删除钩子前确认无依赖                |
+| 4.1.3 | 每周检查一次 `.husky/` 是否正常运行 |

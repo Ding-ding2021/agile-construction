@@ -1,73 +1,88 @@
 ---
-id: DOC-00-GOVERNANCE-CODE-REVIEW
-number: GOV-003
+id: DOC-00-GOVERNANCE-CODE-REVIEW-CHECKLIST
+number: GOV-005
 domain: governance
 category: review-process
-title: Code Review Checklist
+title: 代码审查检查清单
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-05
+last_updated: 2026-05-13
 source_of_truth: true
 related_code: []
 related_docs:
-  - docs/00-governance/coding-standards.md
-  - docs/00-governance/component-development-contract.md
-  - docs/00-governance/project-charter.md
+  - quality-metrics.md
 ---
 
-# Code Review Checklist
+# 代码审查检查清单
 
-## 适用范围
+## Clause 1. 功能性检查
 
-所有 AI 完成开发后，进入"In Review"阶段前必须经过本 checklist。
+### 1.1 [强制] 逻辑正确性
 
----
+**1.1.1 [强制]** 代码实现了规格说明中的所有功能。
 
-## 1. 门禁检查（自动化，必须全部通过）
+**1.1.2 [强制]** 边界条件已处理（空值、极限值、异常输入）。
 
-- [ ] `npm run build` — 0 errors
-- [ ] `npm run lint` — 0 errors
-- [ ] `npm run test:run` — All tests passing
-- [ ] 覆盖率未低于阈值（lines 55% / functions 42% / branches 42%）
+**1.1.3 [强制]** 无死代码、无未使用的 import、无未处理的 Promise。
 
-## 2. 逻辑验证
+### 1.2 [强制] 测试覆盖
 
-- [ ] 新增/修改代码有对应的单元测试
-- [ ] 测试用例名称描述业务场景（非 test1/test2）
-- [ ] 核心模块输出了可解释交付物（测试用例清单 + 流程图 + 边界条件）
+**1.2.1 [强制]** 新功能有对应的单元测试。
 
-## 3. 编码规范
-
-- [ ] 无 `any` 类型（除非有 `eslint-disable` 注释说明理由）
-- [ ] 无硬编码色值/尺寸（使用 CSS 变量或设计 Token）
-- [ ] 命名符合规范（组件 PascalCase，函数 camelCase，常量 UPPER_SNAKE_CASE）
-- [ ] 注释仅用于关键逻辑/边界条件/复杂状态流（工程模式）
-- [ ] 无 `console.log`（仅允许 console.warn/error/info）
-
-## 4. 架构合规
-
-- [ ] 未绕过状态机守卫直接修改状态
-- [ ] 未在子组件中直接操作 localStorage
-- [ ] 路由跳转使用 navigation.ts 的 goTo\* 函数（非 window.location.hash 硬编码）
-- [ ] 数据操作通过 Repository/Store 层（非直接 fetch）
-
-## 5. AI 产物检查
-
-- [ ] 无死代码（定义了但未使用）
-- [ ] 无过度抽象（不要为了"将来可能用"创建接口/工具函数）
-- [ ] 无过度注释（不要"每一行都加注释"）
-- [ ] 无 `@ts-ignore` / `@ts-expect-error`（除非有 Issue 引用）
-
-## 6. QA 验证
-
-- [ ] 核心场景手动验证通过
-- [ ] 边界条件（空数据、错误输入、网络异常）验证通过
-- [ ] UI 变更：检查响应式布局、暗色模式、加载态、空态、错误态
+**1.2.2 [强制]** 修改不会破坏已有测试。
 
 ---
 
-## Review 结论
+## Clause 2. 代码质量
 
-- [ ] **APPROVED** — 全部通过，可合并
-- [ ] **CHANGES REQUESTED** — 具体问题：[列出需要修改的项]
-- [ ] **BLOCKED** — 存在架构性问题，需架构团队介入
+### 2.1 [强制] 类型安全
+
+**2.1.1 [强制]** 不使用 `any`，使用显式类型。
+
+**2.1.2 [强制]** 泛型使用合理，不过度设计。
+
+### 2.2 [强制] 代码风格
+
+**2.2.1 [强制]** 代码符合项目编码规范（见 coding-standards.md）。
+
+**2.2.2 [强制]** 命名清晰，无单字母变量（循环计数除外）。
+
+### 2.3 [强制] 安全性
+
+**2.3.1 [强制]** 无 SQL 注入、XSS、CSRF 等安全漏洞。
+
+**2.3.2 [强制]** 环境变量和密钥不提交到代码库。
+
+**2.3.3 [强制]** 用户输入已校验或净化。
+
+---
+
+## Clause 3. 架构与设计
+
+### 3.1 [强制] 组件设计
+
+**3.1.1 [强制]** 组件职责单一，符合 SRP。
+
+**3.1.2 [强制]** 无循环依赖。
+
+### 3.2 [推荐] 性能
+
+**3.2.1 [推荐]** 无不必要的重渲染（React）。
+
+**3.2.2 [推荐]** 无 N+1 查询问题。
+
+---
+
+## Clause 4. Git 规范
+
+### 4.1 [强制] 提交规范
+
+**4.1.1 [强制]** 提交信息符合约定（见 git-governance.md）。
+
+**4.1.2 [强制]** 无合并冲突残留标记。
+
+### 4.2 [推荐] 变更范围
+
+**4.2.1 [推荐]** PR 粒度适中，不过大也不过小。
+
+**4.2.2 [推荐]** 每个提交功能完整、可独立运行。

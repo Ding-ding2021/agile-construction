@@ -45,3 +45,4 @@ deepseek-models.json
 
 # Local env (contains secrets)
 .env
+.gitnexus

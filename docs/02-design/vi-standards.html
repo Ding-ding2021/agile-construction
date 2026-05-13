@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基础 VI 规范 · 字体与色彩体系</title>
+<style>
+  /* ═══════════════════════════════════════════
+     基础重置与排版
+     ═══════════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: oklch(0.985 0 0);
+    --fg: oklch(0.205 0 0);
+    --muted: oklch(0.922 0 0);
+    --muted-fg: oklch(0.556 0 0);
+    --border: oklch(0.87 0 0);
+    --accent: oklch(0.5 0.2 250);
+    --accent-fg: oklch(0.985 0 0);
+    --success: oklch(0.45 0.18 160);
+    --danger: oklch(0.55 0.23 25);
+    --surface: oklch(0.97 0 0);
+    --radius: 12px;
+    --font-sans: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  }
+
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* ═══════════════════════════════════════════
+     布局
+     ═══════════════════════════════════════════ */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ═══════════════════════════════════════════
+     页头
+     ═══════════════════════════════════════════ */
+  .hero {
+    padding: 80px 0 56px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 64px;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: oklch(0.9 0.1 250 / 0.2);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 1.125rem;
+    color: var(--muted-fg);
+    max-width: 640px;
+  }
+
+  /* ═══════════════════════════════════════════
+     章节
+     ═══════════════════════════════════════════ */
+  section { margin-bottom: 72px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--fg);
+  }
+  .section-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: oklch(0.9 0.1 250 / 0.15);
+    padding: 2px 10px;
+    border-radius: 4px;
+  }
+  .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* ═══════════════════════════════════════════
+     章节描述
+     ═══════════════════════════════════════════ */
+  .section-desc {
+    font-size: 0.9375rem;
+    color: var(--muted-fg);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════
+     字体栈卡片
+     ═══════════════════════════════════════════ */
+  .font-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .font-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: box-shadow 0.2s;
+  }
+  .font-card:hover { box-shadow: 0 4px 16px oklch(0 0 0 / 0.06); }
+  .font-card .label {
+    font-size: 0.75rem;
+    color: var(--muted-fg);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .font-card .preview {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+  }
+  .font-card .stack {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted-fg);
+    word-break: break-all;
+  }
+  .font-card .badge {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--fg);
+    color: var(--bg);
+    margin-bottom: 12px;
+  }
+  .font-card .badge.default { background: var(--accent); color: var(--accent-fg); }
+
+  /* ═══════════════════════════════════════════
+     字体层级展示
+     ═══════════════════════════════════════════ */
+  .level-list { list-style: none; }
+  .level-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid oklch(0 0 0 / 0.06);
+  }
+  .level-item:last-child { border-bottom: none; }
+  .level-meta {
+    flex-shrink: 0;
+    width: 100px;
+  }
+  .level-meta .name {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .level-meta .detail {
+    font-size: 0.75rem;
+    color: var(--muted-fg);
+    margin-top: 4px;
+  }
+  .level-demo { flex: 1; }
+  .level-usage {
+    font-size: 0.75rem;
+    color: var(--muted-fg);
+    margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════════
+     色阶展板
+     ═══════════════════════════════════════════ */
+  .swatch-strip {
+    display: flex;
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 80px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+  .swatch {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: oklch(0.3 0 0);
+    transition: flex 0.2s;
+  }
+  .swatch:hover { flex: 1.5; }
+  .swatch.dark-label { color: oklch(0.8 0 0); }
+
+  .swatch-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .swatch-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-fg);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .swatch-table td {
+    padding: 12px;
+    border-bottom: 1px solid oklch(0 0 0 / 0.04);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .swatch-table tr:last-child td { border-bottom: none; }
+  .swatch-table .swatch-cell { width: 48px; padding: 8px; }
+  .swatch-table .swatch-dot {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid oklch(0 0 0 / 0.06);
+  }
+  .swatch-table .step { font-family: var(--font-mono); color: var(--muted-fg); width: 60px; }
+  .swatch-table .oklch-val { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted-fg); }
+  .swatch-table .usage { max-width: 280px; }
+
+  /* ═══════════════════════════════════════════
+     规则卡片
+     ═══════════════════════════════════════════ */
+  .rule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .rule-card {
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .rule-card.do { background: oklch(0.97 0.02 160); border-color: oklch(0.85 0.06 160); }
+  .rule-card.dont { background: oklch(0.97 0.02 25); border-color: oklch(0.85 0.06 25); }
+  .rule-card .rule-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rule-card.do .rule-label { color: var(--success); }
+  .rule-card.dont .rule-label { color: var(--danger); }
+  .rule-card code {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .rule-card code:last-child { margin-bottom: 0; }
+
+  /* ═══════════════════════════════════════════
+     映射表
+     ═══════════════════════════════════════════ */
+  .map-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .map-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-fg);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .map-table td {
+    padding: 12px;
+    border-bottom: 1px solid oklch(0 0 0 / 0.04);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+  .map-table tr:last-child td { border-bottom: none; }
+
+  /* ═══════════════════════════════════════════
+     语义色板
+     ═══════════════════════════════════════════ */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .palette-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .palette-swatch { height: 60px; }
+  .palette-info { padding: 12px; }
+  .palette-info .name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .palette-info .desc {
+    font-size: 0.6875rem;
+    color: var(--muted-fg);
+  }
+
+  /* ═══════════════════════════════════════════
+     变量映射
+     ═══════════════════════════════════════════ */
+  .var-map {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .var-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .var-item .var-name {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .var-item .var-maps {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--muted-fg);
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════════════════
+     代码块
+     ═══════════════════════════════════════════ */
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 12px;
+  }
+  .code-block .comment { color: var(--muted-fg); }
+  .code-block .tag { color: var(--accent); }
+
+  /* ═══════════════════════════════════════════
+     色板概览
+     ═══════════════════════════════════════════ */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .theme-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .theme-swatch-row {
+    display: flex;
+    height: 40px;
+  }
+  .theme-swatch-row .bar { flex: 1; }
+  .theme-info { padding: 12px 16px; }
+  .theme-info .name { font-weight: 500; font-size: 0.875rem; }
+  .theme-info .hue { font-size: 0.75rem; color: var(--muted-fg); }
+
+  /* ═══════════════════════════════════════════
+     句尾
+     ═══════════════════════════════════════════ */
+  .footer {
+    margin-top: 80px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.8125rem;
+    color: var(--muted-fg);
+    text-align: center;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ═══════════════════════════════════════════
+     响应式
+     ═══════════════════════════════════════════ */
+  @media (max-width: 720px) {
+    .hero { padding: 48px 0 32px; }
+    .hero h1 { font-size: 1.75rem; }
+    .font-grid { grid-template-columns: 1fr; }
+    .rule-grid { grid-template-columns: 1fr; }
+    .palette-grid { grid-template-columns: repeat(3, 1fr); }
+    .theme-grid { grid-template-columns: repeat(2, 1fr); }
+    .var-map { grid-template-columns: repeat(2, 1fr); }
+    .level-item { flex-direction: column; gap: 8px; }
+    .level-meta { width: auto; }
+  }
+  @media (max-width: 480px) {
+    .palette-grid { grid-template-columns: repeat(2, 1fr); }
+    .theme-grid { grid-template-columns: 1fr; }
+    .var-map { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<main class="container">
+
+  <!-- ═══ 页头 ═══ -->
+  <header class="hero">
+    <div class="hero-tag">DES-004 · Source of Truth</div>
+    <h1>基础 VI 规范</h1>
+    <p>字体与色彩体系。继承「黑白极简，零品牌干扰，内容优先」的设计哲学，将视觉要素细化到可执行粒度。</p>
+    <p style="margin-top:12px; font-size:0.875rem; color:var(--muted-fg);">
+      版本 1.0.0 · 2026-05-13 · 设计角色维护
+    </p>
+  </header>
+
+  <!-- ═══ 一、字体 ═══ -->
+  <section>
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2>字体规范</h2>
+    </div>
+    <p class="section-desc">
+      项目使用系统字体栈，避免加载额外字体文件保证性能。4 种字体风格通过 <code style="font-family:var(--font-mono);font-size:0.8125rem;">themes.css</code> 的 html 类名切换。
+    </p>
+
+    <div class="font-grid">
+      <div class="font-card">
+        <div class="badge default">默认</div>
+        <div class="preview" style="font-family:'Inter','Noto Sans SC',system-ui,sans-serif">
+          ABCabc 你好中文 123
+        </div>
+        <div class="label">无衬线 · Sans</div>
+        <div class="stack">Inter, Noto Sans SC, system-ui, sans-serif</div>
+      </div>
+      <div class="font-card">
+        <div class="badge">衬线</div>
+        <div class="preview" style="font-family:'Noto Serif SC',Georgia,serif">
+          ABCabc 你好中文 123
+        </div>
+        <div class="label">衬线 · Serif</div>
+        <div class="stack">Noto Serif SC, Georgia, serif</div>
+      </div>
+      <div class="font-card">
+        <div class="badge">等宽</div>
+        <div class="preview" style="font-family:'JetBrains Mono','SF Mono',Consolas,monospace">
+          ABCabc 123 0x00FF
+        </div>
+        <div class="label">等宽 · Mono</div>
+        <div class="stack">JetBrains Mono, SF Mono, Consolas, monospace</div>
+      </div>
+      <div class="font-card">
+        <div class="badge">圆体</div>
+        <div class="preview" style="font-family:Nunito,'Noto Sans SC',sans-serif">
+          ABCabc 你好中文 123
+        </div>
+        <div class="label">圆体 · Rounded</div>
+        <div class="stack">Nunito, Noto Sans SC, sans-serif</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:500;margin-bottom:20px;">文字层级 · 5 级体系</h3>
+
+    <div class="level-list">
+
+      <div class="level-item">
+        <div class="level-meta">
+          <div class="name">L1 · 页面标题</div>
+          <div class="detail">24px / 600 / 1.25</div>
+          <div class="detail"><code style="font-family:var(--font-mono);font-size:0.6875rem;">text-2xl font-semibold tracking-tight</code></div>
+        </div>
+        <div class="level-demo">
+          <div style="font-size:1.5rem;font-weight:600;letter-spacing:-0.02em;line-height:1.25;">
+            项目仪表盘
+          </div>
+          <div class="level-usage">页面 h1 标题、详情页标题</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <div class="level-meta">
+          <div class="name">L2 · 卡片标题</div>
+          <div class="detail">16px / 500 / 1.3</div>
+          <div class="detail"><code style="font-family:var(--font-mono);font-size:0.6875rem;">text-base font-medium leading-snug</code></div>
+        </div>
+        <div class="level-demo">
+          <div style="font-size:1rem;font-weight:500;line-height:1.3;">
+            进行中任务 · 卡片标题
+          </div>
+          <div class="level-usage">章节小标题、卡片标题、分组标题</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <div class="level-meta">
+          <div class="name">L3 · 正文</div>
+          <div class="detail">14px / 400 / 1.5</div>
+          <div class="detail"><code style="font-family:var(--font-mono);font-size:0.6875rem;">text-sm</code></div>
+        </div>
+        <div class="level-demo">
+          <div style="font-size:0.875rem;line-height:1.5;">
+            任务名称：基础施工 — 这是正文内容，用于表单标签、表格单元格和一般段落文字。
+          </div>
+          <div class="level-usage">表单标签、表格单元格、正文段落</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <div class="level-meta">
+          <div class="name">L4 · 辅助文字</div>
+          <div class="detail">14px / 400 / 1.5</div>
+          <div class="detail"><code style="font-family:var(--font-mono);font-size:0.6875rem;">text-sm text-muted-foreground</code></div>
+        </div>
+        <div class="level-demo">
+          <div style="font-size:0.875rem;line-height:1.5;color:var(--muted-fg);">
+            选填 · 密码至少 8 位字符，包含数字和字母
+          </div>
+          <div class="level-usage">字段说明、CardDescription、次要信息</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <div class="level-meta">
+          <div class="name">L5 · 极小文字</div>
+          <div class="detail">12px / 400 / 1.5</div>
+          <div class="detail"><code style="font-family:var(--font-mono);font-size:0.6875rem;">text-xs text-muted-foreground</code></div>
+        </div>
+        <div class="level-demo">
+          <div style="font-size:0.75rem;line-height:1.5;color:var(--muted-fg);">
+            3 分钟前更新 · 共 42 条记录
+          </div>
+          <div class="level-usage">时间戳、计数、元信息标签</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:500;margin:28px 0 16px;">字重规则</h3>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 允许</div>
+        <code><strong style="font-weight:600;">font-semibold (600)</strong> — 页面标题、统计数字</code>
+        <code><strong style="font-weight:500;">font-medium (500)</strong> — 卡片标题、列表主文字</code>
+        <code><strong style="font-weight:400;">font-normal (400)</strong> — 正文、表格、表单</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ 禁止</div>
+        <code>font-bold (700) — 项目无此场景</code>
+        <code>font-light (300) — 可读性差</code>
+        <code>font-extrabold / font-black (800/900) — 未定义</code>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══ 二、色彩 ═══ -->
+  <section>
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2>灰色梯度体系</h2>
+    </div>
+    <p class="section-desc">
+      项目使用 Tailwind neutral 色板（shadcn <code style="font-family:var(--font-mono);font-size:0.8125rem;">baseColor: "neutral"</code>）作为中性色。从 50（最浅）到 950（最深）共 11 级，所有灰色值必须从此表中选取。
+    </p>
+
+    <div class="swatch-strip">
+      <div class="swatch" style="background:oklch(0.985 0 0);">50</div>
+      <div class="swatch" style="background:oklch(0.97 0 0);">100</div>
+      <div class="swatch" style="background:oklch(0.922 0 0);">200</div>
+      <div class="swatch" style="background:oklch(0.87 0 0);">300</div>
+      <div class="swatch" style="background:oklch(0.708 0 0);">400</div>
+      <div class="swatch" style="background:oklch(0.556 0 0);">500</div>
+      <div class="swatch" style="background:oklch(0.439 0 0);color:oklch(0.8 0 0);">600</div>
+      <div class="swatch" style="background:oklch(0.371 0 0);color:oklch(0.8 0 0);">700</div>
+      <div class="swatch" style="background:oklch(0.269 0 0);color:oklch(0.8 0 0);">800</div>
+      <div class="swatch" style="background:oklch(0.205 0 0);color:oklch(0.8 0 0);">900</div>
+      <div class="swatch" style="background:oklch(0.145 0 0);color:oklch(0.8 0 0);">950</div>
+    </div>
+
+    <table class="swatch-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>色阶</th>
+          <th>Tailwind</th>
+          <th>oklch</th>
+          <th>使用场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.985 0 0);border-color:oklch(0 0 0/0.12);"></span></td><td class="step">50</td><td><code>bg-neutral-50</code></td><td class="oklch-val">oklch(0.985 0 0)</td><td class="usage">页面背景（替代 <code>bg-white</code>）</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.97 0 0);border-color:oklch(0 0 0/0.12);"></span></td><td class="step">100</td><td><code>bg-neutral-100</code></td><td class="oklch-val">oklch(0.97 0 0)</td><td class="usage">次要背景、hover 态、muted 表面</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.922 0 0);border-color:oklch(0 0 0/0.12);"></span></td><td class="step">200</td><td><code>bg-neutral-200</code></td><td class="oklch-val">oklch(0.922 0 0)</td><td class="usage">边框、分割线、输入框背景</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.87 0 0);border-color:oklch(0 0 0/0.12);"></span></td><td class="step">300</td><td><code>bg-neutral-300</code></td><td class="oklch-val">oklch(0.87 0 0)</td><td class="usage">禁用态背景、占位符底色</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.708 0 0);"></span></td><td class="step">400</td><td><code>bg-neutral-400</code></td><td class="oklch-val">oklch(0.708 0 0)</td><td class="usage">禁用文字、次要 icon</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.556 0 0);"></span></td><td class="step">500</td><td><code>bg-neutral-500</code></td><td class="oklch-val">oklch(0.556 0 0)</td><td class="usage"><code>muted-foreground</code>、辅助文字</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.439 0 0);"></span></td><td class="step">600</td><td><code>bg-neutral-600</code></td><td class="oklch-val">oklch(0.439 0 0)</td><td class="usage">暗色模式 muted 表面</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.371 0 0);"></span></td><td class="step">700</td><td><code>bg-neutral-700</code></td><td class="oklch-val">oklch(0.371 0 0)</td><td class="usage">暗色模式边框</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.269 0 0);"></span></td><td class="step">800</td><td><code>bg-neutral-800</code></td><td class="oklch-val">oklch(0.269 0 0)</td><td class="usage">暗色模式次要文字</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.205 0 0);"></span></td><td class="step">900</td><td><code>bg-neutral-900</code></td><td class="oklch-val">oklch(0.205 0 0)</td><td class="usage"><code>foreground</code>、主文字（替代 <code>text-black</code>）</td></tr>
+        <tr><td class="swatch-cell"><span class="swatch-dot" style="background:oklch(0.145 0 0);"></span></td><td class="step">950</td><td><code>bg-neutral-950</code></td><td class="oklch-val">oklch(0.145 0 0)</td><td class="usage">最深背景（暗色模式替代 <code>bg-black</code>）</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:1rem;font-weight:500;margin:32px 0 16px;">CSS 变量 · 灰色等级映射</h3>
+
+    <div class="var-map">
+      <div class="var-item">
+        <div class="var-name">--background</div>
+        <div class="var-maps">亮色 → neutral-50<br>暗色 → neutral-950<br><code>bg-background</code></div>
+      </div>
+      <div class="var-item">
+        <div class="var-name">--foreground</div>
+        <div class="var-maps">亮色 → neutral-900<br>暗色 → neutral-50<br><code>text-foreground</code></div>
+      </div>
+      <div class="var-item">
+        <div class="var-name">--muted</div>
+        <div class="var-maps">→ neutral-100<br><code>bg-muted</code></div>
+      </div>
+      <div class="var-item">
+        <div class="var-name">--muted-foreground</div>
+        <div class="var-maps">→ neutral-500<br><code>text-muted-foreground</code></div>
+      </div>
+      <div class="var-item">
+        <div class="var-name">--border</div>
+        <div class="var-maps">亮色 → neutral-200<br>暗色 → neutral-700<br><code>border-border</code></div>
+      </div>
+      <div class="var-item">
+        <div class="var-name">--input / --ring</div>
+        <div class="var-maps">→ neutral-200 / 400<br><code>border-input / ring-ring</code></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem;font-weight:500;margin:32px 0 16px;">中性色使用规则</h3>
+
+    <h4 style="font-size:0.875rem;font-weight:500;margin-bottom:12px;">底色</h4>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 正确</div>
+        <code>bg-background — 页面背景</code>
+        <code>bg-card — 卡片背景</code>
+        <code>bg-muted — 次要表面</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ 禁止</div>
+        <code>bg-white — 用 bg-background</code>
+        <code>bg-black — 用 bg-background (.dark)</code>
+        <code>bg-neutral-50 — 那是 background</code>
+      </div>
+    </div>
+
+    <h4 style="font-size:0.875rem;font-weight:500;margin-bottom:12px;">文字</h4>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 正确</div>
+        <code>text-foreground — 主文字</code>
+        <code>text-muted-foreground — 辅助文字</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ 禁止</div>
+        <code>text-black / #000 — 用 text-foreground</code>
+        <code>text-white / #FFF — 用 text-foreground (.dark)</code>
+        <code>text-neutral-900 — 用 text-foreground</code>
+      </div>
+    </div>
+
+    <h4 style="font-size:0.875rem;font-weight:500;margin-bottom:12px;">灰色过渡</h4>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 用色阶分层</div>
+        <code>bg-neutral-50 → 100 → 200</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ opacity 模拟灰色</div>
+        <code>bg-black/5</code>
+        <code>bg-foreground/10</code>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══ 三、语义色 ═══ -->
+  <section>
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2>语义色 · 使用总则</h2>
+    </div>
+    <p class="section-desc">
+      颜色只用于表达语义状态，不用作装饰。始终使用 CSS 变量语义别名，不直接使用色阶类名。
+    </p>
+
+    <div class="palette-grid">
+      <div class="palette-item">
+        <div class="palette-swatch" style="background:var(--fg);"></div>
+        <div class="palette-info">
+          <div class="name">foreground</div>
+          <div class="desc">主文字</div>
+        </div>
+      </div>
+      <div class="palette-item">
+        <div class="palette-swatch" style="background:var(--muted-fg);"></div>
+        <div class="palette-info">
+          <div class="name">muted-foreground</div>
+          <div class="desc">辅助文字</div>
+        </div>
+      </div>
+      <div class="palette-item">
+        <div class="palette-swatch" style="background:var(--success);"></div>
+        <div class="palette-info">
+          <div class="name">success</div>
+          <div class="desc">成功 / 已完成</div>
+        </div>
+      </div>
+      <div class="palette-item">
+        <div class="palette-swatch" style="background:var(--danger);"></div>
+        <div class="palette-info">
+          <div class="name">destructive</div>
+          <div class="desc">删除 / 错误</div>
+        </div>
+      </div>
+      <div class="palette-item">
+        <div class="palette-swatch" style="background:var(--accent);"></div>
+        <div class="palette-info">
+          <div class="name">accent (blue)</div>
+          <div class="desc">强调 / 链接</div>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:0.875rem;font-weight:500;margin-bottom:12px;">正确 vs 禁止</h4>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 正确</div>
+        <code>&lt;Button variant="destructive"&gt;删除&lt;/Button&gt;</code>
+        <code>&lt;Badge variant="outline"&gt;进行中&lt;/Badge&gt;</code>
+        <code>&lt;div className="text-destructive"&gt;错误提示&lt;/div&gt;</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ 禁止</div>
+        <code>&lt;Button className="bg-red-500"&gt;删除&lt;/Button&gt;</code>
+        <code>&lt;span className="text-orange-600"&gt;进行中&lt;/span&gt;</code>
+        <code>&lt;div style=&lbrace; color: '#ef4444' &rbrace;&gt;错误&lt;/div&gt;</code>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══ 四、色板 ═══ -->
+  <section>
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2>色板系统</h2>
+    </div>
+    <p class="section-desc">
+      项目支持 5 套可选色板 + 1 套默认 neutral 色板，通过 html 类名切换。色板只影响 primary、chart、ring、sidebar 等强调色，中性色不受影响。
+    </p>
+
+    <div class="theme-grid">
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.5 0.2 250);"></div>
+          <div class="bar" style="background:oklch(0.7 0.15 250);"></div>
+          <div class="bar" style="background:oklch(0.85 0.08 250);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">theme-blue</div>
+          <div class="hue">冷色 primary · 技术/管理后台</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.45 0.18 160);"></div>
+          <div class="bar" style="background:oklch(0.65 0.12 160);"></div>
+          <div class="bar" style="background:oklch(0.85 0.06 160);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">theme-green</div>
+          <div class="hue">暖绿 primary · 项目/环境主题</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.55 0.2 50);"></div>
+          <div class="bar" style="background:oklch(0.7 0.15 50);"></div>
+          <div class="bar" style="background:oklch(0.85 0.08 50);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">theme-orange</div>
+          <div class="hue">暖橙 primary · 紧急/高危</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.5 0.22 300);"></div>
+          <div class="bar" style="background:oklch(0.7 0.15 300);"></div>
+          <div class="bar" style="background:oklch(0.85 0.08 300);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">theme-purple</div>
+          <div class="hue">紫 primary · 特权/Admin</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.3 0.02 80);"></div>
+          <div class="bar" style="background:oklch(0.5 0.02 80);"></div>
+          <div class="bar" style="background:oklch(0.7 0.02 80);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">theme-stone</div>
+          <div class="hue">暖灰 primary · 阅读/文档</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-swatch-row">
+          <div class="bar" style="background:oklch(0.3 0 0);"></div>
+          <div class="bar" style="background:oklch(0.5 0 0);"></div>
+          <div class="bar" style="background:oklch(0.7 0 0);"></div>
+        </div>
+        <div class="theme-info">
+          <div class="name">neutral（默认）</div>
+          <div class="hue">纯黑白 · 无额外类名</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 五、暗色模式 ═══ -->
+  <section>
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2>暗色模式</h2>
+    </div>
+    <p class="section-desc">
+      颜色通过 CSS 变量自动适配 <code style="font-family:var(--font-mono);font-size:0.8125rem;">.dark</code> 类。所有颜色使用语义变量（<code style="font-family:var(--font-mono);font-size:0.8125rem;">bg-background</code>），暗色自动反转。
+    </p>
+    <div class="rule-grid">
+      <div class="rule-card do">
+        <div class="rule-label">✅ 规则</div>
+        <code>默认亮色，暗色由用户偏好决定</code>
+        <code>使用语义变量，暗色自动适配</code>
+        <code>色板 × 暗色可正交组合</code>
+      </div>
+      <div class="rule-card dont">
+        <div class="rule-label">❌ 例外</div>
+        <code>仅亮暗使用不同色阶时才需 dark: 前缀</code>
+        <code>不要手动为每个元素写 dark:xxx</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <p>
+      <a href="vi-standards.md">查看 AI 合约版本 (.md)</a>
+      &nbsp;·&nbsp; <a href="design-spec-v2-shadcn.md">上级规范 DES-001</a>
+      &nbsp;·&nbsp; <a href="design-checklist.md">检查清单 DES-002</a>
+    </p>
+    <p style="margin-top:8px;">
+      维护：设计师 · 版本 1.0.0 · 2026-05-13
+    </p>
+  </footer>
+
+</main>
+
+</body>
+</html>

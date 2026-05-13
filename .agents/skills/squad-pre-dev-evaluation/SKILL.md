@@ -40,17 +40,17 @@ description: 开发前调用评估组从产品/UI/技术多角度评估需求，
 
 ```
 L3 全量：
-  ├── agent-1: 产品评估员（v4-flash）
-  ├── agent-2: UI/UX 评估员（v4-flash）
-  ├── agent-3: 技术评估员（v4-pro，含测试策略）
-  └── agent-0: 组长（v4-pro）—— 同步等待，后续汇总
+  ├── agent-1: 产品评估员（flash）
+  ├── agent-2: UI/UX 评估员（flash）
+  ├── agent-3: 技术评估员（pro，含测试策略）
+  └── agent-0: 组长（pro）—— 同步等待，后续汇总
 
 L2 精简：
-  ├── agent-1: 评估员（v4-flash，任选一个视角）
-  └── agent-0: 组长（v4-pro）
+  ├── agent-1: 评估员（flash，任选一个视角）
+  └── agent-0: 组长（pro）
 
 L1 单人：
-  └── agent-0: 组长（v4-flash/go）
+  └── agent-0: 组长（flash/go）
 ```
 
 ### Step 3: 各子代理输出独立报告

@@ -1,5 +1,0 @@
-Evidence for task 10 - UI Project Detail tests
-- Frontend tests added: src/components/project/__tests__/ProjectDetailPage.test.tsx
-- Verifies tabs rendering based on PROJECT_DETAIL_TABS
-- Evidence gathered using React Testing Library
-- Status: TBD (will be updated after test run)

@@ -101,21 +101,13 @@ related_docs: []
 ### 项目（05-project）
 
 - `docs/05-project/project-rules.md` — `PRJ-001` 项目规则
-- `docs/05-project/development-plan-v1.2.md` — `PRJ-002` 开发计划 V1.2
-- `docs/05-project/development-plan-v2.0.md` — `PRJ-003` 开发计划 V2.0
-- `docs/05-project/2026-05-07-P2-T1.md` — `PRJ-004` P2-T1 实现计划
-- `docs/05-project/2026-05-07-calendar-system.md` — `PRJ-005` 日历系统计划
-- `docs/05-project/2026-05-07-gantt-enhance.md` — `PRJ-006` 甘特图增强计划
-- `docs/05-project/2026-05-07-wbs-phase1-implementation.md` — `PRJ-007` WBS Phase1 实现
-- `docs/05-project/2026-05-07-squad-eval-45-47.md` — `PRJ-008` Squad 评估报告
-- `docs/05-project/DASHBOARD.md` — `PRJ-009` 质量仪表盘
-- `docs/05-project/log.md` — `PRJ-010` Wiki 操作日志
-- `docs/05-project/development-issues-summary-2026-05-02.md` — `PRJ-011` 开发问题汇总
-- `docs/05-project/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — `PRJ-012` Phase 3 回顾
-- `docs/05-project/roadmap-v1.2-impact-assessment.md` — `PRJ-013` V1.2 影响评估
-- `docs/05-project/launch-checklist.md` — `PRJ-014` 发布检查清单
-- `docs/05-project/feishu-publish-runbook.md` — `PRJ-015` 飞书发布 Runbook
-- `docs/05-project/phase1.5-tech-debt-plan.md` — `PRJ-016` Phase 1.5 技术债清理
+- `docs/05-project/development-plan-v2.0.md` — `PRJ-002` 开发计划 V2.0
+- `docs/05-project/DASHBOARD.md` — `PRJ-003` 质量仪表盘
+- `docs/05-project/log.md` — `PRJ-004` Wiki 操作日志
+- `docs/05-project/roadmap-v1.2-impact-assessment.md` — `PRJ-005` V1.2 影响评估
+- `docs/05-project/launch-checklist.md` — `PRJ-006` 发布检查清单
+- `docs/05-project/feishu-publish-runbook.md` — `PRJ-007` 飞书发布 Runbook
+- `docs/05-project/phase1.5-tech-debt-plan.md` — `PRJ-008` Phase 1.5 技术债清理
 
 ### AI 合约层（docs/ai/）
 
@@ -129,6 +121,14 @@ related_docs: []
 
 > `docs/99-archive/` 下所有已标记 `archived` 状态的文档。不作为执行依据。
 
+- `docs/99-archive/development-plan-v1.2.md` — `ARC-001` 开发计划 V1.2（已归档，由 V2.0 替代）
+- `docs/99-archive/2026-05-07-P2-T1.md` — `ARC-002` P2-T1 实现计划（Phase 2 已完成）
+- `docs/99-archive/2026-05-07-calendar-system.md` — `ARC-003` 日历系统计划（已集成）
+- `docs/99-archive/2026-05-07-gantt-enhance.md` — `ARC-004` 甘特图增强计划（已集成）
+- `docs/99-archive/2026-05-07-wbs-phase1-implementation.md` — `ARC-060` WBS Phase1 实现（已完成）
+- `docs/99-archive/2026-05-07-squad-eval-45-47.md` — `ARC-006` Squad 评估报告（已关闭）
+- `docs/99-archive/development-issues-summary-2026-05-02.md` — `ARC-007` 开发问题汇总（已关闭）
+- `docs/99-archive/phase3-retrospective-and-phase4-proposal-2026-04-16.md` — `ARC-008` Phase 3 回顾（已关闭）
 - `docs/99-archive/文档索引.md` — `ARC-059` 旧版中文文档索引（已废弃，由本 README 替代）
 - `docs/99-archive/design-specification.md` — `ARC-005` 设计规范 MUI 版（已废弃，由 shadcn V2 替代）
 - `docs/99-archive/product-roadmap.md` — `ARC-054` 产品规划 V1.0（已归档，被 V1.2 替代）
@@ -138,7 +138,7 @@ related_docs: []
 - `docs/99-archive/phase4/` — Phase 4 一次性评估报告（`ARC-046~052`）
 - `docs/99-archive/knowledge-base/` — 知识库（`ARC-009~027`）
 - `docs/99-archive/legacy-chinese/` — 中文原始文档（`ARC-028~037`）
-- 其他独立归档文档（`ARC-001~008, ARC-038, ARC-055~058`）
+- 其他独立归档文档（`ARC-038, ARC-055~060`）
 
 ## 维护要求
 

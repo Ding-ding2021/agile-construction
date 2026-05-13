@@ -2,23 +2,23 @@
  * 项目管理页面的详情抽屉组件
  */
 
-import { useEffect } from 'react';
-import { EmptyState } from '../shared';
-import type { ProjectItem, ProjectDetail } from './projectManagement.types';
+import { useEffect } from 'react'
+import { EmptyState } from '../shared'
+import type { ProjectItem, ProjectDetail } from './projectManagement.types'
 
 type ProjectDetailDrawerProps = {
-  project: ProjectItem | null;
-  isOpen: boolean;
-  onClose: () => void;
-  isNewProject?: boolean;
-};
+  project: ProjectItem | null
+  isOpen: boolean
+  onClose: () => void
+  isNewProject?: boolean
+}
 
 const riskLevelMap: Record<string, { label: string; tone: string }> = {
   low: { label: '低', tone: 'green' },
   medium: { label: '中', tone: 'yellow' },
   high: { label: '高', tone: 'orange' },
   critical: { label: '严重', tone: 'red' },
-};
+}
 
 // 模拟详情数据生成
 const generateProjectDetail = (project: ProjectItem): ProjectDetail => {
@@ -29,52 +29,54 @@ const generateProjectDetail = (project: ProjectItem): ProjectDetail => {
       { name: '方案评审', status: 'completed', dueDate: '2024-02-20' },
       { name: '施工准备', status: 'in-progress', dueDate: '2024-03-10' },
       { name: '主体施工', status: 'pending', dueDate: '2024-05-30' },
-      { name: '验收交付', status: 'pending', dueDate: project.plannedOpenDate }
+      { name: '验收交付', status: 'pending', dueDate: project.plannedOpenDate },
     ],
     tasks: [
       { name: '完成设计图纸审核', assignee: '张三', status: 'completed' },
       { name: '协调施工资源', assignee: '李四', status: 'in-progress' },
       { name: '设备采购确认', assignee: '王五', status: 'in-progress' },
-      { name: '安全隐患排查', assignee: '赵六', status: 'pending' }
+      { name: '安全隐患排查', assignee: '赵六', status: 'pending' },
     ],
-    risks: project.riskLevel ? [
-      {
-        level: project.riskLevel,
-        description: '施工进度滞后，需要增加人力投入',
-        impact: '可能影响开业时间'
-      }
-    ] : []
-  };
-};
+    risks: project.riskLevel
+      ? [
+          {
+            level: project.riskLevel,
+            description: '施工进度滞后，需要增加人力投入',
+            impact: '可能影响开业时间',
+          },
+        ]
+      : [],
+  }
+}
 
-const ProjectDetailDrawer = ({ 
-  project, 
-  isOpen, 
-  onClose, 
-  isNewProject = false 
+const ProjectDetailDrawer = ({
+  project,
+  isOpen,
+  onClose,
+  isNewProject = false,
 }: ProjectDetailDrawerProps) => {
   // ESC 键关闭
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEsc)
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+      document.removeEventListener('keydown', handleEsc)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, onClose])
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
-  const detail = project ? generateProjectDetail(project) : null;
+  const detail = project ? generateProjectDetail(project) : null
 
   return (
     <>
@@ -86,15 +88,10 @@ const ProjectDetailDrawer = ({
         {/* 头部 */}
         <div className="pm-drawer-header">
           <div className="pm-drawer-title">
-            {isNewProject ? '新建项目' : (project?.name || '项目详情')}
+            {isNewProject ? '新建项目' : project?.name || '项目详情'}
           </div>
-          <button
-            type="button"
-            className="pm-drawer-close"
-            onClick={onClose}
-            aria-label="关闭"
-          >
-            <img src="/assets/CodeBuddyAssets/3848_19/58.svg" alt="" />
+          <button type="button" className="pm-drawer-close" onClick={onClose} aria-label="关闭">
+            <img src="/assets/CodeBubbyAssets/3848_19/58.svg" alt="" />
           </button>
         </div>
 
@@ -198,9 +195,9 @@ const ProjectDetailDrawer = ({
                     <span>{detail.project.progress}%</span>
                   </div>
                   <div className="pm-line-progress">
-                    <div 
-                      className={`pm-line-progress-fill ${detail.project.statusTone}`} 
-                      style={{ width: `${detail.project.progress}%` }} 
+                    <div
+                      className={`pm-line-progress-fill ${detail.project.statusTone}`}
+                      style={{ width: `${detail.project.progress}%` }}
                     />
                   </div>
                 </div>
@@ -233,7 +230,11 @@ const ProjectDetailDrawer = ({
                         <span className="pm-task-assignee">{task.assignee}</span>
                       </div>
                       <span className={`pm-task-status ${task.status}`}>
-                        {task.status === 'completed' ? '已完成' : task.status === 'in-progress' ? '进行中' : '待处理'}
+                        {task.status === 'completed'
+                          ? '已完成'
+                          : task.status === 'in-progress'
+                            ? '进行中'
+                            : '待处理'}
                       </span>
                     </div>
                   ))}
@@ -262,7 +263,7 @@ const ProjectDetailDrawer = ({
             </>
           ) : (
             <EmptyState
-              iconSrc="/assets/CodeBuddyAssets/3848_19/50.svg"
+              iconSrc="/assets/CodeBubbyAssets/3848_19/50.svg"
               title="未选择项目"
               description="请从列表中选择一个项目查看详情"
             />
@@ -293,7 +294,7 @@ const ProjectDetailDrawer = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProjectDetailDrawer;
+export default ProjectDetailDrawer
