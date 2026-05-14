@@ -1,10 +1,11 @@
 ---
 id: AI-PRODUCT-ROADMAP
-human_source: docs/01-product/product-roadmap-v1.2.md
-status: active
-last_synced: 2026-05-11
-title: AI 合约：产品规划路线图
-last_updated: 2026-05-12
+human_source: docs/99-archive/product/product-roadmap-v1.2-draft.md
+status: superseded
+last_synced: 2026-05-14
+title: AI 合约：产品规划路线图（已归档）
+last_updated: 2026-05-14
+superseded_by: docs/ai/contracts/product-planning.md
 ---
 
 # AI 合约：产品规划路线图
@@ -34,15 +35,15 @@ last_updated: 2026-05-12
 
 ## 依赖模块
 
-| 模块     | 引用位置                                     | 依赖内容                                       |
-| -------- | -------------------------------------------- | ---------------------------------------------- |
-| 标准管理 | docs/01-product/product-roadmap-v1.2.md §4.3 | 标准库驱动任务生成、执行指导和验收判断         |
-| 项目管理 | docs/01-product/project-management-prd.md    | 项目容器、PMBOK 标签、里程碑、风险、成本       |
-| 任务中心 | docs/01-product/task-center-prd.md           | 任务树模型、标准绑定、前置依赖                 |
-| 采购管理 | docs/01-product/project-management-prd.md    | 采购申请→订单→到货跟踪与任务联动               |
-| 工队管理 | docs/01-product/workteam-management-prd.md   | 班组结构、资质、评级、排期、派单对接           |
-| Agent    | docs/01-product/multi-agent-v1-prd.md        | 品牌需求 Agent、项目经理 Agent、验收质检 Agent |
-| 系统设置 | docs/01-product/settings-prd.md              | 权限、字典、编码规则、通知、Agent 配置         |
+| 模块     | 引用位置                                      | 依赖内容                                                                             |
+| -------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| 标准管理 | docs/01-product/product-roadmap-v1.2.md §4.3  | 标准库驱动任务生成、执行指导和验收判断                                               |
+| 项目管理 | docs/01-product/project-management-prd.md     | 项目容器、PMBOK 标签、里程碑、风险、成本                                             |
+| 任务中心 | docs/01-product/task-center-prd.md            | 任务树模型、标准绑定、前置依赖                                                       |
+| 采购管理 | docs/01-product/project-management-prd.md     | 采购申请→订单→到货跟踪与任务联动                                                     |
+| 工队管理 | docs/01-product/workteam-management-prd.md    | 班组结构、资质、评级、排期、派单对接                                                 |
+| Agent    | docs/99-archive/product/multi-agent-v1-prd.md | 品牌需求 Agent、项目经理 Agent、验收质检 Agent（已归档，详见 agent-architecture.md） |
+| 系统设置 | docs/01-product/settings-prd.md               | 权限、字典、编码规则、通知、Agent 配置                                               |
 
 ## API 骨架
 

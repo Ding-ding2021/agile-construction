@@ -17,7 +17,7 @@ related_docs: []
 > **文档版本**：V1.0  
 > **文档状态**：建议生效（开发基线）  
 > **适用模块**：标准管理（任务模板 / 项目模板）、任务中心（任务实例化）、项目管理（项目容器初始化）  
-> **依据文档**：`docs/01-product/standard-management-prd.md`、`docs/01-product/task-center-prd.md`、`docs/01-product/project-management-prd.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`
+> **依据文档**：`docs/99-archive/product/standard-management-prd.md`（已归档）、`docs/01-product/task-center-prd.md`、`docs/99-archive/product/project-management-prd.md`（已归档）、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`
 
 ---
 

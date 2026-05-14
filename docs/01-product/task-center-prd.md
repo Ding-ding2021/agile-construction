@@ -9,7 +9,14 @@ status: active
 last_updated: 2026-04-27
 source_of_truth: true
 related_code: []
-related_docs: []
+related_docs:
+  - docs/01-product/product-planning-v1.md（L1 产品规划）
+  - docs/01-product/v1-product-definition.md（L2 V1 产品定义）
+  - docs/02-architecture/task-tree-modeling.md
+  - docs/02-architecture/structured-standard-library.md
+  - docs/02-architecture/state-machine-design.md
+  - docs/01-product/project-management-prd.md
+  - docs/99-archive/product/multi-agent-v1-prd.md（已归档）
 ---
 
 # 任务中心需求文档
@@ -18,7 +25,7 @@ related_docs: []
 > **文档状态**：草稿中
 > **适用阶段**：V1 / MVP
 > **所属模块**：任务中心
-> **关联文档**：`docs/01-product/product-roadmap.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`、`docs/02-architecture/state-machine-design.md`、`docs/01-product/project-management-prd.md`、`docs/01-product/multi-agent-v1-prd.md`
+> **关联文档**：`docs/01-product/product-planning-v1.md`（L1）、`docs/01-product/v1-product-definition.md`（L2）、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`、`docs/02-architecture/state-machine-design.md`
 
 ---
 

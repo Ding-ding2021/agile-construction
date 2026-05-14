@@ -18,7 +18,7 @@ related_docs: []
 > **文档状态**：草稿中  
 > **适用阶段**：V1 / MVP  
 > **所属模块**：数字员工（Agent）  
-> **关联文档**：`docs/01-product/product-roadmap-v1.2-draft.md`、`docs/01-product/multi-agent-v1-prd.md`、`docs/02-architecture/multi-agent-v1-technical-design.md`、`docs/01-product/task-center-prd.md`、`docs/01-product/project-management-prd.md`、`docs/01-product/personnel-management-prd.md`
+> **关联文档**：`docs/01-product/product-planning-v1.md`（L1）、`docs/01-product/v1-product-definition.md`（L2）、`docs/99-archive/product/multi-agent-v1-prd.md`（已归档，详见 `agent-architecture.md`）、`docs/02-architecture/multi-agent-v1-technical-design.md`、`docs/01-product/task-center-prd.md`、`docs/01-product/personnel-management-prd.md`
 
 ---
 

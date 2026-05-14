@@ -34,12 +34,12 @@ last_updated: 2026-05-12
 
 ## 依赖模块
 
-| 模块     | 引用位置                                    | 依赖内容                             |
-| -------- | ------------------------------------------- | ------------------------------------ |
-| 项目管理 | docs/01-product/project-management-prd.md   | 项目状态字典、预警阈值、通知策略     |
-| 任务中心 | docs/01-product/task-center-prd.md          | 任务状态枚举、SLA 阈值、告警路由     |
-| 人员管理 | docs/01-product/personnel-management-prd.md | 角色权限口径、组织边界、账号安全策略 |
-| 数字员工 | docs/01-product/multi-agent-v1-prd.md       | 模块开关、工具权限策略、审批策略     |
+| 模块     | 引用位置                                      | 依赖内容                                                               |
+| -------- | --------------------------------------------- | ---------------------------------------------------------------------- |
+| 项目管理 | docs/01-product/project-management-prd.md     | 项目状态字典、预警阈值、通知策略                                       |
+| 任务中心 | docs/01-product/task-center-prd.md            | 任务状态枚举、SLA 阈值、告警路由                                       |
+| 人员管理 | docs/01-product/personnel-management-prd.md   | 角色权限口径、组织边界、账号安全策略                                   |
+| 数字员工 | docs/99-archive/product/multi-agent-v1-prd.md | 模块开关、工具权限策略、审批策略（已归档，详见 agent-architecture.md） |
 
 ## API 骨架
 

@@ -177,14 +177,14 @@ related_docs: []
 
 ### ⚪ 无影响（已对齐）
 
-| 文档                                                  | 说明                                             |
-| ----------------------------------------------------- | ------------------------------------------------ |
-| `docs/01-product/multi-agent-v1-prd.md`               | Agent 配置与 Roadmap 的「节点型 Agent 辅助」一致 |
-| `docs/01-product/procurement-management-prd.md`       | P0 模块定位与 Roadmap 一致                       |
-| `docs/01-product/standard-management-prd.md`          | P0 模块定位与 Roadmap 一致                       |
-| `docs/01-product/workteam-management-prd.md`          | P1 模块定位与 Roadmap 一致                       |
-| `docs/02-architecture/task-tree-modeling.md`          | 任务树模型与 Roadmap 一致                        |
-| `docs/02-architecture/structured-standard-library.md` | 标准库设计与 Roadmap 一致                        |
+| 文档                                                           | 说明                                             |
+| -------------------------------------------------------------- | ------------------------------------------------ |
+| `docs/99-archive/product/multi-agent-v1-prd.md`（已归档）      | Agent 配置与 Roadmap 的「节点型 Agent 辅助」一致 |
+| `docs/01-product/procurement-management-prd.md`                | P0 模块定位与 Roadmap 一致                       |
+| `docs/99-archive/product/standard-management-prd.md`（已归档） | P0 模块定位与 Roadmap 一致                       |
+| `docs/01-product/workteam-management-prd.md`                   | P1 模块定位与 Roadmap 一致                       |
+| `docs/02-architecture/task-tree-modeling.md`                   | 任务树模型与 Roadmap 一致                        |
+| `docs/02-architecture/structured-standard-library.md`          | 标准库设计与 Roadmap 一致                        |
 
 ---
 

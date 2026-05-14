@@ -18,7 +18,7 @@ related_docs: []
 > **文档状态**：草稿中
 > **适用阶段**：V1 / MVP
 > **所属模块**：采购管理
-> **关联文档**：`docs/01-product/product-roadmap.md`、`docs/01-product/project-management-prd.md`、`docs/01-product/task-center-prd.md`、`docs/01-product/standard-management-prd.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/state-machine-design.md`、`docs/01-product/multi-agent-v1-prd.md`
+> **关联文档**：`docs/01-product/product-planning-v1.md`（L1）、`docs/01-product/v1-product-definition.md`（L2）、`docs/01-product/task-center-prd.md`、`docs/99-archive/product/standard-management-prd.md`（已归档）、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/state-machine-design.md`
 
 ---
 

@@ -5,9 +5,10 @@ domain: product
 category: prd
 title: 多Agent建店管理平台 V1 PRD
 owner: docs-maintainer
-status: active
-last_updated: 2026-04-16
-source_of_truth: true
+status: superseded
+last_updated: 2026-05-14
+source_of_truth: false
+superseded_by: docs/02-architecture/agent-architecture.md
 related_code: []
 related_docs: []
 ---

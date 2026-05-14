@@ -18,7 +18,7 @@ related_docs: []
 > **文档状态**：草稿中
 > **适用阶段**：V1 / MVP
 > **适用范围**：品牌方营建标准、国家/行业/地方标准、企业内部标准、供应商执行标准
-> **关联文档**：`docs/01-product/product-roadmap.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/01-product/multi-agent-v1-prd.md`、`docs/02-architecture/multi-agent-v1-technical-design.md`
+> **关联文档**：`docs/01-product/product-roadmap.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/99-archive/product/multi-agent-v1-prd.md`（已归档）、`docs/02-architecture/multi-agent-v1-technical-design.md`
 
 ---
 
