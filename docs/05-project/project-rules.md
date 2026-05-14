@@ -16,7 +16,7 @@ related_docs: []
 
 > **文档版本**：V1.0  
 > **文档状态**：已生效  
-> **适用范围**：连锁门店营建管理系统（当前仓库）  
+> **适用范围**：数字营建项目（当前仓库）  
 > **依据文档**：`docs/01-product/product-roadmap.md`、`docs/01-product/project-management-prd.md`、`docs/01-product/task-center-prd.md`、`docs/01-product/personnel-management-prd.md`、`docs/01-product/digital-employee-prd.md`、`docs/01-product/settings-prd.md`、`docs/00-governance/design-specification.md`、`docs/00-governance/coding-standards.md`、`docs/03-engineering/development-guide.md`、`CODEBUDDY.md`
 
 ---

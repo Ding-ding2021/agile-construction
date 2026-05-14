@@ -4,7 +4,6 @@ on:
 
 jobs:
   daily-report:
-    if: false  # 已禁用，所有功能已迁移至 Trae Schedule
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,12 +28,12 @@ jobs:
           COMMIT_COUNT=$(echo "$COMMITS" | grep -c "^- " || echo 0)
           FILE_COUNT=$(git log --since="midnight" --name-only --format="" | sort -u | wc -l | tr -d ' ')
 
-          mkdir -p .workbuddy/stats/daily
+          mkdir -p memory/stats/daily
           ALERT=$(if [ "${COMMIT_COUNT}" -eq 0 ]; then echo "无提交"; else echo "无"; fi)
 
           printf "# 日报 — %s (周%s)\n\n## 今日提交\n%s\n\n## 今日指标\n| 指标 | 值 | 状态 |\n|---|---|---|\n| 提交次数 | %s | — |\n| 文件变更 | %s | — |\n\n## 告警\n%s\n\n---\n发布者：harness-bot\n" \
             "$TODAY" "$WEEKDAY_CN" "$COMMITS" "$COMMIT_COUNT" "$FILE_COUNT" "$ALERT" \
-            > ".workbuddy/stats/daily/${TODAY}.md"
+            > "memory/stats/daily/${TODAY}.md"
 
       - name: 飞书推送
         env:
@@ -42,7 +41,7 @@ jobs:
         run: |
           if [ -n "$FEISHU_WEBHOOK_URL" ]; then
             TODAY=$(date '+%Y-%m-%d')
-            python3 scripts/notify-feishu.py "日报 $TODAY" "$(cat .workbuddy/stats/daily/$TODAY.md)"
+            python3 scripts/notify-feishu.py "日报 $TODAY" "$(cat memory/stats/daily/$TODAY.md)"
           else
             echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
@@ -57,7 +56,7 @@ jobs:
         run: |
           git config user.name "harness-bot"
           git config user.email "harness@agile-construction.dev"
-          git add .workbuddy/stats/daily/
+          git add memory/stats/daily/
           git diff --cached --quiet || git commit -m "docs(stats): 每日总结 $(date '+%Y-%m-%d')"
           git push || echo "⚠️ 推送失败"
 

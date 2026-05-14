@@ -5,12 +5,14 @@ domain: product
 category: prd
 title: 项目管理需求文档
 owner: docs-maintainer
-status: active
-last_updated: 2026-04-24
-source_of_truth: true
+status: superseded
+last_updated: 2026-05-14
+source_of_truth: false
+superseded_by: docs/02-architecture/project-task-driven-architecture.md
 related_code: []
 related_docs:
-  - docs/01-product/product-roadmap-v1.2-draft.md
+  - docs/01-product/product-planning-v1.md（L1 产品规划）
+  - docs/01-product/v1-product-definition.md（L2 V1 产品定义）
   - docs/02-architecture/task-tree-modeling.md
   - docs/02-architecture/structured-standard-library.md
   - docs/02-architecture/state-machine-design.md
@@ -20,11 +22,11 @@ related_docs:
 # 项目管理需求文档
 
 > **文档版本**：V1.2
-> **文档状态**：已按 Roadmap V1.2 修正（标签体系 6→8，状态机对齐代码实现）
+> **文档状态**：活跃（与 L1/L2 产品规划对齐，标签体系为 8 领域标签，状态机已修订为任务驱动模型）
 > **适用阶段**：V1 / MVP（兼容 V2 演进）
 > **所属模块**：项目管理
-> **关联文档**：`docs/01-product/product-roadmap-v1.2-draft.md`、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`、`docs/02-architecture/state-machine-design.md`、`docs/01-product/multi-agent-v1-prd.md`
-> **变更说明**：本文档 §1.3、§6.4、§7、§10.3、§11、§12 已按 Roadmap V1.2 的 PMBOK 领域标签和项目状态机进行修正，旧版「生命周期 6 标签 + 两级状态机」设计已废弃。
+> **关联文档**：`docs/01-product/product-planning-v1.md`（L1）、`docs/01-product/v1-product-definition.md`（L2）、`docs/02-architecture/task-tree-modeling.md`、`docs/02-architecture/structured-standard-library.md`、`docs/02-architecture/state-machine-design.md`
+> **变更说明**：本文档的领域标签设计（§4.4）和"项目驱动任务"相关描述已在 L1/L2 中被"任务驱动项目"取代。具体设计以 `v1-product-definition.md`（L2）为准。
 
 ---
 

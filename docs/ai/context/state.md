@@ -19,7 +19,7 @@ related_docs: []
 
 ## 当前阶段
 
-- 项目：连锁门店建设管理系统 V1 / MVP
+- 项目：数字营建项目 V1 / MVP
 - 路线图：`docs/01-product/product-roadmap-v1.2-draft.md`
 - 开发计划：`docs/05-project/development-plan-v2.0.md` (V2.1)
 - 阶段状态：Phase 1~5 已完成（底座 / WBS三视图 / 标准 / 模板 / 采购 / 工队）

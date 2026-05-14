@@ -3,11 +3,11 @@
 # 人类可手动覆盖：将 status 改为 overridden 即停止该调节
 
 version: "1.0"
-last_evaluated: "2026-05-12T03:34:07Z"
+last_evaluated: "2026-05-14T01:37:06Z"
 last_evaluated_by: "harness-bot"
 
 active_adjustments:
-  - id: adj-20260512-pm-TR-001
+  - id: adj-20260514-pm-TR-001
     role: 产品
     trigger: "技能遗漏率高"
     action: force_skill
@@ -16,21 +16,21 @@ active_adjustments:
       mode: mandatory
       inject: True
     message: "近 7 天 产品 技能遗漏 3 次/日"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-pm-TR-004
+  - id: adj-20260514-pm-TR-004
     role: 产品
     trigger: "中文率低"
     action: inject_prompt
     severity: L1
     message: "近 7 天英文思考 3 次，请注意全程中文"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-design-TR-001
+  - id: adj-20260514-design-TR-001
     role: 设计
     trigger: "技能遗漏率高"
     action: force_skill
@@ -39,21 +39,21 @@ active_adjustments:
       mode: mandatory
       inject: True
     message: "近 7 天 设计 技能遗漏 3 次/日"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-design-TR-004
+  - id: adj-20260514-design-TR-004
     role: 设计
     trigger: "中文率低"
     action: inject_prompt
     severity: L1
     message: "近 7 天英文思考 3 次，请注意全程中文"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-dev-TR-001
+  - id: adj-20260514-dev-TR-001
     role: 开发
     trigger: "技能遗漏率高"
     action: force_skill
@@ -62,21 +62,21 @@ active_adjustments:
       mode: mandatory
       inject: True
     message: "近 7 天 开发 技能遗漏 3 次/日"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-dev-TR-004
+  - id: adj-20260514-dev-TR-004
     role: 开发
     trigger: "中文率低"
     action: inject_prompt
     severity: L1
     message: "近 7 天英文思考 3 次，请注意全程中文"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-qa-TR-001
+  - id: adj-20260514-qa-TR-001
     role: 测试
     trigger: "技能遗漏率高"
     action: force_skill
@@ -85,18 +85,18 @@ active_adjustments:
       mode: mandatory
       inject: True
     message: "近 7 天 测试 技能遗漏 3 次/日"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
-  - id: adj-20260512-qa-TR-004
+  - id: adj-20260514-qa-TR-004
     role: 测试
     trigger: "中文率低"
     action: inject_prompt
     severity: L1
     message: "近 7 天英文思考 3 次，请注意全程中文"
-    applied: "2026-05-12"
-    expires: "2026-05-19"
+    applied: "2026-05-14"
+    expires: "2026-05-21"
     status: active
 
 inactive_adjustments:

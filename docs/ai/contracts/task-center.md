@@ -1,9 +1,9 @@
 ---
 id: AI-TASK-CENTER
-human_source: docs/01-product/task-center-prd.md
+human_source: docs/02-architecture/task-center-architecture.md
 status: active
-last_synced: 2026-05-11
-title: AI 合约：任务中心
+last_synced: 2026-05-14
+title: AI 合约：任务中心"从 CRUD 到业务引擎"架构
 last_updated: 2026-05-12
 ---
 

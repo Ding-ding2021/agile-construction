@@ -3,7 +3,7 @@ id: DOC-03-ENGINEERING-DEVELOPMENT-GUIDE
 number: DEV-012
 domain: development
 category: guide
-title: 🚀 连锁门店建设管理系统 - 开发指南
+title: 🚀 数字营建项目 - 开发指南
 owner: docs-maintainer
 status: active
 last_updated: 2026-04-16
@@ -12,7 +12,7 @@ related_code: []
 related_docs: []
 ---
 
-# 🚀 连锁门店建设管理系统 - 开发指南
+# 🚀 数字营建项目 - 开发指南
 
 > **版本**: v2.1.0  
 > **最后更新**: 2026-04-24  

@@ -23,10 +23,10 @@ jobs:
           ALERT=$(if [ ${COMMIT_COUNT:-0} -eq 0 ]; then echo "🟡 本周无提交"; else echo "无"; fi)
           COMMIT_LIST=$(git log --since="$MONDAY" --format='- %s')
 
-          mkdir -p .workbuddy/stats/weekly
+          mkdir -p memory/stats/weekly
           printf "# 周报 — %s (%s ~ %s)\n\n## 本周概览\n- 提交数：%s\n- 文件变更：%s\n\n## 提交列表\n%s\n\n## 指标汇总\n| 指标 | 本周值 | 状态 |\n|---|---|---|\n| 提交次数 | %s | — |\n| 文件变更 | %s | — |\n\n## 告警\n%s\n\n---\n发布者：harness-bot\n" \
             "$WEEK" "$MONDAY" "$TODAY" "$COMMIT_COUNT" "$UNIQUE_FILES" "$COMMIT_LIST" "$COMMIT_COUNT" "$UNIQUE_FILES" "$ALERT" \
-            > ".workbuddy/stats/weekly/${WEEK}.md"
+            > "memory/stats/weekly/${WEEK}.md"
 
       - name: 自适应评估（L2.5 行为调节）
         shell: bash
@@ -37,13 +37,48 @@ jobs:
             --output .harness/adjustments.yaml \
             --agfile AGENTS.md || echo "⚠️ 评估失败（非阻塞）"
 
+      - name: Agent 行为审计报告
+        shell: bash
+        run: |
+          echo "📊 生成 Agent 行为审计报告..."
+          WEEK=$(date '+%Y-W%V')
+          mkdir -p memory/stats/weekly
+          python3 scripts/agent_event_logger.py "$(date -d 'last friday' '+%Y-%m-%d' 2>/dev/null || date -v-6d '+%Y-%m-%d')" "$(date '+%Y-%m-%d')" \
+            > "memory/stats/weekly/agent-eval-${WEEK}.md" 2>/dev/null \
+            || python3 scripts/agent_event_logger.py \
+            > "memory/stats/weekly/agent-eval-${WEEK}.md" 2>/dev/null \
+            || echo "⚠️ 事件日志为空或不存在，跳过行为审计"
+          if [ -f "memory/stats/weekly/agent-eval-${WEEK}.md" ]; then
+            echo "✅ 行为审计报告已生成"
+            cat "memory/stats/weekly/agent-eval-${WEEK}.md" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 矫正效果验证
+        shell: bash
+        run: |
+          echo "🔍 执行矫正效果验证..."
+          python3 scripts/evaluate-adjustments.py \
+            --verify \
+            --output .harness/adjustments.yaml || echo "⚠️ 验证失败（非阻塞）"
+
+      - name: 真相源同步校验
+        shell: bash
+        continue-on-error: true
+        run: |
+          if [ -f scripts/verify-truth-source.py ]; then
+            echo "🔍 执行真相源同步校验..."
+            python3 scripts/verify-truth-source.py || echo "⚠️ 真相源校验发现问题"
+          else
+            echo "⚠️ verify-truth-source.py 不存在，跳过"
+          fi
+
       - name: 飞书推送
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
           if [ -n "$FEISHU_WEBHOOK_URL" ]; then
             WEEK=$(date '+%Y-W%V')
-            python3 scripts/notify-feishu.py "周报 $WEEK" "$(cat .workbuddy/stats/weekly/$WEEK.md)"
+            python3 scripts/notify-feishu.py "周报 $WEEK" "$(cat memory/stats/weekly/$WEEK.md)"
           else
             echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
@@ -58,6 +93,6 @@ jobs:
         run: |
           git config user.name "harness-bot"
           git config user.email "harness@agile-construction.dev"
-          git add .workbuddy/stats/weekly/ .harness/adjustments.yaml AGENTS.md
+          git add memory/stats/weekly/ memory/stats/ .harness/adjustments.yaml AGENTS.md memory/events/
           git diff --cached --quiet || git commit -m "docs(stats): 周报 $(date '+%Y-W%V')"
           git push || echo "⚠️ 推送失败"

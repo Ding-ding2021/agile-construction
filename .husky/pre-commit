@@ -32,4 +32,21 @@ else
   echo "✅ 分支名检查通过"
 fi
 
+# 4. 记忆日志格式校验（警告模式，不阻断）
+echo "📝 检查记忆日志格式..."
+MEMORY_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '^memory/.*\.md$' || true)
+if [ -n "$MEMORY_FILES" ]; then
+  while IFS= read -r f; do
+    if [ -f "$f" ] && grep -q '避坑' "$f"; then
+      HAS_TABLE=$(grep -c '| 避坑 |' "$f" || echo 0)
+      HAS_FALLBACK=$(grep -cE '避坑[：:]\s*[0-9]+\s*次' "$f" || echo 0)
+      if [ "${HAS_TABLE:-0}" -eq 0 ] && [ "${HAS_FALLBACK:-0}" -eq 0 ]; then
+        echo "⚠️  $f: 避坑格式可能不规范，建议使用标准格式"
+        echo "   标准格式1: | 避坑 | 英文思考 3次 / 跳skill 2次 |"
+        echo "   标准格式2: 避坑：3次（E1 英文思考 / E2 跳skill）"
+      fi
+    fi
+  done <<< "$MEMORY_FILES"
+fi
+
 echo "✅ 检查通过"

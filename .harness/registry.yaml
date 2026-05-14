@@ -126,7 +126,7 @@ roles:
     model: deepseek-v4-flash
     phases: [define, plan, test, review, ship, evolve]
     skills: 27
-    role_file: docs/00-governance/harness/roles/产品.md
+    role_file: docs/00-governance/harness/roles/product.md
     squad_leader: true
 
   - id: design
@@ -136,7 +136,7 @@ roles:
     model_note: 多模态
     phases: [define, plan, build, test, review]
     skills: 33
-    role_file: docs/00-governance/harness/roles/设计.md
+    role_file: docs/00-governance/harness/roles/design.md
 
   - id: developer
     name: 开发工程师
@@ -144,7 +144,7 @@ roles:
     model: deepseek-v4-flash
     phases: [plan, build, test]
     skills: 35
-    role_file: docs/00-governance/harness/roles/开发.md
+    role_file: docs/00-governance/harness/roles/development.md
 
   - id: qa
     name: 测试工程师
@@ -152,7 +152,7 @@ roles:
     model: deepseek-v4-pro
     phases: [define, plan, test, review]
     skills: 12
-    role_file: docs/00-governance/harness/roles/测试.md
+    role_file: docs/00-governance/harness/roles/testing.md
 
 # ============================================================
 # 3. 临时组织
@@ -449,7 +449,7 @@ context:
     service: memory
     status: enabled
     strategy: 双轨（Markdown 真相源 + MCP 增强层）
-    details: docs/00-governance/memory-dual-track-strategy.md
+    details: docs/00-governance/human-ai-collaboration.md
     note: |
       MCP Memory Service 采用 sqlite_vec 本地后端运行。
       自动从 Markdown 记忆文件建立语义索引，AI Agent 可在此自动检索历史会话。
@@ -463,10 +463,10 @@ context:
     - knowledge-base-index
 
   role_files:
-    产品: docs/00-governance/harness/roles/产品.md
-    设计: docs/00-governance/harness/roles/设计.md
-    开发: docs/00-governance/harness/roles/开发.md
-    测试: docs/00-governance/harness/roles/测试.md
+    产品: docs/00-governance/harness/roles/product.md
+    设计: docs/00-governance/harness/roles/design.md
+    开发: docs/00-governance/harness/roles/development.md
+    测试: docs/00-governance/harness/roles/testing.md
 
 # ============================================================
 # 7. 工具

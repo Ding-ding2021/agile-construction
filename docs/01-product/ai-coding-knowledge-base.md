@@ -10,7 +10,8 @@ last_updated: 2026-05-07
 source_of_truth: false
 related_code: []
 related_docs:
-  - docs/01-product/product-roadmap-v1.2-draft.md
+  - docs/01-product/product-planning-v1.md（L1）
+  - docs/01-product/v1-product-definition.md（L2）
 ---
 
 # 🤖 AI 编程知识库（2026 年最新）

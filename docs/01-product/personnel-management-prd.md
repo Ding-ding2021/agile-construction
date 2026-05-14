@@ -13,11 +13,12 @@ related_code:
   - src/components/personnel/personnelUsers.ts
   - src/services/repositories/personnelRepository.ts
 related_docs:
-  - docs/01-product/product-roadmap-v1.2-draft.md
+  - docs/01-product/product-planning-v1.md（L1）
+  - docs/01-product/v1-product-definition.md（L2）
   - docs/01-product/project-management-prd.md
   - docs/01-product/task-center-prd.md
   - docs/02-architecture/state-machine-design.md
-  - docs/03-engineering/development-plan-v1.2.md
+  - docs/05-project/development-plan-v2.0.md
   - docs/PLAN.md
 ---
 
@@ -27,7 +28,7 @@ related_docs:
 > **文档状态**：已评审（2026-05-06 产品路线评审通过）
 > **适用阶段**：V1 / MVP
 > **所属模块**：人员管理
-> **关联文档**：`docs/01-product/product-roadmap-v1.2-draft.md`、`docs/01-product/project-management-prd.md`、`docs/01-product/task-center-prd.md`、`docs/02-architecture/state-machine-design.md`、`docs/03-engineering/development-plan-v1.2.md`、`docs/PLAN.md`
+> **关联文档**：`docs/01-product/product-planning-v1.md`（L1）、`docs/01-product/v1-product-definition.md`（L2）、`docs/01-product/project-management-prd.md`、`docs/01-product/task-center-prd.md`、`docs/02-architecture/state-machine-design.md`、`docs/05-project/development-plan-v2.0.md`、`docs/PLAN.md`
 > **变更说明（V1.1）**：
 >
 > - 新增 §3 业务数据关系图（ER 图、流程数据流、现有系统字符串碎片诊断）

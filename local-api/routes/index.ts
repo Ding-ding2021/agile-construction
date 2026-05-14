@@ -17,6 +17,7 @@ import personnelRoutes from './personnel'
 import organizationRoutes from './organizations'
 import crewRoutes from './crews'
 import procurementRoutes from './procurement'
+import feishuRoutes from './feishu'
 import * as taskCtrl from '../controllers/tasks'
 
 const router = Router()
@@ -53,5 +54,6 @@ router.use('/templates', templateRoutes)
 router.use('/task-templates', taskTemplateRoutes)
 router.use('/standards', standardRoutes)
 router.use('/projects', instantiationRoutes)
+router.use('/feishu', feishuRoutes)
 
 export default router

@@ -30,11 +30,11 @@ jobs:
 
           DOC_DIST=$(grep -rl 'status: active' docs/ 2>/dev/null | cut -d/ -f2 | sort | uniq -c | sort -rn | head -5)
 
-          mkdir -p .workbuddy/stats/trends
+          mkdir -p memory/stats/trends
           printf "# 月报 — %s\n\n## 本月概览\n- 提交数：%s\n- 贡献者：%s\n\n## 本月关键提交\n%s\n\n## 趋势分析\n- 提交频率：%s 次/天\n- 如需详细审计，执行手动 workflow_dispatch\n\n## Skills 时效检查\n- 总计：%s 个，过期：%s 个\n%s\n%s\n\n## 文档 active 分布\n%s\n\n---\n发布者：harness-bot\n季度：%s\n" \
             "$MONTH" "$COMMIT_COUNT" "$UNIQUE_AUTHORS" "$TOP_COMMITS" "$FREQ" \
             "$TOTAL_SKILLS" "$STALE_SKILLS" "$SKILL_LIST" "$SKILL_ALERT" "$DOC_DIST" "$QUARTER" \
-            > ".workbuddy/stats/trends/${MONTH}.md"
+            > "memory/stats/trends/${MONTH}.md"
 
       - name: 飞书推送
         env:
@@ -42,7 +42,7 @@ jobs:
         run: |
           if [ -n "$FEISHU_WEBHOOK_URL" ]; then
             MONTH=$(date '+%Y-%m')
-            python3 scripts/notify-feishu.py "月报 $MONTH" "$(cat .workbuddy/stats/trends/$MONTH.md)"
+            python3 scripts/notify-feishu.py "月报 $MONTH" "$(cat memory/stats/trends/$MONTH.md)"
           else
             echo "⚠️ FEISHU_WEBHOOK_URL 未配置，跳过推送"
           fi
@@ -57,6 +57,6 @@ jobs:
         run: |
           git config user.name "harness-bot"
           git config user.email "harness@agile-construction.dev"
-          git add .workbuddy/stats/trends/
+          git add memory/stats/trends/
           git diff --cached --quiet || git commit -m "docs(stats): 月报 $(date '+%Y-%m')"
           git push || echo "⚠️ 推送失败"

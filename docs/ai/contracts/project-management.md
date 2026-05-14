@@ -1,11 +1,15 @@
 ---
 id: AI-PROJECT-MANAGEMENT
-human_source: docs/01-product/project-management-prd.md
-status: active
-last_synced: 2026-05-11
-title: AI 合约：项目管理
-last_updated: 2026-05-12
+human_source: docs/99-archive/product/project-management-prd.md
+status: superseded
+last_synced: 2026-05-14
+title: AI 合约：项目管理（旧版9状态模型）
+last_updated: 2026-05-14
+superseded_by: docs/ai/contracts/project-task-driven.md
 ---
+
+> ⚠️ **本合约已被取代**。旧版 9 状态模型（待立项→待确认→...→已归档）已重构为"任务驱动"多维正交模型。
+> 请使用新合约：`docs/ai/contracts/project-task-driven.md`
 
 # AI 合约：项目管理
 

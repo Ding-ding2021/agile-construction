@@ -34,6 +34,31 @@ export function initDatabase(): DatabaseType {
   // 启用外键约束，确保级联删除等操作生效
   db.pragma('foreign_keys = ON')
 
+  // 飞书消息队列表
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS feishu_messages (
+      id TEXT PRIMARY KEY,
+      chat_id TEXT NOT NULL DEFAULT '',
+      user_id TEXT NOT NULL DEFAULT '',
+      content TEXT NOT NULL DEFAULT '',
+      msg_type TEXT NOT NULL DEFAULT 'private',
+      status TEXT NOT NULL DEFAULT 'pending',
+      source TEXT NOT NULL DEFAULT 'feishu',
+      reply_content TEXT,
+      created_at TEXT NOT NULL DEFAULT '',
+      processed_at TEXT
+    )
+  `)
+
+  // 飞书心跳表
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS feishu_heartbeat (
+      id TEXT PRIMARY KEY,
+      source TEXT NOT NULL DEFAULT 'trae',
+      updated_at TEXT NOT NULL DEFAULT ''
+    )
+  `)
+
   console.log('[SQLite] 数据库连接成功:', DB_PATH)
 
   return db
