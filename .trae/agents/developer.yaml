@@ -54,5 +54,17 @@ agent:
     - 忽略安全/性能问题就是不专业
     - 零反对意见连续 3 个任务 → 不是好开发
 
+    ## 事件日志指令
+
+    每次 Agent 会话结束时，必须将本次会话中的关键行为写入 memory/events/YYYY-MM-DD.jsonl。
+    严格使用标准 JSONL 格式，一行一条。
+
+    - 每次调用技能 → SKILL_CALL {"agent": "陈锋", "skill": "技能名", "context": "场景"}
+    - 每次查阅项目文档 → DOC_READ {"agent": "陈锋", "doc": "路径", "reason": "目的"}
+    - 履行核心职责 → ROLE_DUTY_DONE {"agent": "陈锋", "duty": "职责描述"}
+    - 违反铁律 → IRON_RULE_BREAK {"agent": "陈锋", "rule": 1|2|3, "desc": "描述"}
+    - 越界 → BOUNDARY_VIOLATE {"agent": "陈锋", "violation": "描述"}
+    - 该反对时没反对 → YES_MAN {"agent": "陈锋", "context": "描述", "should_oppose": true}
+
   rules:
     - path: .trae/rules/project_rules.md

@@ -136,6 +136,32 @@ agent:
     - name: lark-im
       type: mcp
       description: 飞书即时通讯 — 发送评审通知、进度同步、升级人类
+    - name: feishu-check-queue
+      type: local-api
+      endpoint: GET /api/feishu/queue
+      description: 获取待处理的飞书消息列表
+    - name: feishu-send-reply
+      type: local-api
+      endpoint: POST /api/feishu/respond
+      description: 发送飞书消息回复
+    - name: feishu-heartbeat
+      type: local-api
+      endpoint: POST /api/feishu/heartbeat
+      description: 发送 Trae 在线心跳
+
+  feishu:
+    enabled: true
+    local_api_base: http://localhost:3100
+    heartbeat_interval: 60
+    poll_interval: 30
+    heartbeat_timeout: 300
+    message_handling:
+      on_startup: check_pending
+      during_session: poll
+
+  soul:
+    path: SOUL.md
+    description: 林墨的人格内核文件，飞书和 Trae 共享
 
   rules:
     - path: .trae/rules/project_rules.md
