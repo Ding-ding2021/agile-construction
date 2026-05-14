@@ -46,4 +46,16 @@ router.get('/state-machine', taskCtrl.getTaskStateMachine)
 // 催办
 router.post('/:taskId/remind', relationCtrl.remindTask)
 
+// 标准绑定
+router.post('/:taskId/standards/bind', taskCtrl.bindStandardsToTask)
+router.delete('/:taskId/standards/:bindingId', taskCtrl.unbindStandardFromTask)
+router.get('/:taskId/standards', taskCtrl.getTaskStandardBindings)
+
+// 快照
+router.get('/:taskId/snapshots', taskCtrl.getTaskSnapshots)
+router.post('/:taskId/snapshots/generate', taskCtrl.generateTaskSnapshot)
+
+// 验收判定
+router.post('/:taskId/acceptance/validate', taskCtrl.validateTaskAcceptance)
+
 export default router

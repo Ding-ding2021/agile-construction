@@ -19,4 +19,7 @@ router.post('/:id/clauses/:clauseId/rules', stdCtrl.createRule)
 router.put('/:id/clauses/:clauseId/rules/:ruleId', stdCtrl.updateRule)
 router.delete('/:id/clauses/:clauseId/rules/:ruleId', stdCtrl.deleteRule)
 
+router.post('/rules/:id/execute', stdCtrl.executeSingleRule)
+router.get('/:id/bindings', stdCtrl.getStandardBindingRefs)
+
 export default router

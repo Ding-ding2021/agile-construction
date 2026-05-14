@@ -3,6 +3,17 @@ import type Database from 'better-sqlite3'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
 import { extractProjectCode } from './projectHelpers'
+import {
+  bindStandardsToTask as bindingBind,
+  getTaskBindings as bindingGetTaskBindings,
+  unbindStandard,
+  checkBindingGuard,
+} from '../services/standardBindingService'
+import {
+  generateSnapshots as genSnapshots,
+  getTaskSnapshots as getTaskSnapshotsSvc,
+} from '../services/snapshotService'
+import { executeAcceptanceRules } from '../services/ruleEngine'
 
 const TASK_COLUMNS = [
   'project_tasks.id',
@@ -476,6 +487,31 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
     addComputedFields(response as Record<string, unknown>, db)
   }
 
+  // 如果状态变更为"执行中"，自动生成快照（fire-and-forget，不阻塞状态流转）
+  if (body.status === '执行中') {
+    try {
+      genSnapshots(taskId, 'status_change')
+    } catch (err) {
+      const auditDb = getDatabase()
+      auditDb
+        .prepare(
+          `
+        INSERT INTO audit_logs (env_id, scene, detail, project_code, at, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `
+        )
+        .run(
+          'test',
+          'snapshot_failure',
+          `任务 ${taskId} 快照生成失败: ${err}`,
+          '',
+          new Date().toISOString(),
+          new Date().toISOString()
+        )
+      console.error(`[Snapshot] 任务 ${taskId} 快照生成失败（不阻塞）:`, err)
+    }
+  }
+
   res.json(response)
 }
 
@@ -691,4 +727,102 @@ export { statusTransitionAllowed, checkPredecessorsDone }
 
 function statusTransitionAllowed(from: string, to: string): boolean {
   return checkTransition(from, to) === null
+}
+
+// ─── 标准绑定 ─────────────────────────────────────────────
+
+export function bindStandardsToTask(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+  const { clauseIds, bindingType, boundBy } = req.body
+
+  if (!Array.isArray(clauseIds) || clauseIds.length === 0) {
+    throw new ApiError('clauseIds 数组不能为空', 'VALIDATION_ERROR', 400)
+  }
+  if (!bindingType) {
+    throw new ApiError('bindingType 不能为空', 'VALIDATION_ERROR', 400)
+  }
+
+  if (!checkBindingGuard(taskId)) {
+    throw new ApiError('任务已生成快照，无法修改标准绑定', 'BINDING_LOCKED', 400)
+  }
+
+  const results = bindingBind(taskId, clauseIds, bindingType, boundBy)
+  res.status(201).json(results)
+}
+
+export function unbindStandardFromTask(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+  const bindingId = parseInt(req.params.bindingId, 10)
+
+  if (isNaN(bindingId)) {
+    throw new ApiError('无效的 bindingId', 'VALIDATION_ERROR', 400)
+  }
+
+  if (!checkBindingGuard(taskId)) {
+    throw new ApiError('任务已生成快照，无法解绑标准', 'BINDING_LOCKED', 400)
+  }
+
+  unbindStandard(taskId, bindingId)
+  res.status(204).end()
+}
+
+export function getTaskStandardBindings(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+
+  const bindings = bindingGetTaskBindings(taskId)
+  res.json({ data: bindings })
+}
+
+// ─── 快照 ─────────────────────────────────────────────────
+
+export function getTaskSnapshots(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+
+  const snapshots = getTaskSnapshotsSvc(taskId)
+  res.json({ data: snapshots })
+}
+
+export function generateTaskSnapshot(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+  const triggerSource = req.body.triggerSource || 'manual'
+
+  const snapshots = genSnapshots(taskId, triggerSource)
+  res.status(201).json(snapshots)
+}
+
+// ─── 验收判定 ─────────────────────────────────────────────
+
+export function validateTaskAcceptance(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const projectId = getProjectId(extractProjectCode(req))
+  const taskId = resolveTaskId(db, projectId, req.params.taskId)
+  const { actualValues } = req.body
+
+  const snapshots = getTaskSnapshotsSvc(taskId)
+
+  if (snapshots.length === 0) {
+    res.json({ error: '未绑定验收标准', code: 'NO_BINDINGS' })
+    return
+  }
+
+  const rules = snapshots
+    .filter(s => s.ruleId !== null && s.ruleJudgeType !== null)
+    .map(s => ({
+      id: s.ruleId as number,
+      judgeType: s.ruleJudgeType as string,
+      paramConfig: s.ruleParamConfig,
+    }))
+
+  const result = executeAcceptanceRules(rules, actualValues || {})
+  res.json(result)
 }

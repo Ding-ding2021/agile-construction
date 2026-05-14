@@ -23,7 +23,9 @@
     "ladle": "npm run ladle -w src-next",
     "ladle:build": "npm run ladle:build -w src-next",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
-    "test:e2e:ui": "playwright test --ui --config e2e/playwright.config.ts"
+    "test:e2e:ui": "playwright test --ui --config e2e/playwright.config.ts",
+    "test:api": "vitest run --config local-api/vitest.config.ts",
+    "test:api:watch": "vitest --config local-api/vitest.config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -73,6 +75,7 @@
     "@types/react": "^19.2.14",
     "@types/react-big-calendar": "^1.16.3",
     "@types/react-dom": "^19.2.3",
+    "@types/supertest": "^7.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.5",
     "@vitest/ui": "^4.1.4",
@@ -89,6 +92,7 @@
     "prettier": "^3.8.3",
     "prisma": "^7.8.0",
     "shadcn": "^4.6.0",
+    "supertest": "^7.2.2",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.19.2",
     "typescript": "~5.9.3",

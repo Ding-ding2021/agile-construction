@@ -29,6 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
+import { PageLayout } from '@/components/page-layout'
 import { ChevronLeft, Plus, Pencil, Trash2 } from 'lucide-react'
 import {
   getStandard,
@@ -154,30 +156,60 @@ export default function StandardDetailPage() {
 
   if (loading) {
     return (
-      <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
-        <div className="text-sm text-muted-foreground">加载中...</div>
-      </div>
+      <PageLayout>
+        <div role="status" aria-busy={true}>
+          <div className="flex items-center gap-3">
+            <Skeleton className="size-8 rounded-md" />
+            <div className="space-y-1.5">
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-3.5 w-24" />
+            </div>
+          </div>
+          <div className="rounded-lg border p-6 space-y-4 mt-4 md:mt-6">
+            <Skeleton className="h-5 w-20" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Skeleton className="h-3.5 w-12" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3.5 w-12" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3.5 w-12" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3.5 w-12" />
+                <Skeleton className="h-4 w-36" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </PageLayout>
     )
   }
   if (!standard) {
     return (
-      <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
+      <PageLayout>
         <div className="text-sm text-muted-foreground">标准不存在</div>
         <Button variant="outline" onClick={() => navigate('/standards')}>
           <ChevronLeft className="size-4 mr-1" /> 返回列表
         </Button>
-      </div>
+      </PageLayout>
     )
   }
 
   return (
-    <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
+    <PageLayout>
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
           size="icon"
           className="size-8"
           onClick={() => navigate('/standards')}
+          aria-label="返回列表"
         >
           <ChevronLeft className="size-4" />
         </Button>
@@ -198,7 +230,7 @@ export default function StandardDetailPage() {
         <CardHeader>
           <CardTitle>基本信息</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-6">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-1">
             <span className="text-sm text-muted-foreground">编码</span>
             <div className="text-sm font-mono">{standard.code}</div>
@@ -282,6 +314,7 @@ export default function StandardDetailPage() {
                           size="icon"
                           className="size-7"
                           onClick={() => openClause(clause)}
+                          aria-label="编辑条款"
                         >
                           <Pencil className="size-3.5" />
                         </Button>
@@ -290,6 +323,7 @@ export default function StandardDetailPage() {
                           size="icon"
                           className="size-7 text-destructive"
                           onClick={() => handleDeleteClause(clause.id)}
+                          aria-label="删除条款"
                         >
                           <Trash2 className="size-3.5" />
                         </Button>
@@ -407,6 +441,6 @@ export default function StandardDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }

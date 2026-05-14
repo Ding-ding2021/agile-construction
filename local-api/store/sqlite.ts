@@ -4,13 +4,22 @@
 
 import { existsSync, mkdirSync } from 'fs'
 import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
 import Database from 'better-sqlite3'
 import type { Database as DatabaseType } from 'better-sqlite3'
 
-const DB_PATH = join(process.cwd(), 'local-api', 'store', 'prisma.db')
 // schema.sql 已删除，表结构由 prisma db push 管理
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 let db: DatabaseType | null = null
+
+function getDbPath(): string {
+  return process.env.TEST_DATABASE === 'true'
+    ? join(__dirname, 'test.db')
+    : join(__dirname, 'prisma.db')
+}
 
 /**
  * 初始化数据库连接与表结构
@@ -19,6 +28,8 @@ export function initDatabase(): DatabaseType {
   if (db) {
     return db
   }
+
+  const DB_PATH = getDbPath()
 
   // 确保目录存在
   const dbDir = dirname(DB_PATH)
@@ -79,6 +90,7 @@ export function getDatabase(): DatabaseType {
  */
 export function closeDatabase(): void {
   if (db) {
+    db.pragma('wal_checkpoint(TRUNCATE)')
     db.close()
     db = null
     console.log('[SQLite] 数据库连接已关闭')

@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
+import { executeRule } from '../services/ruleEngine'
+import { getStandardBindings } from '../services/standardBindingService'
 
 const STD_COLUMNS = [
   'id',
@@ -288,4 +290,40 @@ export function deleteRule(req: Request, res: Response): void {
   const id = Number(req.params.ruleId)
   db.prepare('DELETE FROM standard_rules WHERE id = ?').run(id)
   res.json({ success: true })
+}
+
+// ─── 规则执行 ─────────────────────────────────────────────
+
+export function executeSingleRule(req: Request, res: Response): void {
+  const db = getDatabase()
+  const ruleId = Number(req.params.id)
+
+  const rule = db
+    .prepare(
+      'SELECT judge_type as judgeType, param_config as paramConfig FROM standard_rules WHERE id = ?'
+    )
+    .get(ruleId) as { judgeType: string; paramConfig: string | null } | undefined
+
+  if (!rule) {
+    throw new ApiError('Rule not found', 'NOT_FOUND', 404)
+  }
+
+  const { actualValue } = req.body
+  const result = executeRule(rule, actualValue)
+  res.json(result)
+}
+
+// ─── 绑定引用 ─────────────────────────────────────────────
+
+export function getStandardBindingRefs(req: Request, res: Response): void {
+  const db = getDatabase()
+  const standardId = Number(req.params.id)
+
+  const existing = db.prepare('SELECT id FROM standards WHERE id = ?').get(standardId)
+  if (!existing) {
+    throw new ApiError('Standard not found', 'NOT_FOUND', 404)
+  }
+
+  const bindings = getStandardBindings(standardId)
+  res.json({ data: bindings })
 }

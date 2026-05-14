@@ -223,6 +223,8 @@ model ProjectTask {
   submissions     TaskSubmission[]
   checklist       ChecklistItem[]
   workPackage     WorkPackage? @relation(fields: [workPackageId], references: [code])
+  standardSnapshots StandardSnapshot[]
+  taskStandardBindings TaskStandardBinding[]
 
   @@map("project_tasks")
 }
@@ -568,6 +570,7 @@ model Standard {
   isDeleted  Boolean          @default(false) @map("is_deleted")
   files      StandardFile[]
   clauses    StandardClause[]
+  snapshots  StandardSnapshot[]
   createdAt  DateTime         @default(now()) @map("created_at")
   updatedAt  DateTime         @updatedAt @map("updated_at")
 
@@ -589,13 +592,15 @@ model StandardFile {
 model StandardClause {
   id         Int            @id @default(autoincrement())
   standardId Int            @map("standard_id")
-  code       String         // 条款编号，同一标准内 unique
+  code       String
   title      String
   content    String?
-  clauseType String         @map("clause_type") // execution / acceptance / general
+  clauseType String         @map("clause_type")
   sortOrder  Int            @default(0) @map("sort_order")
   standard   Standard       @relation(fields: [standardId], references: [id], onDelete: Cascade)
   rules      StandardRule[]
+  snapshots  StandardSnapshot[]
+  bindings   TaskStandardBinding[]
 
   @@unique([standardId, code])
   @@map("standard_clauses")
@@ -609,7 +614,54 @@ model StandardRule {
   description String?
   clause      StandardClause @relation(fields: [clauseId], references: [id], onDelete: Cascade)
 
+  snapshots   StandardSnapshot[]
+  bindings    TaskStandardBinding[]
+
   @@map("standard_rules")
+}
+
+// ─── 标准快照（Phase 6A - 标准管理引擎）────────────────────────
+model StandardSnapshot {
+  id                  Int      @id @default(autoincrement())
+  standardId          Int      @map("standard_id")
+  clauseId            Int?     @map("clause_id")
+  ruleId              Int?     @map("rule_id")
+  taskId              Int      @map("task_id")
+  snapshotVersion     String   @map("snapshot_version")
+  standardName        String   @map("standard_name")
+  clauseCode          String   @map("clause_code")
+  clauseTitle         String   @map("clause_title")
+  clauseContent       String?  @map("clause_content")
+  ruleJudgeType       String?  @map("rule_judge_type")
+  ruleParamConfig     String?  @map("rule_param_config")
+  generatedAt         DateTime @default(now()) @map("generated_at")
+  generatedBy         String   @default("system") @map("generated_by")
+  triggerSource       String   @default("status_change") @map("trigger_source")
+
+  standard            Standard       @relation(fields: [standardId], references: [id])
+  clause              StandardClause? @relation(fields: [clauseId], references: [id])
+  rule                StandardRule?  @relation(fields: [ruleId], references: [id])
+  task                ProjectTask    @relation(fields: [taskId], references: [id])
+
+  @@map("standard_snapshots")
+}
+
+// ─── 任务标准绑定（Phase 6A - 标准管理引擎）───────────────────
+model TaskStandardBinding {
+  id          Int      @id @default(autoincrement())
+  taskId      Int      @map("task_id")
+  clauseId    Int      @map("clause_id")
+  ruleId      Int?     @map("rule_id")
+  bindingType String   @map("binding_type") // execution / acceptance
+  boundAt     DateTime @default(now()) @map("bound_at")
+  boundBy     String?  @map("bound_by")
+
+  task        ProjectTask    @relation(fields: [taskId], references: [id])
+  clause      StandardClause @relation(fields: [clauseId], references: [id])
+  rule        StandardRule?  @relation(fields: [ruleId], references: [id])
+
+  @@unique([taskId, clauseId, bindingType])
+  @@map("task_standard_bindings")
 }
 
 // ─── 工队管理表（Phase 5 - 工队管理）───────────────────────────
