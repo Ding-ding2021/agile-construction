@@ -17,7 +17,7 @@ related_docs: []
 > 本文件是仓库文档唯一导航入口（SSOT 索引）。
 > 所有 active 文档必须在本页登记。
 > 计划类文档的管理详见 [PLAN.md](docs/PLAN.md)。
-> 最后索引更新：2026-05-11（新增 `docs/ai/` AI 合约层）
+> 最后索引更新：2026-05-14（归档 3 个过期文档：multi-agent-v1-prd、standard-management-prd、standard-driven-architecture）
 
 ## 文档分层
 
@@ -54,14 +54,11 @@ related_docs: []
 ### 产品（01-product）
 
 - `docs/01-product/product-roadmap-v1.2-draft.md` — `PRD-001` 产品路线图 V1.2
-- `docs/01-product/project-management-prd.md` — `PRD-002` 项目管理 PRD
-- `docs/01-product/task-center-prd.md` — `PRD-003` 任务中心 PRD
+- `docs/01-product/task-center-prd.md` — `PRD-003` 任务中心 PRD（已由 `task-center-architecture.md` 替代，保留作为功能参考）
 - `docs/01-product/personnel-management-prd.md` — `PRD-004` 人员管理 PRD
 - `docs/01-product/procurement-management-prd.md` — `PRD-005` 采购管理 PRD
-- `docs/01-product/standard-management-prd.md` — `PRD-006` 标准管理 PRD
 - `docs/01-product/digital-employee-prd.md` — `PRD-007` 数字员工 PRD
 - `docs/01-product/settings-prd.md` — `PRD-008` 设置 PRD
-- `docs/01-product/multi-agent-v1-prd.md` — `PRD-009` 多 Agent V1 PRD
 - `docs/01-product/workteam-management-prd.md` — `PRD-010` 班组管理 PRD
 - `docs/01-product/gantt-benchmark-research.md` — `PRD-011` 甘特图调研
 - `docs/01-product/gantt-roadmap.md` — `PRD-012` 甘特图路线图
@@ -88,6 +85,9 @@ related_docs: []
 - `docs/03-development/task-center-erd.md` — `DEV-011` 任务中心 ER 图
 - `docs/03-development/development-guide.md` — `DEV-012` 开发指南
 - `docs/03-development/integration-guide.md` — `DEV-013` 集成指南
+- `docs/02-architecture/standard-management-architecture.md` — `DEV-017` 标准管理"标准驱动执行"架构重构
+- `docs/02-architecture/agent-architecture.md` — `DEV-018` 项目经理 Agent "Harness+MCP+Skills" 架构设计
+- `docs/02-architecture/task-center-architecture.md` — `DEV-019` 任务中心"从 CRUD 到业务引擎"架构重构
 - `docs/03-development/phase1-handoff.md` — `DEV-014` Phase 1 交接
 - `docs/03-development/component-refactoring-plan.md` — `DEV-015` 组件重构计划
 - `docs/03-development/component-implementation-spec.md` — `DEV-016` 组件实现规范
@@ -121,6 +121,10 @@ related_docs: []
 
 > `docs/99-archive/` 下所有已标记 `archived` 状态的文档。不作为执行依据。
 
+- `docs/99-archive/product/project-management-prd.md` — `ARC-061` 项目管理 PRD（已归档，由 `project-task-driven-architecture.md` 替代）
+- `docs/99-archive/product/multi-agent-v1-prd.md` — `ARC-062` 多 Agent V1 PRD（已归档，由 `agent-architecture.md` 替代）
+- `docs/99-archive/product/standard-management-prd.md` — `ARC-063` 标准管理 PRD（已归档，由 `standard-management-architecture.md` 替代）
+- `docs/99-archive/architecture/standard-driven-architecture.md` — `ARC-064` 标准驱动执行架构（已归档，由 `standard-management-architecture.md` 替代）
 - `docs/99-archive/development-plan-v1.2.md` — `ARC-001` 开发计划 V1.2（已归档，由 V2.0 替代）
 - `docs/99-archive/2026-05-07-P2-T1.md` — `ARC-002` P2-T1 实现计划（Phase 2 已完成）
 - `docs/99-archive/2026-05-07-calendar-system.md` — `ARC-003` 日历系统计划（已集成）

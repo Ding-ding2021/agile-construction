@@ -6,7 +6,7 @@ category: harness
 title: AI 合约索引
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-12
+last_updated: 2026-05-14
 source_of_truth: true
 related_code: []
 related_docs: []
@@ -27,28 +27,33 @@ related_docs: []
 
 ## 合约清单
 
-| 文件                                  | 来源                                               | 状态   |
-| ------------------------------------- | -------------------------------------------------- | ------ |
-| `contracts/adaptive-governance.md`    | `docs/00-governance/harness/09-governance.md`      | active |
-| `contracts/agent-squad-protocol.md`   | `docs/00-governance/agent-squad-protocol.md`       | active |
-| `contracts/code-review-checklist.md`  | `docs/00-governance/code-review-checklist.md`      | active |
-| `contracts/coding-standards.md`       | `docs/00-governance/coding-standards.md`           | active |
-| `contracts/component-catalog.md`      | `docs/02-design/component-catalog.md`              | active |
-| `contracts/component-development.md`  | `docs/02-design/component-development-contract.md` | active |
-| `contracts/design-standards.md`       | `docs/00-governance/design-standards.md`           | active |
-| `contracts/digital-employee.md`       | `docs/01-product/digital-employee-prd.md`          | active |
-| `contracts/document-governance.md`    | `docs/00-governance/document-governance.md`        | active |
-| `contracts/human-ai-collaboration.md` | `docs/00-governance/human-ai-collaboration.md`     | active |
-| `contracts/personnel-management.md`   | `docs/01-product/personnel-management-prd.md`      | active |
-| `contracts/procurement-management.md` | `docs/01-product/procurement-management-prd.md`    | active |
-| `contracts/product-roadmap.md`        | `docs/01-product/product-roadmap-v1.2.md`          | active |
-| `contracts/project-charter.md`        | `docs/00-governance/project-charter.md`            | active |
-| `contracts/project-management.md`     | `docs/01-product/project-management-prd.md`        | active |
-| `contracts/settings.md`               | `docs/01-product/settings-prd.md`                  | active |
-| `contracts/task-center.md`            | `docs/01-product/task-center-prd.md`               | active |
-| `contracts/testing-standards.md`      | `docs/04-testing/testing-standards.md`             | active |
-| `contracts/vi-standards.md`           | `docs/02-design/vi-standards.md`                   | active |
-| `contracts/workteam-management.md`    | `docs/01-product/workteam-management-prd.md`       | active |
+| 文件                                  | 来源                                                       | 状态       |
+| ------------------------------------- | ---------------------------------------------------------- | ---------- |
+| `contracts/adaptive-governance.md`    | `docs/00-governance/harness/09-governance.md`              | active     |
+| `contracts/agent-squad-protocol.md`   | `docs/00-governance/agent-squad-protocol.md`               | active     |
+| `contracts/code-review-checklist.md`  | `docs/00-governance/code-review-checklist.md`              | active     |
+| `contracts/coding-standards.md`       | `docs/00-governance/coding-standards.md`                   | active     |
+| `contracts/component-catalog.md`      | `docs/02-design/component-catalog.md`                      | active     |
+| `contracts/component-development.md`  | `docs/02-design/component-development-contract.md`         | active     |
+| `contracts/design-standards.md`       | `docs/00-governance/design-standards.md`                   | active     |
+| `contracts/digital-employee.md`       | `docs/01-product/digital-employee-prd.md`                  | active     |
+| `contracts/document-governance.md`    | `docs/00-governance/document-governance.md`                | active     |
+| `contracts/human-ai-collaboration.md` | `docs/00-governance/human-ai-collaboration.md`             | active     |
+| `contracts/personnel-management.md`   | `docs/01-product/personnel-management-prd.md`              | active     |
+| `contracts/procurement-management.md` | `docs/01-product/procurement-management-prd.md`            | active     |
+| `contracts/product-planning.md`       | `docs/01-product/product-planning-v1.md`                   | active     |
+| `contracts/product-roadmap.md`        | `docs/99-archive/product/product-roadmap-v1.2-draft.md`    | superseded |
+| `contracts/project-charter.md`        | `docs/00-governance/project-charter.md`                    | active     |
+| `contracts/project-management.md`     | `docs/99-archive/product/project-management-prd.md`        | superseded |
+| `contracts/project-task-driven.md`    | `docs/02-architecture/project-task-driven-architecture.md` | active     |
+| `contracts/settings.md`               | `docs/01-product/settings-prd.md`                          | active     |
+| `contracts/agent.md`                  | `docs/02-architecture/agent-architecture.md`               | active     |
+| `contracts/standard-management.md`    | `docs/02-architecture/standard-management-architecture.md` | active     |
+| `contracts/task-center.md`            | `docs/02-architecture/task-center-architecture.md`         | active     |
+| `contracts/testing-standards.md`      | `docs/04-testing/testing-standards.md`                     | active     |
+| `contracts/v1-product-definition.md`  | `docs/01-product/v1-product-definition.md`                 | active     |
+| `contracts/vi-standards.md`           | `docs/02-design/vi-standards.md`                           | active     |
+| `contracts/workteam-management.md`    | `docs/01-product/workteam-management-prd.md`               | active     |
 
 ## knowledge/ 清单
 
