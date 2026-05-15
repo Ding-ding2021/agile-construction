@@ -6,6 +6,8 @@ const router = Router()
 router.get('/', projectCtrl.getProjects)
 router.post('/', projectCtrl.createProject)
 router.get('/:code', projectCtrl.getProjectByCode)
+router.get('/:code/health', projectCtrl.getProjectHealth)
+router.post('/:code/reaggregate', projectCtrl.reaggregateProject)
 router.put('/:code', projectCtrl.updateProject)
 router.delete('/:code', projectCtrl.deleteProject)
 

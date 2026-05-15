@@ -51,10 +51,7 @@ model Project {
   code      String   @unique
   name      String
   brand     String
-  status    String   // 旧版单状态字段（向后兼容）
-  parentStatus  String  @default("启动") @map("parent_status")  // 新版父状态
-  subStatusJson String? @map("sub_status_json")                 // JSON: SubStatusProgress
-  statusTone String  @map("status_tone")
+  parentStatus  String  @default("启动") @map("parent_status")
   stage     String
   progress  Int      @default(0)
   budget    String?
@@ -69,13 +66,18 @@ model Project {
   templateId String? @map("template_id")
   plannedOpenDate   String  @map("planned_open_date")
   actualOpenDate    String? @map("actual_open_date")
-  dispatchStatus    String? @map("dispatch_status")
-  executionStatus   String? @map("execution_status")
-  acceptanceStatus  String? @map("acceptance_status")
-  settlementStatus  String? @map("settlement_status")
+  dispatchStatus    String  @default("未派单") @map("dispatch_status")
+  executionStatus   String  @default("未开始") @map("execution_status")
+  acceptanceStatus  String  @default("待验收") @map("acceptance_status")
+  settlementStatus  String  @default("未结算") @map("settlement_status")
   pendingDispatchCount    Int @default(0) @map("pending_dispatch_count")
   pendingExecutionCount   Int @default(0) @map("pending_execution_count")
   pendingAcceptanceCount  Int @default(0) @map("pending_acceptance_count")
+  pendingSettlementCount  Int @default(0) @map("pending_settlement_count")
+
+  // ── 健康度 ──
+  healthStatus           String @default("正常") @map("health_status")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

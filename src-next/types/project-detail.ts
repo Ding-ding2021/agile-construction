@@ -10,8 +10,12 @@ export interface ProjectOverview {
   code: string
   name: string
   brand: string
-  status: string
   parentStatus: string | null
+  healthStatus: string | null
+  dispatchStatus: string | null
+  executionStatus: string | null
+  acceptanceStatus: string | null
+  settlementStatus: string | null
   stage: string
   progress: number
   budget: string | null
@@ -88,6 +92,30 @@ export interface QualityCheckItem {
   status: 'pass' | 'fail' | 'pending'
   inspector: string
   checkedAt: string | null
+}
+
+export interface ProjectHealthResponse {
+  projectCode: string
+  health: {
+    status: '正常' | '关注' | '预警' | '严重'
+    indicators: Array<{
+      label: string
+      value: string
+      level: 'normal' | 'warning' | 'critical' | 'info'
+    }>
+  }
+  executionStatus: string
+  acceptanceStatus: string
+  settlementStatus: string
+  dispatchStatus: string
+  parentStatus: string
+  progress: number
+  pendingCounts: {
+    dispatch: number
+    execution: number
+    acceptance: number
+    settlement: number
+  }
 }
 
 export interface IssueLog {

@@ -9,10 +9,10 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table'
-import { PROJECT_STATUS_STYLE } from '@/pages/projects/constants/project-styles'
+import { HEALTH_STYLE } from '@/pages/projects/constants/project-styles'
 import type { ProjectItem } from '@/types/project'
 
-const STATUS_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+const HEALTH_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
 
 interface ProjectTableViewProps {
   projects: ProjectItem[]
@@ -30,7 +30,7 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
             <TableRow>
               <TableHead className="bg-muted/60">编码</TableHead>
               <TableHead className="bg-muted/60">项目名称</TableHead>
-              <TableHead className="bg-muted/60">状态</TableHead>
+              <TableHead className="bg-muted/60">健康度</TableHead>
               <TableHead className="bg-muted/60">进度</TableHead>
               <TableHead className="bg-muted/60">负责人</TableHead>
               <TableHead className="bg-muted/60">计划开业</TableHead>
@@ -60,7 +60,7 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
             <TableRow>
               <TableHead className="bg-muted/60">编码</TableHead>
               <TableHead className="bg-muted/60">项目名称</TableHead>
-              <TableHead className="bg-muted/60">状态</TableHead>
+              <TableHead className="bg-muted/60">健康度</TableHead>
               <TableHead className="bg-muted/60">进度</TableHead>
               <TableHead className="bg-muted/60">负责人</TableHead>
               <TableHead className="bg-muted/60">计划开业</TableHead>
@@ -85,7 +85,7 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
           <TableRow>
             <TableHead className="w-28 bg-muted/60">编码</TableHead>
             <TableHead className="bg-muted/60">项目名称</TableHead>
-            <TableHead className="w-24 bg-muted/60">状态</TableHead>
+            <TableHead className="w-24 bg-muted/60">健康度</TableHead>
             <TableHead className="w-32 bg-muted/60">进度</TableHead>
             <TableHead className="w-24 bg-muted/60">负责人</TableHead>
             <TableHead className="w-28 bg-muted/60">计划开业</TableHead>
@@ -112,10 +112,10 @@ export function ProjectTableView({ projects, loading }: ProjectTableViewProps) {
                   variant="ghost"
                   className={
                     'text-xs font-medium ' +
-                    (PROJECT_STATUS_STYLE[project.status] ?? STATUS_FALLBACK)
+                    (HEALTH_STYLE[project.healthStatus ?? ''] ?? HEALTH_FALLBACK)
                   }
                 >
-                  {project.status}
+                  {project.healthStatus ?? '正常'}
                 </Badge>
               </TableCell>
               <TableCell className="py-2.5">

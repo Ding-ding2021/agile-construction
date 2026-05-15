@@ -1,6 +1,16 @@
 import type { Request, Response, NextFunction } from 'express'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
+import { triggerProjectAggregation } from './projects'
+
+function getProjectIdByCode(code: string): number {
+  const db = getDatabase()
+  const row = db.prepare('SELECT id FROM projects WHERE code = ?').get(code) as
+    | { id: number }
+    | undefined
+  if (!row) throw new ApiError('Project not found', 'PROJECT_NOT_FOUND', 404)
+  return row.id
+}
 
 const ORDER_COLUMNS = [
   'id',
@@ -144,6 +154,12 @@ export function createProcurement(req: Request, res: Response, _next: NextFuncti
     .prepare(`SELECT ${ORDER_COLUMNS} FROM procurement_orders WHERE id = ?`)
     .get(result.lastInsertRowid)
 
+  try {
+    triggerProjectAggregation(getProjectIdByCode(body.projectCode))
+  } catch {
+    /* non-blocking */
+  }
+
   res.status(201).json(created)
 }
 
@@ -205,6 +221,13 @@ export function updateProcurement(req: Request, res: Response, _next: NextFuncti
   })
 
   const updated = db.prepare(`SELECT ${ORDER_COLUMNS} FROM procurement_orders WHERE id = ?`).get(id)
+
+  try {
+    const projCode = body.projectCode || (existing as Record<string, unknown>).project_code
+    if (projCode) triggerProjectAggregation(getProjectIdByCode(projCode as string))
+  } catch {
+    /* non-blocking */
+  }
 
   res.json(updated)
 }

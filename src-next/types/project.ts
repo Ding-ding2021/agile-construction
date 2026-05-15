@@ -3,9 +3,8 @@ export interface ProjectItem {
   code: string
   name: string
   brand: string
-  status: string
   parentStatus: string | null
-  statusTone: string | null
+  healthStatus: string | null
   stage: string
   progress: number
   budget: string | null

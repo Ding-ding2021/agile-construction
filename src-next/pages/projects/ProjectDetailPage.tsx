@@ -12,7 +12,7 @@ import { TabResource } from './detail/tab-resource'
 import { TabRisk } from './detail/tab-risk'
 import { TabSettings } from './detail/tab-settings'
 import { TAB_KEYS, TAB_LABELS, type TabKey, type ProjectDetail } from '@/types/project-detail'
-import { PROJECT_STATUS_STYLE } from '@/pages/projects/constants/project-styles'
+import { HEALTH_STYLE } from '@/pages/projects/constants/project-styles'
 import {
   LayoutDashboard,
   GitBranch,
@@ -37,7 +37,7 @@ const TAB_ICONS: Record<TabKey, React.ReactNode> = {
   settings: <Settings className="size-4" />,
 }
 
-const STATUS_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+const HEALTH_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
 
 export default function ProjectDetailPage() {
   const { projectCode } = useParams<{ projectCode: string }>()
@@ -90,9 +90,11 @@ export default function ProjectDetailPage() {
           <div className="flex-1" />
           <Badge
             variant="ghost"
-            className={PROJECT_STATUS_STYLE[project.status] ?? STATUS_FALLBACK}
+            className={
+              'text-xs font-medium ' + (HEALTH_STYLE[project.healthStatus ?? ''] ?? HEALTH_FALLBACK)
+            }
           >
-            {project.status}
+            {project.healthStatus ?? '正常'}
           </Badge>
         </div>
       )}

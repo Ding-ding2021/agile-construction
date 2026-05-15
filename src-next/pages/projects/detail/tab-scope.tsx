@@ -133,24 +133,6 @@ export function TabScope({ projectCode }: TabScopeProps) {
     return buildTree(tasks.filter(t => !t.parentId))
   }, [tasks])
 
-  const handleRowClick = useMemo(
-    () => (row: TreeTask) => {
-      setSelectedTask({
-        id: String(row.id),
-        code: row.code,
-        name: row.name,
-        projectName: projectCode,
-        projectCode,
-        status: row.status,
-        owner: row.assigneeName,
-        assigneeName: row.assigneeName,
-        priority: 'medium',
-        progress: row.progress,
-      } as unknown as TaskItem)
-    },
-    [projectCode]
-  )
-
   if (loading) {
     return <div className="text-sm text-muted-foreground py-4 text-center">加载中...</div>
   }

@@ -1,14 +1,26 @@
 import type { ProjectItem } from '@/types/project'
 import type { MetricCardData } from '@/components/section-cards'
 
-export const PROJECT_STATUS_STYLE: Record<string, string> = {
-  待启动: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400',
-  执行中: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400',
-  待验收: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400',
-  已验收: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400',
-  已关闭: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400',
-  已暂停: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+export const HEALTH_STYLE: Record<string, string> = {
+  正常: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400',
+  关注: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400',
+  预警: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+  严重: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
 }
+
+export const DIMENSION_LABELS: Record<string, string> = {
+  executionStatus: '执行维度',
+  acceptanceStatus: '验收维度',
+  settlementStatus: '结算维度',
+  dispatchStatus: '派单维度',
+}
+
+export const DIMENSION_ORDER = [
+  'executionStatus',
+  'acceptanceStatus',
+  'settlementStatus',
+  'dispatchStatus',
+] as const
 
 export function getProjectMetrics(projects: ProjectItem[]): MetricCardData[] {
   return [
@@ -19,22 +31,26 @@ export function getProjectMetrics(projects: ProjectItem[]): MetricCardData[] {
       description: '所有在建与已建项目',
     },
     {
-      title: '执行中',
-      value: String(projects.filter(p => p.status === '执行中').length),
+      title: '健康',
+      value: String(projects.filter(p => p.healthStatus === '正常' || !p.healthStatus).length),
       trend: 'up',
-      trendLabel: '进行中',
-      description: '当前正在执行的项目',
+      trendLabel: '正常',
+      description: '运行正常的项目',
     },
     {
-      title: '待验收',
-      value: String(projects.filter(p => p.status === '待验收').length),
-      trend: 'neutral',
-      trendLabel: '待验收',
-      description: '等待验收确认的项目',
+      title: '需关注',
+      value: String(
+        projects.filter(
+          p => p.healthStatus === '关注' || p.healthStatus === '预警' || p.healthStatus === '严重'
+        ).length
+      ),
+      trend: 'down',
+      trendLabel: '有风险',
+      description: '存在风险或异常的项目',
     },
     {
       title: '已完成',
-      value: String(projects.filter(p => p.status === '已验收' || p.status === '已关闭').length),
+      value: String(projects.filter(p => p.healthStatus === '正常' && p.progress >= 100).length),
       trend: 'up',
       trendLabel: '完成率',
       description: '已验收或关闭的项目',

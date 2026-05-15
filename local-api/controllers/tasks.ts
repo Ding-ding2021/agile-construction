@@ -14,6 +14,8 @@ import {
   getTaskSnapshots as getTaskSnapshotsSvc,
 } from '../services/snapshotService'
 import { executeAcceptanceRules } from '../services/ruleEngine'
+import { calculateSlaStatus } from '../services/slaCalculator'
+import { triggerProjectAggregation } from './projects'
 
 const TASK_COLUMNS = [
   'project_tasks.id',
@@ -104,6 +106,13 @@ function addComputedFields(row: Record<string, unknown>, db?: Database.Database)
   } else {
     row.predecessorStatus = '无前置任务'
   }
+
+  const slaStatus = calculateSlaStatus(
+    (row.plannedEndAt as string) || null,
+    (row.status as string) || '',
+    (row.actualEndAt as string) || null
+  )
+  row._slaStatus = slaStatus
 }
 
 function getProjectId(projectCode: string): number {
@@ -390,6 +399,32 @@ export function getTaskByCodeGlobal(req: Request, res: Response, _next: NextFunc
   res.json(parsed)
 }
 
+function afterTaskUpdate(taskId: number, projectId: number, newStatus: string): void {
+  if (newStatus === '执行中') {
+    try {
+      genSnapshots(taskId, 'status_change')
+    } catch (err) {
+      const auditDb = getDatabase()
+      auditDb
+        .prepare(
+          `INSERT INTO audit_logs (env_id, scene, detail, project_code, at, created_at)
+           VALUES (?, ?, ?, ?, ?, ?)`
+        )
+        .run(
+          'test',
+          'snapshot_failure',
+          `任务 ${taskId} 快照生成失败: ${err}`,
+          '',
+          new Date().toISOString(),
+          new Date().toISOString()
+        )
+      console.error(`[Snapshot] 任务 ${taskId} 快照生成失败（不阻塞）:`, err)
+    }
+  }
+
+  triggerProjectAggregation(projectId)
+}
+
 export function updateTask(req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
   const projectId = getProjectId(extractProjectCode(req))
@@ -487,30 +522,7 @@ export function updateTask(req: Request, res: Response, _next: NextFunction): vo
     addComputedFields(response as Record<string, unknown>, db)
   }
 
-  // 如果状态变更为"执行中"，自动生成快照（fire-and-forget，不阻塞状态流转）
-  if (body.status === '执行中') {
-    try {
-      genSnapshots(taskId, 'status_change')
-    } catch (err) {
-      const auditDb = getDatabase()
-      auditDb
-        .prepare(
-          `
-        INSERT INTO audit_logs (env_id, scene, detail, project_code, at, created_at)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `
-        )
-        .run(
-          'test',
-          'snapshot_failure',
-          `任务 ${taskId} 快照生成失败: ${err}`,
-          '',
-          new Date().toISOString(),
-          new Date().toISOString()
-        )
-      console.error(`[Snapshot] 任务 ${taskId} 快照生成失败（不阻塞）:`, err)
-    }
-  }
+  afterTaskUpdate(taskId, projectId, body.status)
 
   res.json(response)
 }

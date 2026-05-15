@@ -1,17 +1,16 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SectionCards, type MetricCardData } from '@/components/section-cards'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Users, Target, ArrowUpRight, ClipboardList, Settings, Sparkles } from 'lucide-react'
 import { InstantiateDialog } from '@/pages/projects/components/InstantiateDialog'
-import { PROJECT_STATUS_STYLE } from '@/pages/projects/constants/project-styles'
-import type { ProjectDetail } from '@/types/project-detail'
-
-const STATUS_FALLBACK = 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+import { ProjectHealthCard } from '@/pages/projects/components/ProjectHealthCard'
+import { ProjectDimensionStatus } from '@/pages/projects/components/ProjectDimensionStatus'
+import { api } from '@/services/api'
+import type { ProjectDetail, ProjectHealthResponse } from '@/types/project-detail'
 
 interface TabOverviewProps {
   project: ProjectDetail | null
@@ -21,6 +20,18 @@ interface TabOverviewProps {
 export function TabOverview({ project, loading }: TabOverviewProps) {
   const navigate = useNavigate()
   const [showInstantiate, setShowInstantiate] = useState(false)
+  const [healthData, setHealthData] = useState<ProjectHealthResponse | null>(null)
+  const [healthLoading, setHealthLoading] = useState(true)
+
+  useEffect(() => {
+    if (!project?.code) return
+    setHealthLoading(true)
+    api
+      .getProjectHealth(project.code)
+      .then(setHealthData)
+      .catch(() => setHealthData(null))
+      .finally(() => setHealthLoading(false))
+  }, [project?.code])
 
   const handleInstantiateSuccess = (taskCount: number) => {
     alert(`成功生成 ${taskCount} 个任务`)
@@ -83,6 +94,10 @@ export function TabOverview({ project, loading }: TabOverviewProps) {
 
   return (
     <div className="space-y-4">
+      <ProjectHealthCard health={healthData?.health ?? null} loading={healthLoading} />
+
+      <ProjectDimensionStatus project={healthData ?? project} loading={healthLoading} />
+
       <SectionCards metrics={metrics} cardSize="lg" />
 
       <div className="grid grid-cols-1 @4xl/main:grid-cols-3 gap-4">
@@ -102,15 +117,8 @@ export function TabOverview({ project, loading }: TabOverviewProps) {
                 <p className="text-sm">{project.brand}</p>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">状态</label>
-                <div className="mt-0.5">
-                  <Badge
-                    variant="ghost"
-                    className={PROJECT_STATUS_STYLE[project.status] ?? STATUS_FALLBACK}
-                  >
-                    {project.status}
-                  </Badge>
-                </div>
+                <label className="text-xs text-muted-foreground">生命周期</label>
+                <p className="text-sm">{project.parentStatus || '-'}</p>
               </div>
               <div>
                 <label className="text-xs text-muted-foreground">负责人</label>

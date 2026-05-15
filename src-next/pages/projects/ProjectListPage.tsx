@@ -32,7 +32,7 @@ import type { ProjectItem } from '@/types/project'
 const VIEWS = ['table', 'kanban', 'calendar', 'map'] as const
 type ViewType = (typeof VIEWS)[number]
 
-const STATUS_OPTIONS = ['待启动', '执行中', '待验收', '已验收', '已关闭', '已暂停']
+const HEALTH_OPTIONS = ['正常', '关注', '预警', '严重']
 
 export default function ProjectListPage() {
   const navigate = useNavigate()
@@ -42,7 +42,7 @@ export default function ProjectListPage() {
   const [view, setView] = useState<ViewType>('table')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [statusFilter, setStatusFilter] = useState<string[]>([])
+  const [healthFilter, setHealthFilter] = useState<string[]>([])
   const [sortKey, setSortKey] = useState<'progress' | 'plannedOpenDate'>('progress')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
 
@@ -67,14 +67,15 @@ export default function ProjectListPage() {
           (p.owner ?? '').toLowerCase().includes(q)
       )
     }
-    if (statusFilter.length > 0) list = list.filter(p => statusFilter.includes(p.status))
+    if (healthFilter.length > 0)
+      list = list.filter(p => healthFilter.includes(p.healthStatus ?? ''))
     list = [...list].sort((a, b) => {
       const mul = sortDir === 'asc' ? 1 : -1
       if (sortKey === 'progress') return (a.progress - b.progress) * mul
       return String(a.plannedOpenDate ?? '').localeCompare(String(b.plannedOpenDate ?? '')) * mul
     })
     return list
-  }, [projects, search, statusFilter, sortKey, sortDir])
+  }, [projects, search, healthFilter, sortKey, sortDir])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
   const safePage = Math.min(page, totalPages)
@@ -83,10 +84,10 @@ export default function ProjectListPage() {
 
   useEffect(() => {
     setPage(1)
-  }, [search, statusFilter])
+  }, [search, healthFilter])
 
   const toggleFilter = useCallback((s: string) => {
-    setStatusFilter(prev => (prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]))
+    setHealthFilter(prev => (prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]))
   }, [])
 
   const isEmpty = !loading && filtered.length === 0
@@ -119,6 +120,7 @@ export default function ProjectListPage() {
             </InputGroupAddon>
             <InputGroupInput
               placeholder="搜索项目..."
+              aria-label="搜索项目"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -133,17 +135,17 @@ export default function ProjectListPage() {
                   className="h-7 text-xs gap-0.5 px-2 text-muted-foreground"
                 >
                   <Filter className="size-3.5" />
-                  筛选{statusFilter.length > 0 && ` (${statusFilter.length})`}
+                  健康度{healthFilter.length > 0 && ` (${healthFilter.length})`}
                 </Button>
               }
             />
             <DropdownMenuContent align="end" className="w-36">
               <DropdownMenuGroup>
-                <DropdownMenuLabel>按状态</DropdownMenuLabel>
-                {STATUS_OPTIONS.map(s => (
+                <DropdownMenuLabel>按健康度</DropdownMenuLabel>
+                {HEALTH_OPTIONS.map(s => (
                   <DropdownMenuCheckboxItem
                     key={s}
-                    checked={statusFilter.includes(s)}
+                    checked={healthFilter.includes(s)}
                     onCheckedChange={() => toggleFilter(s)}
                   >
                     {s}

@@ -1,16 +1,14 @@
 import type { Request, Response, NextFunction } from 'express'
 import { getDatabase } from '../store/sqlite'
 import { ApiError } from '../middleware/error'
+import { aggregateProjectStatus } from '../services/projectAggregator'
 
 const PROJECT_COLUMNS = [
   'id',
   'code',
   'name',
   'brand',
-  'status',
   'parent_status as parentStatus',
-  'sub_status_json as subStatusJson',
-  'status_tone as statusTone',
   'stage',
   'progress',
   'budget',
@@ -29,12 +27,54 @@ const PROJECT_COLUMNS = [
   'execution_status as executionStatus',
   'acceptance_status as acceptanceStatus',
   'settlement_status as settlementStatus',
+  'health_status as healthStatus',
   'pending_dispatch_count as pendingDispatchCount',
   'pending_execution_count as pendingExecutionCount',
   'pending_acceptance_count as pendingAcceptanceCount',
+  'pending_settlement_count as pendingSettlementCount',
   'created_at as createdAt',
   'updated_at as updatedAt',
 ].join(', ')
+
+export function triggerProjectAggregation(projectId: number): void {
+  try {
+    const aggregation = aggregateProjectStatus(projectId)
+    const db = getDatabase()
+    db.prepare(
+      `
+      UPDATE projects SET
+        parent_status = @parentStatus,
+        execution_status = @executionStatus,
+        acceptance_status = @acceptanceStatus,
+        settlement_status = @settlementStatus,
+        dispatch_status = @dispatchStatus,
+        health_status = @healthStatus,
+        progress = @progress,
+        pending_dispatch_count = @pendingDispatch,
+        pending_execution_count = @pendingExecution,
+        pending_acceptance_count = @pendingAcceptance,
+        pending_settlement_count = @pendingSettlement,
+        updated_at = datetime('now')
+      WHERE id = @projectId
+    `
+    ).run({
+      projectId,
+      parentStatus: aggregation.parentStatus,
+      executionStatus: aggregation.executionStatus,
+      acceptanceStatus: aggregation.acceptanceStatus,
+      settlementStatus: aggregation.settlementStatus,
+      dispatchStatus: aggregation.dispatchStatus,
+      healthStatus: aggregation.health.status,
+      progress: aggregation.progress,
+      pendingDispatch: aggregation.pendingCounts.dispatch,
+      pendingExecution: aggregation.pendingCounts.execution,
+      pendingAcceptance: aggregation.pendingCounts.acceptance,
+      pendingSettlement: aggregation.pendingCounts.settlement,
+    })
+  } catch (err) {
+    console.error(`[Aggregator] 项目 ${projectId} 聚合失败:`, err)
+  }
+}
 
 export function getProjects(_req: Request, res: Response, _next: NextFunction): void {
   const db = getDatabase()
@@ -47,61 +87,63 @@ export function createProject(req: Request, res: Response, _next: NextFunction):
   const body = req.body
   const now = new Date().toISOString()
 
-  const stmt = db.prepare(`
+  const result = db
+    .prepare(
+      `
     INSERT INTO projects (
-      code, name, brand, status, parent_status, sub_status_json, status_tone, stage, progress,
+      code, name, brand, parent_status, stage, progress,
       budget, team_size, date_range, description, owner,
       risk_level, risk_count, milestone, tasks, template_id,
       planned_open_date, actual_open_date,
-      dispatch_status, execution_status, acceptance_status, settlement_status,
-      pending_dispatch_count, pending_execution_count, pending_acceptance_count,
+      dispatch_status, execution_status, acceptance_status, settlement_status, health_status,
+      pending_dispatch_count, pending_execution_count, pending_acceptance_count, pending_settlement_count,
       created_at, updated_at
     ) VALUES (
-      @code, @name, @brand, @status, @parentStatus, @subStatusJson, @statusTone, @stage, @progress,
+      @code, @name, @brand, @parentStatus, @stage, @progress,
       @budget, @teamSize, @dateRange, @description, @owner,
       @riskLevel, @riskCount, @milestone, @tasks, @templateId,
       @plannedOpenDate, @actualOpenDate,
-      @dispatchStatus, @executionStatus, @acceptanceStatus, @settlementStatus,
-      @pendingDispatchCount, @pendingExecutionCount, @pendingAcceptanceCount,
+      @dispatchStatus, @executionStatus, @acceptanceStatus, @settlementStatus, @healthStatus,
+      @pendingDispatchCount, @pendingExecutionCount, @pendingAcceptanceCount, @pendingSettlementCount,
       @now, @now
     )
-  `)
+  `
+    )
+    .run({
+      code: body.code,
+      name: body.name || '',
+      brand: body.brand || '',
+      parentStatus: '启动',
+      stage: body.stage || '启动',
+      progress: 0,
+      budget: body.budget || null,
+      teamSize: body.teamSize || null,
+      dateRange: body.dateRange || null,
+      description: body.description || null,
+      owner: body.owner || null,
+      riskLevel: body.riskLevel || null,
+      riskCount: body.riskCount || 0,
+      milestone: body.milestone || null,
+      tasks: body.tasks || null,
+      templateId: body.templateId || null,
+      plannedOpenDate: body.plannedOpenDate || '',
+      actualOpenDate: body.actualOpenDate || null,
+      dispatchStatus: '未派单',
+      executionStatus: '未开始',
+      acceptanceStatus: '待验收',
+      settlementStatus: '未结算',
+      healthStatus: '正常',
+      pendingDispatchCount: 0,
+      pendingExecutionCount: 0,
+      pendingAcceptanceCount: 0,
+      pendingSettlementCount: 0,
+      now,
+    })
 
-  const result = stmt.run({
-    code: body.code,
-    name: body.name || '',
-    brand: body.brand || '',
-    status: body.status || '待立项',
-    parentStatus: body.parentStatus || '启动',
-    subStatusJson: body.subStatusJson || null,
-    statusTone: body.statusTone || 'blue',
-    stage: body.stage || '启动',
-    progress: body.progress || 0,
-    budget: body.budget || null,
-    teamSize: body.teamSize || null,
-    dateRange: body.dateRange || null,
-    description: body.description || null,
-    owner: body.owner || null,
-    riskLevel: body.riskLevel || null,
-    riskCount: body.riskCount || 0,
-    milestone: body.milestone || null,
-    tasks: body.tasks || null,
-    templateId: body.templateId || null,
-    plannedOpenDate: body.plannedOpenDate || '',
-    actualOpenDate: body.actualOpenDate || null,
-    dispatchStatus: body.dispatchStatus || null,
-    executionStatus: body.executionStatus || null,
-    acceptanceStatus: body.acceptanceStatus || null,
-    settlementStatus: body.settlementStatus || null,
-    pendingDispatchCount: body.pendingDispatchCount || 0,
-    pendingExecutionCount: body.pendingExecutionCount || 0,
-    pendingAcceptanceCount: body.pendingAcceptanceCount || 0,
-    now,
-  })
+  const projectId = Number(result.lastInsertRowid)
+  triggerProjectAggregation(projectId)
 
-  const created = db
-    .prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE id = ?`)
-    .get(result.lastInsertRowid)
+  const created = db.prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE id = ?`).get(projectId)
 
   res.status(201).json(created)
 }
@@ -145,13 +187,24 @@ export function updateProject(req: Request, res: Response, _next: NextFunction):
   const db = getDatabase()
   const { code } = req.params
 
-  const existing = db.prepare('SELECT id FROM projects WHERE code = ?').get(code)
+  const existing = db.prepare('SELECT id FROM projects WHERE code = ?').get(code) as
+    | { id: number }
+    | undefined
   if (!existing) {
     throw new ApiError('Project not found', 'NOT_FOUND', 404)
   }
 
   const { code: _ignored, ...data } = req.body
   void _ignored
+
+  if ('status' in req.body) {
+    throw new ApiError(
+      'status 字段已废弃，不允许手动设置。项目状态已由系统自动聚合',
+      'DEPRECATED_FIELD',
+      400
+    )
+  }
+
   const setClauses: string[] = []
   const params: Record<string, unknown> = {}
 
@@ -162,8 +215,9 @@ export function updateProject(req: Request, res: Response, _next: NextFunction):
   }
 
   if (setClauses.length === 0) {
-    const existing = db.prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE code = ?`).get(code)
-    res.json(existing)
+    triggerProjectAggregation(existing.id)
+    const updated = db.prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE code = ?`).get(code)
+    res.json(updated)
     return
   }
 
@@ -172,6 +226,8 @@ export function updateProject(req: Request, res: Response, _next: NextFunction):
     ...params,
     code,
   })
+
+  triggerProjectAggregation(existing.id)
 
   const updated = db.prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE code = ?`).get(code)
   res.json(updated)
@@ -187,4 +243,46 @@ export function deleteProject(req: Request, res: Response, _next: NextFunction):
   }
 
   res.status(204).end()
+}
+
+export function getProjectHealth(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const { code } = req.params
+
+  const project = db.prepare('SELECT id, code FROM projects WHERE code = ?').get(code) as
+    | { id: number; code: string }
+    | undefined
+  if (!project) {
+    throw new ApiError('Project not found', 'NOT_FOUND', 404)
+  }
+
+  const aggregation = aggregateProjectStatus(project.id)
+  res.json({
+    projectCode: project.code,
+    health: aggregation.health,
+    executionStatus: aggregation.executionStatus,
+    acceptanceStatus: aggregation.acceptanceStatus,
+    settlementStatus: aggregation.settlementStatus,
+    dispatchStatus: aggregation.dispatchStatus,
+    parentStatus: aggregation.parentStatus,
+    progress: aggregation.progress,
+    pendingCounts: aggregation.pendingCounts,
+  })
+}
+
+export function reaggregateProject(req: Request, res: Response, _next: NextFunction): void {
+  const db = getDatabase()
+  const { code } = req.params
+
+  const project = db.prepare('SELECT id, code FROM projects WHERE code = ?').get(code) as
+    | { id: number; code: string }
+    | undefined
+  if (!project) {
+    throw new ApiError('Project not found', 'NOT_FOUND', 404)
+  }
+
+  triggerProjectAggregation(project.id)
+
+  const updated = db.prepare(`SELECT ${PROJECT_COLUMNS} FROM projects WHERE code = ?`).get(code)
+  res.json(updated)
 }

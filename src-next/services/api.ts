@@ -47,6 +47,11 @@ export const api = {
   getProjectDetail: (projectCode: string) =>
     request<import('../types/project-detail').ProjectDetail>(`/projects/${projectCode}`),
 
+  getProjectHealth: (projectCode: string) =>
+    request<import('../types/project-detail').ProjectHealthResponse>(
+      `/projects/${projectCode}/health`
+    ),
+
   updateProject: (projectCode: string, data: Record<string, unknown>) =>
     request<import('../types/project-detail').ProjectOverview>(`/projects/${projectCode}`, {
       method: 'PUT',
