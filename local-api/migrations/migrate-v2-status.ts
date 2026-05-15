@@ -33,7 +33,7 @@ function backupDatabase(dbPath: string): string {
   const backupPath = join(backupDir, `pre-migration-v2-status-${timestamp}.db`)
 
   copyFileSync(dbPath, backupPath)
-  console.log(`[迁移] 数据库备份完成: ${backupPath}`)
+  console.info(`[迁移] 数据库备份完成: ${backupPath}`)
   return backupPath
 }
 
@@ -86,7 +86,7 @@ function migrateProjects(): void {
     )
     .all() as Array<{ id: number; code: string; status: string; parentStatus: string }>
 
-  console.log(`[迁移] 找到 ${projects.length} 个需要迁移的项目`)
+  console.info(`[迁移] 找到 ${projects.length} 个需要迁移的项目`)
 
   for (const project of projects) {
     const mappedStatus = STATUS_MAP[project.status]
@@ -96,14 +96,14 @@ function migrateProjects(): void {
           mappedStatus,
           project.id
         )
-        console.log(
+        console.info(
           `  [${project.code}] status="${project.status}" → parentStatus="${mappedStatus}"`
         )
       } else {
-        console.log(`  [${project.code}] parentStatus 已有值 "${project.parentStatus}"，跳过映射`)
+        console.info(`  [${project.code}] parentStatus 已有值 "${project.parentStatus}"，跳过映射`)
       }
     } else {
-      console.log(
+      console.info(
         `  [${project.code}] status="${project.status}" 无映射规则，保持当前 parentStatus="${project.parentStatus}"`
       )
     }
@@ -117,7 +117,7 @@ function recalculateAllDimensions(): void {
     id: number
     code: string
   }>
-  console.log(`[迁移] 重新计算 ${allProjects.length} 个项目的全维度状态`)
+  console.info(`[迁移] 重新计算 ${allProjects.length} 个项目的全维度状态`)
 
   for (const project of allProjects) {
     try {
@@ -153,7 +153,7 @@ function recalculateAllDimensions(): void {
         pendingAcceptance: aggregation.pendingCounts.acceptance,
         pendingSettlement: aggregation.pendingCounts.settlement,
       })
-      console.log(
+      console.info(
         `  [${project.code}] parentStatus=${aggregation.parentStatus}, health=${aggregation.health.status}`
       )
     } catch (err) {
@@ -163,22 +163,22 @@ function recalculateAllDimensions(): void {
 }
 
 function main(): void {
-  console.log('='.repeat(60))
-  console.log('  Phase 6C — V2 状态迁移脚本')
-  console.log('='.repeat(60))
+  console.info('='.repeat(60))
+  console.info('  Phase 6C — V2 状态迁移脚本')
+  console.info('='.repeat(60))
 
   ensureMigrationsTable()
 
   if (isMigrationApplied()) {
-    console.log('[迁移] 已执行过，跳过（幂等保护）')
-    console.log(
+    console.info('[迁移] 已执行过，跳过（幂等保护）')
+    console.info(
       "[迁移] 如需重新执行，请执行: DELETE FROM _migrations WHERE name = 'v2_status_migration';"
     )
     return
   }
 
   const dbPath = getDbPath()
-  console.log(`[迁移] 数据库路径: ${dbPath}`)
+  console.info(`[迁移] 数据库路径: ${dbPath}`)
 
   if (!existsSync(dbPath)) {
     console.error('[迁移] 错误: 数据库文件不存在，请先初始化数据库')
@@ -191,7 +191,7 @@ function main(): void {
   recalculateAllDimensions()
   markMigrationApplied()
 
-  console.log('[迁移] 完成!')
+  console.info('[迁移] 完成!')
 }
 
 main()
