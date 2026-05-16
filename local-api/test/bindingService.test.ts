@@ -18,8 +18,8 @@ beforeAll(() => {
   const now = new Date().toISOString()
   db.prepare(
     `
-    INSERT INTO projects (code, name, brand, status, parent_status, status_tone, stage, planned_open_date, created_at, updated_at)
-    VALUES ('BIND-TEST-PROJECT', '绑定测试项目', '测试品牌', 'active', '启动', 'neutral', '施工', '2026-06-01', ?, ?)
+    INSERT INTO projects (code, name, brand, parent_status, stage, planned_open_date, created_at, updated_at)
+    VALUES ('BIND-TEST-PROJECT', '绑定测试项目', '测试品牌', '启动', '施工', '2026-06-01', ?, ?)
   `
   ).run(now, now)
 

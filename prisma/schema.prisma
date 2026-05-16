@@ -59,6 +59,7 @@ model Project {
   dateRange String?  @map("date_range")
   description String?
   owner     String?
+  ownerId   Int?     @map("owner_id")
   riskLevel String?  @map("risk_level")
   riskCount Int      @default(0) @map("risk_count")
   milestone String?
@@ -89,6 +90,8 @@ model Project {
   members     ProjectMember[]
   statusLogs  ProjectStatusLog[]
   workPackages WorkPackage[]
+
+  ownerPerson Person? @relation("ProjectOwner", fields: [ownerId], references: [id])
 
   @@map("projects")
 }
@@ -160,6 +163,7 @@ model ProjectTask {
   status          String   @default("草稿")
   assigneeId      String?  @map("assignee_id")
   assigneeName    String?  @map("assignee_name")
+  assigneePersonId Int?    @map("assignee_person_id")
   startDate       DateTime?  @map("start_date")
   dueDate         DateTime?  @map("due_date")
 
@@ -219,6 +223,8 @@ model ProjectTask {
   childTasks      ProjectTask[] @relation("TaskTree")
   derivedFrom     ProjectTask?  @relation("DerivedTask", fields: [derivedFromTaskId], references: [id])
   derivedTasks    ProjectTask[] @relation("DerivedTask")
+
+  assigneePerson  Person?       @relation("TaskAssignee", fields: [assigneePersonId], references: [id])
   taskRelationsFrom TaskRelation[] @relation("TaskFrom")
   taskRelationsTo   TaskRelation[] @relation("TaskTo")
   eventLogs       TaskEventLog[]
@@ -366,9 +372,9 @@ model ProjectTemplate {
   status              String   // "draft" | "reviewing" | "ready" | "active" | "inactive" | "deprecated"
   priority            Int      @default(0)
   scopes              String?  // JSON: TemplateScopes (brandScope, storeTypeScope, regionScope, projectTypeScope, serviceScope)
-  phaseBlueprint      String?  // JSON: PhaseBlueprint[]
-  milestoneBlueprint  String?  // JSON: MilestoneBlueprint[]
-  taskTemplateBinding String?  // JSON: ProjectTemplateBinding[] (引用的任务模板ID列表)
+  phaseBlueprint      String?  @map("phase_blueprint") // JSON: PhaseBlueprint[]
+  milestoneBlueprint  String?  @map("milestone_blueprint") // JSON: MilestoneBlueprint[]
+  taskTemplateBinding String?  @map("task_template_binding") // JSON: ProjectTemplateBinding[] (引用的任务模板ID列表)
   meta                String?  // JSON: TemplateMeta (createdBy, updatedBy, effectiveFrom, effectiveTo)
   createdAt           DateTime @default(now()) @map("created_at")
   updatedAt           DateTime @updatedAt @map("updated_at")
@@ -413,6 +419,7 @@ model Person {
   email              String?
   avatarUrl          String?  @map("avatar_url")
   orgId              Int      @map("org_id")
+  teamId             Int?     @map("team_id")
   title              String?
   employmentType     Int      @default(1) @map("employment_type") // 1内部 2外包 3供应商
   personStatus       Int      @default(1) @map("person_status")   // 1在岗 2请假 3离岗 4禁用
@@ -430,6 +437,14 @@ model Person {
   updatedAt          DateTime @updatedAt @map("updated_at")
 
   organization       Organization @relation(fields: [orgId], references: [id])
+  team               Team?        @relation("PersonTeam", fields: [teamId], references: [id])
+  teamLeadOf         Team[]        @relation("TeamLeader")
+  roleRels           PersonRoleRel[]
+  teamMemberships    TeamMemberRel[]
+  assignments        AssignmentRel[]
+  statusLogs         PersonStatusLog[]
+  ownedProjects      Project[]        @relation("ProjectOwner")
+  taskAssignments    ProjectTask[]    @relation("TaskAssignee")
 
   @@unique([orgId, mobile])
   @@unique([personCode])
@@ -451,8 +466,118 @@ model Organization {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   persons       Person[]
+  teams         Team[]
 
   @@map("pm_organization")
+}
+
+// ─── 角色表（阶段 B - 角色与团队）────────────────────────────────
+model Role {
+  id          Int             @id @default(autoincrement())
+  roleCode    String          @unique @map("role_code")
+  roleName    String          @map("role_name")
+  roleScope   Int             @default(1) @map("role_scope") // 1品牌 2平台 3资源方 4全局
+  description String?
+  status      Int             @default(1)                     // 1启用 2禁用
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  personRels  PersonRoleRel[]
+
+  @@map("pm_role")
+}
+
+// ─── 人员-角色关联表（阶段 B）────────────────────────────────────
+model PersonRoleRel {
+  id        Int      @id @default(autoincrement())
+  personId  Int      @map("person_id")
+  roleId    Int      @map("role_id")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  person Person @relation(fields: [personId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  @@unique([personId, roleId])
+  @@map("pm_person_role_rel")
+}
+
+// ─── 团队表（阶段 B - 角色与团队）────────────────────────────────
+model Team {
+  id            Int             @id @default(autoincrement())
+  orgId         Int             @map("org_id")
+  teamCode      String          @map("team_code")
+  teamName      String          @map("team_name")
+  teamLeaderId  Int?            @map("team_leader_id")
+  serviceScope  String?         @map("service_scope")
+  status        Int             @default(1) // 1启用 2禁用
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  organization  Organization    @relation(fields: [orgId], references: [id])
+  leader        Person?         @relation("TeamLeader", fields: [teamLeaderId], references: [id])
+  members       TeamMemberRel[]
+  persons       Person[]        @relation("PersonTeam")
+
+  @@unique([orgId, teamCode])
+  @@map("pm_team")
+}
+
+// ─── 团队成员关联表（阶段 B - 多对多）────────────────────────────
+model TeamMemberRel {
+  id         Int      @id @default(autoincrement())
+  teamId     Int      @map("team_id")
+  personId   Int      @map("person_id")
+  roleInTeam String?  @map("role_in_team")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  person Person @relation(fields: [personId], references: [id])
+
+  @@unique([teamId, personId])
+  @@map("pm_team_member_rel")
+}
+
+// ─── 人员关联表（阶段 C - 分配校验）────────────────────────────
+model AssignmentRel {
+  id                 Int      @id @default(autoincrement())
+  relationCode       String   @unique @map("relation_code")
+  sourceType         Int      @map("source_type")      // 1项目 2任务
+  sourceId           Int      @map("source_id")
+  personId           Int      @map("person_id")
+  relationRole       Int      @default(1) @map("relation_role") // 1负责人 2执行人 3协同人 4替补人
+  startAt            DateTime? @map("start_at")
+  endAt              DateTime? @map("end_at")
+  status             Int      @default(1)              // 1有效 2失效
+  replaceFromPersonId Int?    @map("replace_from_person_id")
+  changeReason       String?  @map("change_reason")
+  createdBy          String   @default("system") @map("created_by")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedBy          String?  @map("updated_by")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  person             Person   @relation(fields: [personId], references: [id])
+
+  @@index([sourceType, sourceId])
+  @@index([personId])
+  @@map("pm_assignment_rel")
+}
+
+// ─── 人员状态变更日志表（阶段 C）────────────────────────────────
+model PersonStatusLog {
+  id                  Int      @id @default(autoincrement())
+  personId            Int      @map("person_id")
+  beforePersonStatus  Int?     @map("before_person_status")
+  afterPersonStatus   Int?     @map("after_person_status")
+  beforeAvailability  Int?     @map("before_availability")
+  afterAvailability   Int?     @map("after_availability")
+  reason              String?  @map("reason")
+  operatorId          String   @map("operator_id")
+  changedAt           DateTime @default(now()) @map("changed_at")
+
+  person              Person   @relation(fields: [personId], references: [id])
+
+  @@index([personId])
+  @@map("pm_person_status_log")
 }
 
 // ─── 供应商表（采购管理）────────────────────────────────────────
@@ -498,8 +623,8 @@ model TemplateInstantiation {
   projectId       Int      @map("project_id")
   templateId      String   @map("template_id")
   templateVersion String   @map("template_version")
-  matchInput      String?  // JSON: 实例化输入
-  outputSnapshot  String?  // JSON: 实例化输出快照
+  matchInput      String?  @map("match_input") // JSON: 实例化输入
+  outputSnapshot  String?  @map("output_snapshot") // JSON: 实例化输出快照
   createdAt       DateTime @default(now()) @map("created_at")
   createdBy       String   @map("created_by")
 
@@ -673,6 +798,7 @@ model Crew {
   code        String           @unique
   leaderName  String?          @map("leader_name")
   leaderPhone String?          @map("leader_phone")
+  leaderPersonId Int?          @map("leader_person_id")
   memberCount Int              @default(0) @map("member_count")
   rating      String?          // 优秀 / 良好 / 一般
   status      String           @default("active") // active / inactive

@@ -38,6 +38,7 @@ related_docs: []
 | `contracts/design-standards.md`       | `docs/00-governance/design-standards.md`                   | active     |
 | `contracts/digital-employee.md`       | `docs/01-product/digital-employee-prd.md`                  | active     |
 | `contracts/document-governance.md`    | `docs/00-governance/document-governance.md`                | active     |
+| `contracts/harness-workflows.md`      | `docs/00-governance/harness/01-workflows.md`               | active     |
 | `contracts/human-ai-collaboration.md` | `docs/00-governance/human-ai-collaboration.md`             | active     |
 | `contracts/personnel-management.md`   | `docs/01-product/personnel-management-prd.md`              | active     |
 | `contracts/procurement-management.md` | `docs/01-product/procurement-management-prd.md`            | active     |
@@ -48,6 +49,7 @@ related_docs: []
 | `contracts/project-task-driven.md`    | `docs/02-architecture/project-task-driven-architecture.md` | active     |
 | `contracts/settings.md`               | `docs/01-product/settings-prd.md`                          | active     |
 | `contracts/agent.md`                  | `docs/02-architecture/agent-architecture.md`               | active     |
+| `contracts/knowledge-architecture.md` | `docs/00-governance/knowledge-architecture.md`             | active     |
 | `contracts/standard-management.md`    | `docs/02-architecture/standard-management-architecture.md` | active     |
 | `contracts/task-center.md`            | `docs/02-architecture/task-center-architecture.md`         | active     |
 | `contracts/testing-standards.md`      | `docs/04-testing/testing-standards.md`                     | active     |
@@ -55,16 +57,21 @@ related_docs: []
 | `contracts/vi-standards.md`           | `docs/02-design/vi-standards.md`                           | active     |
 | `contracts/workteam-management.md`    | `docs/01-product/workteam-management-prd.md`               | active     |
 
-## knowledge/ 清单
+## knowledge/ 清单（L3 长期记忆）
 
-| 文件                     | 内容说明            | 读者       |
-| ------------------------ | ------------------- | ---------- |
-| `knowledge/decisions.md` | 架构决策记录（ADR） | 开发、架构 |
-| `knowledge/patterns.md`  | 可复用代码模式      | 开发       |
-| `knowledge/rules.md`     | 不可违背规则        | 全体       |
+本目录是知识架构的 **L3 长期记忆层**，存放从交付中提炼的正式档案。数据来源为 `memory/`（L2 速记缓冲区）的升迁推送。
+
+| 文件                     | 内容说明            | 读者       | 来源                       |
+| ------------------------ | ------------------- | ---------- | -------------------------- |
+| `knowledge/decisions.md` | 架构决策记录（ADR） | 开发、架构 | `memory/decisions.md` 升迁 |
+| `knowledge/patterns.md`  | 可复用代码模式      | 开发       | `memory/patterns.md` 升迁  |
+| `knowledge/rules.md`     | 不可违背规则        | 全体       | 精炼任务维护               |
+
+> **注意**：`memory/memory.jsonl`（MCP 知识图谱数据文件）逻辑上属于 L3 长期记忆层，但因工具配置因素物理存储在 `memory/` 目录。数据可正常读写，仅路径归属不匹配。
 
 ## 维护规则
 
 - 合约由 `document-sync` 技能自动维护，**不要手动编辑**
 - 每次人类文档变更后，必须重新同步对应合约
 - 合约文件在 `docs/README.md` 的 AI 合约层部分集中索引
+- L3 档案接受 `memory/`（L2 速记缓冲区）的升迁推送，不接受直接手工追加（提炼任务例外）

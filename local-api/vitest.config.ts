@@ -14,5 +14,10 @@ export default defineConfig({
     hookTimeout: 15000,
     include: ['test/**/*.test.ts'],
     fileParallelism: false,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['services/**', 'controllers/**', 'routes/**', 'middleware/**'],
+    },
   },
 })

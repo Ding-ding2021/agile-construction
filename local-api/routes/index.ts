@@ -18,6 +18,8 @@ import organizationRoutes from './organizations'
 import crewRoutes from './crews'
 import procurementRoutes from './procurement'
 import feishuRoutes from './feishu'
+import rolesRoutes from './roles'
+import teamsRoutes from './teams'
 import * as taskCtrl from '../controllers/tasks'
 
 const router = Router()
@@ -39,6 +41,10 @@ router.use('/audit/logs', auditRoutes)
 // 人员管理
 router.use('/personnel', personnelRoutes)
 router.use('/organizations', organizationRoutes)
+
+// 角色与团队管理
+router.use('/roles', rolesRoutes)
+router.use('/teams', teamsRoutes)
 
 // 采购管理
 router.use('/procurement', procurementRoutes)

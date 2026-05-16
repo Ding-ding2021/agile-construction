@@ -25,16 +25,22 @@ beforeAll(async () => {
 
   initDatabase()
 
-  try {
-    const schemaPath = join(__dirname, '..', '..', 'prisma', 'schema.prisma')
-    execSync(
-      `npx prisma db push --accept-data-loss --schema="${schemaPath}" --url="file:${TEST_DB_PATH}"`,
-      {
-        stdio: 'pipe',
+  const schemaPath = join(__dirname, '..', '..', 'prisma', 'schema.prisma')
+  const cmd = `npx prisma db push --accept-data-loss --schema="${schemaPath}" --url="file:${TEST_DB_PATH}"`
+  let pushOk = false
+  for (let i = 0; i < 3; i++) {
+    try {
+      execSync(cmd, { stdio: 'pipe' })
+      pushOk = true
+      break
+    } catch {
+      if (i < 2) {
+        execSync(`sleep 1`, { stdio: 'pipe' })
       }
-    )
-  } catch (e) {
-    console.warn('[Test Setup] prisma db push warning (non-fatal):', (e as Error).message)
+    }
+  }
+  if (!pushOk) {
+    console.warn('[Test Setup] prisma db push 重试 3 次后仍失败，检查数据库 schema')
   }
 
   seedTestData(getDatabase())
@@ -116,10 +122,10 @@ function seedTestData(db: DatabaseType): void {
 
   db.prepare(
     `
-    INSERT INTO projects (code, name, brand, status, parent_status, status_tone, stage, planned_open_date, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+    INSERT INTO projects (code, name, brand, parent_status, stage, planned_open_date, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
   `
-  ).run('TEST-PRJ', '测试项目', '测试品牌', '执行中', '启动', 'neutral', '施工', '2026-06-01')
+  ).run('TEST-PRJ', '测试项目', '测试品牌', '启动', '施工', '2026-06-01')
 
   db.prepare(
     `

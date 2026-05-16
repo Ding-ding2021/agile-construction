@@ -11,20 +11,10 @@ import type { Database as DatabaseType } from 'better-sqlite3'
 function seedTestTask(db: DatabaseType): { projectId: number; taskId: number } {
   db.prepare(
     `
-    INSERT INTO projects (code, name, brand, status, parent_status, status_tone, stage, progress, planned_open_date, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+    INSERT INTO projects (code, name, brand, parent_status, stage, progress, planned_open_date, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
   `
-  ).run(
-    'PRJ-SNAP-001',
-    '快照测试项目',
-    '测试品牌',
-    'active',
-    '执行中',
-    'neutral',
-    '施工',
-    50,
-    '2026-06-01'
-  )
+  ).run('PRJ-SNAP-001', '快照测试项目', '测试品牌', '执行中', '施工', 50, '2026-06-01')
 
   const projectId = (
     db.prepare(`SELECT id FROM projects WHERE code = ?`).get('PRJ-SNAP-001') as { id: number }

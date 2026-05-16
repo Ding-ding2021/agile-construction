@@ -167,6 +167,92 @@ export const api = {
 
   getOrganizations: () =>
     request<{ data: import('../types/personnel').OrganizationItem[] }>('/organizations'),
+
+  getRoles: (page = 1, pageSize = 50) =>
+    request<{
+      data: Record<string, unknown>[]
+      pagination: { page: number; pageSize: number; total: number; totalPages: number }
+    }>(`/roles?page=${page}&pageSize=${pageSize}`),
+
+  getRole: (id: number) => request<Record<string, unknown>>(`/roles/${id}`),
+
+  createRole: (data: Record<string, unknown>) =>
+    request<Record<string, unknown>>('/roles', { method: 'POST', body: JSON.stringify(data) }),
+
+  updateRole: (id: number, data: Record<string, unknown>) =>
+    request<Record<string, unknown>>(`/roles/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+
+  deleteRole: (id: number) => request<{ success: boolean }>(`/roles/${id}`, { method: 'DELETE' }),
+
+  bindPersonToRole: (roleId: number, personId: number, isPrimary?: boolean) =>
+    request<unknown>(`/roles/${roleId}/bind`, {
+      method: 'POST',
+      body: JSON.stringify({ personId, isPrimary }),
+    }),
+
+  unbindPersonFromRole: (roleId: number, personId: number) =>
+    request<{ success: boolean }>(`/roles/${roleId}/bind/${personId}`, { method: 'DELETE' }),
+
+  getTeams: (page = 1, pageSize = 50) =>
+    request<{
+      data: Record<string, unknown>[]
+      pagination: { page: number; pageSize: number; total: number; totalPages: number }
+    }>(`/teams?page=${page}&pageSize=${pageSize}`),
+
+  getTeam: (id: number) => request<Record<string, unknown>>(`/teams/${id}`),
+
+  createTeam: (data: Record<string, unknown>) =>
+    request<Record<string, unknown>>('/teams', { method: 'POST', body: JSON.stringify(data) }),
+
+  updateTeam: (id: number, data: Record<string, unknown>) =>
+    request<Record<string, unknown>>(`/teams/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+
+  deleteTeam: (id: number) => request<{ success: boolean }>(`/teams/${id}`, { method: 'DELETE' }),
+
+  addTeamMember: (teamId: number, personId: number, roleInTeam?: string) =>
+    request<unknown>(`/teams/${teamId}/members`, {
+      method: 'POST',
+      body: JSON.stringify({ personId, roleInTeam }),
+    }),
+
+  removeTeamMember: (teamId: number, personId: number) =>
+    request<{ success: boolean }>(`/teams/${teamId}/members/${personId}`, { method: 'DELETE' }),
+
+  updatePersonStatus: (id: number, personStatus: number, reason?: string, operatorId?: string) =>
+    request<import('../types/personnel').PersonItem>(`/personnel/${id}/status`, {
+      method: 'POST',
+      body: JSON.stringify({ personStatus, reason, operatorId }),
+    }),
+
+  getPersonStatusLogs: (id: number) =>
+    request<{ data: Record<string, unknown>[] }>(`/personnel/${id}/status-logs`),
+
+  getPersonRoles: (id: number) =>
+    request<{ data: Record<string, unknown>[] }>(`/personnel/${id}/roles`),
+
+  getPersonTeams: (id: number) =>
+    request<{ data: Record<string, unknown>[] }>(`/personnel/${id}/teams`),
+
+  getPersonnelList: (params?: {
+    status?: number
+    orgId?: number
+    roleId?: number
+    teamId?: number
+    page?: number
+    pageSize?: number
+  }) => {
+    const qs = new URLSearchParams()
+    if (params?.status !== undefined) qs.set('status', String(params.status))
+    if (params?.orgId !== undefined) qs.set('orgId', String(params.orgId))
+    if (params?.roleId !== undefined) qs.set('roleId', String(params.roleId))
+    if (params?.teamId !== undefined) qs.set('teamId', String(params.teamId))
+    if (params?.page !== undefined) qs.set('page', String(params.page))
+    if (params?.pageSize !== undefined) qs.set('pageSize', String(params.pageSize))
+    return request<{
+      data: import('../types/personnel').PersonItem[]
+      pagination: { page: number; pageSize: number; total: number; totalPages: number }
+    }>(`/personnel?${qs.toString()}`)
+  },
 }
 
 // ─── WBS ────────────────────────────────────────────────────────

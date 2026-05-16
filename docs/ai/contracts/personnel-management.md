@@ -2,16 +2,14 @@
 id: AI-PERSONNEL-MANAGEMENT
 human_source: docs/01-product/personnel-management-prd.md
 status: active
-last_synced: 2026-05-11
-title: AI 合约：人员管理
-last_updated: 2026-05-12
+last_synced: 2026-05-16
 ---
 
 # AI 合约：人员管理
 
 ## 模块定位
 
-三端协作的组织与角色底座，统一管理"人、组织、角色、技能、可用性、协同关系"，支撑"分配-执行-验收-结算"全链路的人效与协同。
+三端协作的组织与角色底座，统一管理"人、组织、角色、团队、技能、可用性、协同关系"，支撑"分配-执行-验收-结算"全链路的人效与协同。
 
 ## 核心实体
 
@@ -19,8 +17,9 @@ last_updated: 2026-05-12
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | Person `pm_person`                   | person_code, name, mobile(org内唯一), org_id, team_id, title, employment_type(1内部/2外包/3供应商), person_status, availability_status, current_task_count, risk_level | person_status: 1在岗→2请假→3离岗→4禁用；availability: 1可分配/2忙碌/3不可分配 |
 | Organization `pm_organization`       | org_code, org_name, org_type(1品牌方/2平台/3资源方), status                                                                                                            | 1启用/2禁用                                                                   |
-| Team `pm_team`                       | org_id, team_code(org内唯一), team_name, team_leader_id, service_scope                                                                                                 | —                                                                             |
-| Role `pm_role`                       | role_code, role_name, role_scope(1品牌/2平台/3资源方/4全局)                                                                                                            | —                                                                             |
+| Team `pm_team`                       | org_id, team_code(org内唯一), team_name, team_leader_id, service_scope, status                                                                                         | 1启用/2禁用                                                                   |
+| TeamMemberRel `pm_team_member_rel`   | team_id+person_id UK, role_in_team                                                                                                                                     | —                                                                             |
+| Role `pm_role`                       | role_code, role_name, role_scope(1品牌/2平台/3资源方/4全局), status                                                                                                    | 1启用/2禁用                                                                   |
 | SkillDict `pm_skill_dict`            | skill_code, skill_name, status                                                                                                                                         | —                                                                             |
 | CertDict `pm_cert_dict`              | cert_code, cert_name, valid_days                                                                                                                                       | —                                                                             |
 | PersonRoleRel `pm_person_role_rel`   | person_id+role_id UK, is_primary                                                                                                                                       | —                                                                             |
@@ -59,8 +58,11 @@ last_updated: 2026-05-12
 | GET/POST       | `/api/organizations`        | 组织列表/新增                    |
 | GET/PUT        | `/api/organizations/:id`    | 组织详情/编辑                    |
 | GET/POST       | `/api/roles`                | 角色列表/新增                    |
-| PUT            | `/api/roles/:id`            | 角色编辑                         |
+| PUT/DELETE     | `/api/roles/:id`            | 角色编辑/删除                    |
 | POST           | `/api/personnel/:id/roles`  | 人员角色绑定                     |
+| GET/POST       | `/api/teams`                | 团队列表/新增                    |
+| GET/PUT/DELETE | `/api/teams/:id`            | 团队详情/编辑/删除               |
+| POST           | `/api/teams/:id/members`    | 团队成员增删                     |
 | GET/POST       | `/api/assignments`          | 关联记录列表/新建                |
 | POST           | `/api/assignments/validate` | 分配前守卫校验 → {ok, reasons[]} |
 | GET/POST/PUT   | `/api/skills`               | 技能字典 CRUD                    |
