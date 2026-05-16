@@ -6,8 +6,9 @@ category: prd
 title: 人员管理需求文档
 owner: docs-maintainer
 status: active
-last_updated: 2026-05-06
+last_updated: 2026-05-16
 source_of_truth: true
+ai_contract: docs/ai/contracts/personnel-management.md
 related_code:
   - prisma/schema.prisma
   - src/components/personnel/personnelUsers.ts
@@ -195,20 +196,24 @@ V1 不纳入范围：
 ### 3.4 ER 关系总图
 
 ```
-pm_organization ──1:N──► pm_team ──N:1──► pm_person
-                                                 │
-                          pm_role ◄──N:M──► pm_person_role_rel
-                                                 │
-                          pm_skill_dict ◄──N:M──► pm_person_skill_rel
-                                                 │
-                          pm_cert_dict ◄──N:M──► pm_person_cert_rel
-                                                 │
-                                         1:N ───► pm_person_status_log
-                                                 │
-                                         1:N ───► pm_assignment_rel
-                                                   │
-                          Project ◄────────────────┤ source_type=1
-                          ProjectTask ◄────────────┤ source_type=2
+pm_organization ──1:N──► pm_team
+                              │
+                              │ 1:N
+                              ▼
+                     pm_team_member_rel ──N:1──► pm_person
+                                                         │
+                                  pm_role ◄──N:M──► pm_person_role_rel
+                                                         │
+                                  pm_skill_dict ◄──N:M──► pm_person_skill_rel
+                                                         │
+                                  pm_cert_dict ◄──N:M──► pm_person_cert_rel
+                                                         │
+                                                 1:N ───► pm_person_status_log
+                                                         │
+                                                 1:N ───► pm_assignment_rel
+                                                           │
+                                  Project ◄────────────────┤ source_type=1
+                                  ProjectTask ◄────────────┤ source_type=2
 ```
 
 ---
@@ -570,7 +575,9 @@ pm_organization ──1:N──► pm_team ──N:1──► pm_person
 
 > 当项目立项需要"选项目负责人"时，角色体系必须可用
 
-**建表**：`pm_role` + `pm_person_role_rel` + `pm_team`
+**建表**：`pm_role` + `pm_person_role_rel` + `pm_team` + `pm_team_member_rel`
+
+> `pm_team_member_rel` 支持人员与团队的多对多关系（一个人可同时属于多个团队，如同时属于"电工组"和"夜班小组"）。若仅需单归属，通过 `pm_person.team_id` 字段表达。
 
 **API**：`GET/POST/PUT /api/roles`、角色绑定接口
 
@@ -688,6 +695,16 @@ pm_organization ──1:N──► pm_team ──N:1──► pm_person
 | status         | TINYINT UNSIGNED | 是   | 1                                                   | IDX                  | 1启用/2禁用                |
 | created_at     | DATETIME(3)      | 是   | CURRENT_TIMESTAMP(3)                                | -                    | 创建时间                   |
 | updated_at     | DATETIME(3)      | 是   | CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) | -                    | 更新时间                   |
+
+### 14.4a 团队成员关联表 `pm_team_member_rel` — 阶段 B
+
+| 字段名       | 类型            | 必填 | 默认值               | 索引                  | 说明         |
+| ------------ | --------------- | ---- | -------------------- | --------------------- | ------------ |
+| id           | BIGINT UNSIGNED | 是   | AUTO_INCREMENT       | PK                    | 主键         |
+| team_id      | BIGINT UNSIGNED | 是   | -                    | UK(team_id,person_id) | 团队ID       |
+| person_id    | BIGINT UNSIGNED | 是   | -                    | UK(team_id,person_id) | 人员ID       |
+| role_in_team | VARCHAR(64)     | 否   | NULL                 | -                     | 在团队内角色 |
+| created_at   | DATETIME(3)     | 是   | CURRENT_TIMESTAMP(3) | -                     | 创建时间     |
 
 ### 14.5 角色表与关联表 — 阶段 B
 
