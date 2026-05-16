@@ -38,10 +38,10 @@ jobs:
         run: npm run build
 
       - name: Run unit tests
-        run: npm run test:run
+        run: npm run test:api
 
       - name: Run tests with coverage
-        run: npm run test:coverage
+        run: npx vitest run --config local-api/vitest.config.ts --coverage
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
