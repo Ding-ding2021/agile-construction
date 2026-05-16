@@ -11,6 +11,28 @@ function getProjectId(projectCode: string): number {
   return project.id
 }
 
+interface TaskToCreate {
+  code: string
+  name: string
+  status: string
+  nodeLevelType: string
+  priority: string
+  taskType: string
+  sourceType: string
+  description: null
+  assigneeId: string
+  assigneeName: string
+  plannedStartAt: null
+  plannedEndAt: null
+  parentId: number | null
+  requiredFlag: number
+  milestoneFlag: number
+  ownerRole: string | null
+  assigneeType: string | null
+  templateCode: string
+  parentTemplateCode: string | null
+}
+
 export function instantiateFromTemplate(req: Request, res: Response): void {
   const db = getDatabase()
   const projectCode = req.params.code as string
@@ -37,15 +59,13 @@ export function instantiateFromTemplate(req: Request, res: Response): void {
     .all(...taskTemplateIds) as Record<string, unknown>[]
 
   const now = new Date().toISOString()
-  const rootTemplates = taskTemplates.filter(t => !t.parent_template_code)
-  const tasksToCreate: Record<string, unknown>[] = []
   const codeIndex: Record<string, number> = {}
 
-  function buildTasks(tpl: Record<string, unknown>, parentId: number | null) {
+  function buildTaskDef(tpl: Record<string, unknown>): TaskToCreate {
     const code = tpl.task_template_code as string
     codeIndex[code] = (codeIndex[code] || 0) + 1
-    const taskCode = `T-${Date.now()}-${codeIndex[code]}`
-    const task = {
+    const taskCode = `T-${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${codeIndex[code]}`
+    return {
       code: taskCode,
       name: tpl.task_template_name as string,
       status: '草稿',
@@ -63,38 +83,64 @@ export function instantiateFromTemplate(req: Request, res: Response): void {
       assigneeName: '待分配',
       plannedStartAt: null,
       plannedEndAt: null,
-      parentId,
+      parentId: null,
       requiredFlag: tpl.required_flag ? 1 : 0,
       milestoneFlag: tpl.milestone_flag ? 1 : 0,
       ownerRole: (tpl.owner_role as string) || null,
       assigneeType: (tpl.assignee_type_default as string) || null,
-    }
-    tasksToCreate.push(task)
-
-    const children = taskTemplates.filter(t => t.parent_template_code === tpl.task_template_code)
-    for (const child of children) {
-      buildTasks(child, null)
+      templateCode: code,
+      parentTemplateCode: (tpl.parent_template_code as string) || null,
     }
   }
 
-  for (const root of rootTemplates) {
-    buildTasks(root, null)
-  }
+  const tasksToCreate: TaskToCreate[] = taskTemplates.map(t => buildTaskDef(t))
 
   const batchApi = db.transaction(() => {
     const insertStmt = db.prepare(`
       INSERT INTO project_tasks (project_id, code, name, status, assignee_id, assignee_name,
         start_date, due_date, parent_id, node_level_type, priority, task_type, source_type,
-        description, required_flag, milestone_flag, owner_role, assignee_type, created_by, created_at)
+        description, required_flag, milestone_flag, owner_role, assignee_type, created_by, created_at, updated_at)
       VALUES (@projectId, @code, @name, @status, @assigneeId, @assigneeName,
         @plannedStartAt, @plannedEndAt, @parentId, @nodeLevelType, @priority, @taskType, @sourceType,
-        @description, @requiredFlag, @milestoneFlag, @ownerRole, @assigneeType, @createdBy, @now)
+        @description, @requiredFlag, @milestoneFlag, @ownerRole, @assigneeType, @createdBy, @now, @now)
     `)
+    const idMap: Record<string, number> = {}
     const createdIds: number[] = []
     for (const item of tasksToCreate) {
-      const info = insertStmt.run({ ...item, projectId, now, createdBy: 'system' })
-      createdIds.push(Number(info.lastInsertRowid))
+      const info = insertStmt.run({
+        projectId,
+        code: item.code,
+        name: item.name,
+        status: item.status,
+        assigneeId: item.assigneeId,
+        assigneeName: item.assigneeName,
+        plannedStartAt: item.plannedStartAt,
+        plannedEndAt: item.plannedEndAt,
+        parentId: item.parentId,
+        nodeLevelType: item.nodeLevelType,
+        priority: item.priority,
+        taskType: item.taskType,
+        sourceType: item.sourceType,
+        description: item.description,
+        requiredFlag: item.requiredFlag,
+        milestoneFlag: item.milestoneFlag,
+        ownerRole: item.ownerRole,
+        assigneeType: item.assigneeType,
+        createdBy: 'system',
+        now,
+      })
+      const id = Number(info.lastInsertRowid)
+      idMap[item.templateCode] = id
+      createdIds.push(id)
     }
+
+    const updateParentStmt = db.prepare('UPDATE project_tasks SET parent_id = ? WHERE code = ?')
+    for (const item of tasksToCreate) {
+      if (item.parentTemplateCode && idMap[item.parentTemplateCode]) {
+        updateParentStmt.run(idMap[item.parentTemplateCode], item.code)
+      }
+    }
+
     return createdIds
   })
 
