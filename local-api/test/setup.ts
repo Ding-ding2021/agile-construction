@@ -116,10 +116,10 @@ function seedTestData(db: DatabaseType): void {
 
   db.prepare(
     `
-    INSERT INTO projects (code, name, brand, status, parent_status, status_tone, stage, planned_open_date, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+    INSERT INTO projects (code, name, brand, parent_status, stage, planned_open_date, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
   `
-  ).run('TEST-PRJ', '测试项目', '测试品牌', '执行中', '启动', 'neutral', '施工', '2026-06-01')
+  ).run('TEST-PRJ', '测试项目', '测试品牌', '启动', '施工', '2026-06-01')
 
   db.prepare(
     `

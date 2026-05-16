@@ -1,48 +1,17 @@
 # 当前任务状态
 
-## Phase 6C 项目管理引擎 — ✅ 已交付（含 Evolve 复盘）
+## Phase 6D 人员管理引擎 API 设计 — 开发中
 
-| 步骤           | 状态 | 备注                                   |
-| -------------- | ---- | -------------------------------------- |
-| Define         | ✅   | 5 阶段 16 任务                         |
-| Plan           | ✅   | 9 项仲裁决策熔入                       |
-| Pre-dev Squad  | ✅   | 4 角色有余件 → 人类仲裁                |
-| Build          | ✅   | 后端 + 前端 + 数据迁移                 |
-| Test           | ✅   | 158 tests / 11 files                   |
-| Post-dev Squad | ✅   | 全票通过 → 增量重审通过                |
-| Ship           | ✅   | commit + push to main                  |
-| Evolve         | ✅   | 复盘报告 + 5-Why + 改进措施 + 反哺完成 |
+**状态**: P1、P2、P4 已完成，P3 待前端工程师处理
 
-## 交付commit
+**已完成**:
 
-- `99aa126` feat(6C): 项目管理引擎 — 任务驱动聚合 + 前端组件 + 数据迁移
-- `5cbf2b3` fix(6C): 迁移脚本 console.log → console.info（预检门禁合规）
+- [x] P1: 列表接口（roles/teams/personnel）增加服务端分页（page / pageSize）
+- [x] P2: 统一分页响应格式，与现有任务列表接口一致（data + pagination 结构）
+- [x] P4: getPersonnel 暴露 roleId / teamId 查询参数（原已支持，分页改造中保留）
 
-## 产出物索引
+**待完成**:
 
-| 文件                                        | 说明            |
-| ------------------------------------------- | --------------- |
-| `docs/03-development/delivery-6c-report.md` | 交付报告        |
-| `docs/03-development/evolve-6c-report.md`   | Evolve 复盘报告 |
-| `memory/progress-log.md`                    | 进度日志        |
-| `memory/decisions.md`                       | 决策速记        |
-| `memory/patterns.md`                        | 模式记录        |
-| `memory/violations/2026-05.md`              | 违规记录        |
+- [ ] P3: 前端 api.ts 补充 6D 新增端点封装（需苏染/前端工程师处理）
 
-## 等待下一阶段
-
-Phase 7 共享组件 / Phase 8B 前端增强 / Phase 6D 人员管理引擎
-
----
-
-## 2026-05-16 晚间技能进化总结 — ✅ 已执行
-
-| 步骤         | 状态 | 备注                                                    |
-| ------------ | ---- | ------------------------------------------------------- |
-| 日志检查     | ✅   | memory/ 目录正常（17篇 daily log），05-15/16 日志有 gap |
-| 技能使用分析 | ✅   | 本会话为治理任务，未加载 Skill 工具（合理）             |
-| 进化建议生成 | ✅   | 5 个薄弱环节、3 项新技能建议                            |
-| 知识提炼     | ✅   | 跨会话阈值已满足（17篇 > 5）                            |
-| 报告输出     | ✅   | `.workbuddy/stats/daily/2026-05-16-evolution.md`        |
-| 飞书推送     | ⚠️   | 跳过 — FEISHU_WEBHOOK_URL 未配置                        |
-| Git 提交     | ✅   | `761b0c7` feat(evolve): 2026-05-16 晚间技能进化总结     |
+**验收报告位置**: docs/04-testing/phase-6d-api-ui-review-report.md
