@@ -207,39 +207,72 @@ export function updatePerson(req: Request, res: Response, _next: NextFunction): 
   const id = Number(req.params.id)
   const body = req.body
 
-  const existing = db.prepare('SELECT id FROM pm_person WHERE id = ?').get(id)
+  const existing = db
+    .prepare('SELECT id, person_status, availability_status FROM pm_person WHERE id = ?')
+    .get(id) as Record<string, unknown> | undefined
   if (!existing) throw new ApiError('Person not found', 'NOT_FOUND', 404)
 
-  db.prepare(
-    `
-    UPDATE pm_person SET
-      name = COALESCE(@name, name),
-      mobile = COALESCE(@mobile, mobile),
-      email = COALESCE(@email, email),
-      org_id = COALESCE(@orgId, org_id),
-      title = COALESCE(@title, title),
-      employment_type = COALESCE(@employmentType, employment_type),
-      person_status = COALESCE(@personStatus, person_status),
-      availability_status = COALESCE(@availabilityStatus, availability_status),
-      work_city = COALESCE(@workCity, work_city),
-      remark = COALESCE(@remark, remark),
-      updated_at = @updatedAt
-    WHERE id = @id
-  `
-  ).run({
-    id,
-    name: body.name ?? null,
-    mobile: body.mobile ?? null,
-    email: body.email ?? null,
-    orgId: body.orgId ?? null,
-    title: body.title ?? null,
-    employmentType: body.employmentType ?? null,
-    personStatus: body.personStatus ?? null,
-    availabilityStatus: body.availabilityStatus ?? null,
-    workCity: body.workCity ?? null,
-    remark: body.remark ?? null,
-    updatedAt: new Date().toISOString(),
-  })
+  let skipStatusFields = false
+
+  if (
+    body.personStatus !== undefined &&
+    Number(body.personStatus) !== (existing.person_status as number)
+  ) {
+    const newStatus = Number(body.personStatus)
+    const newAvailability = getAvailabilityForStatus(newStatus)
+
+    changePersonStatus(db, {
+      personId: id,
+      beforeStatus: existing.person_status as number,
+      afterStatus: newStatus,
+      beforeAvailability: existing.availability_status as number,
+      afterAvailability: newAvailability,
+      reason: body.statusChangeReason || null,
+      operatorId: body.operatorId || 'system',
+    })
+
+    skipStatusFields = true
+  }
+
+  const setClauses: string[] = []
+  const params: Record<string, unknown> = { id, updatedAt: new Date().toISOString() }
+
+  const fieldMapping: Record<string, string> = {
+    name: 'name',
+    mobile: 'mobile',
+    email: 'email',
+    orgId: 'org_id',
+    title: 'title',
+    employmentType: 'employment_type',
+    workCity: 'work_city',
+    remark: 'remark',
+  }
+
+  for (const [key, col] of Object.entries(fieldMapping)) {
+    if (body[key] !== undefined) {
+      setClauses.push(`${col} = @${key}`)
+      params[key] = body[key]
+    }
+  }
+
+  if (skipStatusFields) {
+    setClauses.push('person_status = person_status')
+    setClauses.push('availability_status = availability_status')
+  } else {
+    if (body.personStatus !== undefined) {
+      setClauses.push('person_status = @personStatus')
+      params.personStatus = Number(body.personStatus)
+    }
+    if (body.availabilityStatus !== undefined) {
+      setClauses.push('availability_status = @availabilityStatus')
+      params.availabilityStatus = Number(body.availabilityStatus)
+    }
+  }
+
+  if (setClauses.length > 0) {
+    setClauses.push('updated_at = @updatedAt')
+    db.prepare(`UPDATE pm_person SET ${setClauses.join(', ')} WHERE id = @id`).run(params)
+  }
 
   const updated = db.prepare(`SELECT ${PERSON_COLUMNS} FROM pm_person WHERE id = ?`).get(id)
 
