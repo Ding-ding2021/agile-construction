@@ -5,7 +5,7 @@ export type SlaStatus = 'normal' | 'warning' | 'overdue'
 export function calculateSlaStatus(
   dueDate: string | null,
   status: string,
-  actualEndAt: string | null
+  _actualEndAt: string | null
 ): SlaStatus {
   if (status === '已完成' || status === '已关闭') {
     return 'normal'

@@ -20,28 +20,20 @@ function seedTask(db: DatabaseType, status: string): SeedResult {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).run(projectCode, '验收测试项目', '测试品牌', '启动', '施工', 50, '2026-06-01', now, now)
 
-  const projectId = (db.prepare('SELECT id FROM projects WHERE code = ?').get(projectCode) as { id: number }).id
+  const projectId = (
+    db.prepare('SELECT id FROM projects WHERE code = ?').get(projectCode) as { id: number }
+  ).id
 
   db.prepare(
     `INSERT INTO project_tasks (project_id, code, name, status, created_by, created_at, updated_at)
      VALUES (?, ?, ?, ?, ?, ?, ?)`
   ).run(projectId, taskCode, '验收测试任务', status, 'tester', now, now)
 
-  const taskId = (db.prepare('SELECT id FROM project_tasks WHERE code = ?').get(taskCode) as { id: number }).id
+  const taskId = (
+    db.prepare('SELECT id FROM project_tasks WHERE code = ?').get(taskCode) as { id: number }
+  ).id
 
   return { projectId, taskId, taskCode }
-}
-
-function seedProjectOnly(db: DatabaseType): number {
-  const now = new Date().toISOString()
-  const projectCode = 'PRJ-ACCEPT-ONLY-' + Date.now()
-
-  db.prepare(
-    `INSERT INTO projects (code, name, brand, parent_status, stage, progress, planned_open_date, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(projectCode, '验收父项目', '测试品牌', '启动', '施工', 50, '2026-06-01', now, now)
-
-  return (db.prepare('SELECT id FROM projects WHERE code = ?').get(projectCode) as { id: number }).id
 }
 
 function cleanTestData(db: DatabaseType): void {
@@ -74,10 +66,14 @@ describe('acceptanceWorkflow', () => {
       expect(result.submission.taskId).toBe(taskId)
       expect(result.submission.submittedBy).toBe('张三')
 
-      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as { status: string }
+      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as {
+        status: string
+      }
       expect(task.status).toBe('待验收')
 
-      const logs = db.prepare('SELECT COUNT(*) as cnt FROM task_event_logs WHERE task_id = ?').get(taskId) as { cnt: number }
+      const logs = db
+        .prepare('SELECT COUNT(*) as cnt FROM task_event_logs WHERE task_id = ?')
+        .get(taskId) as { cnt: number }
       expect(logs.cnt).toBe(1)
     })
 
@@ -114,7 +110,9 @@ describe('acceptanceWorkflow', () => {
          VALUES (?, ?, ?, ?, ?, ?, ?)`
       ).run(projectId, taskCode, '前置任务', '进行中', 'tester', now, now)
 
-      const predTaskId = (db.prepare('SELECT id FROM project_tasks WHERE code = ?').get(taskCode) as { id: number }).id
+      const predTaskId = (
+        db.prepare('SELECT id FROM project_tasks WHERE code = ?').get(taskCode) as { id: number }
+      ).id
 
       db.prepare(
         `INSERT INTO task_relations (from_task_id, to_task_id, relation_type)
@@ -144,7 +142,12 @@ describe('acceptanceWorkflow', () => {
       const { taskId } = seedTask(db, '执行中')
       const subId = submitAndGetId(taskId)
 
-      const result = reviewTask({ submissionId: subId, result: 'pass', comment: '验收通过', reviewedBy: '李四' })
+      const result = reviewTask({
+        submissionId: subId,
+        result: 'pass',
+        comment: '验收通过',
+        reviewedBy: '李四',
+      })
 
       expect(result.submission.status).toBe('accepted')
       expect(result.submission.reviewResult).toBe('pass')
@@ -152,7 +155,9 @@ describe('acceptanceWorkflow', () => {
       expect(result.submission.reviewedBy).toBe('李四')
       expect(result.taskStatus).toBe('已完成')
 
-      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as { status: string }
+      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as {
+        status: string
+      }
       expect(task.status).toBe('已完成')
     })
 
@@ -160,14 +165,21 @@ describe('acceptanceWorkflow', () => {
       const { taskId } = seedTask(db, '执行中')
       const subId = submitAndGetId(taskId)
 
-      const result = reviewTask({ submissionId: subId, result: 'reject', comment: '质量问题', reviewedBy: '李四' })
+      const result = reviewTask({
+        submissionId: subId,
+        result: 'reject',
+        comment: '质量问题',
+        reviewedBy: '李四',
+      })
 
       expect(result.submission.status).toBe('rejected')
       expect(result.submission.reviewResult).toBe('reject')
       expect(result.submission.reviewComment).toBe('质量问题')
       expect(result.taskStatus).toBe('不通过')
 
-      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as { status: string }
+      const task = db.prepare('SELECT status FROM project_tasks WHERE id = ?').get(taskId) as {
+        status: string
+      }
       expect(task.status).toBe('不通过')
     })
 
@@ -216,11 +228,21 @@ describe('acceptanceWorkflow', () => {
       reviewTask({ submissionId: subId, result: 'pass', comment: '通过', reviewedBy: '李四' })
 
       expect(() => {
-        reviewTask({ submissionId: subId, result: 'reject', comment: '再次审核', reviewedBy: '王五' })
+        reviewTask({
+          submissionId: subId,
+          result: 'reject',
+          comment: '再次审核',
+          reviewedBy: '王五',
+        })
       }).toThrow(ApiError)
 
       try {
-        reviewTask({ submissionId: subId, result: 'reject', comment: '再次审核', reviewedBy: '王五' })
+        reviewTask({
+          submissionId: subId,
+          result: 'reject',
+          comment: '再次审核',
+          reviewedBy: '王五',
+        })
       } catch (e) {
         expect((e as ApiError).message).toBe('提交记录不存在或已被审核')
         expect((e as ApiError).code).toBe('NOT_FOUND')
