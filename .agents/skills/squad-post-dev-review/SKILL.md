@@ -113,9 +113,20 @@ L1 单人：
 最终结论：APPROVED
 ```
 
-### Step 6: 通过后通知收尾
+### Step 6: 通过后触发 Evolve 复盘
 
-验收通过后，通知开发交付者执行 `finishing-a-development-branch`。
+验收通过后，组长自动触发 Evolve 复盘子流程：
+
+1. 统计交付数据（文件/代码行/测试/commit/Skills 调用）
+2. 汇总角色派发记录和行为审计
+3. 对本次暴露的问题执行 5-Why 根因分析
+4. 输出改进措施并落实到受影响文件
+5. 反哺 knowledge/（patterns/decisions/rules）
+6. 产出 `docs/03-development/evolve-<phase>.md` 复盘报告
+
+### Step 7: 通知收尾
+
+Evolve 复盘完成后，通知开发交付者执行 `finishing-a-development-branch`。
 
 ## 铁律
 
@@ -139,3 +150,6 @@ L1 单人：
 - [ ] UI 验收报告
 - [ ] 组长汇总验收报告
 - [ ] （如打回）修复后增量重审报告
+- [ ] Evolve 复盘报告（`docs/03-development/evolve-<phase>.md`）
+- [ ] Memory 更新（current-task/progress-log/decisions/patterns）
+- [ ] MCP 知识图谱写入（实体 + 关系）
